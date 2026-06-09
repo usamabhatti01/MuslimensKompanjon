@@ -11,11 +11,15 @@ class UserDataStruct extends BaseStruct {
     String? language,
     NotificationsStruct? notifications,
     bool? darkMode,
+    bool? phoneDetect,
+    bool? switchToEnglish,
   })  : _name = name,
         _city = city,
         _language = language,
         _notifications = notifications,
-        _darkMode = darkMode;
+        _darkMode = darkMode,
+        _phoneDetect = phoneDetect,
+        _switchToEnglish = switchToEnglish;
 
   // "name" field.
   String? _name;
@@ -57,6 +61,20 @@ class UserDataStruct extends BaseStruct {
 
   bool hasDarkMode() => _darkMode != null;
 
+  // "phoneDetect" field.
+  bool? _phoneDetect;
+  bool get phoneDetect => _phoneDetect ?? false;
+  set phoneDetect(bool? val) => _phoneDetect = val;
+
+  bool hasPhoneDetect() => _phoneDetect != null;
+
+  // "switchToEnglish" field.
+  bool? _switchToEnglish;
+  bool get switchToEnglish => _switchToEnglish ?? false;
+  set switchToEnglish(bool? val) => _switchToEnglish = val;
+
+  bool hasSwitchToEnglish() => _switchToEnglish != null;
+
   static UserDataStruct fromMap(Map<String, dynamic> data) => UserDataStruct(
         name: data['name'] as String?,
         city: data['city'] as String?,
@@ -65,6 +83,8 @@ class UserDataStruct extends BaseStruct {
             ? data['notifications']
             : NotificationsStruct.maybeFromMap(data['notifications']),
         darkMode: data['darkMode'] as bool?,
+        phoneDetect: data['phoneDetect'] as bool?,
+        switchToEnglish: data['switchToEnglish'] as bool?,
       );
 
   static UserDataStruct? maybeFromMap(dynamic data) =>
@@ -76,6 +96,8 @@ class UserDataStruct extends BaseStruct {
         'language': _language,
         'notifications': _notifications?.toMap(),
         'darkMode': _darkMode,
+        'phoneDetect': _phoneDetect,
+        'switchToEnglish': _switchToEnglish,
       }.withoutNulls;
 
   @override
@@ -98,6 +120,14 @@ class UserDataStruct extends BaseStruct {
         ),
         'darkMode': serializeParam(
           _darkMode,
+          ParamType.bool,
+        ),
+        'phoneDetect': serializeParam(
+          _phoneDetect,
+          ParamType.bool,
+        ),
+        'switchToEnglish': serializeParam(
+          _switchToEnglish,
           ParamType.bool,
         ),
       }.withoutNulls;
@@ -130,6 +160,16 @@ class UserDataStruct extends BaseStruct {
           ParamType.bool,
           false,
         ),
+        phoneDetect: deserializeParam(
+          data['phoneDetect'],
+          ParamType.bool,
+          false,
+        ),
+        switchToEnglish: deserializeParam(
+          data['switchToEnglish'],
+          ParamType.bool,
+          false,
+        ),
       );
 
   @override
@@ -142,12 +182,21 @@ class UserDataStruct extends BaseStruct {
         city == other.city &&
         language == other.language &&
         notifications == other.notifications &&
-        darkMode == other.darkMode;
+        darkMode == other.darkMode &&
+        phoneDetect == other.phoneDetect &&
+        switchToEnglish == other.switchToEnglish;
   }
 
   @override
-  int get hashCode => const ListEquality()
-      .hash([name, city, language, notifications, darkMode]);
+  int get hashCode => const ListEquality().hash([
+        name,
+        city,
+        language,
+        notifications,
+        darkMode,
+        phoneDetect,
+        switchToEnglish
+      ]);
 }
 
 UserDataStruct createUserDataStruct({
@@ -156,6 +205,8 @@ UserDataStruct createUserDataStruct({
   String? language,
   NotificationsStruct? notifications,
   bool? darkMode,
+  bool? phoneDetect,
+  bool? switchToEnglish,
 }) =>
     UserDataStruct(
       name: name,
@@ -163,4 +214,6 @@ UserDataStruct createUserDataStruct({
       language: language,
       notifications: notifications ?? NotificationsStruct(),
       darkMode: darkMode,
+      phoneDetect: phoneDetect,
+      switchToEnglish: switchToEnglish,
     );

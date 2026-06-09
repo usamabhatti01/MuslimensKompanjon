@@ -31,8 +31,6 @@ class _SettingPagesHeaderWidgetState extends State<SettingPagesHeaderWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => SettingPagesHeaderModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

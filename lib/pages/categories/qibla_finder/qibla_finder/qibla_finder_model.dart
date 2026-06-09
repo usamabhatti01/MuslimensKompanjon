@@ -1,4 +1,4 @@
-import '/components/page_sub_header_widget.dart';
+import '/extra/page_sub_header/page_sub_header_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'qibla_finder_widget.dart' show QiblaFinderWidget;
 import 'package:flutter/material.dart';

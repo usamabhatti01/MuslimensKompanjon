@@ -4,7 +4,6 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_youtube_player.dart';
 import '/flutter_flow/form_field_controller.dart';
-import '/pages/home/categories_sub_tab/categories_sub_tab_widget.dart';
 import '/pages/home/youtube_video_item/youtube_video_item_widget.dart';
 import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
@@ -47,8 +46,6 @@ class _HomeWidgetState extends State<HomeWidget> {
       safeSetState(() {});
       safeSetState(() {});
     });
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -87,9 +84,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          FFLocalizations.of(context).getText(
-                            'z0nfmsqo' /* Muslimens Kompanjon */,
-                          ),
+                          'Muslimens Kompanjon',
                           style:
                               FlutterFlowTheme.of(context).pxBoldGreen.override(
                                     font: GoogleFonts.roboto(
@@ -193,9 +188,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                         .bodyMedium
                                         .fontStyle,
                                   ),
-                              hintText: FFLocalizations.of(context).getText(
-                                '1rmnuxcp' /* Select... */,
-                              ),
+                              hintText: 'Select...',
                               icon: Icon(
                                 Icons.search,
                                 color: FlutterFlowTheme.of(context).primaryText,
@@ -343,9 +336,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            FFLocalizations.of(context).getText(
-                              'egooxlu9' /* MK Channel */,
-                            ),
+                            'MK-kanalen',
                             style:
                                 FlutterFlowTheme.of(context).blackBold.override(
                                       font: GoogleFonts.manrope(
@@ -413,9 +404,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            FFLocalizations.of(context).getText(
-                              'etzm8l1t' /* Recommended Content */,
-                            ),
+                            'Rekommenderat innehåll',
                             style:
                                 FlutterFlowTheme.of(context).blackBold.override(
                                       font: GoogleFonts.manrope(
@@ -492,9 +481,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              FFLocalizations.of(context).getText(
-                                'errzcqel' /* Categories */,
-                              ),
+                              'Categories',
                               style: FlutterFlowTheme.of(context)
                                   .titleMedium
                                   .override(
@@ -550,18 +537,141 @@ class _HomeWidgetState extends State<HomeWidget> {
                                     highlightColor: Colors.transparent,
                                     onTap: () async {
                                       context.pushNamed(
-                                          IslamicCalenderWidget.routeName);
+                                          AboutIslamWidget.routeName);
                                     },
-                                    child: wrapWithModel(
-                                      model: _model.categoriesSubTabModel1,
-                                      updateCallback: () => safeSetState(() {}),
-                                      child: CategoriesSubTabWidget(
-                                        icon: Icon(
-                                          Icons.calendar_today,
-                                          color: FlutterFlowTheme.of(context)
-                                              .primary,
+                                    child: Container(
+                                      width: 102.0,
+                                      height: 76.0,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                        borderRadius: BorderRadius.circular(
+                                            FlutterFlowTheme.of(context)
+                                                .designToken
+                                                .radius
+                                                .sm),
+                                        border: Border.all(
+                                          color: Color(0xFFF0F0F0),
                                         ),
-                                        catogeryName: 'Kalender',
+                                      ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            child: Image.asset(
+                                              'assets/images/hugeicons_audio-book-01.png',
+                                              width: 30.0,
+                                              height: 30.0,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Om Islam',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  font: GoogleFonts.manrope(
+                                                    fontWeight:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontWeight,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
+                                                  letterSpacing: 0.0,
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                          ),
+                                        ].divide(SizedBox(height: 5.0)),
+                                      ),
+                                    ),
+                                  ),
+                                  InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      context.pushNamed(TasbihWidget.routeName);
+                                    },
+                                    child: Container(
+                                      width: 102.0,
+                                      height: 76.0,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                        borderRadius: BorderRadius.circular(
+                                            FlutterFlowTheme.of(context)
+                                                .designToken
+                                                .radius
+                                                .sm),
+                                        border: Border.all(
+                                          color: Color(0xFFF0F0F0),
+                                        ),
+                                      ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            child: Image.asset(
+                                              'assets/images/tas_1.png',
+                                              width: 30.0,
+                                              height: 30.0,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Tasbih',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  font: GoogleFonts.manrope(
+                                                    fontWeight:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontWeight,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
+                                                  letterSpacing: 0.0,
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                          ),
+                                        ].divide(SizedBox(height: 5.0)),
                                       ),
                                     ),
                                   ),
@@ -572,52 +682,131 @@ class _HomeWidgetState extends State<HomeWidget> {
                                     highlightColor: Colors.transparent,
                                     onTap: () async {
                                       context.pushNamed(
-                                          AboutIslamWidget.routeName);
+                                          IslamicCalenderWidget.routeName);
                                     },
-                                    child: wrapWithModel(
-                                      model: _model.categoriesSubTabModel2,
-                                      updateCallback: () => safeSetState(() {}),
-                                      child: CategoriesSubTabWidget(
-                                        icon: Icon(
-                                          Icons.menu_book,
-                                          color: FlutterFlowTheme.of(context)
-                                              .primary,
-                                        ),
-                                        catogeryName: 'Om Islam',
-                                      ),
-                                    ),
-                                  ),
-                                  wrapWithModel(
-                                    model: _model.categoriesSubTabModel3,
-                                    updateCallback: () => safeSetState(() {}),
-                                    child: CategoriesSubTabWidget(
-                                      icon: Icon(
-                                        Icons.bookmark_sharp,
+                                    child: Container(
+                                      width: 102.0,
+                                      height: 76.0,
+                                      decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context)
-                                            .primary,
+                                            .secondaryBackground,
+                                        borderRadius: BorderRadius.circular(
+                                            FlutterFlowTheme.of(context)
+                                                .designToken
+                                                .radius
+                                                .sm),
+                                        border: Border.all(
+                                          color: Color(0xFFF0F0F0),
+                                        ),
                                       ),
-                                      catogeryName: 'Quran',
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(0.0),
+                                            child: Image.asset(
+                                              'assets/images/calendar3_1.png',
+                                              width: 30.0,
+                                              height: 30.0,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Kalender',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  font: GoogleFonts.manrope(
+                                                    fontWeight:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontWeight,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
+                                                  letterSpacing: 0.0,
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                          ),
+                                        ].divide(SizedBox(height: 5.0)),
+                                      ),
                                     ),
                                   ),
-                                  InkWell(
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () async {
-                                      context.pushNamed(AdhkarWidget.routeName);
-                                    },
-                                    child: wrapWithModel(
-                                      model: _model.categoriesSubTabModel4,
-                                      updateCallback: () => safeSetState(() {}),
-                                      child: CategoriesSubTabWidget(
-                                        icon: Icon(
-                                          Icons.menu_book,
-                                          color: FlutterFlowTheme.of(context)
-                                              .primary,
-                                        ),
-                                        catogeryName: 'Dhikr',
+                                  Container(
+                                    width: 102.0,
+                                    height: 76.0,
+                                    decoration: BoxDecoration(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
+                                      borderRadius: BorderRadius.circular(
+                                          FlutterFlowTheme.of(context)
+                                              .designToken
+                                              .radius
+                                              .sm),
+                                      border: Border.all(
+                                        color: Color(0xFFF0F0F0),
                                       ),
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          child: Image.asset(
+                                            'assets/images/icons8_todo-list.png',
+                                            width: 30.0,
+                                            height: 30.0,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        Text(
+                                          'To-Do-lista',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                font: GoogleFonts.manrope(
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                                letterSpacing: 0.0,
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
+                                        ),
+                                      ].divide(SizedBox(height: 5.0)),
                                     ),
                                   ),
                                   InkWell(
@@ -629,29 +818,129 @@ class _HomeWidgetState extends State<HomeWidget> {
                                       context.pushNamed(
                                           QiblaFinderWidget.routeName);
                                     },
-                                    child: wrapWithModel(
-                                      model: _model.categoriesSubTabModel5,
-                                      updateCallback: () => safeSetState(() {}),
-                                      child: CategoriesSubTabWidget(
-                                        icon: Icon(
-                                          Icons.my_location,
-                                          color: FlutterFlowTheme.of(context)
-                                              .primary,
+                                    child: Container(
+                                      width: 102.0,
+                                      height: 76.0,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                        borderRadius: BorderRadius.circular(
+                                            FlutterFlowTheme.of(context)
+                                                .designToken
+                                                .radius
+                                                .sm),
+                                        border: Border.all(
+                                          color: Color(0xFFF0F0F0),
                                         ),
-                                        catogeryName: 'Moskéer',
+                                      ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            child: Image.asset(
+                                              'assets/images/mage_location.png',
+                                              width: 30.0,
+                                              height: 30.0,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Moskéer',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  font: GoogleFonts.manrope(
+                                                    fontWeight:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontWeight,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
+                                                  letterSpacing: 0.0,
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                          ),
+                                        ].divide(SizedBox(height: 5.0)),
                                       ),
                                     ),
                                   ),
-                                  wrapWithModel(
-                                    model: _model.categoriesSubTabModel6,
-                                    updateCallback: () => safeSetState(() {}),
-                                    child: CategoriesSubTabWidget(
-                                      icon: Icon(
-                                        Icons.add,
-                                        color: FlutterFlowTheme.of(context)
-                                            .primary,
+                                  Container(
+                                    width: 102.0,
+                                    height: 76.0,
+                                    decoration: BoxDecoration(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
+                                      borderRadius: BorderRadius.circular(
+                                          FlutterFlowTheme.of(context)
+                                              .designToken
+                                              .radius
+                                              .sm),
+                                      border: Border.all(
+                                        color: Color(0xFFF0F0F0),
                                       ),
-                                      catogeryName: 'Reserverad',
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          child: Image.asset(
+                                            'assets/images/add.png',
+                                            width: 30.0,
+                                            height: 30.0,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Reserverad',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                font: GoogleFonts.manrope(
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                                letterSpacing: 0.0,
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
+                                        ),
+                                      ].divide(SizedBox(height: 5.0)),
                                     ),
                                   ),
                                 ],

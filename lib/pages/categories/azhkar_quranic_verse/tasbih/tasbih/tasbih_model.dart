@@ -1,4 +1,4 @@
-import '/components/page_sub_header_widget.dart';
+import '/extra/page_sub_header/page_sub_header_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/pages/categories/azhkar_quranic_verse/adhkar_all_pages_banner/adhkar_all_pages_banner_widget.dart';
 import '/pages/categories/azhkar_quranic_verse/arabic_heading_and_translation/arabic_heading_and_translation_widget.dart';

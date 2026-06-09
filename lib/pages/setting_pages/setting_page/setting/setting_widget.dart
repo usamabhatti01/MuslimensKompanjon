@@ -37,7 +37,6 @@ class _SettingWidgetState extends State<SettingWidget> {
 
     _model.switchValue1 = FFAppState().user.language == 'sv' ? true : false;
     _model.switchValue2 = FFAppState().user.darkMode ? true : false;
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -90,9 +89,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                         Align(
                           alignment: AlignmentDirectional(-1.0, 0.0),
                           child: Text(
-                            FFLocalizations.of(context).getText(
-                              'mtollg4l' /* GENERAL */,
-                            ),
+                            'GENERAL',
                             style: FlutterFlowTheme.of(context)
                                 .titleSmall
                                 .override(
@@ -129,62 +126,41 @@ class _SettingWidgetState extends State<SettingWidget> {
                             mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  wrapWithModel(
-                                    model: _model.settingTabWithSwitchModel1,
-                                    updateCallback: () => safeSetState(() {}),
-                                    child: SettingTabWithSwitchWidget(
-                                      label:
-                                          FFLocalizations.of(context).getText(
-                                        'fncdf82o' /* Language */,
-                                      ),
-                                      sunLabel:
-                                          FFLocalizations.of(context).getText(
-                                        'xmrsw0q5' /* English / Swedish */,
-                                      ),
-                                      icon: Icon(
-                                        Icons.translate,
-                                        color: FlutterFlowTheme.of(context)
-                                            .primary,
-                                        size: 18.0,
-                                      ),
+                              if (responsiveVisibility(
+                                context: context,
+                                phone: false,
+                              ))
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Switch.adaptive(
+                                      value: _model.switchValue1!,
+                                      onChanged: (newValue) async {
+                                        safeSetState(() =>
+                                            _model.switchValue1 = newValue);
+                                        if (newValue) {
+                                          setAppLanguage(context, 'sv');
+                                          FFAppState().user = UserDataStruct(
+                                            language: 'sv',
+                                          );
+                                          safeSetState(() {});
+                                        }
+                                      },
+                                      activeColor: FlutterFlowTheme.of(context)
+                                          .alternate,
+                                      activeTrackColor:
+                                          FlutterFlowTheme.of(context).primary,
+                                      inactiveTrackColor:
+                                          FlutterFlowTheme.of(context)
+                                              .alternate,
+                                      inactiveThumbColor:
+                                          FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
                                     ),
-                                  ),
-                                  Switch.adaptive(
-                                    value: _model.switchValue1!,
-                                    onChanged: (newValue) async {
-                                      safeSetState(() =>
-                                          _model.switchValue1 = newValue);
-                                      if (newValue) {
-                                        setAppLanguage(context, 'sv');
-                                        FFAppState().user = UserDataStruct(
-                                          language: 'sv',
-                                        );
-                                        safeSetState(() {});
-                                      } else {
-                                        setAppLanguage(context, 'en');
-                                        FFAppState().user = UserDataStruct(
-                                          language: 'en',
-                                        );
-                                        safeSetState(() {});
-                                      }
-                                    },
-                                    activeColor:
-                                        FlutterFlowTheme.of(context).alternate,
-                                    activeTrackColor:
-                                        FlutterFlowTheme.of(context).primary,
-                                    inactiveTrackColor:
-                                        FlutterFlowTheme.of(context).alternate,
-                                    inactiveThumbColor:
-                                        FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
-                                  ),
-                                ],
-                              ),
+                                  ],
+                                ),
                               Divider(
                                 thickness: 1.0,
                                 indent: 15.0,
@@ -197,17 +173,11 @@ class _SettingWidgetState extends State<SettingWidget> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   wrapWithModel(
-                                    model: _model.settingTabWithSwitchModel2,
+                                    model: _model.settingTabWithSwitchModel1,
                                     updateCallback: () => safeSetState(() {}),
                                     child: SettingTabWithSwitchWidget(
-                                      label:
-                                          FFLocalizations.of(context).getText(
-                                        'wenh6r45' /* Dark Mode */,
-                                      ),
-                                      sunLabel:
-                                          FFLocalizations.of(context).getText(
-                                        'tfuixbmk' /* Enable night theme */,
-                                      ),
+                                      label: 'Dark Mode',
+                                      sunLabel: 'Enable night theme',
                                       icon: Icon(
                                         Icons.dark_mode_outlined,
                                         color: FlutterFlowTheme.of(context)
@@ -328,10 +298,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                     .bodyMedium
                                                     .fontStyle,
                                           ),
-                                      hintText:
-                                          FFLocalizations.of(context).getText(
-                                        'g5vea3ux' /* Select... */,
-                                      ),
+                                      hintText: 'Select...',
                                       icon: Icon(
                                         Icons.search,
                                         color: FlutterFlowTheme.of(context)
@@ -365,9 +332,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                         Align(
                           alignment: AlignmentDirectional(-1.0, 0.0),
                           child: Text(
-                            FFLocalizations.of(context).getText(
-                              'tcsya18m' /* NOTIFICATIONS */,
-                            ),
+                            'NOTIFICATIONS',
                             style: FlutterFlowTheme.of(context)
                                 .titleSmall
                                 .override(
@@ -413,16 +378,11 @@ class _SettingWidgetState extends State<SettingWidget> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 wrapWithModel(
-                                  model: _model.settingTabWithSwitchModel3,
+                                  model: _model.settingTabWithSwitchModel2,
                                   updateCallback: () => safeSetState(() {}),
                                   child: SettingTabWithSwitchWidget(
-                                    label: FFLocalizations.of(context).getText(
-                                      'vqurv3tv' /* Prayer Alerts */,
-                                    ),
-                                    sunLabel:
-                                        FFLocalizations.of(context).getText(
-                                      '2wpr27rj' /* Adhan & reminders */,
-                                    ),
+                                    label: 'Prayer Alerts',
+                                    sunLabel: 'Adhan & reminders',
                                     icon: Icon(
                                       Icons.mosque_outlined,
                                       color:
@@ -440,9 +400,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                         Align(
                           alignment: AlignmentDirectional(-1.0, 0.0),
                           child: Text(
-                            FFLocalizations.of(context).getText(
-                              '1ikyhdgs' /* ABOUT */,
-                            ),
+                            'ABOUT',
                             style: FlutterFlowTheme.of(context)
                                 .titleSmall
                                 .override(
@@ -478,31 +436,16 @@ class _SettingWidgetState extends State<SettingWidget> {
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  context.pushNamed(AboutPageWidget.routeName);
-                                },
-                                child: wrapWithModel(
-                                  model: _model.settingTabModel1,
-                                  updateCallback: () => safeSetState(() {}),
-                                  child: SettingTabWidget(
-                                    label: FFLocalizations.of(context).getText(
-                                      'li4rumqj' /* About App */,
-                                    ),
-                                    sunLabel:
-                                        FFLocalizations.of(context).getText(
-                                      '6j7r761q' /* App Verison */,
-                                    ),
-                                    icon: Icon(
-                                      Icons.info_outline,
-                                      color:
-                                          FlutterFlowTheme.of(context).primary,
-                                      size: 18.0,
-                                    ),
+                              wrapWithModel(
+                                model: _model.settingTabModel1,
+                                updateCallback: () => safeSetState(() {}),
+                                child: SettingTabWidget(
+                                  label: 'About App',
+                                  sunLabel: ' ',
+                                  icon: Icon(
+                                    Icons.info_outline,
+                                    color: FlutterFlowTheme.of(context).primary,
+                                    size: 18.0,
                                   ),
                                 ),
                               ),
@@ -512,31 +455,16 @@ class _SettingWidgetState extends State<SettingWidget> {
                                 endIndent: 15.0,
                                 color: FlutterFlowTheme.of(context).containerBg,
                               ),
-                              InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  context.pushNamed(RatingPageWidget.routeName);
-                                },
-                                child: wrapWithModel(
-                                  model: _model.settingTabModel2,
-                                  updateCallback: () => safeSetState(() {}),
-                                  child: SettingTabWidget(
-                                    label: FFLocalizations.of(context).getText(
-                                      'a790uuls' /* Rate App */,
-                                    ),
-                                    sunLabel:
-                                        FFLocalizations.of(context).getText(
-                                      'fltp0ov1' /* Rate on PlayStore */,
-                                    ),
-                                    icon: Icon(
-                                      Icons.star_border,
-                                      color:
-                                          FlutterFlowTheme.of(context).primary,
-                                      size: 18.0,
-                                    ),
+                              wrapWithModel(
+                                model: _model.settingTabModel2,
+                                updateCallback: () => safeSetState(() {}),
+                                child: SettingTabWidget(
+                                  label: 'Rate App',
+                                  sunLabel: 'Ask Imam notifications',
+                                  icon: Icon(
+                                    Icons.star_border,
+                                    color: FlutterFlowTheme.of(context).primary,
+                                    size: 18.0,
                                   ),
                                 ),
                               ),

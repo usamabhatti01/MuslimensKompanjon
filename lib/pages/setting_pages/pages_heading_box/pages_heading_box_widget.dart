@@ -32,8 +32,6 @@ class _PagesHeadingBoxWidgetState extends State<PagesHeadingBoxWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => PagesHeadingBoxModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

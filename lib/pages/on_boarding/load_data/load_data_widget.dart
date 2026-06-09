@@ -33,8 +33,6 @@ class _LoadDataWidgetState extends State<LoadDataWidget> {
 
       context.pushNamed(HomeWidget.routeName);
     });
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

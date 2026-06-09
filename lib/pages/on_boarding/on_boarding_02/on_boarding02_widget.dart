@@ -30,8 +30,6 @@ class _OnBoarding02WidgetState extends State<OnBoarding02Widget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => OnBoarding02Model());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -77,9 +75,7 @@ class _OnBoarding02WidgetState extends State<OnBoarding02Widget> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Text(
-                        FFLocalizations.of(context).getText(
-                          'yl1786un' /* Location */,
-                        ),
+                        'Plats',
                         style:
                             FlutterFlowTheme.of(context).headlineLarge.override(
                                   font: GoogleFonts.manrope(
@@ -100,9 +96,8 @@ class _OnBoarding02WidgetState extends State<OnBoarding02Widget> {
                                 ),
                       ),
                       Text(
-                        FFLocalizations.of(context).getText(
-                          'k7h01c7m' /* To provide accurate prayer tim... */,
-                        ),
+                        'För att kunna ange korrekta bönetider behöver appen veta din plats.',
+                        textAlign: TextAlign.center,
                         style: FlutterFlowTheme.of(context).bodyLarge.override(
                               font: GoogleFonts.inter(
                                 fontWeight: FlutterFlowTheme.of(context)
@@ -164,9 +159,7 @@ class _OnBoarding02WidgetState extends State<OnBoarding02Widget> {
 
                       safeSetState(() {});
                     },
-                    text: FFLocalizations.of(context).getText(
-                      'c73jwsb7' /* Use my current location */,
-                    ),
+                    text: 'Använd min nuvarande plats',
                     icon: Icon(
                       Icons.gps_fixed,
                       size: 18.0,
@@ -229,9 +222,7 @@ class _OnBoarding02WidgetState extends State<OnBoarding02Widget> {
                         },
                       ).then((value) => safeSetState(() {}));
                     },
-                    text: FFLocalizations.of(context).getText(
-                      'e5ae3lwy' /* Select location manually */,
-                    ),
+                    text: 'Välj plats manuellt',
                     options: FFButtonOptions(
                       width: 250.0,
                       height: 50.0,

@@ -34,8 +34,6 @@ class _PrayerTimeWidgetState extends State<PrayerTimeWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => PrayerTimeModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

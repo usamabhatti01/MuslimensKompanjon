@@ -1,4 +1,4 @@
-import '/components/page_sub_header_widget.dart';
+import '/extra/page_sub_header/page_sub_header_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
@@ -25,8 +25,6 @@ class _QiblaFinderWidgetState extends State<QiblaFinderWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => QiblaFinderModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -50,10 +48,11 @@ class _QiblaFinderWidgetState extends State<QiblaFinderWidget> {
           top: true,
           child: Padding(
             padding: EdgeInsets.all(
-                FlutterFlowTheme.of(context).designToken.spacing.md),
+                FlutterFlowTheme.of(context).designToken.spacing.lg),
             child: Column(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 wrapWithModel(
                   model: _model.pageSubHeaderModel,
@@ -62,15 +61,22 @@ class _QiblaFinderWidgetState extends State<QiblaFinderWidget> {
                     pageName: 'Qibla Finder',
                   ),
                 ),
-                Container(
-                  width: MediaQuery.sizeOf(context).width * 1.0,
-                  height: MediaQuery.sizeOf(context).height * 0.7,
-                  child: custom_widgets.QiblaCompassWidget(
-                    width: MediaQuery.sizeOf(context).width * 1.0,
-                    height: MediaQuery.sizeOf(context).height * 0.7,
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Align(
+                        alignment: AlignmentDirectional(0.0, -1.0),
+                        child: custom_widgets.QiblaCompassWidget(
+                          width: MediaQuery.sizeOf(context).width * 1.0,
+                          height: MediaQuery.sizeOf(context).height * 0.7,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ].addToStart(SizedBox(height: 20.0)),
             ),
           ),
         ),

@@ -34,8 +34,6 @@ class _ArabicHeadingAndTranslationWidgetState
   void initState() {
     super.initState();
     _model = createModel(context, () => ArabicHeadingAndTranslationModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -72,9 +70,7 @@ class _ArabicHeadingAndTranslationWidgetState
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: FFLocalizations.of(context).getText(
-                    'v45ugzwi' /* Translation:  */,
-                  ),
+                  text: 'Translation: ',
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         font: GoogleFonts.manrope(
                           fontWeight: FontWeight.bold,

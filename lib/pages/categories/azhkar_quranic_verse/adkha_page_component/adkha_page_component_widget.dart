@@ -33,8 +33,6 @@ class _AdkhaPageComponentWidgetState extends State<AdkhaPageComponentWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => AdkhaPageComponentModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -61,7 +59,7 @@ class _AdkhaPageComponentWidgetState extends State<AdkhaPageComponentWidget> {
             EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.md),
         child: Row(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             widget.icon!,
             Text(
@@ -83,7 +81,7 @@ class _AdkhaPageComponentWidgetState extends State<AdkhaPageComponentWidget> {
                         FlutterFlowTheme.of(context).titleSmall.fontStyle,
                   ),
             ),
-          ],
+          ].divide(SizedBox(width: 20.0)),
         ),
       ),
     );

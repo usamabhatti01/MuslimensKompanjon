@@ -1,6 +1,5 @@
-import '/components/page_sub_header_widget.dart';
+import '/extra/page_sub_header/page_sub_header_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/pages/categories/azhkar_quranic_verse/adhkar_all_pages_banner/adhkar_all_pages_banner_widget.dart';
 import '/pages/categories/azhkar_quranic_verse/adkha_page_component/adkha_page_component_widget.dart';
 import '/index.dart';
 import 'adhkar_widget.dart' show AdhkarWidget;
@@ -11,8 +10,6 @@ class AdhkarModel extends FlutterFlowModel<AdhkarWidget> {
 
   // Model for PageSubHeader component.
   late PageSubHeaderModel pageSubHeaderModel;
-  // Model for AdhkarAllPagesBanner component.
-  late AdhkarAllPagesBannerModel adhkarAllPagesBannerModel;
   // Model for AdkhaPageComponent component.
   late AdkhaPageComponentModel adkhaPageComponentModel1;
   // Model for AdkhaPageComponent component.
@@ -27,8 +24,6 @@ class AdhkarModel extends FlutterFlowModel<AdhkarWidget> {
   @override
   void initState(BuildContext context) {
     pageSubHeaderModel = createModel(context, () => PageSubHeaderModel());
-    adhkarAllPagesBannerModel =
-        createModel(context, () => AdhkarAllPagesBannerModel());
     adkhaPageComponentModel1 =
         createModel(context, () => AdkhaPageComponentModel());
     adkhaPageComponentModel2 =
@@ -44,7 +39,6 @@ class AdhkarModel extends FlutterFlowModel<AdhkarWidget> {
   @override
   void dispose() {
     pageSubHeaderModel.dispose();
-    adhkarAllPagesBannerModel.dispose();
     adkhaPageComponentModel1.dispose();
     adkhaPageComponentModel2.dispose();
     adkhaPageComponentModel3.dispose();

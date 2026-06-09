@@ -10,7 +10,7 @@ export '/pages/categories/counter/tashbih_counter/tashbih_counter_widget.dart'
     show TashbihCounterWidget;
 export '/pages/categories/qibla_finder/qibla_finder/qibla_finder_widget.dart'
     show QiblaFinderWidget;
-export '/youtube_feed/youtube_feed_widget.dart' show YoutubeFeedWidget;
+export '/extra/youtube_feed/youtube_feed_widget.dart' show YoutubeFeedWidget;
 export '/pages/categories/azhkar_quranic_verse/adhkar/adhkar_widget.dart'
     show AdhkarWidget;
 export '/pages/categories/azhkar_quranic_verse/mornng_and_evebing_adhkar/morning_adhkar/morning_adhkar_widget.dart'
@@ -31,7 +31,7 @@ export '/pages/setting_pages/notification_page/notification/notification_widget.
     show NotificationWidget;
 export '/pages/setting_pages/setting_page/setting/setting_widget.dart'
     show SettingWidget;
-export '/in_page2/in_page2_widget.dart' show InPage2Widget;
+export '/extra/in_page2/in_page2_widget.dart' show InPage2Widget;
 export '/pages/islamic_calender/islamic_calender/islamic_calender_widget.dart'
     show IslamicCalenderWidget;
 export '/pages/on_boarding/on_boarding_00/on_boarding00_widget.dart'
@@ -41,3 +41,4 @@ export '/pages/setting_pages/setting_page/rating_page/rating_page_widget.dart'
     show RatingPageWidget;
 export '/pages/setting_pages/about_page/about_page_widget.dart'
     show AboutPageWidget;
+export '/test/test_widget.dart' show TestWidget;

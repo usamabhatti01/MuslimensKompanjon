@@ -35,8 +35,6 @@ class _NameBoxWidgetState extends State<NameBoxWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => NameBoxModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

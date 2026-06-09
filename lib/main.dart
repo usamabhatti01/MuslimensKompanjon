@@ -1,5 +1,4 @@
 import 'package:provider/provider.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -10,8 +9,13 @@ import 'flutter_flow/internationalization.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'index.dart';
 
+
+import 'package:timezone/data/latest.dart' as tz;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  tz.initializeTimeZones();
+
   GoRouter.optionURLReflectsImperativeAPIs = true;
   usePathUrlStrategy();
 
@@ -37,17 +41,8 @@ class MyApp extends StatefulWidget {
       context.findAncestorStateOfType<_MyAppState>()!;
 }
 
-class MyAppScrollBehavior extends MaterialScrollBehavior {
-  @override
-  Set<PointerDeviceKind> get dragDevices => {
-        PointerDeviceKind.touch,
-        PointerDeviceKind.mouse,
-        PointerDeviceKind.trackpad,
-      };
-}
-
 class _MyAppState extends State<MyApp> {
-  Locale? _locale = FFLocalizations.getStoredLocale();
+  Locale? _locale;
 
   ThemeMode _themeMode = FlutterFlowTheme.themeMode;
 
@@ -76,7 +71,6 @@ class _MyAppState extends State<MyApp> {
 
   void setLocale(String language) {
     safeSetState(() => _locale = createLocale(language));
-    FFLocalizations.storeLocale(language);
   }
 
   void setThemeMode(ThemeMode mode) => safeSetState(() {
@@ -89,7 +83,6 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'MuslimensKompanjon',
-      scrollBehavior: MyAppScrollBehavior(),
       localizationsDelegates: [
         FFLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
@@ -101,7 +94,6 @@ class _MyAppState extends State<MyApp> {
       locale: _locale,
       supportedLocales: const [
         Locale('sv'),
-        Locale('en'),
       ],
       theme: ThemeData(
         brightness: Brightness.light,
@@ -161,7 +153,7 @@ class NavBarPage extends StatefulWidget {
 
 /// This is the private State class that goes with NavBarPage.
 class _NavBarPageState extends State<NavBarPage> {
-  String _currentPageName = 'Home';
+  String _currentPageName = 'Adhkar';
   late Widget? _currentPage;
 
   @override
@@ -174,10 +166,10 @@ class _NavBarPageState extends State<NavBarPage> {
   @override
   Widget build(BuildContext context) {
     final tabs = {
-      'Home': HomeWidget(),
       'Adhkar': AdhkarWidget(),
       'QiblaFinder': QiblaFinderWidget(),
       'Setting': SettingWidget(),
+      'Home': HomeWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 
@@ -204,23 +196,11 @@ class _NavBarPageState extends State<NavBarPage> {
           type: BottomNavigationBarType.fixed,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home_outlined,
-                size: 24.0,
-              ),
-              label: FFLocalizations.of(context).getText(
-                'y57a81yv' /* Home */,
-              ),
-              tooltip: '',
-            ),
-            BottomNavigationBarItem(
               icon: FaIcon(
                 FontAwesomeIcons.bookOpen,
                 size: 20.0,
               ),
-              label: FFLocalizations.of(context).getText(
-                '9v555u67' /* Adhkar */,
-              ),
+              label: 'Adhkar',
               tooltip: '',
             ),
             BottomNavigationBarItem(
@@ -228,9 +208,7 @@ class _NavBarPageState extends State<NavBarPage> {
                 FontAwesomeIcons.compass,
                 size: 20.0,
               ),
-              label: FFLocalizations.of(context).getText(
-                '1tdbu0h2' /* Qibla */,
-              ),
+              label: 'Qibla',
               tooltip: '',
             ),
             BottomNavigationBarItem(
@@ -238,9 +216,15 @@ class _NavBarPageState extends State<NavBarPage> {
                 Icons.settings_outlined,
                 size: 20.0,
               ),
-              label: FFLocalizations.of(context).getText(
-                'qpk4tfzr' /* Setting */,
+              label: 'Setting',
+              tooltip: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.home_outlined,
+                size: 24.0,
               ),
+              label: 'Home',
               tooltip: '',
             )
           ],

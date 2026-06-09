@@ -1,4 +1,4 @@
-import '/components/page_sub_header_widget.dart';
+import '/extra/page_sub_header/page_sub_header_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -38,8 +38,6 @@ class _IslamicCalenderWidgetState extends State<IslamicCalenderWidget> {
       safeSetState(() {});
       safeSetState(() {});
     });
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -104,9 +102,7 @@ class _IslamicCalenderWidgetState extends State<IslamicCalenderWidget> {
                         fontStyle:
                             FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                       ),
-                  hintText: FFLocalizations.of(context).getText(
-                    'jb6vj8mf' /* Select... */,
-                  ),
+                  hintText: 'Select...',
                   icon: Icon(
                     Icons.keyboard_arrow_down_rounded,
                     color: FlutterFlowTheme.of(context).primaryText,
@@ -124,9 +120,7 @@ class _IslamicCalenderWidgetState extends State<IslamicCalenderWidget> {
                   isMultiSelect: false,
                 ),
                 Text(
-                  FFLocalizations.of(context).getText(
-                    '32zln7lu' /* Månads bönetider */,
-                  ),
+                  'Månads bönetider',
                   style: FlutterFlowTheme.of(context).titleLarge.override(
                         font: GoogleFonts.manrope(
                           fontWeight: FlutterFlowTheme.of(context)
@@ -181,9 +175,7 @@ class _IslamicCalenderWidgetState extends State<IslamicCalenderWidget> {
                                     .bodyMedium
                                     .fontStyle,
                               ),
-                      hintText: FFLocalizations.of(context).getText(
-                        'nhbj8ppo' /* Select Month */,
-                      ),
+                      hintText: 'Select Month',
                       icon: Icon(
                         Icons.keyboard_arrow_down_rounded,
                         color: FlutterFlowTheme.of(context).primaryText,
@@ -207,14 +199,7 @@ class _IslamicCalenderWidgetState extends State<IslamicCalenderWidget> {
                         _model.yearValue ??= 2026,
                       ),
                       options: List<int>.from([2026, 2027]),
-                      optionLabels: [
-                        FFLocalizations.of(context).getText(
-                          'gt9z67j0' /* 2026 */,
-                        ),
-                        FFLocalizations.of(context).getText(
-                          'tcpi989l' /* 2027 */,
-                        )
-                      ],
+                      optionLabels: ['2026', '2027'],
                       onChanged: (val) async {
                         safeSetState(() => _model.yearValue = val);
                         _model.year = _model.yearValue!;
@@ -240,9 +225,7 @@ class _IslamicCalenderWidgetState extends State<IslamicCalenderWidget> {
                                     .bodyMedium
                                     .fontStyle,
                               ),
-                      hintText: FFLocalizations.of(context).getText(
-                        'u41togof' /* Select Year */,
-                      ),
+                      hintText: 'Select Year',
                       icon: Icon(
                         Icons.keyboard_arrow_down_rounded,
                         color: FlutterFlowTheme.of(context).primaryText,

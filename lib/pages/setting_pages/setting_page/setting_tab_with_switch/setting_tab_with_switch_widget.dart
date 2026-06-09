@@ -36,8 +36,6 @@ class _SettingTabWithSwitchWidgetState
   void initState() {
     super.initState();
     _model = createModel(context, () => SettingTabWithSwitchModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

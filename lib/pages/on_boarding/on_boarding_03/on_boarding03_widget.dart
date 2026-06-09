@@ -22,8 +22,6 @@ class OnBoarding03Widget extends StatefulWidget {
 class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
   late OnBoarding03Model _model;
 
-  LatLng? currentUserLocationValue;
-
   @override
   void setState(VoidCallback callback) {
     super.setState(callback);
@@ -42,8 +40,6 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
       );
       safeSetState(() {});
     });
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -83,12 +79,15 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        FFLocalizations.of(context).getText(
-                          'zswc8wda' /* Search Location */,
-                        ),
-                        style:
-                            FlutterFlowTheme.of(context).titleMedium.override(
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Sök plats',
+                            style: FlutterFlowTheme.of(context)
+                                .titleMedium
+                                .override(
                                   font: GoogleFonts.manrope(
                                     fontWeight: FlutterFlowTheme.of(context)
                                         .titleMedium
@@ -105,6 +104,22 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
                                       .titleMedium
                                       .fontStyle,
                                 ),
+                          ),
+                          InkWell(
+                            splashColor: Colors.transparent,
+                            focusColor: Colors.transparent,
+                            hoverColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onTap: () async {
+                              Navigator.pop(context);
+                            },
+                            child: Icon(
+                              Icons.close_sharp,
+                              color: FlutterFlowTheme.of(context).primaryText,
+                              size: 14.0,
+                            ),
+                          ),
+                        ],
                       ),
                       Row(
                         mainAxisSize: MainAxisSize.max,
@@ -130,8 +145,13 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
                                           ))
                                       .toList()
                                   : ([]),
-                              onChanged: (val) => safeSetState(
-                                  () => _model.dropDownValue = val),
+                              onChanged: (val) async {
+                                safeSetState(() => _model.dropDownValue = val);
+                                FFAppState().updateUserStruct(
+                                  (e) => e..city = _model.dropDownValue,
+                                );
+                                safeSetState(() {});
+                              },
                               height: 40.0,
                               searchHintTextStyle: FlutterFlowTheme.of(context)
                                   .labelMedium
@@ -184,6 +204,8 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
                                           .bodyMedium
                                           .fontStyle,
                                     ),
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryText,
                                     letterSpacing: 0.0,
                                     fontWeight: FlutterFlowTheme.of(context)
                                         .bodyMedium
@@ -192,13 +214,8 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
                                         .bodyMedium
                                         .fontStyle,
                                   ),
-                              hintText: FFLocalizations.of(context).getText(
-                                'wb3ixwl4' /* Search city...  */,
-                              ),
-                              searchHintText:
-                                  FFLocalizations.of(context).getText(
-                                '4wb899h8' /*  */,
-                              ),
+                              hintText: 'Sök stad...',
+                              searchHintText: '',
                               icon: Icon(
                                 Icons.search_outlined,
                                 color: FlutterFlowTheme.of(context).primaryText,
@@ -216,66 +233,6 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
                               isOverButton: false,
                               isSearchable: true,
                               isMultiSelect: false,
-                            ),
-                          ),
-                          InkWell(
-                            splashColor: Colors.transparent,
-                            focusColor: Colors.transparent,
-                            hoverColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            onTap: () async {
-                              currentUserLocationValue =
-                                  await getCurrentUserLocation(
-                                      defaultLocation: LatLng(0.0, 0.0));
-                              _model.singleCity =
-                                  await actions.loadCitiesFromAsset(
-                                currentUserLocationValue,
-                              );
-                              if (_model.singleCity?.length == 1) {
-                                FFAppState().updateUserStruct(
-                                  (e) => e
-                                    ..city =
-                                        _model.singleCity?.firstOrNull?.name,
-                                );
-                                safeSetState(() {});
-                                safeSetState(() {});
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      _model.singleCity!.firstOrNull!.name,
-                                      style: TextStyle(
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                      ),
-                                    ),
-                                    duration: Duration(milliseconds: 4000),
-                                    backgroundColor:
-                                        FlutterFlowTheme.of(context).primary,
-                                  ),
-                                );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      'Not Found',
-                                      style: TextStyle(
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                      ),
-                                    ),
-                                    duration: Duration(milliseconds: 4000),
-                                    backgroundColor:
-                                        FlutterFlowTheme.of(context).error,
-                                  ),
-                                );
-                              }
-
-                              safeSetState(() {});
-                            },
-                            child: Icon(
-                              Icons.gps_fixed,
-                              color: FlutterFlowTheme.of(context).primaryText,
-                              size: 24.0,
                             ),
                           ),
                         ].divide(SizedBox(width: 20.0)),
@@ -297,9 +254,7 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
 
                           context.pushNamed(OnBoarding04Widget.routeName);
                         },
-                        text: FFLocalizations.of(context).getText(
-                          '610ohxtp' /* Confirm  */,
-                        ),
+                        text: 'Kom igång  ',
                         icon: Icon(
                           Icons.arrow_forward_outlined,
                           size: 16.0,

@@ -28,8 +28,6 @@ class _SelectLanguageWidgetState extends State<SelectLanguageWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => SelectLanguageModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -69,9 +67,7 @@ class _SelectLanguageWidgetState extends State<SelectLanguageWidget> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Text(
-                            FFLocalizations.of(context).getText(
-                              'j592cc89' /* Välj språk */,
-                            ),
+                            'Välj språk',
                             style: FlutterFlowTheme.of(context)
                                 .headlineLarge
                                 .override(
@@ -93,9 +89,7 @@ class _SelectLanguageWidgetState extends State<SelectLanguageWidget> {
                                 ),
                           ),
                           Text(
-                            FFLocalizations.of(context).getText(
-                              '20n2l1zk' /* Choose language */,
-                            ),
+                            'Choose language',
                             style: FlutterFlowTheme.of(context)
                                 .titleMedium
                                 .override(
@@ -120,9 +114,7 @@ class _SelectLanguageWidgetState extends State<SelectLanguageWidget> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Text(
-                        FFLocalizations.of(context).getText(
-                          'b5evds53' /* Appen följer ditt telefonspråk... */,
-                        ),
+                        'Appen följer ditt telefonspråk automatiskt. Du\nkan ändra detta senare i inställningarna.',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.manrope(
                                 fontWeight: FlutterFlowTheme.of(context)
@@ -176,9 +168,7 @@ class _SelectLanguageWidgetState extends State<SelectLanguageWidget> {
                     onPressed: () async {
                       context.pushNamed(OnBoarding02Widget.routeName);
                     },
-                    text: FFLocalizations.of(context).getText(
-                      'kqunxrd7' /* Fortsätt */,
-                    ),
+                    text: 'Fortsätt',
                     icon: Icon(
                       Icons.arrow_forward_outlined,
                       size: 16.0,

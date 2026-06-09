@@ -38,8 +38,6 @@ class _LanguageSelectorWidgetState extends State<LanguageSelectorWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => LanguageSelectorModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -103,7 +101,7 @@ class _LanguageSelectorWidgetState extends State<LanguageSelectorWidget> {
                   Text(
                     valueOrDefault<String>(
                       widget.mainHeading,
-                      'Svenska',
+                      '.',
                     ),
                     style: FlutterFlowTheme.of(context).headlineSmall.override(
                           font: GoogleFonts.manrope(
@@ -126,7 +124,7 @@ class _LanguageSelectorWidgetState extends State<LanguageSelectorWidget> {
                   Text(
                     valueOrDefault<String>(
                       widget.detail,
-                      'detaill',
+                      '.',
                     ),
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           font: GoogleFonts.manrope(
@@ -153,13 +151,31 @@ class _LanguageSelectorWidgetState extends State<LanguageSelectorWidget> {
             mainAxisSize: MainAxisSize.max,
             children: [
               FlutterFlowRadioButton(
-                options: [
-                  FFLocalizations.of(context).getText(
-                    'i2r73lj1' /*  */,
-                  )
-                ].toList(),
-                onChanged:
-                    widget.select! ? null : (val) => safeSetState(() {}),
+                options: [''].toList(),
+                onChanged: (val) async {
+                  safeSetState(() {});
+                  if (widget.shortName == 'SV') {
+                    FFAppState().updateUserStruct(
+                      (e) => e..phoneDetect = true,
+                    );
+                    safeSetState(() {});
+                    FFAppState().updateUserStruct(
+                      (e) => e..switchToEnglish = false,
+                    );
+                    safeSetState(() {});
+                  } else {
+                    FFAppState().updateUserStruct(
+                      (e) => e..phoneDetect = false,
+                    );
+                    safeSetState(() {});
+                    FFAppState().updateUserStruct(
+                      (e) => e..switchToEnglish = true,
+                    );
+                    safeSetState(() {});
+                  }
+
+                  safeSetState(() {});
+                },
                 controller: _model.radioButtonValueController ??=
                     FormFieldController<String>(null),
                 optionHeight: 32.0,

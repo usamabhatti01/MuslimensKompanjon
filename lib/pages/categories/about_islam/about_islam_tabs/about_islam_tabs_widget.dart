@@ -32,8 +32,6 @@ class _AboutIslamTabsWidgetState extends State<AboutIslamTabsWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => AboutIslamTabsModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

@@ -36,8 +36,6 @@ class _YoutubeVideoItemWidgetState extends State<YoutubeVideoItemWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => YoutubeVideoItemModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

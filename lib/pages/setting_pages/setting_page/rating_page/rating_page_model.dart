@@ -1,5 +1,5 @@
-import '/components/feedback_chip_widget.dart';
-import '/components/rating_star_widget.dart';
+import '/extra/feedback_chip/feedback_chip_widget.dart';
+import '/extra/rating_star/rating_star_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'rating_page_widget.dart' show RatingPageWidget;
 import 'package:flutter/material.dart';

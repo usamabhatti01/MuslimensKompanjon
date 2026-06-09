@@ -1,4 +1,4 @@
-import '/components/page_sub_header_widget.dart';
+import '/extra/page_sub_header/page_sub_header_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/pages/on_boarding/prayer_notification/prayer_notification_widget.dart';
 import '/pages/setting_pages/pages_heading_box/pages_heading_box_widget.dart';

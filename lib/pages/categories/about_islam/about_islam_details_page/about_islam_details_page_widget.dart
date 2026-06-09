@@ -31,8 +31,6 @@ class _AboutIslamDetailsPageWidgetState
   void initState() {
     super.initState();
     _model = createModel(context, () => AboutIslamDetailsPageModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -54,38 +52,47 @@ class _AboutIslamDetailsPageWidgetState
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         body: SafeArea(
           top: true,
-          child: wrapWithModel(
-            model: _model.islamicDetailsPageModel,
-            updateCallback: () => safeSetState(() {}),
-            child: IslamicDetailsPageWidget(
-              pageHeading: getJsonField(
-                widget.tabData,
-                r'''$.pageHeading''',
-              ).toString(),
-              imagePath: getJsonField(
-                widget.tabData,
-                r'''$.imagePath''',
-              ).toString(),
-              audioPath: getJsonField(
-                widget.tabData,
-                r'''$.audioPath''',
-              ).toString(),
-              contentBody: getJsonField(
-                widget.tabData,
-                r'''$.contentBody''',
-              ).toString(),
-              contentBody2: getJsonField(
-                widget.tabData,
-                r'''$.contentBody2''',
-              ).toString(),
-              contentBody3: getJsonField(
-                widget.tabData,
-                r'''$.contentBody3''',
-              ).toString(),
-              pageName: getJsonField(
-                widget.tabData,
-                r'''$.title''',
-              ).toString(),
+          child: Padding(
+            padding: EdgeInsets.all(
+                FlutterFlowTheme.of(context).designToken.spacing.lg),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                wrapWithModel(
+                  model: _model.islamicDetailsPageModel,
+                  updateCallback: () => safeSetState(() {}),
+                  child: IslamicDetailsPageWidget(
+                    pageHeading: getJsonField(
+                      widget.tabData,
+                      r'''$.pageHeading''',
+                    ).toString(),
+                    imagePath: getJsonField(
+                      widget.tabData,
+                      r'''$.imagePath''',
+                    ).toString(),
+                    audioPath: getJsonField(
+                      widget.tabData,
+                      r'''$.audioPath''',
+                    ).toString(),
+                    contentBody: getJsonField(
+                      widget.tabData,
+                      r'''$.contentBody''',
+                    ).toString(),
+                    contentBody2: getJsonField(
+                      widget.tabData,
+                      r'''$.contentBody2''',
+                    ).toString(),
+                    contentBody3: getJsonField(
+                      widget.tabData,
+                      r'''$.contentBody3''',
+                    ).toString(),
+                    pageName: getJsonField(
+                      widget.tabData,
+                      r'''$.title''',
+                    ).toString(),
+                  ),
+                ),
+              ].divide(SizedBox(height: 20.0)).around(SizedBox(height: 20.0)),
             ),
           ),
         ),

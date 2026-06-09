@@ -15,19 +15,17 @@ class SettingModel extends FlutterFlowModel<SettingWidget> {
   late SettingPagesHeaderModel settingPagesHeaderModel;
   // Model for PagesHeadingBox component.
   late PagesHeadingBoxModel pagesHeadingBoxModel;
-  // Model for SettingTabWithSwitch component.
-  late SettingTabWithSwitchModel settingTabWithSwitchModel1;
   // State field(s) for Switch widget.
   bool? switchValue1;
   // Model for SettingTabWithSwitch component.
-  late SettingTabWithSwitchModel settingTabWithSwitchModel2;
+  late SettingTabWithSwitchModel settingTabWithSwitchModel1;
   // State field(s) for Switch widget.
   bool? switchValue2;
   // State field(s) for DropDown widget.
   String? dropDownValue;
   FormFieldController<String>? dropDownValueController;
   // Model for SettingTabWithSwitch component.
-  late SettingTabWithSwitchModel settingTabWithSwitchModel3;
+  late SettingTabWithSwitchModel settingTabWithSwitchModel2;
   // Model for SettingTab component.
   late SettingTabModel settingTabModel1;
   // Model for SettingTab component.
@@ -42,8 +40,6 @@ class SettingModel extends FlutterFlowModel<SettingWidget> {
         createModel(context, () => SettingTabWithSwitchModel());
     settingTabWithSwitchModel2 =
         createModel(context, () => SettingTabWithSwitchModel());
-    settingTabWithSwitchModel3 =
-        createModel(context, () => SettingTabWithSwitchModel());
     settingTabModel1 = createModel(context, () => SettingTabModel());
     settingTabModel2 = createModel(context, () => SettingTabModel());
   }
@@ -54,7 +50,6 @@ class SettingModel extends FlutterFlowModel<SettingWidget> {
     pagesHeadingBoxModel.dispose();
     settingTabWithSwitchModel1.dispose();
     settingTabWithSwitchModel2.dispose();
-    settingTabWithSwitchModel3.dispose();
     settingTabModel1.dispose();
     settingTabModel2.dispose();
   }

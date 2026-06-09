@@ -2,6 +2,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/pages/on_boarding/prayer_notification/prayer_notification_widget.dart';
+import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,8 +29,6 @@ class _OnBoarding04WidgetState extends State<OnBoarding04Widget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => OnBoarding04Model());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -82,9 +81,7 @@ class _OnBoarding04WidgetState extends State<OnBoarding04Widget> {
                       ),
                       Expanded(
                         child: Text(
-                          FFLocalizations.of(context).getText(
-                            'ihs7k9dt' /* Prayer Notifications */,
-                          ),
+                          'Bönenotiser',
                           textAlign: TextAlign.center,
                           style:
                               FlutterFlowTheme.of(context).titleMedium.override(
@@ -127,9 +124,7 @@ class _OnBoarding04WidgetState extends State<OnBoarding04Widget> {
                           ),
                         ),
                         Text(
-                          FFLocalizations.of(context).getText(
-                            'urwz9ora' /* Never Miss a prayer! */,
-                          ),
+                          'Missa aldrig en bön!',
                           style:
                               FlutterFlowTheme.of(context).titleLarge.override(
                                     font: GoogleFonts.manrope(
@@ -150,9 +145,7 @@ class _OnBoarding04WidgetState extends State<OnBoarding04Widget> {
                                   ),
                         ),
                         Text(
-                          FFLocalizations.of(context).getText(
-                            'mngumizw' /* Choose which times you want to... */,
-                          ),
+                          'Välj för vilka tider du vill få påminnelser \noch notiser.',
                           textAlign: TextAlign.center,
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
@@ -243,9 +236,7 @@ class _OnBoarding04WidgetState extends State<OnBoarding04Widget> {
                           ),
                         ),
                         Text(
-                          FFLocalizations.of(context).getText(
-                            'a2usqzrp' /* You can select different adhan... */,
-                          ),
+                          'Du kan välja olika adhan-röster och inställningar \nsenare i appen.',
                           textAlign: TextAlign.center,
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
@@ -268,39 +259,42 @@ class _OnBoarding04WidgetState extends State<OnBoarding04Widget> {
                         ),
                         FFButtonWidget(
                           onPressed: () async {
-                            FFAppState().updateUserStruct(
-                              (e) => e
-                                ..updateNotifications(
-                                  (e) => e
-                                    ..fazr = _model.fazrModel.switchValue
-                                    ..shuruq = _model.shuruqModel.switchValue
-                                    ..dohr = _model.dohtModel.switchValue
-                                    ..asr = _model.asrModel.switchValue
-                                    ..maghrib = _model.maghribModel.switchValue
-                                    ..isha = _model.ishaModel.switchValue,
-                                ),
-                            );
-                            safeSetState(() {});
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'Notification Update Successfully.',
-                                  style: TextStyle(
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
+                            if (FFAppState().user.city != '') {
+                              FFAppState().updateUserStruct(
+                                (e) => e
+                                  ..updateNotifications(
+                                    (e) => e
+                                      ..fazr = _model.fazrModel.switchValue
+                                      ..shuruq = _model.shuruqModel.switchValue
+                                      ..dohr = _model.dohtModel.switchValue
+                                      ..asr = _model.asrModel.switchValue
+                                      ..maghrib =
+                                          _model.maghribModel.switchValue
+                                      ..isha = _model.ishaModel.switchValue,
                                   ),
-                                ),
-                                duration: Duration(milliseconds: 4000),
-                                backgroundColor:
-                                    FlutterFlowTheme.of(context).secondary,
-                              ),
-                            );
+                              );
+                              safeSetState(() {});
+                              await actions.schedulePrayerNotifications();
 
-                            context.pushNamed(HomeWidget.routeName);
+                              context.pushNamed(HomeWidget.routeName);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'CityNot Select',
+                                    style: TextStyle(
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                    ),
+                                  ),
+                                  duration: Duration(milliseconds: 4000),
+                                  backgroundColor:
+                                      FlutterFlowTheme.of(context).secondary,
+                                ),
+                              );
+                            }
                           },
-                          text: FFLocalizations.of(context).getText(
-                            'wlfhuhub' /* Enable Notifications */,
-                          ),
+                          text: 'Aktivera notiser',
                           options: FFButtonOptions(
                             width: 250.0,
                             height: 40.0,
@@ -342,9 +336,7 @@ class _OnBoarding04WidgetState extends State<OnBoarding04Widget> {
                             context.pushNamed(HomeWidget.routeName);
                           },
                           child: Text(
-                            FFLocalizations.of(context).getText(
-                              's060smtr' /* Skip */,
-                            ),
+                            'Hoppa över',
                             style: FlutterFlowTheme.of(context)
                                 .titleSmall
                                 .override(

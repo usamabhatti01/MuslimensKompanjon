@@ -2,11 +2,10 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/pages/on_boarding/language_selector/language_selector_widget.dart';
-import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'on_boarding00_model.dart';
 export 'on_boarding00_model.dart';
 
@@ -29,13 +28,6 @@ class _OnBoarding00WidgetState extends State<OnBoarding00Widget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => OnBoarding00Model());
-
-    // On page load action.
-    SchedulerBinding.instance.addPostFrameCallback((_) async {
-      await actions.schedulePrayerNotifications();
-    });
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -47,6 +39,8 @@ class _OnBoarding00WidgetState extends State<OnBoarding00Widget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -65,9 +59,7 @@ class _OnBoarding00WidgetState extends State<OnBoarding00Widget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  FFLocalizations.of(context).getText(
-                    'tp7zc6ya' /* Choose Language */,
-                  ),
+                  'Choose Language',
                   style: FlutterFlowTheme.of(context).headlineLarge.override(
                         font: GoogleFonts.manrope(
                           fontWeight: FlutterFlowTheme.of(context)
@@ -87,9 +79,7 @@ class _OnBoarding00WidgetState extends State<OnBoarding00Widget> {
                       ),
                 ),
                 Text(
-                  FFLocalizations.of(context).getText(
-                    '7c2axt1z' /* The app follows your phone's l... */,
-                  ),
+                  'The app follows your phone\'s language automatically. You can change this later in settings.',
                   textAlign: TextAlign.start,
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         font: GoogleFonts.manrope(
@@ -106,27 +96,14 @@ class _OnBoarding00WidgetState extends State<OnBoarding00Widget> {
                             FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                       ),
                 ),
-                InkWell(
-                  splashColor: Colors.transparent,
-                  focusColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onTap: () async {
-                    _model.phoneDetect = _model
-                                .languageSelectorModel1.radioButtonValue !=
-                            null &&
-                        _model.languageSelectorModel1.radioButtonValue != '';
-                    safeSetState(() {});
-                  },
-                  child: wrapWithModel(
-                    model: _model.languageSelectorModel1,
-                    updateCallback: () => safeSetState(() {}),
-                    child: LanguageSelectorWidget(
-                      shortName: 'SV',
-                      mainHeading: 'Svenska',
-                      detail: 'Detected from your phone',
-                      select: false,
-                    ),
+                wrapWithModel(
+                  model: _model.languageSelectorModel1,
+                  updateCallback: () => safeSetState(() {}),
+                  child: LanguageSelectorWidget(
+                    shortName: 'SV',
+                    mainHeading: 'Svenska',
+                    detail: 'Detected from your phone',
+                    select: FFAppState().user.phoneDetect,
                   ),
                 ),
                 wrapWithModel(
@@ -136,16 +113,14 @@ class _OnBoarding00WidgetState extends State<OnBoarding00Widget> {
                     shortName: 'EN',
                     mainHeading: 'English',
                     detail: 'Switch to English',
-                    select: false,
+                    select: FFAppState().user.switchToEnglish,
                   ),
                 ),
                 FFButtonWidget(
                   onPressed: () async {
                     context.pushNamed(OnBoarding01Widget.routeName);
                   },
-                  text: FFLocalizations.of(context).getText(
-                    '76260gef' /* Continue */,
-                  ),
+                  text: 'Continue',
                   icon: Icon(
                     Icons.east_rounded,
                     size: 18.0,

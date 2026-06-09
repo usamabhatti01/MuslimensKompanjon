@@ -37,8 +37,6 @@ class _NameMeaningPopupWidgetState extends State<NameMeaningPopupWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => NameMeaningPopupModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -149,9 +147,7 @@ class _NameMeaningPopupWidgetState extends State<NameMeaningPopupWidget> {
                 onPressed: () async {
                   Navigator.pop(context);
                 },
-                text: FFLocalizations.of(context).getText(
-                  'fo35xndn' /* Closed */,
-                ),
+                text: 'Closed',
                 options: FFButtonOptions(
                   width: double.infinity,
                   height: 40.0,

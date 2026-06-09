@@ -1,5 +1,5 @@
-import '/components/feedback_chip_widget.dart';
-import '/components/rating_star_widget.dart';
+import '/extra/feedback_chip/feedback_chip_widget.dart';
+import '/extra/rating_star/rating_star_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -32,8 +32,6 @@ class _RatingPageWidgetState extends State<RatingPageWidget> {
 
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -81,9 +79,7 @@ class _RatingPageWidgetState extends State<RatingPageWidget> {
                             animate: true,
                           ),
                           Text(
-                            FFLocalizations.of(context).getText(
-                              '0hbhjqqz' /* Enjoying MuslimensKompanjon? */,
-                            ),
+                            'Enjoying MuslimensKompanjon?',
                             textAlign: TextAlign.center,
                             style: FlutterFlowTheme.of(context)
                                 .headlineMedium
@@ -103,9 +99,7 @@ class _RatingPageWidgetState extends State<RatingPageWidget> {
                                 ),
                           ),
                           Text(
-                            FFLocalizations.of(context).getText(
-                              'qp32ewht' /* Your feedback helps us improve... */,
-                            ),
+                            'Your feedback helps us improve the experience for the Ummah.',
                             textAlign: TextAlign.center,
                             style:
                                 FlutterFlowTheme.of(context).bodyLarge.override(
@@ -147,9 +141,7 @@ class _RatingPageWidgetState extends State<RatingPageWidget> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  FFLocalizations.of(context).getText(
-                                    '66z8t0gc' /* Tap to rate */,
-                                  ),
+                                  'Tap to rate',
                                   style: FlutterFlowTheme.of(context)
                                       .labelLarge
                                       .override(
@@ -235,9 +227,7 @@ class _RatingPageWidgetState extends State<RatingPageWidget> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      FFLocalizations.of(context).getText(
-                                        'tld60ncz' /* What do you like most? */,
-                                      ),
+                                      'What do you like most?',
                                       style: FlutterFlowTheme.of(context)
                                           .titleSmall
                                           .override(
@@ -349,9 +339,7 @@ class _RatingPageWidgetState extends State<RatingPageWidget> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
-                            FFLocalizations.of(context).getText(
-                              'ov0frsyq' /* Additional comments (optional) */,
-                            ),
+                            'Additional comments (optional)',
                             style: FlutterFlowTheme.of(context)
                                 .labelLarge
                                 .override(
@@ -404,9 +392,7 @@ class _RatingPageWidgetState extends State<RatingPageWidget> {
                                           .labelMedium
                                           .fontStyle,
                                     ),
-                                hintText: FFLocalizations.of(context).getText(
-                                  'deu9y9jy' /* TextField */,
-                                ),
+                                hintText: 'TextField',
                                 hintStyle: FlutterFlowTheme.of(context)
                                     .labelMedium
                                     .override(
@@ -489,9 +475,7 @@ class _RatingPageWidgetState extends State<RatingPageWidget> {
                             onPressed: () {
                               print('Button pressed ...');
                             },
-                            text: FFLocalizations.of(context).getText(
-                              'zp1dfurw' /* Send */,
-                            ),
+                            text: 'Send',
                             options: FFButtonOptions(
                               height: 40.0,
                               padding: EdgeInsetsDirectional.fromSTEB(
@@ -536,9 +520,7 @@ class _RatingPageWidgetState extends State<RatingPageWidget> {
                             size: 14.0,
                           ),
                           Text(
-                            FFLocalizations.of(context).getText(
-                              '5izqt0k8' /* Your feedback is anonymous and... */,
-                            ),
+                            'Your feedback is anonymous and secure',
                             style: FlutterFlowTheme.of(context)
                                 .labelSmall
                                 .override(

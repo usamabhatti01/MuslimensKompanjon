@@ -1,5 +1,5 @@
-import '/components/feature_item_widget.dart';
-import '/components/social_link_widget.dart';
+import '/extra/feature_item/feature_item_widget.dart';
+import '/extra/social_link/social_link_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -28,8 +28,6 @@ class _AboutPageWidgetState extends State<AboutPageWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => AboutPageModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -115,9 +113,7 @@ class _AboutPageWidgetState extends State<AboutPageWidget> {
                               ),
                             ),
                             Text(
-                              FFLocalizations.of(context).getText(
-                                'v24rdvb0' /* MuslimensKompanjon */,
-                              ),
+                              'MuslimensKompanjon',
                               style: FlutterFlowTheme.of(context)
                                   .headlineMedium
                                   .override(
@@ -138,9 +134,7 @@ class _AboutPageWidgetState extends State<AboutPageWidget> {
                                   ),
                             ),
                             Text(
-                              FFLocalizations.of(context).getText(
-                                'hp5noamc' /* Version 1.2.0 */,
-                              ),
+                              'Version 1.2.0',
                               style: FlutterFlowTheme.of(context)
                                   .labelMedium
                                   .override(
@@ -184,9 +178,7 @@ class _AboutPageWidgetState extends State<AboutPageWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          FFLocalizations.of(context).getText(
-                            'u60ethy3' /* Our Mission */,
-                          ),
+                          'Our Mission',
                           style:
                               FlutterFlowTheme.of(context).titleLarge.override(
                                     font: GoogleFonts.manrope(
@@ -205,9 +197,7 @@ class _AboutPageWidgetState extends State<AboutPageWidget> {
                                   ),
                         ),
                         Text(
-                          FFLocalizations.of(context).getText(
-                            'aosgszi8' /* MuslimensKompanjon is dedicate... */,
-                          ),
+                          'MuslimensKompanjon is dedicated to providing a seamless, ad-free experience for Muslims worldwide. Our goal is to blend modern technology with spiritual necessity, helping you stay connected to your faith wherever you are.',
                           style: FlutterFlowTheme.of(context)
                               .bodyMedium
                               .override(
@@ -238,9 +228,7 @@ class _AboutPageWidgetState extends State<AboutPageWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          FFLocalizations.of(context).getText(
-                            'v29kvzub' /* Key Features */,
-                          ),
+                          'Key Features',
                           style: FlutterFlowTheme.of(context)
                               .titleLarge
                               .override(
@@ -326,9 +314,7 @@ class _AboutPageWidgetState extends State<AboutPageWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          FFLocalizations.of(context).getText(
-                            'opjnggcv' /* Connect With Us */,
-                          ),
+                          'Connect With Us',
                           style: FlutterFlowTheme.of(context)
                               .titleLarge
                               .override(
@@ -426,9 +412,7 @@ class _AboutPageWidgetState extends State<AboutPageWidget> {
                                     size: 24.0,
                                   ),
                                   Text(
-                                    FFLocalizations.of(context).getText(
-                                      '2up1j1ny' /* Support the Project */,
-                                    ),
+                                    'Support the Project',
                                     style: FlutterFlowTheme.of(context)
                                         .titleMedium
                                         .override(
@@ -453,9 +437,7 @@ class _AboutPageWidgetState extends State<AboutPageWidget> {
                                 ].divide(SizedBox(width: 8.0)),
                               ),
                               Text(
-                                FFLocalizations.of(context).getText(
-                                  'g3mertf2' /* This app is developed as Sadaq... */,
-                                ),
+                                'This app is developed as Sadaqah Jariyah. If you find it beneficial, please keep the developers in your Duas.',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -493,9 +475,7 @@ class _AboutPageWidgetState extends State<AboutPageWidget> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            FFLocalizations.of(context).getText(
-                              'jqvtshzb' /* Made with ❤️ for the Ummah */,
-                            ),
+                            'Made with ❤️ for the Ummah',
                             style: FlutterFlowTheme.of(context)
                                 .labelSmall
                                 .override(
@@ -519,9 +499,7 @@ class _AboutPageWidgetState extends State<AboutPageWidget> {
                                 ),
                           ),
                           Text(
-                            FFLocalizations.of(context).getText(
-                              'wx631s0z' /* © 2024 MuslimensKompanjon Team */,
-                            ),
+                            '© 2024 MuslimensKompanjon Team',
                             style: FlutterFlowTheme.of(context)
                                 .labelSmall
                                 .override(

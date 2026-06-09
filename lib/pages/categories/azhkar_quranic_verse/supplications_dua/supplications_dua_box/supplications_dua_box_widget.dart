@@ -33,8 +33,6 @@ class _SupplicationsDuaBoxWidgetState extends State<SupplicationsDuaBoxWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => SupplicationsDuaBoxModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

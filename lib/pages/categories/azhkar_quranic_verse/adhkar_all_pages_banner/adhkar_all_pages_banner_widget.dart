@@ -32,8 +32,6 @@ class _AdhkarAllPagesBannerWidgetState
   void initState() {
     super.initState();
     _model = createModel(context, () => AdhkarAllPagesBannerModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

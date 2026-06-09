@@ -46,8 +46,6 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget>
         ],
       ),
     });
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -90,9 +88,7 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget>
                       ),
                     ),
                     Text(
-                      FFLocalizations.of(context).getText(
-                        'nx8iom7k' /* Your daily companion for a ric... */,
-                      ),
+                      'Din vardagliga kompanjon för ett rikare muslimskt liv – med allt från Koranen på arabiska, svenska och engelska (text och ljud), MK-videokanalen och Dhikr till information om islam. Appen innehåller även viktiga verktyg som bönetider, Hijri-kalender, Qibla, to-do-lista och en karta över Sveriges moskéer.',
                       textAlign: TextAlign.start,
                       style: FlutterFlowTheme.of(context).bodyLarge.override(
                             font: GoogleFonts.inter(
@@ -162,9 +158,7 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                FFLocalizations.of(context).getText(
-                                  'rvpsptrn' /* The Quran */,
-                                ),
+                                'Koranen',
                                 style: FlutterFlowTheme.of(context)
                                     .headlineLarge
                                     .override(
@@ -187,9 +181,7 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget>
                                     ),
                               ),
                               Text(
-                                FFLocalizations.of(context).getText(
-                                  'joihiot8' /* Arabic/Swedish/English text an... */,
-                                ),
+                                'Arabisk/svensk/Engelsk text och ljud.',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -249,9 +241,7 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                FFLocalizations.of(context).getText(
-                                  'maa4ofyz' /* Information about Islam */,
-                                ),
+                                'Information om islam',
                                 style: FlutterFlowTheme.of(context)
                                     .headlineLarge
                                     .override(
@@ -274,9 +264,7 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget>
                                     ),
                               ),
                               Text(
-                                FFLocalizations.of(context).getText(
-                                  'wfyj726d' /* Learn the basics of Islam. */,
-                                ),
+                                'Lär dig islams grunder.',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -336,9 +324,7 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                FFLocalizations.of(context).getText(
-                                  'dmu2s25s' /* MK Video Channel */,
-                                ),
+                                'MK-videokanalen',
                                 style: FlutterFlowTheme.of(context)
                                     .headlineLarge
                                     .override(
@@ -361,9 +347,7 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget>
                                     ),
                               ),
                               Text(
-                                FFLocalizations.of(context).getText(
-                                  'dp7yclz4' /* Inspirational and educational ... */,
-                                ),
+                                'Inspirerande och lärorika videor.',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -423,9 +407,7 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                FFLocalizations.of(context).getText(
-                                  'azey4eph' /* Prayer Times & Tools */,
-                                ),
+                                'Bönetider & Verktyg',
                                 style: FlutterFlowTheme.of(context)
                                     .headlineLarge
                                     .override(
@@ -448,9 +430,7 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget>
                                     ),
                               ),
                               Text(
-                                FFLocalizations.of(context).getText(
-                                  'a8ohkp7l' /* Prayer times, Qibla, Dhikr, an... */,
-                                ),
+                                'Bönetider, Qibla, Dhikr och to-do-lista.',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -510,9 +490,7 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                FFLocalizations.of(context).getText(
-                                  'bbdbyrlr' /* Hijri Calendar & Maps */,
-                                ),
+                                'Hijri-kalender & Kartor',
                                 style: FlutterFlowTheme.of(context)
                                     .headlineLarge
                                     .override(
@@ -535,9 +513,7 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget>
                                     ),
                               ),
                               Text(
-                                FFLocalizations.of(context).getText(
-                                  'jl9wgdwf' /* Important dates and map of mos... */,
-                                ),
+                                'Viktiga datum och karta över moskéer.',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -574,9 +550,7 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget>
                 onPressed: () async {
                   context.pushNamed(OnBoarding02Widget.routeName);
                 },
-                text: FFLocalizations.of(context).getText(
-                  'vdnlcr9h' /* Get Started */,
-                ),
+                text: 'Kom igång ',
                 icon: Icon(
                   Icons.east_rounded,
                   size: 18.0,

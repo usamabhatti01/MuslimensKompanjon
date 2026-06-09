@@ -1,5 +1,5 @@
-import '/components/feature_item_widget.dart';
-import '/components/social_link_widget.dart';
+import '/extra/feature_item/feature_item_widget.dart';
+import '/extra/social_link/social_link_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'about_page_widget.dart' show AboutPageWidget;
 import 'package:flutter/material.dart';

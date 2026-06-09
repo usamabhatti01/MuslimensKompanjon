@@ -1,4 +1,4 @@
-import '/components/page_sub_header_widget.dart';
+import '/extra/page_sub_header/page_sub_header_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -30,8 +30,6 @@ class _NotificationWidgetState extends State<NotificationWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => NotificationModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -86,9 +84,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          FFLocalizations.of(context).getText(
-                            'xu2eyxv3' /* Never Miss a prayer! */,
-                          ),
+                          'Never Miss a prayer!',
                           style:
                               FlutterFlowTheme.of(context).titleLarge.override(
                                     font: GoogleFonts.manrope(
@@ -109,9 +105,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                                   ),
                         ),
                         Text(
-                          FFLocalizations.of(context).getText(
-                            'zfw0kuao' /* Choose which times you want to... */,
-                          ),
+                          'Choose which times you want to \nreceive alerts and notifications for.',
                           textAlign: TextAlign.center,
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
@@ -202,9 +196,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                           ),
                         ),
                         Text(
-                          FFLocalizations.of(context).getText(
-                            '703n8kne' /* You can select different adhan... */,
-                          ),
+                          'You can select different adhan voices and\n options later in the app settings.',
                           textAlign: TextAlign.center,
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
@@ -257,9 +249,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                               ),
                             );
                           },
-                          text: FFLocalizations.of(context).getText(
-                            'gwrkyhlk' /* Enable Notifications */,
-                          ),
+                          text: 'Enable Notifications',
                           options: FFButtonOptions(
                             width: 250.0,
                             height: 40.0,

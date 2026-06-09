@@ -1,4 +1,4 @@
-import '/components/page_sub_header_widget.dart';
+import '/extra/page_sub_header/page_sub_header_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/pages/categories/about_islam/about_islam_tabs/about_islam_tabs_widget.dart';
@@ -28,8 +28,6 @@ class _AboutIslamWidgetState extends State<AboutIslamWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => AboutIslamModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -55,7 +53,7 @@ class _AboutIslamWidgetState extends State<AboutIslamWidget> {
           top: true,
           child: Padding(
             padding: EdgeInsets.all(
-                FlutterFlowTheme.of(context).designToken.spacing.md),
+                FlutterFlowTheme.of(context).designToken.spacing.lg),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
@@ -67,9 +65,7 @@ class _AboutIslamWidgetState extends State<AboutIslamWidget> {
                   ),
                 ),
                 Text(
-                  FFLocalizations.of(context).getText(
-                    '5xodvrat' /* Guiding reminders */,
-                  ),
+                  'Guiding reminders',
                   style: FlutterFlowTheme.of(context).headlineLarge.override(
                         font: GoogleFonts.manrope(
                           fontWeight: FlutterFlowTheme.of(context)
@@ -137,7 +133,7 @@ class _AboutIslamWidgetState extends State<AboutIslamWidget> {
                     );
                   },
                 ),
-              ].divide(SizedBox(height: 20.0)),
+              ].divide(SizedBox(height: 20.0)).around(SizedBox(height: 20.0)),
             ),
           ),
         ),

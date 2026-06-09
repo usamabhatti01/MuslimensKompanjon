@@ -1,7 +1,6 @@
-import '/components/page_sub_header_widget.dart';
+import '/extra/page_sub_header/page_sub_header_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/pages/categories/azhkar_quranic_verse/adhkar_all_pages_banner/adhkar_all_pages_banner_widget.dart';
 import '/pages/categories/azhkar_quranic_verse/adkha_page_component/adkha_page_component_widget.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
@@ -27,8 +26,6 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => AdhkarModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -52,7 +49,7 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
           top: true,
           child: Padding(
             padding: EdgeInsets.all(
-                FlutterFlowTheme.of(context).designToken.spacing.md),
+                FlutterFlowTheme.of(context).designToken.spacing.lg),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
@@ -60,18 +57,7 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
                   model: _model.pageSubHeaderModel,
                   updateCallback: () => safeSetState(() {}),
                   child: PageSubHeaderWidget(
-                    pageName: FFLocalizations.of(context).getText(
-                      '7uzhg2z5' /* Adhkar */,
-                    ),
-                  ),
-                ),
-                wrapWithModel(
-                  model: _model.adhkarAllPagesBannerModel,
-                  updateCallback: () => safeSetState(() {}),
-                  child: AdhkarAllPagesBannerWidget(
-                    pageName: FFLocalizations.of(context).getText(
-                      'd1wi5lcc' /* Adhkar */,
-                    ),
+                    pageName: 'Adhkar',
                   ),
                 ),
                 Expanded(
@@ -115,11 +101,7 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
                               color: FlutterFlowTheme.of(context).tertiary,
                               size: 32.0,
                             ),
-                            title: FFLocalizations.of(context).getText(
-                              'y5atdrmd' /* Morning
-Adhkar */
-                              ,
-                            ),
+                            title: 'Morgon \nAdhkar',
                           ),
                         ),
                       ),
@@ -140,11 +122,7 @@ Adhkar */
                               color: FlutterFlowTheme.of(context).success,
                               size: 32.0,
                             ),
-                            title: FFLocalizations.of(context).getText(
-                              'cb1pwk76' /* Evening
-Adhkar */
-                              ,
-                            ),
+                            title: 'Kväll\nAdhkar',
                           ),
                         ),
                       ),
@@ -165,9 +143,7 @@ Adhkar */
                               color: FlutterFlowTheme.of(context).primary,
                               size: 32.0,
                             ),
-                            title: FFLocalizations.of(context).getText(
-                              'lwqvydl6' /* Tasbih */,
-                            ),
+                            title: 'Tasbih',
                           ),
                         ),
                       ),
@@ -188,11 +164,7 @@ Adhkar */
                               color: FlutterFlowTheme.of(context).primary,
                               size: 32.0,
                             ),
-                            title: FFLocalizations.of(context).getText(
-                              'jguwpo06' /* Names
-of Allah */
-                              ,
-                            ),
+                            title: 'Allahs namn',
                           ),
                         ),
                       ),
@@ -213,18 +185,14 @@ of Allah */
                               color: FlutterFlowTheme.of(context).primary,
                               size: 32.0,
                             ),
-                            title: FFLocalizations.of(context).getText(
-                              'lxb3k9nj' /* Supplicati-
-ons (Dua) */
-                              ,
-                            ),
+                            title: 'Åkallan & Dua',
                           ),
                         ),
                       ),
                     ],
                   ),
                 ),
-              ].divide(SizedBox(height: 22.0)),
+              ].divide(SizedBox(height: 20.0)).around(SizedBox(height: 20.0)),
             ),
           ),
         ),

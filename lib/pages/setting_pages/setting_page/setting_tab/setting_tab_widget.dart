@@ -34,8 +34,6 @@ class _SettingTabWidgetState extends State<SettingTabWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => SettingTabModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

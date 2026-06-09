@@ -12,8 +12,6 @@ class OnBoarding03Model extends FlutterFlowModel<OnBoarding03Widget> {
   // State field(s) for DropDown widget.
   String? dropDownValue;
   FormFieldController<String>? dropDownValueController;
-  // Stores action output result for [Custom Action - loadCitiesFromAsset] action in Icon widget.
-  List<CityRecordStruct>? singleCity;
 
   @override
   void initState(BuildContext context) {}

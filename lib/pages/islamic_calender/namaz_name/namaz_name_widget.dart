@@ -30,8 +30,6 @@ class _NamazNameWidgetState extends State<NamazNameWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => NamazNameModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
