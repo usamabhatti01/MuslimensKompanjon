@@ -88,7 +88,7 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
                             style: FlutterFlowTheme.of(context)
                                 .titleMedium
                                 .override(
-                                  font: GoogleFonts.manrope(
+                                  font: GoogleFonts.plusJakartaSans(
                                     fontWeight: FlutterFlowTheme.of(context)
                                         .titleMedium
                                         .fontWeight,
@@ -177,7 +177,7 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
                               searchTextStyle: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    font: GoogleFonts.manrope(
+                                    font: GoogleFonts.inter(
                                       fontWeight: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .fontWeight,
@@ -196,7 +196,7 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
                               textStyle: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    font: GoogleFonts.manrope(
+                                    font: GoogleFonts.inter(
                                       fontWeight: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .fontWeight,
@@ -272,7 +272,7 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
                           color: FlutterFlowTheme.of(context).primary,
                           textStyle:
                               FlutterFlowTheme.of(context).titleSmall.override(
-                                    font: GoogleFonts.manrope(
+                                    font: GoogleFonts.plusJakartaSans(
                                       fontWeight: FlutterFlowTheme.of(context)
                                           .titleSmall
                                           .fontWeight,

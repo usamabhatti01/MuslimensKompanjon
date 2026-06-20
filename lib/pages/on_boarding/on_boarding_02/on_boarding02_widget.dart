@@ -78,7 +78,7 @@ class _OnBoarding02WidgetState extends State<OnBoarding02Widget> {
                         'Plats',
                         style:
                             FlutterFlowTheme.of(context).headlineLarge.override(
-                                  font: GoogleFonts.manrope(
+                                  font: GoogleFonts.plusJakartaSans(
                                     fontWeight: FlutterFlowTheme.of(context)
                                         .headlineLarge
                                         .fontWeight,
@@ -177,7 +177,7 @@ class _OnBoarding02WidgetState extends State<OnBoarding02Widget> {
                       textStyle: FlutterFlowTheme.of(context)
                           .titleMedium
                           .override(
-                            font: GoogleFonts.manrope(
+                            font: GoogleFonts.plusJakartaSans(
                               fontWeight: FlutterFlowTheme.of(context)
                                   .titleMedium
                                   .fontWeight,
@@ -234,7 +234,7 @@ class _OnBoarding02WidgetState extends State<OnBoarding02Widget> {
                       color: FlutterFlowTheme.of(context).containerBg,
                       textStyle:
                           FlutterFlowTheme.of(context).titleMedium.override(
-                                font: GoogleFonts.manrope(
+                                font: GoogleFonts.plusJakartaSans(
                                   fontWeight: FlutterFlowTheme.of(context)
                                       .titleMedium
                                       .fontWeight,
@@ -253,6 +253,26 @@ class _OnBoarding02WidgetState extends State<OnBoarding02Widget> {
                       elevation: 0.0,
                       borderRadius: BorderRadius.circular(12.0),
                     ),
+                  ),
+                  Text(
+                    'Hoppa över',
+                    style: FlutterFlowTheme.of(context).titleSmall.override(
+                          font: GoogleFonts.plusJakartaSans(
+                            fontWeight: FlutterFlowTheme.of(context)
+                                .titleSmall
+                                .fontWeight,
+                            fontStyle: FlutterFlowTheme.of(context)
+                                .titleSmall
+                                .fontStyle,
+                          ),
+                          letterSpacing: 0.0,
+                          fontWeight: FlutterFlowTheme.of(context)
+                              .titleSmall
+                              .fontWeight,
+                          fontStyle:
+                              FlutterFlowTheme.of(context).titleSmall.fontStyle,
+                          decoration: TextDecoration.underline,
+                        ),
                   ),
                 ].divide(SizedBox(height: 20.0)),
               ),

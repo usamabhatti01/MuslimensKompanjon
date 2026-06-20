@@ -1,7 +1,7 @@
-import '/extra/page_sub_header/page_sub_header_widget.dart';
+import '/custom_header_footer/adhkar_header/adhkar_header_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/pages/categories/azhkar_quranic_verse/adhkar_all_pages_banner/adhkar_all_pages_banner_widget.dart';
-import '/pages/categories/azhkar_quranic_verse/arabic_heading_and_translation/arabic_heading_and_translation_widget.dart';
+import '/pages/categories/azhkar_quranic_verse/akallan_dua/akallan_dua_box_ar/akallan_dua_box_ar_widget.dart';
+import '/pages/categories/azhkar_quranic_verse/akallan_dua/akallan_dua_box_sv/akallan_dua_box_sv_widget.dart';
 import '/index.dart';
 import 'tasbih_widget.dart' show TasbihWidget;
 import 'package:flutter/material.dart';
@@ -9,26 +9,32 @@ import 'package:flutter/material.dart';
 class TasbihModel extends FlutterFlowModel<TasbihWidget> {
   ///  State fields for stateful widgets in this page.
 
-  // Model for PageSubHeader component.
-  late PageSubHeaderModel pageSubHeaderModel;
-  // Model for AdhkarAllPagesBanner component.
-  late AdhkarAllPagesBannerModel adhkarAllPagesBannerModel;
-  // Model for ArabicHeadingAndTranslation component.
-  late ArabicHeadingAndTranslationModel arabicHeadingAndTranslationModel;
+  // Model for AdhkarHeader component.
+  late AdhkarHeaderModel adhkarHeaderModel;
+  // State field(s) for TabBar widget.
+  TabController? tabBarController;
+  int get tabBarCurrentIndex =>
+      tabBarController != null ? tabBarController!.index : 0;
+  int get tabBarPreviousIndex =>
+      tabBarController != null ? tabBarController!.previousIndex : 0;
+
+  // Model for AkallanDuaBoxAr component.
+  late AkallanDuaBoxArModel akallanDuaBoxArModel;
+  // Model for AkallanDuaBoxSv component.
+  late AkallanDuaBoxSvModel akallanDuaBoxSvModel;
 
   @override
   void initState(BuildContext context) {
-    pageSubHeaderModel = createModel(context, () => PageSubHeaderModel());
-    adhkarAllPagesBannerModel =
-        createModel(context, () => AdhkarAllPagesBannerModel());
-    arabicHeadingAndTranslationModel =
-        createModel(context, () => ArabicHeadingAndTranslationModel());
+    adhkarHeaderModel = createModel(context, () => AdhkarHeaderModel());
+    akallanDuaBoxArModel = createModel(context, () => AkallanDuaBoxArModel());
+    akallanDuaBoxSvModel = createModel(context, () => AkallanDuaBoxSvModel());
   }
 
   @override
   void dispose() {
-    pageSubHeaderModel.dispose();
-    adhkarAllPagesBannerModel.dispose();
-    arabicHeadingAndTranslationModel.dispose();
+    adhkarHeaderModel.dispose();
+    tabBarController?.dispose();
+    akallanDuaBoxArModel.dispose();
+    akallanDuaBoxSvModel.dispose();
   }
 }

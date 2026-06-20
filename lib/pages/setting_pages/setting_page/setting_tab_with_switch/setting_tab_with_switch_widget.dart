@@ -48,78 +48,95 @@ class _SettingTabWithSwitchWidgetState
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(
-          FlutterFlowTheme.of(context).designToken.spacing.md,
-          FlutterFlowTheme.of(context).designToken.spacing.sm,
-          FlutterFlowTheme.of(context).designToken.spacing.md,
-          FlutterFlowTheme.of(context).designToken.spacing.sm),
+      padding: EdgeInsets.all(16.0),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 44.0,
-                height: 44.0,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                  borderRadius: BorderRadius.circular(
-                      FlutterFlowTheme.of(context).designToken.radius.sm),
+          Expanded(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Container(
+                      width: 44.0,
+                      height: 44.0,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        borderRadius: BorderRadius.circular(
+                            FlutterFlowTheme.of(context).designToken.radius.sm),
+                      ),
+                      child: Align(
+                        alignment: AlignmentDirectional(0.0, 0.0),
+                        child: widget.icon!,
+                      ),
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          valueOrDefault<String>(
+                            widget.label,
+                            'add label',
+                          ),
+                          style:
+                              FlutterFlowTheme.of(context).titleSmall.override(
+                                    font: GoogleFonts.plusJakartaSans(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontStyle,
+                                    ),
+                                    letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .fontStyle,
+                                  ),
+                        ),
+                        Text(
+                          valueOrDefault<String>(
+                            widget.sunLabel,
+                            'add sublabel',
+                          ),
+                          style:
+                              FlutterFlowTheme.of(context).bodySmall.override(
+                                    font: GoogleFonts.inter(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodySmall
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodySmall
+                                          .fontStyle,
+                                    ),
+                                    letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodySmall
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodySmall
+                                        .fontStyle,
+                                  ),
+                        ),
+                      ],
+                    ),
+                  ].divide(SizedBox(width: 10.0)),
                 ),
-                child: widget.icon!,
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    valueOrDefault<String>(
-                      widget.label,
-                      'add label',
-                    ),
-                    style: FlutterFlowTheme.of(context).titleSmall.override(
-                          font: GoogleFonts.manrope(
-                            fontWeight: FlutterFlowTheme.of(context)
-                                .titleSmall
-                                .fontWeight,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .titleSmall
-                                .fontStyle,
-                          ),
-                          letterSpacing: 0.0,
-                          fontWeight: FlutterFlowTheme.of(context)
-                              .titleSmall
-                              .fontWeight,
-                          fontStyle:
-                              FlutterFlowTheme.of(context).titleSmall.fontStyle,
-                        ),
-                  ),
-                  Text(
-                    valueOrDefault<String>(
-                      widget.sunLabel,
-                      'add sublabel',
-                    ),
-                    style: FlutterFlowTheme.of(context).bodySmall.override(
-                          font: GoogleFonts.inter(
-                            fontWeight: FlutterFlowTheme.of(context)
-                                .bodySmall
-                                .fontWeight,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .bodySmall
-                                .fontStyle,
-                          ),
-                          letterSpacing: 0.0,
-                          fontWeight:
-                              FlutterFlowTheme.of(context).bodySmall.fontWeight,
-                          fontStyle:
-                              FlutterFlowTheme.of(context).bodySmall.fontStyle,
-                        ),
-                  ),
-                ],
-              ),
-            ].divide(SizedBox(width: 20.0)),
+                Icon(
+                  Icons.chevron_right,
+                  color: FlutterFlowTheme.of(context).primaryText,
+                  size: 20.0,
+                ),
+              ].divide(SizedBox(width: 20.0)),
+            ),
           ),
         ],
       ),

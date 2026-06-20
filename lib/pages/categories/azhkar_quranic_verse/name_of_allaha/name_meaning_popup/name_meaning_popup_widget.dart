@@ -66,18 +66,12 @@ class _NameMeaningPopupWidgetState extends State<NameMeaningPopupWidget> {
               Text(
                 widget.popupNameArabic!,
                 textAlign: TextAlign.center,
-                style: FlutterFlowTheme.of(context).arabiFont.override(
-                      font: GoogleFonts.cairo(
-                        fontWeight: FontWeight.bold,
-                        fontStyle:
-                            FlutterFlowTheme.of(context).arabiFont.fontStyle,
-                      ),
+                style: FlutterFlowTheme.of(context).arabiTitle.override(
+                      fontFamily: 'arabic',
                       color: FlutterFlowTheme.of(context).primary,
                       fontSize: 22.0,
                       letterSpacing: 0.0,
                       fontWeight: FontWeight.bold,
-                      fontStyle:
-                          FlutterFlowTheme.of(context).arabiFont.fontStyle,
                     ),
               ),
               Column(
@@ -87,92 +81,73 @@ class _NameMeaningPopupWidgetState extends State<NameMeaningPopupWidget> {
                   Text(
                     widget.popupMeaningAr!,
                     textAlign: TextAlign.center,
-                    style: FlutterFlowTheme.of(context).blackBold.override(
-                          font: GoogleFonts.manrope(
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .blackBold
-                                .fontStyle,
-                          ),
-                          color: Colors.black,
+                    style: FlutterFlowTheme.of(context).arabicBody.override(
+                          fontFamily: 'arabic',
+                          color: FlutterFlowTheme.of(context).black,
                           fontSize: 14.0,
                           letterSpacing: 0.0,
-                          fontWeight: FontWeight.bold,
-                          fontStyle:
-                              FlutterFlowTheme.of(context).blackBold.fontStyle,
+                          fontWeight: FontWeight.normal,
                         ),
                   ),
                   Text(
                     widget.popupNameEnglish!,
                     textAlign: TextAlign.center,
-                    style:
-                        FlutterFlowTheme.of(context).youtubeVideoTitle.override(
-                              font: GoogleFonts.manrope(
-                                fontWeight: FontWeight.bold,
-                                fontStyle: FlutterFlowTheme.of(context)
-                                    .youtubeVideoTitle
-                                    .fontStyle,
-                              ),
-                              color: Colors.black,
-                              fontSize: 12.0,
-                              letterSpacing: 0.0,
-                              fontWeight: FontWeight.bold,
-                              fontStyle: FlutterFlowTheme.of(context)
-                                  .youtubeVideoTitle
-                                  .fontStyle,
-                            ),
+                    style: FlutterFlowTheme.of(context).arabicBody.override(
+                          fontFamily: 'arabic',
+                          color: FlutterFlowTheme.of(context).black,
+                          fontSize: 14.0,
+                          letterSpacing: 0.0,
+                          fontWeight: FontWeight.normal,
+                        ),
                   ),
                   Text(
                     widget.popupMeaningEn!,
                     textAlign: TextAlign.center,
-                    style: FlutterFlowTheme.of(context).bodySmall.override(
-                          font: GoogleFonts.inter(
-                            fontWeight: FlutterFlowTheme.of(context)
-                                .bodySmall
-                                .fontWeight,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .bodySmall
-                                .fontStyle,
-                          ),
+                    style: FlutterFlowTheme.of(context).arabicBody.override(
+                          fontFamily: 'arabic',
+                          color: FlutterFlowTheme.of(context).black,
+                          fontSize: 14.0,
                           letterSpacing: 0.0,
-                          fontWeight:
-                              FlutterFlowTheme.of(context).bodySmall.fontWeight,
-                          fontStyle:
-                              FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                          fontWeight: FontWeight.normal,
                         ),
                   ),
                 ].divide(SizedBox(height: 12.0)),
               ),
-              FFButtonWidget(
-                onPressed: () async {
-                  Navigator.pop(context);
-                },
-                text: 'Closed',
-                options: FFButtonOptions(
-                  width: double.infinity,
-                  height: 40.0,
-                  padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
-                  iconPadding:
-                      EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                  color: FlutterFlowTheme.of(context).primary,
-                  textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                        font: GoogleFonts.manrope(
+              Expanded(
+                child: FFButtonWidget(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                  },
+                  text: 'Closed',
+                  options: FFButtonOptions(
+                    width: double.infinity,
+                    height: 40.0,
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                    iconPadding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                    color: FlutterFlowTheme.of(context).primary,
+                    textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                          font: GoogleFonts.plusJakartaSans(
+                            fontWeight: FlutterFlowTheme.of(context)
+                                .titleSmall
+                                .fontWeight,
+                            fontStyle: FlutterFlowTheme.of(context)
+                                .titleSmall
+                                .fontStyle,
+                          ),
+                          color: Colors.white,
+                          letterSpacing: 0.0,
                           fontWeight: FlutterFlowTheme.of(context)
                               .titleSmall
                               .fontWeight,
                           fontStyle:
                               FlutterFlowTheme.of(context).titleSmall.fontStyle,
                         ),
-                        color: Colors.white,
-                        letterSpacing: 0.0,
-                        fontWeight:
-                            FlutterFlowTheme.of(context).titleSmall.fontWeight,
-                        fontStyle:
-                            FlutterFlowTheme.of(context).titleSmall.fontStyle,
-                      ),
-                  elevation: 0.0,
-                  borderRadius: BorderRadius.circular(
-                      FlutterFlowTheme.of(context).designToken.radius.md),
+                    elevation: 0.0,
+                    borderRadius: BorderRadius.circular(
+                        FlutterFlowTheme.of(context).designToken.radius.md),
+                  ),
                 ),
               ),
             ].divide(SizedBox(height: 25.0)),

@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 
 import '/backend/schema/structs/index.dart';
 
-import '/main.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
 import '/index.dart';
@@ -36,12 +35,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
-      errorBuilder: (context, state) => TestWidget(),
+      errorBuilder: (context, state) => HomeWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
-          builder: (context, _) => TestWidget(),
+          builder: (context, _) => HomeWidget(),
         ),
         FFRoute(
           name: OnBoarding01Widget.routeName,
@@ -61,57 +60,37 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: HomeWidget.routeName,
           path: HomeWidget.routePath,
-          builder: (context, params) =>
-              params.isEmpty ? NavBarPage(initialPage: 'Home') : HomeWidget(),
+          builder: (context, params) => HomeWidget(),
         ),
         FFRoute(
           name: TashbihCounterWidget.routeName,
           path: TashbihCounterWidget.routePath,
-          builder: (context, params) => TashbihCounterWidget(),
+          builder: (context, params) => TashbihCounterWidget(
+            arabicValeue: params.getParam(
+              'arabicValeue',
+              ParamType.String,
+            ),
+          ),
         ),
         FFRoute(
           name: QiblaFinderWidget.routeName,
           path: QiblaFinderWidget.routePath,
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'QiblaFinder')
-              : QiblaFinderWidget(),
-        ),
-        FFRoute(
-          name: YoutubeFeedWidget.routeName,
-          path: YoutubeFeedWidget.routePath,
-          builder: (context, params) => YoutubeFeedWidget(),
+          builder: (context, params) => QiblaFinderWidget(),
         ),
         FFRoute(
           name: AdhkarWidget.routeName,
           path: AdhkarWidget.routePath,
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'Adhkar')
-              : AdhkarWidget(),
+          builder: (context, params) => AdhkarWidget(),
         ),
         FFRoute(
-          name: MorningAdhkarWidget.routeName,
-          path: MorningAdhkarWidget.routePath,
-          builder: (context, params) => MorningAdhkarWidget(),
-        ),
-        FFRoute(
-          name: TasbihWidget.routeName,
-          path: TasbihWidget.routePath,
-          builder: (context, params) => TasbihWidget(),
-        ),
-        FFRoute(
-          name: AllahNamesWidget.routeName,
-          path: AllahNamesWidget.routePath,
-          builder: (context, params) => AllahNamesWidget(),
-        ),
-        FFRoute(
-          name: EveningAdhkarWidget.routeName,
-          path: EveningAdhkarWidget.routePath,
-          builder: (context, params) => EveningAdhkarWidget(),
-        ),
-        FFRoute(
-          name: SupplicationsDuaWidget.routeName,
-          path: SupplicationsDuaWidget.routePath,
-          builder: (context, params) => SupplicationsDuaWidget(),
+          name: MorningEveningAdhkarWidget.routeName,
+          path: MorningEveningAdhkarWidget.routePath,
+          builder: (context, params) => MorningEveningAdhkarWidget(
+            adkar: params.getParam(
+              'adkar',
+              ParamType.String,
+            ),
+          ),
         ),
         FFRoute(
           name: AboutIslamWidget.routeName,
@@ -121,24 +100,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: AboutIslamDetailsPageWidget.routeName,
           path: AboutIslamDetailsPageWidget.routePath,
-          builder: (context, params) => AboutIslamDetailsPageWidget(
-            tabData: params.getParam(
-              'tabData',
-              ParamType.JSON,
-            ),
-          ),
-        ),
-        FFRoute(
-          name: NotificationWidget.routeName,
-          path: NotificationWidget.routePath,
-          builder: (context, params) => NotificationWidget(),
+          builder: (context, params) => AboutIslamDetailsPageWidget(),
         ),
         FFRoute(
           name: SettingWidget.routeName,
           path: SettingWidget.routePath,
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'Setting')
-              : SettingWidget(),
+          builder: (context, params) => SettingWidget(),
         ),
         FFRoute(
           name: InPage2Widget.routeName,
@@ -146,34 +113,89 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => InPage2Widget(),
         ),
         FFRoute(
-          name: IslamicCalenderWidget.routeName,
-          path: IslamicCalenderWidget.routePath,
-          builder: (context, params) => IslamicCalenderWidget(),
+          name: FullCalenderWidget.routeName,
+          path: FullCalenderWidget.routePath,
+          builder: (context, params) => FullCalenderWidget(),
         ),
         FFRoute(
-          name: OnBoarding00Widget.routeName,
-          path: OnBoarding00Widget.routePath,
-          builder: (context, params) => OnBoarding00Widget(),
+          name: KuranHomeWidget.routeName,
+          path: KuranHomeWidget.routePath,
+          builder: (context, params) => KuranHomeWidget(),
         ),
         FFRoute(
-          name: LoadDataWidget.routeName,
-          path: LoadDataWidget.routePath,
-          builder: (context, params) => LoadDataWidget(),
+          name: MKkanalenWidget.routeName,
+          path: MKkanalenWidget.routePath,
+          builder: (context, params) => MKkanalenWidget(),
         ),
         FFRoute(
-          name: RatingPageWidget.routeName,
-          path: RatingPageWidget.routePath,
-          builder: (context, params) => RatingPageWidget(),
+          name: LiveVideoWidget.routeName,
+          path: LiveVideoWidget.routePath,
+          builder: (context, params) => LiveVideoWidget(),
         ),
         FFRoute(
-          name: AboutPageWidget.routeName,
-          path: AboutPageWidget.routePath,
-          builder: (context, params) => AboutPageWidget(),
+          name: VideorWidget.routeName,
+          path: VideorWidget.routePath,
+          builder: (context, params) => VideorWidget(),
+        ),
+        FFRoute(
+          name: ShortsWidget.routeName,
+          path: ShortsWidget.routePath,
+          builder: (context, params) => ShortsWidget(),
+        ),
+        FFRoute(
+          name: SenasteLiveWidget.routeName,
+          path: SenasteLiveWidget.routePath,
+          builder: (context, params) => SenasteLiveWidget(),
+        ),
+        FFRoute(
+          name: ReelsWidget.routeName,
+          path: ReelsWidget.routePath,
+          builder: (context, params) => ReelsWidget(),
         ),
         FFRoute(
           name: TestWidget.routeName,
           path: TestWidget.routePath,
           builder: (context, params) => TestWidget(),
+        ),
+        FFRoute(
+          name: AllahNamesWidget.routeName,
+          path: AllahNamesWidget.routePath,
+          builder: (context, params) => AllahNamesWidget(
+            adkar: params.getParam(
+              'adkar',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: AkallanDuaWidget.routeName,
+          path: AkallanDuaWidget.routePath,
+          builder: (context, params) => AkallanDuaWidget(
+            adkar: params.getParam(
+              'adkar',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: TasbihWidget.routeName,
+          path: TasbihWidget.routePath,
+          builder: (context, params) => TasbihWidget(
+            adkar: params.getParam(
+              'adkar',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: KalenderWidget.routeName,
+          path: KalenderWidget.routePath,
+          builder: (context, params) => KalenderWidget(),
+        ),
+        FFRoute(
+          name: KuranCopyWidget.routeName,
+          path: KuranCopyWidget.routePath,
+          builder: (context, params) => KuranCopyWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
       observers: [routeObserver],

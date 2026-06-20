@@ -54,7 +54,7 @@ class _PrayerTimeWidgetState extends State<PrayerTimeWidget> {
             'fajr',
           ),
           style: FlutterFlowTheme.of(context).bodyMedium.override(
-                font: GoogleFonts.manrope(
+                font: GoogleFonts.inter(
                   fontWeight:
                       FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                   fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
@@ -67,7 +67,7 @@ class _PrayerTimeWidgetState extends State<PrayerTimeWidget> {
         Text(
           widget.namazTime!.toString(),
           style: FlutterFlowTheme.of(context).bodyMedium.override(
-                font: GoogleFonts.manrope(
+                font: GoogleFonts.inter(
                   fontWeight:
                       FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                   fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,

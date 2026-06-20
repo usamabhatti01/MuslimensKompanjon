@@ -13,12 +13,33 @@ import 'package:flutter/material.dart';
 import '/custom_code/widgets/index.dart';
 import '/custom_code/actions/index.dart';
 import '/flutter_flow/custom_functions.dart';
-
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
-import 'package:timezone/timezone.dart' as tz;
+import 'package:flutter/services.dart';
+
+class PrayerWidgetStrings {
+  static const Map<String, Map<String, String>> values = {
+    'en': {
+      'Fajr': 'Fajr',
+      'Shuruq': 'Shuruq',
+      'Dhohr': 'Dhohr',
+      'Asr': 'Asr',
+      'Maghrib': 'Maghrib',
+      'Isha': 'Isha',
+      'timeLeft': 'Time left until {nextPrayer}: {time}',
+    },
+    'sv': {
+      'Fajr': 'Fajr',
+      'Shuruq': 'Shuruq',
+      'Dhohr': 'Dhuhr',
+      'Asr': 'Asr',
+      'Maghrib': 'Maghrib',
+      'Isha': 'Isha',
+      'timeLeft': 'Tid kvar till {nextPrayer}: {time}',
+    },
+  };
+}
 
 class PrayerTimeWidgets extends StatefulWidget {
   const PrayerTimeWidgets({
@@ -27,40 +48,23 @@ class PrayerTimeWidgets extends StatefulWidget {
     this.height,
     required this.cityName,
   });
-
   final double? width;
   final double? height;
   final String cityName;
-
   @override
   State<PrayerTimeWidgets> createState() => _PrayerTimeWidgetsState();
 }
 
 class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets> {
   Map<String, String> prayerTimes = {};
-
   String currentPrayer = '';
   String nextPrayer = '';
   Duration remaining = Duration.zero;
-
   Timer? timer;
-
-  tz.Location? cityLocation;
-
-  final List<String> prayerOrder = const [
-    'Fajr',
-    'Shuruq',
-    'Dhohr',
-    'Asr',
-    'Maghrib',
-    'Isha',
-  ];
-
   @override
   void initState() {
     super.initState();
     loadPrayerData();
-
     timer = Timer.periodic(
       const Duration(seconds: 1),
       (_) => updatePrayerState(),
@@ -68,15 +72,15 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets> {
   }
 
   @override
-  void didUpdateWidget(covariant PrayerTimeWidgets oldWidget) {
+  void didUpdateWidget(
+    covariant PrayerTimeWidgets oldWidget,
+  ) {
     super.didUpdateWidget(oldWidget);
-
     if (oldWidget.cityName != widget.cityName) {
       prayerTimes.clear();
       currentPrayer = '';
       nextPrayer = '';
       remaining = Duration.zero;
-
       loadPrayerData();
     }
   }
@@ -87,70 +91,73 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets> {
     super.dispose();
   }
 
-  // ================= ONLY CITY TIME =================
-
-  tz.TZDateTime nowCity() {
-    return tz.TZDateTime.now(cityLocation!);
-  }
-
-  // ================= LOAD DATA =================
-
+  // =====================================================
+  // LOAD PRAYER DATA
+  // =====================================================
   Future<void> loadPrayerData() async {
     try {
-      final jsonString = await loadPrayerJson(
-        widget.cityName,
-        DateTime.now().year,
-      );
-
-      final decoded = json.decode(jsonString);
-
-      final timeZoneName = decoded['city']?['timezone'] ?? 'UTC';
-
-      cityLocation = tz.getLocation(timeZoneName);
-
-      final now = nowCity();
-
+      final now = DateTime.now();
       final todayKey = "${now.year.toString().padLeft(4, '0')}-"
           "${now.month.toString().padLeft(2, '0')}-"
           "${now.day.toString().padLeft(2, '0')}";
-
+      final jsonString = await loadPrayerJson(
+        widget.cityName,
+        now.year,
+      );
+      final decoded = json.decode(jsonString);
       final prayerData = decoded['prayer_times']?[todayKey];
-
       if (prayerData == null) {
-        debugPrint("No prayer data for $todayKey");
+        debugPrint(
+          "No prayer data found",
+        );
         return;
       }
-
       prayerTimes = {
-        'Fajr': _format(prayerData['fajr']),
-        'Shuruq': _format(prayerData['shuruq']),
-        'Dhohr': _format(prayerData['dhuhr']),
-        'Asr': _format(prayerData['asr']),
-        'Maghrib': _format(prayerData['maghrib']),
-        'Isha': _format(prayerData['isha']),
+        'Fajr': formatTime(
+          prayerData['fajr'],
+        ),
+        'Shuruq': formatTime(
+          prayerData['shuruq'],
+        ),
+        'Dhohr': formatTime(
+          prayerData['dhuhr'],
+        ),
+        'Asr': formatTime(
+          prayerData['asr'],
+        ),
+        'Maghrib': formatTime(
+          prayerData['maghrib'],
+        ),
+        'Isha': formatTime(
+          prayerData['isha'],
+        ),
       };
-
       updatePrayerState();
-
-      if (mounted) setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     } catch (e) {
-      debugPrint("ERROR: $e");
+      debugPrint(
+        "Error loading prayer data: $e",
+      );
     }
   }
 
-  String _format(dynamic t) {
-    final parts = t.toString().split(':');
-    return "${parts[0].padLeft(2, '0')}:${parts[1].padLeft(2, '0')}";
+  String formatTime(dynamic time) {
+    if (time == null) {
+      return '--:--';
+    }
+    final parts = time.toString().split(':');
+    return "${parts[0].padLeft(2, '0')}:"
+        "${parts[1].padLeft(2, '0')}";
   }
 
-  // ================= PRAYER TIME =================
-
-  tz.TZDateTime _toTime(String time) {
-    final now = nowCity();
+  DateTime parsePrayerTime(
+    String time,
+  ) {
+    final now = DateTime.now();
     final parts = time.split(':');
-
-    return tz.TZDateTime(
-      cityLocation!,
+    return DateTime(
       now.year,
       now.month,
       now.day,
@@ -159,71 +166,103 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets> {
     );
   }
 
-  // ================= CORE LOGIC =================
-
   void updatePrayerState() {
-    if (prayerTimes.isEmpty || cityLocation == null) return;
-
-    final now = nowCity();
-
-    String active = prayerOrder.first;
-    tz.TZDateTime? nextTime;
+    if (prayerTimes.isEmpty) return;
+    final now = DateTime.now();
+    final entries = prayerTimes.entries.toList();
+    DateTime? nextTime;
     String? nextName;
-
-    for (final prayer in prayerOrder) {
-      final time = _toTime(prayerTimes[prayer]!);
-
-      if (now.isAfter(time)) {
-        active = prayer;
-      } else if (nextTime == null) {
-        nextTime = time;
-        nextName = prayer;
+    String activePrayer = entries.first.key;
+    for (final entry in entries) {
+      final prayerTime = parsePrayerTime(
+        entry.value,
+      );
+      if (now.isAfter(prayerTime)) {
+        activePrayer = entry.key;
+      }
+      if (now.isBefore(prayerTime) && nextTime == null) {
+        nextTime = prayerTime;
+        nextName = entry.key;
       }
     }
-
-    // rollover to next day
     if (nextTime == null) {
-      final fajr = _toTime(prayerTimes['Fajr']!);
-      nextTime = fajr.add(const Duration(days: 1));
+      final fajr = parsePrayerTime(
+        prayerTimes['Fajr']!,
+      );
+      nextTime = fajr.add(
+        const Duration(days: 1),
+      );
       nextName = 'Fajr';
     }
-
     if (!mounted) return;
-
     setState(() {
-      currentPrayer = active;
+      currentPrayer = activePrayer;
       nextPrayer = nextName!;
       remaining = nextTime!.difference(now);
     });
   }
 
-  // ================= UI =================
-
-  String formatDuration(Duration d) {
-    String two(int n) => n.toString().padLeft(2, '0');
-
-    return "${two(d.inHours)}:"
-        "${two(d.inMinutes.remainder(60))}:"
-        "${two(d.inSeconds.remainder(60))}";
+  String formatDuration(
+    Duration duration,
+  ) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final hours = twoDigits(duration.inHours);
+    final minutes = twoDigits(
+      duration.inMinutes.remainder(60),
+    );
+    final seconds = twoDigits(
+      duration.inSeconds.remainder(60),
+    );
+    return "$hours:$minutes:$seconds";
   }
 
-  Widget prayerItem(String title, String time) {
-    final isActive = currentPrayer == title;
+  String _translate(String key, {Map<String, String>? args}) {
+    String lang = 'en';
+    try {
+      if (mounted) {
+        lang = FFLocalizations.of(context).languageCode;
+      }
+    } catch (_) {}
+    if (lang.startsWith('sv')) {
+      lang = 'sv';
+    } else {
+      lang = 'en';
+    }
+    final translationMap =
+        PrayerWidgetStrings.values[lang] ?? PrayerWidgetStrings.values['en']!;
+    String text = translationMap[key] ?? key;
+    if (args != null) {
+      args.forEach((k, v) {
+        text = text.replaceAll('{$k}', v);
+      });
+    }
+    return text;
+  }
 
+  Widget prayerItem(
+    String title,
+    String time,
+  ) {
+    final isActive = currentPrayer == title;
     return Expanded(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            title,
+            _translate(title),
             style: TextStyle(
-              fontWeight: FontWeight.bold,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
               color: isActive ? Colors.green : Colors.black,
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(
+            height: 10,
+          ),
           Text(
             time,
             style: TextStyle(
+              fontSize: 12,
               color: isActive ? Colors.green : Colors.black,
             ),
           ),
@@ -233,13 +272,14 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     if (prayerTimes.isEmpty) {
       return const Center(
         child: CircularProgressIndicator(),
       );
     }
-
     return Container(
       width: widget.width ?? double.infinity,
       height: widget.height,
@@ -247,13 +287,41 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
-            children:
-                prayerOrder.map((p) => prayerItem(p, prayerTimes[p]!)).toList(),
+            children: [
+              prayerItem(
+                'Fajr',
+                prayerTimes['Fajr']!,
+              ),
+              prayerItem(
+                'Shuruq',
+                prayerTimes['Shuruq']!,
+              ),
+              prayerItem(
+                'Dhohr',
+                prayerTimes['Dhohr']!,
+              ),
+              prayerItem(
+                'Asr',
+                prayerTimes['Asr']!,
+              ),
+              prayerItem(
+                'Maghrib',
+                prayerTimes['Maghrib']!,
+              ),
+              prayerItem(
+                'Isha',
+                prayerTimes['Isha']!,
+              ),
+            ],
           ),
-          const SizedBox(height: 18),
+          const SizedBox(
+            height: 18,
+          ),
           Text(
-            "Time left until $nextPrayer: "
-            "${formatDuration(remaining)}",
+            _translate('timeLeft', args: {
+              'nextPrayer': _translate(nextPrayer),
+              'time': formatDuration(remaining),
+            }),
             style: const TextStyle(
               fontSize: 14,
               color: Colors.green,
@@ -264,4 +332,4 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets> {
       ),
     );
   }
-}
+} //

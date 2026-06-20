@@ -90,7 +90,7 @@ class _SuccessMessageWidgetState extends State<SuccessMessageWidget> {
                       Text(
                         widget.header,
                         style: FlutterFlowTheme.of(context).titleSmall.override(
-                              font: GoogleFonts.manrope(
+                              font: GoogleFonts.plusJakartaSans(
                                 fontWeight: FlutterFlowTheme.of(context)
                                     .titleSmall
                                     .fontWeight,

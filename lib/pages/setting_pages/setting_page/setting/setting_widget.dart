@@ -1,17 +1,21 @@
-import '/backend/schema/structs/index.dart';
-import '/flutter_flow/flutter_flow_drop_down.dart';
+import '/custom_header_footer/page_footer/page_footer_widget.dart';
+import '/custom_header_footer/page_sub_header/page_sub_header_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/form_field_controller.dart';
-import '/pages/setting_pages/pages_heading_box/pages_heading_box_widget.dart';
+import '/pages/setting_pages/setting_page/adhanljud/adhanljud_widget.dart';
+import '/pages/setting_pages/setting_page/betygsttappen/betygsttappen_widget.dart';
+import '/pages/setting_pages/setting_page/bnetidsnotiser/bnetidsnotiser_widget.dart';
+import '/pages/setting_pages/setting_page/kontaktaoss/kontaktaoss_widget.dart';
+import '/pages/setting_pages/setting_page/omappen/omappen_widget.dart';
+import '/pages/setting_pages/setting_page/plats/plats_widget.dart';
+import '/pages/setting_pages/setting_page/pminnelsefre_adhan/pminnelsefre_adhan_widget.dart';
 import '/pages/setting_pages/setting_page/setting_tab/setting_tab_widget.dart';
 import '/pages/setting_pages/setting_page/setting_tab_with_switch/setting_tab_with_switch_widget.dart';
-import '/pages/setting_pages/setting_pages_header/setting_pages_header_widget.dart';
-import '/custom_code/actions/index.dart' as actions;
-import '/index.dart';
+import '/pages/setting_pages/setting_page/tema/tema_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:webviewx_plus/webviewx_plus.dart';
 import 'setting_model.dart';
 export 'setting_model.dart';
 
@@ -34,9 +38,6 @@ class _SettingWidgetState extends State<SettingWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => SettingModel());
-
-    _model.switchValue1 = FFAppState().user.language == 'sv' ? true : false;
-    _model.switchValue2 = FFAppState().user.darkMode ? true : false;
   }
 
   @override
@@ -58,42 +59,39 @@ class _SettingWidgetState extends State<SettingWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        body: SafeArea(
-          top: true,
-          child: Padding(
-            padding: EdgeInsets.all(
-                FlutterFlowTheme.of(context).designToken.spacing.lg),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                wrapWithModel(
-                  model: _model.settingPagesHeaderModel,
-                  updateCallback: () => safeSetState(() {}),
-                  child: SettingPagesHeaderWidget(
-                    pageName: 'Setting',
-                  ),
+        body: Padding(
+          padding: EdgeInsets.all(
+              FlutterFlowTheme.of(context).designToken.spacing.md),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              wrapWithModel(
+                model: _model.pageSubHeaderModel,
+                updateCallback: () => safeSetState(() {}),
+                child: PageSubHeaderWidget(
+                  pageName: 'Inställningar',
                 ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        wrapWithModel(
-                          model: _model.pagesHeadingBoxModel,
-                          updateCallback: () => safeSetState(() {}),
-                          child: PagesHeadingBoxWidget(
-                            title: 'Muslimens Kompanjon',
-                            subTitle: 'Prayer & Lifestyle Companion',
-                          ),
-                        ),
-                        Align(
-                          alignment: AlignmentDirectional(-1.0, 0.0),
-                          child: Text(
-                            'GENERAL',
-                            style: FlutterFlowTheme.of(context)
-                                .titleSmall
-                                .override(
-                                  font: GoogleFonts.manrope(
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Align(
+                        alignment: AlignmentDirectional(-1.0, 0.0),
+                        child: Text(
+                          'Allmänt',
+                          style:
+                              FlutterFlowTheme.of(context).titleSmall.override(
+                                    font: GoogleFonts.plusJakartaSans(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontStyle,
+                                    ),
+                                    letterSpacing: 0.0,
                                     fontWeight: FlutterFlowTheme.of(context)
                                         .titleSmall
                                         .fontWeight,
@@ -101,386 +99,598 @@ class _SettingWidgetState extends State<SettingWidget> {
                                         .titleSmall
                                         .fontStyle,
                                   ),
-                                  letterSpacing: 0.0,
-                                  fontWeight: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .fontWeight,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .fontStyle,
-                                ),
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                              FlutterFlowTheme.of(context)
+                                  .designToken
+                                  .radius
+                                  .md),
+                          border: Border.all(
+                            color: FlutterFlowTheme.of(context).containerBg,
                           ),
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                                FlutterFlowTheme.of(context)
-                                    .designToken
-                                    .radius
-                                    .md),
-                            border: Border.all(
-                              color: FlutterFlowTheme.of(context).containerBg,
-                            ),
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (responsiveVisibility(
-                                context: context,
-                                phone: false,
-                              ))
-                                Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Switch.adaptive(
-                                      value: _model.switchValue1!,
-                                      onChanged: (newValue) async {
-                                        safeSetState(() =>
-                                            _model.switchValue1 = newValue);
-                                        if (newValue) {
-                                          setAppLanguage(context, 'sv');
-                                          FFAppState().user = UserDataStruct(
-                                            language: 'sv',
-                                          );
-                                          safeSetState(() {});
-                                        }
-                                      },
-                                      activeColor: FlutterFlowTheme.of(context)
-                                          .alternate,
-                                      activeTrackColor:
-                                          FlutterFlowTheme.of(context).primary,
-                                      inactiveTrackColor:
-                                          FlutterFlowTheme.of(context)
-                                              .alternate,
-                                      inactiveThumbColor:
-                                          FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                    ),
-                                  ],
-                                ),
-                              Divider(
-                                thickness: 1.0,
-                                indent: 15.0,
-                                endIndent: 15.0,
-                                color: FlutterFlowTheme.of(context).containerBg,
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  wrapWithModel(
-                                    model: _model.settingTabWithSwitchModel1,
-                                    updateCallback: () => safeSetState(() {}),
-                                    child: SettingTabWithSwitchWidget(
-                                      label: 'Dark Mode',
-                                      sunLabel: 'Enable night theme',
-                                      icon: Icon(
-                                        Icons.dark_mode_outlined,
-                                        color: FlutterFlowTheme.of(context)
-                                            .primary,
-                                        size: 18.0,
-                                      ),
-                                    ),
-                                  ),
-                                  Switch.adaptive(
-                                    value: _model.switchValue2!,
-                                    onChanged: (newValue) async {
-                                      safeSetState(() =>
-                                          _model.switchValue2 = newValue);
-                                      if (newValue) {
-                                        setDarkModeSetting(
-                                            context, ThemeMode.dark);
-                                        FFAppState().updateUserStruct(
-                                          (e) => e..darkMode = true,
-                                        );
-                                        safeSetState(() {});
-                                      } else {
-                                        setDarkModeSetting(
-                                            context, ThemeMode.light);
-                                        FFAppState().updateUserStruct(
-                                          (e) => e..darkMode = false,
-                                        );
-                                        safeSetState(() {});
-                                      }
-                                    },
-                                    activeColor:
-                                        FlutterFlowTheme.of(context).alternate,
-                                    activeTrackColor:
-                                        FlutterFlowTheme.of(context).primary,
-                                    inactiveTrackColor:
-                                        FlutterFlowTheme.of(context).alternate,
-                                    inactiveThumbColor:
-                                        FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
-                                  ),
-                                ],
-                              ),
-                              Divider(
-                                thickness: 1.0,
-                                indent: 15.0,
-                                endIndent: 15.0,
-                                color: FlutterFlowTheme.of(context).containerBg,
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: 44.0,
-                                    height: 44.0,
-                                    decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                      borderRadius: BorderRadius.circular(
-                                          FlutterFlowTheme.of(context)
-                                              .designToken
-                                              .radius
-                                              .sm),
-                                    ),
-                                    child: Icon(
-                                      Icons.location_on_outlined,
-                                      color:
-                                          FlutterFlowTheme.of(context).primary,
-                                      size: 20.0,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: FlutterFlowDropDown<String>(
-                                      controller:
-                                          _model.dropDownValueController ??=
-                                              FormFieldController<String>(
-                                        _model.dropDownValue ??=
-                                            valueOrDefault<String>(
-                                          FFAppState().user.city,
-                                          'EmptyString',
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                await showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  useSafeArea: true,
+                                  context: context,
+                                  builder: (context) {
+                                    return WebViewAware(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          FocusScope.of(context).unfocus();
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
+                                        },
+                                        child: Padding(
+                                          padding:
+                                              MediaQuery.viewInsetsOf(context),
+                                          child: Container(
+                                            height: MediaQuery.sizeOf(context)
+                                                    .height *
+                                                0.6,
+                                            child: TemaWidget(),
+                                          ),
                                         ),
                                       ),
-                                      options: FFAppState()
-                                          .cityList
-                                          .map((e) => e.name)
-                                          .toList(),
-                                      onChanged: (val) async {
-                                        safeSetState(
-                                            () => _model.dropDownValue = val);
-                                        FFAppState().updateUserStruct(
-                                          (e) => e..city = _model.dropDownValue,
-                                        );
-                                        safeSetState(() {});
-                                        await actions
-                                            .schedulePrayerNotifications();
-                                      },
-                                      width: 200.0,
-                                      height: 40.0,
-                                      textStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.manrope(
-                                              fontWeight:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontWeight,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontStyle,
-                                            ),
-                                            letterSpacing: 0.0,
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                          ),
-                                      hintText: 'Select...',
-                                      icon: Icon(
-                                        Icons.search,
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                        size: 18.0,
-                                      ),
-                                      fillColor: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                      elevation: 2.0,
-                                      borderColor: Colors.transparent,
-                                      borderWidth: 0.0,
-                                      borderRadius: 8.0,
-                                      margin: EdgeInsetsDirectional.fromSTEB(
-                                          12.0, 0.0, 12.0, 0.0),
-                                      hidesUnderline: true,
-                                      isOverButton: false,
-                                      isSearchable: false,
-                                      isMultiSelect: false,
-                                    ),
+                                    );
+                                  },
+                                ).then((value) => safeSetState(() {}));
+                              },
+                              child: wrapWithModel(
+                                model: _model.settingTabWithSwitchModel1,
+                                updateCallback: () => safeSetState(() {}),
+                                child: SettingTabWithSwitchWidget(
+                                  label: 'Tema',
+                                  sunLabel: 'Ljus',
+                                  icon: Icon(
+                                    Icons.wb_sunny_outlined,
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    size: 18.0,
                                   ),
-                                ]
-                                    .divide(SizedBox(width: 20.0))
-                                    .addToStart(SizedBox(width: 20.0))
-                                    .addToEnd(SizedBox(width: 10.0)),
-                              ),
-                            ]
-                                .addToStart(SizedBox(height: 10.0))
-                                .addToEnd(SizedBox(height: 10.0)),
-                          ),
-                        ),
-                        Align(
-                          alignment: AlignmentDirectional(-1.0, 0.0),
-                          child: Text(
-                            'NOTIFICATIONS',
-                            style: FlutterFlowTheme.of(context)
-                                .titleSmall
-                                .override(
-                                  font: GoogleFonts.manrope(
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .titleSmall
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .titleSmall
-                                        .fontStyle,
-                                  ),
-                                  letterSpacing: 0.0,
-                                  fontWeight: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .fontWeight,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .fontStyle,
                                 ),
-                          ),
-                        ),
-                        InkWell(
-                          splashColor: Colors.transparent,
-                          focusColor: Colors.transparent,
-                          hoverColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onTap: () async {
-                            context.pushNamed(NotificationWidget.routeName);
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                  FlutterFlowTheme.of(context)
-                                      .designToken
-                                      .radius
-                                      .md),
-                              border: Border.all(
-                                color: FlutterFlowTheme.of(context).containerBg,
                               ),
                             ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                wrapWithModel(
-                                  model: _model.settingTabWithSwitchModel2,
-                                  updateCallback: () => safeSetState(() {}),
-                                  child: SettingTabWithSwitchWidget(
-                                    label: 'Prayer Alerts',
-                                    sunLabel: 'Adhan & reminders',
-                                    icon: Icon(
-                                      Icons.mosque_outlined,
-                                      color:
-                                          FlutterFlowTheme.of(context).primary,
-                                      size: 18.0,
-                                    ),
-                                  ),
-                                ),
-                              ]
-                                  .addToStart(SizedBox(height: 10.0))
-                                  .addToEnd(SizedBox(height: 10.0)),
-                            ),
-                          ),
-                        ),
-                        Align(
-                          alignment: AlignmentDirectional(-1.0, 0.0),
-                          child: Text(
-                            'ABOUT',
-                            style: FlutterFlowTheme.of(context)
-                                .titleSmall
-                                .override(
-                                  font: GoogleFonts.manrope(
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .titleSmall
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .titleSmall
-                                        .fontStyle,
-                                  ),
-                                  letterSpacing: 0.0,
-                                  fontWeight: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .fontWeight,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .fontStyle,
-                                ),
-                          ),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                                FlutterFlowTheme.of(context)
-                                    .designToken
-                                    .radius
-                                    .md),
-                            border: Border.all(
+                            Divider(
+                              thickness: 1.0,
+                              indent: 15.0,
+                              endIndent: 15.0,
                               color: FlutterFlowTheme.of(context).containerBg,
                             ),
+                            InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                await showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  context: context,
+                                  builder: (context) {
+                                    return WebViewAware(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          FocusScope.of(context).unfocus();
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
+                                        },
+                                        child: Padding(
+                                          padding:
+                                              MediaQuery.viewInsetsOf(context),
+                                          child: Container(
+                                            height: MediaQuery.sizeOf(context)
+                                                    .height *
+                                                0.9,
+                                            child: PlatsWidget(),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ).then((value) => safeSetState(() {}));
+                              },
+                              child: wrapWithModel(
+                                model: _model.settingTabWithSwitchModel2,
+                                updateCallback: () => safeSetState(() {}),
+                                child: SettingTabWithSwitchWidget(
+                                  label: 'Plats',
+                                  sunLabel: FFAppState().user.city,
+                                  icon: Icon(
+                                    Icons.location_pin,
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    size: 18.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ]
+                              .addToStart(SizedBox(height: 10.0))
+                              .addToEnd(SizedBox(height: 10.0)),
+                        ),
+                      ),
+                      Align(
+                        alignment: AlignmentDirectional(-1.0, 0.0),
+                        child: Text(
+                          'Notiser',
+                          style:
+                              FlutterFlowTheme.of(context).titleSmall.override(
+                                    font: GoogleFonts.plusJakartaSans(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontStyle,
+                                    ),
+                                    letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .fontStyle,
+                                  ),
+                        ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                              FlutterFlowTheme.of(context)
+                                  .designToken
+                                  .radius
+                                  .md),
+                          border: Border.all(
+                            color: FlutterFlowTheme.of(context).containerBg,
                           ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              wrapWithModel(
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                await showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  useSafeArea: true,
+                                  context: context,
+                                  builder: (context) {
+                                    return WebViewAware(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          FocusScope.of(context).unfocus();
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
+                                        },
+                                        child: Padding(
+                                          padding:
+                                              MediaQuery.viewInsetsOf(context),
+                                          child: Container(
+                                            height: MediaQuery.sizeOf(context)
+                                                    .height *
+                                                0.8,
+                                            child: BnetidsnotiserWidget(),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ).then((value) => safeSetState(() {}));
+                              },
+                              child: wrapWithModel(
+                                model: _model.settingTabWithSwitchModel3,
+                                updateCallback: () => safeSetState(() {}),
+                                child: SettingTabWithSwitchWidget(
+                                  label: 'Bönetidsnotiser',
+                                  sunLabel:
+                                      'Slå på/av notiser för specifika böner',
+                                  icon: Icon(
+                                    Icons.message_outlined,
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    size: 18.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              thickness: 1.0,
+                              indent: 15.0,
+                              endIndent: 15.0,
+                              color: FlutterFlowTheme.of(context).containerBg,
+                            ),
+                            InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                await showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  enableDrag: false,
+                                  context: context,
+                                  builder: (context) {
+                                    return WebViewAware(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          FocusScope.of(context).unfocus();
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
+                                        },
+                                        child: Padding(
+                                          padding:
+                                              MediaQuery.viewInsetsOf(context),
+                                          child: Container(
+                                            height: MediaQuery.sizeOf(context)
+                                                    .height *
+                                                0.8,
+                                            child: AdhanljudWidget(),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ).then((value) => safeSetState(() {}));
+                              },
+                              child: wrapWithModel(
+                                model: _model.settingTabWithSwitchModel4,
+                                updateCallback: () => safeSetState(() {}),
+                                child: SettingTabWithSwitchWidget(
+                                  label: 'Adhan',
+                                  sunLabel: 'Välj ljud för böneutropet',
+                                  icon: Icon(
+                                    Icons.vibration_sharp,
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    size: 18.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              thickness: 1.0,
+                              indent: 15.0,
+                              endIndent: 15.0,
+                              color: FlutterFlowTheme.of(context).containerBg,
+                            ),
+                            InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                await showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  enableDrag: false,
+                                  context: context,
+                                  builder: (context) {
+                                    return WebViewAware(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          FocusScope.of(context).unfocus();
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
+                                        },
+                                        child: Padding(
+                                          padding:
+                                              MediaQuery.viewInsetsOf(context),
+                                          child: Container(
+                                            height: MediaQuery.sizeOf(context)
+                                                    .height *
+                                                0.6,
+                                            child: PminnelsefreAdhanWidget(),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ).then((value) => safeSetState(() {}));
+                              },
+                              child: wrapWithModel(
+                                model: _model.settingTabWithSwitchModel5,
+                                updateCallback: () => safeSetState(() {}),
+                                child: SettingTabWithSwitchWidget(
+                                  label: 'Påminnelse före Adhan',
+                                  sunLabel:
+                                      'Få en notis 5, 10 eller 15 minuter innan',
+                                  icon: Icon(
+                                    FFIcons.kbell,
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    size: 18.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ]
+                              .addToStart(SizedBox(height: 10.0))
+                              .addToEnd(SizedBox(height: 10.0)),
+                        ),
+                      ),
+                      Align(
+                        alignment: AlignmentDirectional(-1.0, 0.0),
+                        child: Text(
+                          'Om',
+                          style:
+                              FlutterFlowTheme.of(context).titleSmall.override(
+                                    font: GoogleFonts.plusJakartaSans(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontStyle,
+                                    ),
+                                    letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .fontStyle,
+                                  ),
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                              FlutterFlowTheme.of(context)
+                                  .designToken
+                                  .radius
+                                  .md),
+                          border: Border.all(
+                            color: FlutterFlowTheme.of(context).containerBg,
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                await showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  enableDrag: false,
+                                  context: context,
+                                  builder: (context) {
+                                    return WebViewAware(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          FocusScope.of(context).unfocus();
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
+                                        },
+                                        child: Padding(
+                                          padding:
+                                              MediaQuery.viewInsetsOf(context),
+                                          child: Container(
+                                            height: MediaQuery.sizeOf(context)
+                                                    .height *
+                                                0.7,
+                                            child: OmappenWidget(),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ).then((value) => safeSetState(() {}));
+                              },
+                              child: wrapWithModel(
                                 model: _model.settingTabModel1,
                                 updateCallback: () => safeSetState(() {}),
                                 child: SettingTabWidget(
-                                  label: 'About App',
+                                  label: 'Om appen',
                                   sunLabel: ' ',
                                   icon: Icon(
                                     Icons.info_outline,
-                                    color: FlutterFlowTheme.of(context).primary,
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
                                     size: 18.0,
                                   ),
                                 ),
                               ),
-                              Divider(
-                                thickness: 1.0,
-                                indent: 15.0,
-                                endIndent: 15.0,
-                                color: FlutterFlowTheme.of(context).containerBg,
-                              ),
-                              wrapWithModel(
+                            ),
+                            Divider(
+                              thickness: 1.0,
+                              indent: 15.0,
+                              endIndent: 15.0,
+                              color: FlutterFlowTheme.of(context).containerBg,
+                            ),
+                            InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                await showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  enableDrag: false,
+                                  context: context,
+                                  builder: (context) {
+                                    return WebViewAware(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          FocusScope.of(context).unfocus();
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
+                                        },
+                                        child: Padding(
+                                          padding:
+                                              MediaQuery.viewInsetsOf(context),
+                                          child: Container(
+                                            height: MediaQuery.sizeOf(context)
+                                                    .height *
+                                                0.75,
+                                            child: BetygsttappenWidget(),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ).then((value) => safeSetState(() {}));
+                              },
+                              child: wrapWithModel(
                                 model: _model.settingTabModel2,
                                 updateCallback: () => safeSetState(() {}),
                                 child: SettingTabWidget(
-                                  label: 'Rate App',
-                                  sunLabel: 'Ask Imam notifications',
+                                  label: 'Betygsätt appen',
+                                  sunLabel: ' ',
                                   icon: Icon(
                                     Icons.star_border,
-                                    color: FlutterFlowTheme.of(context).primary,
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
                                     size: 18.0,
                                   ),
                                 ),
                               ),
-                            ]
-                                .addToStart(SizedBox(height: 10.0))
-                                .addToEnd(SizedBox(height: 10.0)),
-                          ),
+                            ),
+                            Divider(
+                              thickness: 1.0,
+                              indent: 15.0,
+                              endIndent: 15.0,
+                              color: FlutterFlowTheme.of(context).containerBg,
+                            ),
+                            wrapWithModel(
+                              model: _model.settingTabModel3,
+                              updateCallback: () => safeSetState(() {}),
+                              child: SettingTabWidget(
+                                label: 'Dela appen',
+                                sunLabel: ' ',
+                                icon: Icon(
+                                  Icons.share_outlined,
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                  size: 18.0,
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              thickness: 1.0,
+                              indent: 15.0,
+                              endIndent: 15.0,
+                              color: FlutterFlowTheme.of(context).containerBg,
+                            ),
+                            InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                await showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  enableDrag: false,
+                                  context: context,
+                                  builder: (context) {
+                                    return WebViewAware(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          FocusScope.of(context).unfocus();
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
+                                        },
+                                        child: Padding(
+                                          padding:
+                                              MediaQuery.viewInsetsOf(context),
+                                          child: Container(
+                                            height: MediaQuery.sizeOf(context)
+                                                    .height *
+                                                0.9,
+                                            child: KontaktaossWidget(),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ).then((value) => safeSetState(() {}));
+                              },
+                              child: wrapWithModel(
+                                model: _model.settingTabModel4,
+                                updateCallback: () => safeSetState(() {}),
+                                child: SettingTabWidget(
+                                  label: 'Kontakta oss',
+                                  sunLabel: ' ',
+                                  icon: Icon(
+                                    Icons.mail_outline_rounded,
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    size: 18.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ]
+                              .addToStart(SizedBox(height: 10.0))
+                              .addToEnd(SizedBox(height: 10.0)),
                         ),
-                      ]
-                          .divide(SizedBox(height: 20.0))
-                          .around(SizedBox(height: 20.0)),
-                    ),
+                      ),
+                    ]
+                        .divide(SizedBox(height: 20.0))
+                        .around(SizedBox(height: 20.0)),
                   ),
                 ),
-              ],
-            ),
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Muslimens Kompanjon Version: 1.0',
+                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                          font: GoogleFonts.inter(
+                            fontWeight: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .fontWeight,
+                            fontStyle: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .fontStyle,
+                          ),
+                          letterSpacing: 0.0,
+                          fontWeight: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .fontWeight,
+                          fontStyle:
+                              FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                        ),
+                  ),
+                ],
+              ),
+              wrapWithModel(
+                model: _model.pageFooterModel,
+                updateCallback: () => safeSetState(() {}),
+                child: PageFooterWidget(
+                  activeTab: 5,
+                ),
+              ),
+            ].divide(SizedBox(height: 20.0)).addToStart(SizedBox(
+                height: FlutterFlowTheme.of(context).designToken.spacing.xxl)),
           ),
         ),
       ),

@@ -64,18 +64,15 @@ class _YoutubeVideoItemWidgetState extends State<YoutubeVideoItemWidget> {
         Text(
           widget.videoTitle,
           maxLines: 1,
-          style: FlutterFlowTheme.of(context).youtubeVideoTitle.override(
-                font: GoogleFonts.roboto(
-                  fontWeight: FontWeight.bold,
-                  fontStyle:
-                      FlutterFlowTheme.of(context).youtubeVideoTitle.fontStyle,
+          style: FlutterFlowTheme.of(context).titleSmall.override(
+                font: GoogleFonts.plusJakartaSans(
+                  fontWeight:
+                      FlutterFlowTheme.of(context).titleSmall.fontWeight,
+                  fontStyle: FlutterFlowTheme.of(context).titleSmall.fontStyle,
                 ),
-                color: Colors.black,
-                fontSize: 12.0,
                 letterSpacing: 0.0,
-                fontWeight: FontWeight.bold,
-                fontStyle:
-                    FlutterFlowTheme.of(context).youtubeVideoTitle.fontStyle,
+                fontWeight: FlutterFlowTheme.of(context).titleSmall.fontWeight,
+                fontStyle: FlutterFlowTheme.of(context).titleSmall.fontStyle,
               ),
           overflow: TextOverflow.ellipsis,
         ),

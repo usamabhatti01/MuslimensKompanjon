@@ -75,7 +75,7 @@ class _FeatureItemWidgetState extends State<FeatureItemWidget> {
                   'Accurate Prayer Times',
                 ),
                 style: FlutterFlowTheme.of(context).titleMedium.override(
-                      font: GoogleFonts.manrope(
+                      font: GoogleFonts.plusJakartaSans(
                         fontWeight: FontWeight.bold,
                         fontStyle:
                             FlutterFlowTheme.of(context).titleMedium.fontStyle,

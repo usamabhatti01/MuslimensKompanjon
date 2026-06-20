@@ -62,24 +62,26 @@ class _AdkhaPageComponentWidgetState extends State<AdkhaPageComponentWidget> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             widget.icon!,
-            Text(
-              valueOrDefault<String>(
-                widget.title,
-                'Add Title',
-              ),
-              style: FlutterFlowTheme.of(context).titleSmall.override(
-                    font: GoogleFonts.manrope(
+            Expanded(
+              child: Text(
+                valueOrDefault<String>(
+                  widget.title,
+                  'Add Title',
+                ),
+                style: FlutterFlowTheme.of(context).bodyMedium.override(
+                      font: GoogleFonts.inter(
+                        fontWeight:
+                            FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+                        fontStyle:
+                            FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                      ),
+                      letterSpacing: 0.0,
                       fontWeight:
-                          FlutterFlowTheme.of(context).titleSmall.fontWeight,
+                          FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                       fontStyle:
-                          FlutterFlowTheme.of(context).titleSmall.fontStyle,
+                          FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                     ),
-                    letterSpacing: 0.0,
-                    fontWeight:
-                        FlutterFlowTheme.of(context).titleSmall.fontWeight,
-                    fontStyle:
-                        FlutterFlowTheme.of(context).titleSmall.fontStyle,
-                  ),
+              ),
             ),
           ].divide(SizedBox(width: 20.0)),
         ),

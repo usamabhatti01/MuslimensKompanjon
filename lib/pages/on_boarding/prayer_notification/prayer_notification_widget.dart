@@ -46,37 +46,51 @@ class _PrayerNotificationWidgetState extends State<PrayerNotificationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          valueOrDefault<String>(
-            widget.prayerName,
-            'Fazr',
-          ),
-          style: FlutterFlowTheme.of(context).titleMedium.override(
-                font: GoogleFonts.manrope(
-                  fontWeight:
-                      FlutterFlowTheme.of(context).titleMedium.fontWeight,
-                  fontStyle: FlutterFlowTheme.of(context).titleMedium.fontStyle,
-                ),
-                letterSpacing: 0.0,
-                fontWeight: FlutterFlowTheme.of(context).titleMedium.fontWeight,
-                fontStyle: FlutterFlowTheme.of(context).titleMedium.fontStyle,
+    return Container(
+      height: 50.0,
+      decoration: BoxDecoration(
+        color: FlutterFlowTheme.of(context).secondaryBackground,
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              valueOrDefault<String>(
+                widget.prayerName,
+                'Fazr',
               ),
+              style: FlutterFlowTheme.of(context).titleMedium.override(
+                    font: GoogleFonts.plusJakartaSans(
+                      fontWeight:
+                          FlutterFlowTheme.of(context).titleMedium.fontWeight,
+                      fontStyle:
+                          FlutterFlowTheme.of(context).titleMedium.fontStyle,
+                    ),
+                    letterSpacing: 0.0,
+                    fontWeight:
+                        FlutterFlowTheme.of(context).titleMedium.fontWeight,
+                    fontStyle:
+                        FlutterFlowTheme.of(context).titleMedium.fontStyle,
+                  ),
+            ),
+            Switch.adaptive(
+              value: _model.switchValue!,
+              onChanged: (newValue) async {
+                safeSetState(() => _model.switchValue = newValue);
+              },
+              activeColor: FlutterFlowTheme.of(context).primary,
+              activeTrackColor: FlutterFlowTheme.of(context).primary,
+              inactiveTrackColor: FlutterFlowTheme.of(context).alternate,
+              inactiveThumbColor:
+                  FlutterFlowTheme.of(context).secondaryBackground,
+            ),
+          ],
         ),
-        Switch.adaptive(
-          value: _model.switchValue!,
-          onChanged: (newValue) async {
-            safeSetState(() => _model.switchValue = newValue);
-          },
-          activeColor: FlutterFlowTheme.of(context).primary,
-          activeTrackColor: FlutterFlowTheme.of(context).primary,
-          inactiveTrackColor: FlutterFlowTheme.of(context).alternate,
-          inactiveThumbColor: FlutterFlowTheme.of(context).secondaryBackground,
-        ),
-      ],
+      ),
     );
   }
 }

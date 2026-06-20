@@ -152,7 +152,7 @@ class _PrayerTimeRowWidgetState extends State<PrayerTimeRowWidget> {
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
-                                      font: GoogleFonts.manrope(
+                                      font: GoogleFonts.inter(
                                         fontWeight: FontWeight.w600,
                                         fontStyle: FlutterFlowTheme.of(context)
                                             .bodyMedium

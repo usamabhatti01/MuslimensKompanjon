@@ -65,7 +65,7 @@ class _PagesHeadingBoxWidgetState extends State<PagesHeadingBoxWidget> {
                 'ad title',
               ),
               style: FlutterFlowTheme.of(context).titleLarge.override(
-                    font: GoogleFonts.manrope(
+                    font: GoogleFonts.plusJakartaSans(
                       fontWeight:
                           FlutterFlowTheme.of(context).titleLarge.fontWeight,
                       fontStyle:
@@ -84,7 +84,7 @@ class _PagesHeadingBoxWidgetState extends State<PagesHeadingBoxWidget> {
                 'add sub title',
               ),
               style: FlutterFlowTheme.of(context).bodyMedium.override(
-                    font: GoogleFonts.manrope(
+                    font: GoogleFonts.inter(
                       fontWeight:
                           FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                       fontStyle:

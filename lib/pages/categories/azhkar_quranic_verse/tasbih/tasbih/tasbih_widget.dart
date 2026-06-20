@@ -1,17 +1,21 @@
-import '/extra/page_sub_header/page_sub_header_widget.dart';
+import '/custom_header_footer/adhkar_header/adhkar_header_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/pages/categories/azhkar_quranic_verse/adhkar_all_pages_banner/adhkar_all_pages_banner_widget.dart';
-import '/pages/categories/azhkar_quranic_verse/arabic_heading_and_translation/arabic_heading_and_translation_widget.dart';
-import '/pages/categories/azhkar_quranic_verse/tasbih/tasbih_box/tasbih_box_widget.dart';
+import '/pages/categories/azhkar_quranic_verse/akallan_dua/akallan_dua_box_ar/akallan_dua_box_ar_widget.dart';
+import '/pages/categories/azhkar_quranic_verse/akallan_dua/akallan_dua_box_sv/akallan_dua_box_sv_widget.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'tasbih_model.dart';
 export 'tasbih_model.dart';
 
 class TasbihWidget extends StatefulWidget {
-  const TasbihWidget({super.key});
+  const TasbihWidget({
+    super.key,
+    required this.adkar,
+  });
+
+  final String? adkar;
 
   static String routeName = 'Tasbih';
   static String routePath = '/tasbih';
@@ -20,7 +24,8 @@ class TasbihWidget extends StatefulWidget {
   State<TasbihWidget> createState() => _TasbihWidgetState();
 }
 
-class _TasbihWidgetState extends State<TasbihWidget> {
+class _TasbihWidgetState extends State<TasbihWidget>
+    with TickerProviderStateMixin {
   late TasbihModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -29,6 +34,12 @@ class _TasbihWidgetState extends State<TasbihWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => TasbihModel());
+
+    _model.tabBarController = TabController(
+      vsync: this,
+      length: 2,
+      initialIndex: 0,
+    )..addListener(() => safeSetState(() {}));
   }
 
   @override
@@ -40,8 +51,6 @@ class _TasbihWidgetState extends State<TasbihWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -50,103 +59,292 @@ class _TasbihWidgetState extends State<TasbihWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        body: SafeArea(
-          top: true,
-          child: Padding(
-            padding: EdgeInsets.all(
-                FlutterFlowTheme.of(context).designToken.spacing.lg),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                wrapWithModel(
-                  model: _model.pageSubHeaderModel,
-                  updateCallback: () => safeSetState(() {}),
-                  child: PageSubHeaderWidget(
-                    pageName: 'Tasbih',
-                  ),
+        body: Padding(
+          padding: EdgeInsets.all(
+              FlutterFlowTheme.of(context).designToken.spacing.md),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              wrapWithModel(
+                model: _model.adhkarHeaderModel,
+                updateCallback: () => safeSetState(() {}),
+                child: AdhkarHeaderWidget(
+                  pageName: widget.adkar!,
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.all(
-                        FlutterFlowTheme.of(context).designToken.spacing.md),
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    width: MediaQuery.sizeOf(context).width * 1.0,
+                    height: MediaQuery.sizeOf(context).height * 0.7,
+                    decoration: BoxDecoration(),
                     child: Column(
-                      mainAxisSize: MainAxisSize.max,
                       children: [
-                        wrapWithModel(
-                          model: _model.adhkarAllPagesBannerModel,
-                          updateCallback: () => safeSetState(() {}),
-                          child: AdhkarAllPagesBannerWidget(
-                            pageName: 'Tasbih',
-                          ),
-                        ),
-                        wrapWithModel(
-                          model: _model.arabicHeadingAndTranslationModel,
-                          updateCallback: () => safeSetState(() {}),
-                          child: ArabicHeadingAndTranslationWidget(
-                            heading:
-                                'أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ',
-                            translation:
-                                'Translation: Surely, in the remembrance of Allah do hearts find peace.',
+                        Align(
+                          alignment: Alignment(0.0, 0),
+                          child: TabBar(
+                            labelColor: FlutterFlowTheme.of(context).primary,
+                            unselectedLabelColor:
+                                FlutterFlowTheme.of(context).secondaryText,
+                            labelStyle: FlutterFlowTheme.of(context)
+                                .titleSmall
+                                .override(
+                                  font: GoogleFonts.plusJakartaSans(
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .fontStyle,
+                                  ),
+                                  letterSpacing: 0.0,
+                                  fontWeight: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .fontWeight,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .fontStyle,
+                                ),
+                            unselectedLabelStyle: FlutterFlowTheme.of(context)
+                                .titleSmall
+                                .override(
+                                  font: GoogleFonts.plusJakartaSans(
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .fontStyle,
+                                  ),
+                                  letterSpacing: 0.0,
+                                  fontWeight: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .fontWeight,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .fontStyle,
+                                ),
+                            indicatorColor:
+                                FlutterFlowTheme.of(context).primary,
+                            tabs: [
+                              Tab(
+                                text: 'Arabiska',
+                              ),
+                              Tab(
+                                text: 'Svenska',
+                              ),
+                            ],
+                            controller: _model.tabBarController,
+                            onTap: (i) async {
+                              [() async {}, () async {}][i]();
+                            },
                           ),
                         ),
                         Expanded(
-                          child: Builder(
-                            builder: (context) {
-                              final tasbihItem = getJsonField(
-                                FFAppState().tasbihList,
-                                r'''$''',
-                              ).toList();
-
-                              return ListView.separated(
-                                padding: EdgeInsets.zero,
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
-                                itemCount: tasbihItem.length,
-                                separatorBuilder: (_, __) =>
-                                    SizedBox(height: 20.0),
-                                itemBuilder: (context, tasbihItemIndex) {
-                                  final tasbihItemItem =
-                                      tasbihItem[tasbihItemIndex];
-                                  return InkWell(
+                          child: TabBarView(
+                            controller: _model.tabBarController,
+                            children: [
+                              Column(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(12.0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Text(
+                                          '(28:13)',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                font: GoogleFonts.inter(
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                                letterSpacing: 0.0,
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
+                                        ),
+                                        Text(
+                                          'وَقَالَ رَبُّكُمُ ادْعُونِي أَسْتَجِبْ لَكُمْ',
+                                          textAlign: TextAlign.center,
+                                          style: FlutterFlowTheme.of(context)
+                                              .arabiTitle
+                                              .override(
+                                                fontFamily: 'arabic',
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primary,
+                                                fontSize: 22.0,
+                                                letterSpacing: 0.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  InkWell(
                                     splashColor: Colors.transparent,
                                     focusColor: Colors.transparent,
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
                                     onTap: () async {
-                                      FFAppState().currentTasbihId =
-                                          getJsonField(
-                                        tasbihItemItem,
-                                        r'''$.id''',
-                                      );
-                                      safeSetState(() {});
-
                                       context.pushNamed(
-                                          TashbihCounterWidget.routeName);
+                                        TashbihCounterWidget.routeName,
+                                        queryParameters: {
+                                          'arabicValeue': serializeParam(
+                                            'Tasbih',
+                                            ParamType.String,
+                                          ),
+                                        }.withoutNulls,
+                                      );
                                     },
-                                    child: TasbihBoxWidget(
-                                      key: Key(
-                                          'Keyypw_${tasbihItemIndex}_of_${tasbihItem.length}'),
-                                      tasbihName: getJsonField(
-                                        tasbihItemItem,
-                                        r'''$.tasbihName''',
-                                      ).toString(),
-                                      tasbih: getJsonField(
-                                        tasbihItemItem,
-                                        r'''$.tasbih''',
-                                      ).toString(),
+                                    child: wrapWithModel(
+                                      model: _model.akallanDuaBoxArModel,
+                                      updateCallback: () => safeSetState(() {}),
+                                      child: AkallanDuaBoxArWidget(
+                                        tasbihName: 'سُبْحَانَ ٱللَّٰهِ',
+                                        tasbih:
+                                            'سُبْحَانَ اللَّهِ فِي اللُّغَةِ تُغْنِي تَنْزِيهَ اللَّهِ عَزَّ وَجَلَّ عَنِ السُّوءِ، وَأَنْ يَكُونَ لَهُ مِثْلٌ أَوْ شَرِيكٌ.',
+                                      ),
                                     ),
-                                  );
-                                },
-                              );
-                            },
+                                  ),
+                                ]
+                                    .divide(SizedBox(height: 12.0))
+                                    .around(SizedBox(height: 12.0)),
+                              ),
+                              Column(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(12.0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            'Sannerligen, i åminnelsen av Allah finner hjärtan ro',
+                                            textAlign: TextAlign.center,
+                                            style: FlutterFlowTheme.of(context)
+                                                .svenskaTitle
+                                                .override(
+                                                  font: GoogleFonts.cairo(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .svenskaTitle
+                                                            .fontStyle,
+                                                  ),
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primary,
+                                                  fontSize: 20.0,
+                                                  letterSpacing: 0.0,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .svenskaTitle
+                                                          .fontStyle,
+                                                ),
+                                          ),
+                                        ),
+                                        Text(
+                                          '(13:28)',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                font: GoogleFonts.inter(
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                                fontSize: 12.0,
+                                                letterSpacing: 0.0,
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      context.pushNamed(
+                                        TashbihCounterWidget.routeName,
+                                        queryParameters: {
+                                          'arabicValeue': serializeParam(
+                                            'Tasbih',
+                                            ParamType.String,
+                                          ),
+                                        }.withoutNulls,
+                                      );
+                                    },
+                                    child: wrapWithModel(
+                                      model: _model.akallanDuaBoxSvModel,
+                                      updateCallback: () => safeSetState(() {}),
+                                      child: AkallanDuaBoxSvWidget(
+                                        tasbihName: 'Subhan Allah',
+                                        tasbih:
+                                            'Ära vare Gud: Prisa Honom som fri från alla brister och ofullkomligheter.',
+                                      ),
+                                    ),
+                                  ),
+                                ]
+                                    .divide(SizedBox(height: 12.0))
+                                    .around(SizedBox(height: 12.0)),
+                              ),
+                            ],
                           ),
                         ),
-                      ].divide(SizedBox(height: 20.0)),
+                      ],
                     ),
                   ),
-                ),
-              ].divide(SizedBox(height: 20.0)),
-            ),
+                ],
+              ),
+            ].divide(SizedBox(height: 20.0)).addToStart(SizedBox(
+                height: FlutterFlowTheme.of(context).designToken.spacing.xxl)),
           ),
         ),
       ),

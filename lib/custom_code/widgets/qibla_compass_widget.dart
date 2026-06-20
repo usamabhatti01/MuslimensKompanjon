@@ -13,16 +13,40 @@ import 'package:flutter/material.dart';
 import '/custom_code/widgets/index.dart';
 import '/custom_code/actions/index.dart';
 import '/flutter_flow/custom_functions.dart';
-
 import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
-
 import 'package:flutter/services.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:adhan/adhan.dart';
 import 'package:vibration/vibration.dart';
+
+class QiblaStrings {
+  static const Map<String, Map<String, String>> values = {
+    'en': {
+      'calibrate':
+          'Calibrate the compass by moving the phone in a figure eight (8)',
+      'facingKaaba': 'You are facing the Kaaba',
+      'deviceAngleLabel': 'Device angle relative to Qibla',
+      'qiblaDirection': 'Facing Qibla',
+      'vibrationLabel': 'vibration at exact direction',
+      'fetching': 'Fetching location...',
+      'disabled': 'Location services disabled',
+      'permission': 'Location permission denied',
+    },
+    'sv': {
+      'calibrate': 'Kalibrera kompassen genom att röra telefonen i en åtta (8)',
+      'facingKaaba': 'Du är i riktning mot Kaba',
+      'deviceAngleLabel': 'Enhetens vinkel i förhållande till Qibla',
+      'qiblaDirection': 'Riktning mot Qibla',
+      'vibrationLabel': 'vibration vid exakt riktning',
+      'fetching': 'Hämtar plats...',
+      'disabled': 'Platstjänster är avstängda',
+      'permission': 'Platsbehörighet nekad',
+    },
+  };
+}
 
 class QiblaCompassWidget extends StatefulWidget {
   const QiblaCompassWidget({
@@ -30,10 +54,8 @@ class QiblaCompassWidget extends StatefulWidget {
     this.width,
     this.height,
   });
-
   final double? width;
   final double? height;
-
   @override
   State<QiblaCompassWidget> createState() => _QiblaCompassWidgetState();
 }
@@ -42,30 +64,49 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
     with SingleTickerProviderStateMixin {
   double? _heading;
   double? _qiblaDirection;
-
   bool _isAligned = false;
   bool _hasVibrated = false;
-
+  bool _showAlert = true;
   ui.Image? _kaabaImage;
-
   late AnimationController _controller;
   late Animation<double> _animation;
-
   StreamSubscription<CompassEvent>? _compassSubscription;
+  String _instruction = 'fetching';
+  String _translate(String key) {
+    String lang = 'en';
+    try {
+      if (mounted) {
+        lang = FFLocalizations.of(context).languageCode;
+      }
+    } catch (_) {}
+    if (lang.startsWith('sv')) {
+      lang = 'sv';
+    } else {
+      lang = 'en';
+    }
+    final translationMap =
+        QiblaStrings.values[lang] ?? QiblaStrings.values['en']!;
+    return translationMap[key] ?? key;
+  }
 
-  String _instruction = 'Fetching location...';
+  String _getLanguageCode() {
+    String lang = 'en';
+    try {
+      if (mounted) {
+        lang = FFLocalizations.of(context).languageCode;
+      }
+    } catch (_) {}
+    return lang;
+  }
 
   @override
   void initState() {
     super.initState();
-
     _loadKaabaImage();
-
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 250),
     );
-
     _animation = Tween<double>(
       begin: 0,
       end: 0,
@@ -75,7 +116,6 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
         curve: Curves.easeOut,
       ),
     );
-
     _init();
   }
 
@@ -83,15 +123,11 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
     final data = await rootBundle.load(
       'assets/images/kaba.png',
     );
-
     final bytes = data.buffer.asUint8List();
-
     final codec = await ui.instantiateImageCodec(
       bytes,
     );
-
     final frame = await codec.getNextFrame();
-
     setState(() {
       _kaabaImage = frame.image;
     });
@@ -99,58 +135,45 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
 
   Future<void> _init() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-
     if (!serviceEnabled) {
       setState(() {
-        _instruction = 'Location services disabled';
+        _instruction = 'disabled';
       });
       return;
     }
-
     LocationPermission permission = await Geolocator.checkPermission();
-
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
     }
-
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
       setState(() {
-        _instruction = 'Location permission denied';
+        _instruction = 'permission';
       });
       return;
     }
-
     final position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
-
     final qibla = Qibla(
       Coordinates(
         position.latitude,
         position.longitude,
       ),
     ).direction;
-
     setState(() {
       _qiblaDirection = qibla;
     });
-
     _startCompass();
   }
 
   void _startCompass() {
     final stream = FlutterCompass.events;
-
     if (stream == null) return;
-
     _compassSubscription = stream.listen((CompassEvent event) {
       final heading = event.heading;
-
       if (heading == null) return;
-
       final normalized = (heading % 360 + 360) % 360;
-
       _animation = Tween<double>(
         begin: _animation.value,
         end: normalized,
@@ -160,53 +183,13 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
           curve: Curves.easeOut,
         ),
       );
-
       _controller
         ..reset()
         ..forward();
-
       setState(() {
         _heading = normalized;
       });
     });
-  }
-
-  String get directionInstruction {
-    if (_heading == null || _qiblaDirection == null) {
-      return _instruction;
-    }
-
-    double diff = ((_qiblaDirection! - _heading!) + 540) % 360 - 180;
-
-    final absDiff = diff.abs();
-
-    _isAligned = absDiff <= 2;
-
-    // vibration feedback
-
-    if (_isAligned && !_hasVibrated) {
-      _hasVibrated = true;
-
-      Vibration.vibrate(
-        duration: 120,
-      );
-    }
-
-    if (!_isAligned) {
-      _hasVibrated = false;
-    }
-
-    if (_isAligned) {
-      return 'Perfect alignment with Qibla';
-    }
-
-    final rounded = absDiff.round();
-
-    if (diff > 0) {
-      return 'Rotate the phone ${rounded}° to the right';
-    } else {
-      return 'Rotate the phone ${rounded}° to the left';
-    }
   }
 
   @override
@@ -216,93 +199,233 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
     super.dispose();
   }
 
+  Widget _buildAlertBanner() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFEAF5EA),
+        border: Border.all(color: const Color(0xFFC8E6C9), width: 1.5),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              border: Border.all(color: const Color(0xFFC8E6C9)),
+            ),
+            child: Center(
+              child: Icon(
+                _isAligned ? Icons.explore : Icons.gesture,
+                color: const Color(0xFF0B7A12),
+                size: 20,
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              _isAligned ? _translate('facingKaaba') : _translate('calibrate'),
+              style: const TextStyle(
+                fontSize: 13,
+                color: Colors.black87,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _showAlert = false;
+              });
+            },
+            child: const Icon(
+              Icons.close,
+              color: Colors.black54,
+              size: 18,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPillButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Opacity(
+          opacity: _isAligned ? 1.0 : 0.0,
+          child: const Text(
+            '((   ',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.black38,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF5F5F5),
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(color: const Color(0xFFE0E0E0), width: 1),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(2),
+                decoration: const BoxDecoration(
+                  color: Color(0xFF2ECC71),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.check,
+                  color: Colors.white,
+                  size: 14,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                _translate('qiblaDirection'),
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Opacity(
+          opacity: _isAligned ? 1.0 : 0.0,
+          child: const Text(
+            '   ))',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.black38,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = math.min(
       widget.width ?? 350,
       widget.height ?? 600,
     );
-
+    // alignment check
+    if (_heading != null && _qiblaDirection != null) {
+      double diff = ((_qiblaDirection! - _heading!) + 540) % 360 - 180;
+      _isAligned = diff.abs() <= 2;
+      // vibration feedback
+      if (_isAligned && !_hasVibrated) {
+        _hasVibrated = true;
+        Vibration.vibrate(duration: 120);
+      }
+      if (!_isAligned) {
+        _hasVibrated = false;
+      }
+    }
     return Container(
       width: widget.width,
       height: widget.height,
       color: Colors.white,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            width: size * 0.8,
-            height: size * 0.8,
-            child: AnimatedBuilder(
-              animation: _controller,
-              builder: (context, child) {
-                return CustomPaint(
-                  painter: _CompassPainter(
-                    heading: _animation.value,
-                    qiblaDirection: _qiblaDirection ?? 0,
-                    kaabaImage: _kaabaImage,
+          // Top section (Alert banner or loader)
+          Column(
+            children: [
+              if (_heading == null || _qiblaDirection == null)
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    _translate(_instruction),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black54,
+                    ),
                   ),
-                );
-              },
-            ),
+                )
+              else if (_showAlert)
+                _buildAlertBanner(),
+            ],
           ),
-          const SizedBox(height: 34),
-          Text(
-            '${(_heading ?? 0).round()}°',
-            style: TextStyle(
-              fontSize: 44,
-              fontWeight: FontWeight.w700,
-              color: _isAligned
-                  ? const Color(0xFFFFC107)
-                  : const Color(0xFF0B7A12),
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            _isAligned ? 'Aligned with Qibla' : 'Device angle to qibla',
-            style: TextStyle(
-              fontSize: 16,
-              color: _isAligned ? const Color(0xFFFFC107) : Colors.black87,
-            ),
-          ),
-          const SizedBox(height: 28),
-          AnimatedContainer(
-            duration: const Duration(
-              milliseconds: 250,
-            ),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 22,
-              vertical: 14,
-            ),
-            decoration: BoxDecoration(
-              color: _isAligned
-                  ? const Color(0xFFFFF8E1)
-                  : const Color(0xFFF3F3F3),
-              borderRadius: BorderRadius.circular(
-                18,
-              ),
-              boxShadow: _isAligned
-                  ? [
-                      BoxShadow(
-                        color: const Color(
-                          0xFFFFC107,
-                        ).withOpacity(
-                          0.35,
-                        ),
-                        blurRadius: 20,
-                        spreadRadius: 2,
+          // Middle section (Compass)
+          Expanded(
+            child: Center(
+              child: SizedBox(
+                width: size * 0.85,
+                height: size * 0.85,
+                child: AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, child) {
+                    return CustomPaint(
+                      painter: _CompassPainter(
+                        heading: _animation.value,
+                        qiblaDirection: _qiblaDirection ?? 0,
+                        kaabaImage: _kaabaImage,
+                        languageCode: _getLanguageCode(),
                       ),
-                    ]
-                  : [],
-            ),
-            child: Text(
-              directionInstruction,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: _isAligned ? FontWeight.w600 : FontWeight.w400,
-                color: _isAligned ? const Color(0xFFFF8F00) : Colors.black87,
+                    );
+                  },
+                ),
               ),
+            ),
+          ),
+          // Bottom section (Angle, Pill, Vibration info)
+          Padding(
+            padding:
+                const EdgeInsets.only(bottom: 24.0, left: 16.0, right: 16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Angle Text
+                Text(
+                  '${(_heading ?? 0).round()}°',
+                  style: const TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xFF0B7A12),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                // Device Angle Label
+                Text(
+                  _translate('deviceAngleLabel'),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black54,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                // Pill Button with Checkmark
+                _buildPillButton(),
+                const SizedBox(height: 8),
+                // Vibration description
+                Text(
+                  _translate('vibrationLabel'),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.black38,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -315,15 +438,14 @@ class _CompassPainter extends CustomPainter {
   final double heading;
   final double qiblaDirection;
   final ui.Image? kaabaImage;
-
+  final String languageCode;
   _CompassPainter({
     required this.heading,
     required this.qiblaDirection,
     required this.kaabaImage,
+    required this.languageCode,
   });
-
   static const green = Color(0xFF0B7A12);
-
   @override
   void paint(
     Canvas canvas,
@@ -331,84 +453,44 @@ class _CompassPainter extends CustomPainter {
   ) {
     final cx = size.width / 2;
     final cy = size.height / 2;
-
     final radius = size.width / 2 - 20;
-
-    double alignmentDiff = ((qiblaDirection - heading) + 540) % 360 - 180;
-
-    bool aligned = alignmentDiff.abs() <= 2;
-
-    // glowing halo
-
-    if (aligned) {
-      final glowPaint = Paint()
-        ..color = const Color(
-          0xFFFFD54F,
-        ).withOpacity(0.35)
-        ..maskFilter = const MaskFilter.blur(
-          BlurStyle.normal,
-          30,
-        );
-
-      canvas.drawCircle(
-        Offset(cx, cy),
-        radius + 8,
-        glowPaint,
-      );
-    }
-
-    // outer circle
-
+    // Outer circle
     final circlePaint = Paint()
-      ..color = aligned ? const Color(0xFFFFC107) : green
+      ..color = green
       ..style = PaintingStyle.stroke
       ..strokeWidth = 6;
-
     canvas.drawCircle(
       Offset(cx, cy),
       radius,
       circlePaint,
     );
-
-    // dots
-
+    // Dots
     final dotPaint = Paint()
-      ..color = aligned ? const Color(0xFFFFC107) : green
+      ..color = green
       ..style = PaintingStyle.fill;
-
     final dotAngles = [
       45.0,
       135.0,
       225.0,
       315.0,
     ];
-
     for (double deg in dotAngles) {
       final rad = (deg - 90) * math.pi / 180;
-
       final dx = cx + (radius - 18) * math.cos(rad);
-
       final dy = cy + (radius - 18) * math.sin(rad);
-
       canvas.drawCircle(
         Offset(dx, dy),
         4,
         dotPaint,
       );
     }
-
-    // rotate letters
-
+    // Rotate letters
     canvas.save();
-
     canvas.translate(cx, cy);
-
     canvas.rotate(
       -heading * math.pi / 180,
     );
-
     canvas.translate(-cx, -cy);
-
     final labels = [
       {
         'text': 'N',
@@ -427,26 +509,21 @@ class _CompassPainter extends CustomPainter {
         'angle': 180.0,
       },
     ];
-
     for (final item in labels) {
       final angle = (item['angle'] as double) * math.pi / 180;
-
       final dx = cx + (radius - 38) * math.cos(angle);
-
       final dy = cy + (radius - 38) * math.sin(angle);
-
       final tp = TextPainter(
         text: TextSpan(
           text: item['text'] as String,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18,
-            color: aligned ? const Color(0xFFFFC107) : Colors.black87,
+            color: Colors.black87,
             fontWeight: FontWeight.w500,
           ),
         ),
         textDirection: ui.TextDirection.ltr,
       )..layout();
-
       tp.paint(
         canvas,
         Offset(
@@ -455,11 +532,8 @@ class _CompassPainter extends CustomPainter {
         ),
       );
     }
-
     canvas.restore();
-
-    // kaaba asset
-
+    // Kaaba asset
     _drawKaabaAsset(
       canvas,
       Offset(
@@ -467,9 +541,7 @@ class _CompassPainter extends CustomPainter {
         cy - radius + 8,
       ),
     );
-
-    // top indicator
-
+    // Top indicator
     final topArrow = Path()
       ..moveTo(
         cx,
@@ -484,82 +556,65 @@ class _CompassPainter extends CustomPainter {
         cy - radius - 32,
       )
       ..close();
-
     canvas.drawPath(
       topArrow,
-      Paint()..color = aligned ? const Color(0xFFFFC107) : green,
+      Paint()..color = green,
     );
-
-    // needle snap logic
-
+    // Needle snap logic
     double diff = ((qiblaDirection - heading) + 540) % 360 - 180;
-
-    // auto snap
-
+    // Auto snap
     if (diff.abs() <= 2) {
       diff = 0;
     }
-
     final needleAngle = diff * math.pi / 180 - math.pi / 2;
-
     final tipX = cx +
         (radius - 62) *
             math.cos(
               needleAngle,
             );
-
     final tipY = cy +
         (radius - 62) *
             math.sin(
               needleAngle,
             );
-
     final leftX = cx +
         12 *
             math.cos(
               needleAngle + math.pi / 2,
             );
-
     final leftY = cy +
         12 *
             math.sin(
               needleAngle + math.pi / 2,
             );
-
     final rightX = cx +
         12 *
             math.cos(
               needleAngle - math.pi / 2,
             );
-
     final rightY = cy +
         12 *
             math.sin(
               needleAngle - math.pi / 2,
             );
-
     final needlePath = Path()
       ..moveTo(tipX, tipY)
       ..lineTo(leftX, leftY)
       ..lineTo(rightX, rightY)
       ..close();
-
     canvas.drawShadow(
       needlePath,
       Colors.black26,
       4,
       true,
     );
-
     canvas.drawPath(
       needlePath,
       Paint()
-        ..color = aligned ? const Color(0xFFFFC107) : green
+        ..color = green
         ..style = PaintingStyle.fill,
     );
-
-    // center circle outer
-
+    // Center circle outer
     canvas.drawCircle(
       Offset(cx, cy),
       18,
@@ -567,7 +622,6 @@ class _CompassPainter extends CustomPainter {
         ..color = Colors.white
         ..style = PaintingStyle.fill,
     );
-
     canvas.drawShadow(
       Path()
         ..addOval(
@@ -580,14 +634,12 @@ class _CompassPainter extends CustomPainter {
       4,
       true,
     );
-
-    // center circle inner
-
+    // Center circle inner
     canvas.drawCircle(
       Offset(cx, cy),
       16,
       Paint()
-        ..color = aligned ? const Color(0xFFFFC107) : green
+        ..color = green
         ..style = PaintingStyle.fill,
     );
   }
@@ -597,15 +649,12 @@ class _CompassPainter extends CustomPainter {
     Offset center,
   ) {
     if (kaabaImage == null) return;
-
     const double size = 42;
-
     final rect = Rect.fromCenter(
       center: center,
       width: size,
       height: size,
     );
-
     paintImage(
       canvas: canvas,
       rect: rect,
@@ -621,6 +670,7 @@ class _CompassPainter extends CustomPainter {
   ) {
     return oldDelegate.heading != heading ||
         oldDelegate.qiblaDirection != qiblaDirection ||
-        oldDelegate.kaabaImage != kaabaImage;
+        oldDelegate.kaabaImage != kaabaImage ||
+        oldDelegate.languageCode != languageCode;
   }
-}
+} //

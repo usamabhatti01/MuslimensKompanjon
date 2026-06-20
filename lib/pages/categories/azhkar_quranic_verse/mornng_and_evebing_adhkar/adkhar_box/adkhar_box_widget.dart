@@ -1,7 +1,6 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'adkhar_box_model.dart';
 export 'adkhar_box_model.dart';
 
@@ -11,13 +10,11 @@ class AdkharBoxWidget extends StatefulWidget {
     required this.azkarNumber,
     required this.azkarNmae,
     required this.azkar,
-    required this.azkarTranslation,
   });
 
   final int? azkarNumber;
   final String? azkarNmae;
   final String? azkar;
-  final String? azkarTranslation;
 
   @override
   State<AdkharBoxWidget> createState() => _AdkharBoxWidgetState();
@@ -73,37 +70,22 @@ class _AdkharBoxWidgetState extends State<AdkharBoxWidget> {
                 children: [
                   Text(
                     'Adkhar ${widget.azkarNumber?.toString()}',
-                    style: FlutterFlowTheme.of(context).blackBold.override(
-                          font: GoogleFonts.manrope(
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .blackBold
-                                .fontStyle,
-                          ),
-                          color: Colors.black,
+                    style: FlutterFlowTheme.of(context).arabicBody.override(
+                          fontFamily: 'arabic',
+                          color: FlutterFlowTheme.of(context).black,
                           fontSize: 14.0,
                           letterSpacing: 0.0,
-                          fontWeight: FontWeight.bold,
-                          fontStyle:
-                              FlutterFlowTheme.of(context).blackBold.fontStyle,
+                          fontWeight: FontWeight.normal,
                         ),
                   ),
                   Text(
                     widget.azkarNmae!,
-                    style: FlutterFlowTheme.of(context).pxBoldGreen.override(
-                          font: GoogleFonts.manrope(
-                            fontWeight: FontWeight.w800,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .pxBoldGreen
-                                .fontStyle,
-                          ),
+                    style: FlutterFlowTheme.of(context).arabiTitle.override(
+                          fontFamily: 'arabic',
                           color: FlutterFlowTheme.of(context).primary,
-                          fontSize: 14.0,
+                          fontSize: 22.0,
                           letterSpacing: 0.0,
-                          fontWeight: FontWeight.w800,
-                          fontStyle: FlutterFlowTheme.of(context)
-                              .pxBoldGreen
-                              .fontStyle,
+                          fontWeight: FontWeight.bold,
                         ),
                   ),
                 ],
@@ -113,32 +95,12 @@ class _AdkharBoxWidgetState extends State<AdkharBoxWidget> {
           Text(
             widget.azkar!,
             textAlign: TextAlign.end,
-            style: FlutterFlowTheme.of(context).pxBoldGreen.override(
-                  font: GoogleFonts.manrope(
-                    fontWeight: FontWeight.w800,
-                    fontStyle:
-                        FlutterFlowTheme.of(context).pxBoldGreen.fontStyle,
-                  ),
-                  color: FlutterFlowTheme.of(context).primary,
+            style: FlutterFlowTheme.of(context).arabicBody.override(
+                  fontFamily: 'arabic',
+                  color: FlutterFlowTheme.of(context).black,
                   fontSize: 14.0,
                   letterSpacing: 0.0,
-                  fontWeight: FontWeight.w800,
-                  fontStyle: FlutterFlowTheme.of(context).pxBoldGreen.fontStyle,
-                ),
-          ),
-          Text(
-            widget.azkarTranslation!,
-            style: FlutterFlowTheme.of(context).bodyMedium.override(
-                  font: GoogleFonts.manrope(
-                    fontWeight:
-                        FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                    fontStyle:
-                        FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                  ),
-                  letterSpacing: 0.0,
-                  fontWeight:
-                      FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                  fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                  fontWeight: FontWeight.normal,
                 ),
           ),
         ].divide(SizedBox(height: 15.0)).addToEnd(SizedBox(height: 15.0)),

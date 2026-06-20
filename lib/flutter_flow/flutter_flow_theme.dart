@@ -59,10 +59,32 @@ abstract class FlutterFlowTheme {
   late Color error;
   late Color info;
 
-  late Color onBoardingColor;
   late Color black;
   late Color containerBg;
   late Color tint;
+  late Color onPrimary;
+  late Color primaryContainer;
+  late Color onPrimaryContainer;
+  late Color onSecondary;
+  late Color secondaryContainer;
+  late Color onSecondaryContainer;
+  late Color onAccent;
+  late Color accentContainer;
+  late Color onAccentContainer;
+  late Color onBackground;
+  late Color onSurface;
+  late Color surfaceVariant;
+  late Color onSurfaceVariant;
+  late Color onSuccess;
+  late Color onWarning;
+  late Color onError;
+  late Color onInfo;
+  late Color transparent;
+  late Color surface40;
+  late Color background40;
+  late Color onPrimary20;
+  late Color onPrimary30;
+  late Color footerInActive;
 
   FFDesignTokens get designToken => FFDesignTokens(this);
 
@@ -140,28 +162,18 @@ abstract class FlutterFlowTheme {
   String get bodySmallFamily => typography.bodySmallFamily;
   bool get bodySmallIsCustom => typography.bodySmallIsCustom;
   TextStyle get bodySmall => typography.bodySmall;
-  String get pxBoldGreenFamily => typography.pxBoldGreenFamily;
-  TextStyle get pxBoldGreen => typography.pxBoldGreen;
-  String get lightGreyDatesFamily => typography.lightGreyDatesFamily;
-  TextStyle get lightGreyDates => typography.lightGreyDates;
-  String get blackBoldFamily => typography.blackBoldFamily;
-  TextStyle get blackBold => typography.blackBold;
-  String get youtubeVideoTitleFamily => typography.youtubeVideoTitleFamily;
-  TextStyle get youtubeVideoTitle => typography.youtubeVideoTitle;
-  String get arabiFontFamily => typography.arabiFontFamily;
-  TextStyle get arabiFont => typography.arabiFont;
-  String get counterFontFamily => typography.counterFontFamily;
-  TextStyle get counterFont => typography.counterFont;
-  String get arabicTextFamily => typography.arabicTextFamily;
-  TextStyle get arabicText => typography.arabicText;
-  String get yellowNumberingFamily => typography.yellowNumberingFamily;
-  TextStyle get yellowNumbering => typography.yellowNumbering;
+  String get arabiTitleFamily => typography.arabiTitleFamily;
+  TextStyle get arabiTitle => typography.arabiTitle;
+  String get arabicBodyFamily => typography.arabicBodyFamily;
+  TextStyle get arabicBody => typography.arabicBody;
   String get arabicBalckBoldFamily => typography.arabicBalckBoldFamily;
   TextStyle get arabicBalckBold => typography.arabicBalckBold;
-  String get smallTimeTextFamily => typography.smallTimeTextFamily;
-  TextStyle get smallTimeText => typography.smallTimeText;
-  String get pageTitleFamily => typography.pageTitleFamily;
-  TextStyle get pageTitle => typography.pageTitle;
+  String get svenskaTitleFamily => typography.svenskaTitleFamily;
+  TextStyle get svenskaTitle => typography.svenskaTitle;
+  String get svenskaBodyFamily => typography.svenskaBodyFamily;
+  TextStyle get svenskaBody => typography.svenskaBody;
+  String get ayatNumberFamily => typography.ayatNumberFamily;
+  TextStyle get ayatNumber => typography.ayatNumber;
 
   Typography get typography => ThemeTypography(this);
 }
@@ -174,27 +186,49 @@ class LightModeTheme extends FlutterFlowTheme {
   @Deprecated('Use tertiary instead')
   Color get tertiaryColor => tertiary;
 
-  late Color primary = const Color(0xFF056F00);
-  late Color secondary = const Color(0xFF2C6E49);
-  late Color tertiary = const Color(0xFFC49A3C);
-  late Color alternate = const Color(0xFFE0E3E7);
-  late Color primaryText = const Color(0xFF14181B);
-  late Color secondaryText = const Color(0xFF57636C);
+  late Color primary = const Color(0xFF007A00);
+  late Color secondary = const Color(0xFF385749);
+  late Color tertiary = const Color(0xFFFF2D55);
+  late Color alternate = const Color(0xFFEEEEEE);
+  late Color primaryText = const Color(0xFF1A1A1A);
+  late Color secondaryText = const Color(0xFF666666);
   late Color primaryBackground = const Color(0xFFFFFFFF);
   late Color secondaryBackground = const Color(0xFFF7F7F7);
   late Color accent1 = const Color(0x4C4B39EF);
   late Color accent2 = const Color(0x4D39D2C0);
-  late Color accent3 = const Color(0x4DEE8B60);
+  late Color accent3 = const Color(0xFF999999);
   late Color accent4 = const Color(0xCCFFFFFF);
-  late Color success = const Color(0xFF249689);
-  late Color warning = const Color(0xFFF9CF58);
-  late Color error = const Color(0xFFFF5963);
-  late Color info = const Color(0xFFFFFFFF);
+  late Color success = const Color(0xFF007A00);
+  late Color warning = const Color(0xFFFF9500);
+  late Color error = const Color(0xFFFF3B30);
+  late Color info = const Color(0xFF007AFF);
 
-  late Color onBoardingColor = const Color(0xFF2C1A4A);
   late Color black = const Color(0xFF000000);
   late Color containerBg = const Color(0xFFEBEBEB);
   late Color tint = const Color(0xFFE8F4ED);
+  late Color onPrimary = const Color(0xFFFFFFFF);
+  late Color primaryContainer = const Color(0x1A007A00);
+  late Color onPrimaryContainer = const Color(0xFF1A1A1A);
+  late Color onSecondary = const Color(0xFFFFFFFF);
+  late Color secondaryContainer = const Color(0x1A385749);
+  late Color onSecondaryContainer = const Color(0xFF1A1A1A);
+  late Color onAccent = const Color(0xFFFFFFFF);
+  late Color accentContainer = const Color(0x1AFF2D55);
+  late Color onAccentContainer = const Color(0xFF1A1A1A);
+  late Color onBackground = const Color(0xFF1A1A1A);
+  late Color onSurface = const Color(0xFF1A1A1A);
+  late Color surfaceVariant = const Color(0xFFF2F2F2);
+  late Color onSurfaceVariant = const Color(0xFF666666);
+  late Color onSuccess = const Color(0xFFFFFFFF);
+  late Color onWarning = const Color(0xFFFFFFFF);
+  late Color onError = const Color(0xFFFFFFFF);
+  late Color onInfo = const Color(0xFFFFFFFF);
+  late Color transparent = const Color(0x00000000);
+  late Color surface40 = const Color(0x66FFFFFF);
+  late Color background40 = const Color(0x66FFFFFF);
+  late Color onPrimary20 = const Color(0x33FFFFFF);
+  late Color onPrimary30 = const Color(0x4DFFFFFF);
+  late Color footerInActive = const Color(0xFF999999);
 }
 
 abstract class Typography {
@@ -243,28 +277,18 @@ abstract class Typography {
   String get bodySmallFamily;
   bool get bodySmallIsCustom;
   TextStyle get bodySmall;
-  String get pxBoldGreenFamily;
-  TextStyle get pxBoldGreen;
-  String get lightGreyDatesFamily;
-  TextStyle get lightGreyDates;
-  String get blackBoldFamily;
-  TextStyle get blackBold;
-  String get youtubeVideoTitleFamily;
-  TextStyle get youtubeVideoTitle;
-  String get arabiFontFamily;
-  TextStyle get arabiFont;
-  String get counterFontFamily;
-  TextStyle get counterFont;
-  String get arabicTextFamily;
-  TextStyle get arabicText;
-  String get yellowNumberingFamily;
-  TextStyle get yellowNumbering;
+  String get arabiTitleFamily;
+  TextStyle get arabiTitle;
+  String get arabicBodyFamily;
+  TextStyle get arabicBody;
   String get arabicBalckBoldFamily;
   TextStyle get arabicBalckBold;
-  String get smallTimeTextFamily;
-  TextStyle get smallTimeText;
-  String get pageTitleFamily;
-  TextStyle get pageTitle;
+  String get svenskaTitleFamily;
+  TextStyle get svenskaTitle;
+  String get svenskaBodyFamily;
+  TextStyle get svenskaBody;
+  String get ayatNumberFamily;
+  TextStyle get ayatNumber;
 }
 
 class ThemeTypography extends Typography {
@@ -272,173 +296,163 @@ class ThemeTypography extends Typography {
 
   final FlutterFlowTheme theme;
 
-  String get displayLargeFamily => 'Manrope';
+  String get displayLargeFamily => 'Plus Jakarta Sans';
   bool get displayLargeIsCustom => false;
-  TextStyle get displayLarge => GoogleFonts.manrope(
+  TextStyle get displayLarge => GoogleFonts.plusJakartaSans(
         color: theme.primaryText,
-        fontWeight: FontWeight.w600,
-        fontSize: 64.0,
+        fontWeight: FontWeight.w800,
+        fontSize: 58.0,
+        height: 1.1,
       );
-  String get displayMediumFamily => 'Manrope';
+  String get displayMediumFamily => 'Plus Jakarta Sans';
   bool get displayMediumIsCustom => false;
-  TextStyle get displayMedium => GoogleFonts.manrope(
+  TextStyle get displayMedium => GoogleFonts.plusJakartaSans(
         color: theme.primaryText,
-        fontWeight: FontWeight.w600,
-        fontSize: 44.0,
+        fontWeight: FontWeight.w800,
+        fontSize: 46.0,
+        height: 1.1,
       );
-  String get displaySmallFamily => 'Manrope';
+  String get displaySmallFamily => 'Plus Jakarta Sans';
   bool get displaySmallIsCustom => false;
-  TextStyle get displaySmall => GoogleFonts.manrope(
+  TextStyle get displaySmall => GoogleFonts.plusJakartaSans(
         color: theme.primaryText,
-        fontWeight: FontWeight.w600,
-        fontSize: 36.0,
+        fontWeight: FontWeight.bold,
+        fontSize: 38.0,
+        height: 1.2,
       );
-  String get headlineLargeFamily => 'Manrope';
+  String get headlineLargeFamily => 'Plus Jakarta Sans';
   bool get headlineLargeIsCustom => false;
-  TextStyle get headlineLarge => GoogleFonts.manrope(
+  TextStyle get headlineLarge => GoogleFonts.plusJakartaSans(
         color: theme.primary,
         fontWeight: FontWeight.bold,
-        fontSize: 24.0,
+        fontSize: 32.0,
+        height: 1.2,
       );
-  String get headlineMediumFamily => 'Manrope';
+  String get headlineMediumFamily => 'Plus Jakarta Sans';
   bool get headlineMediumIsCustom => false;
-  TextStyle get headlineMedium => GoogleFonts.manrope(
+  TextStyle get headlineMedium => GoogleFonts.plusJakartaSans(
         color: theme.primary,
-        fontWeight: FontWeight.w600,
-        fontSize: 22.0,
+        fontWeight: FontWeight.bold,
+        fontSize: 26.0,
+        height: 1.2,
       );
-  String get headlineSmallFamily => 'Manrope';
+  String get headlineSmallFamily => 'Plus Jakarta Sans';
   bool get headlineSmallIsCustom => false;
-  TextStyle get headlineSmall => GoogleFonts.manrope(
+  TextStyle get headlineSmall => GoogleFonts.plusJakartaSans(
         color: theme.primary,
         fontWeight: FontWeight.w600,
-        fontSize: 12.0,
+        fontSize: 24.0,
+        height: 1.3,
       );
-  String get titleLargeFamily => 'Manrope';
+  String get titleLargeFamily => 'Plus Jakarta Sans';
   bool get titleLargeIsCustom => false;
-  TextStyle get titleLarge => GoogleFonts.manrope(
+  TextStyle get titleLarge => GoogleFonts.plusJakartaSans(
         color: theme.primaryText,
-        fontWeight: FontWeight.bold,
-        fontSize: 16.0,
+        fontWeight: FontWeight.w600,
+        fontSize: 20.0,
+        height: 1.3,
       );
-  String get titleMediumFamily => 'Manrope';
+  String get titleMediumFamily => 'Plus Jakarta Sans';
   bool get titleMediumIsCustom => false;
-  TextStyle get titleMedium => GoogleFonts.manrope(
+  TextStyle get titleMedium => GoogleFonts.plusJakartaSans(
         color: theme.primaryText,
-        fontWeight: FontWeight.bold,
-        fontSize: 14.0,
+        fontWeight: FontWeight.w600,
+        fontSize: 16.0,
+        height: 1.4,
       );
-  String get titleSmallFamily => 'Manrope';
+  String get titleSmallFamily => 'Plus Jakarta Sans';
   bool get titleSmallIsCustom => false;
-  TextStyle get titleSmall => GoogleFonts.manrope(
+  TextStyle get titleSmall => GoogleFonts.plusJakartaSans(
         color: theme.primaryText,
-        fontWeight: FontWeight.bold,
-        fontSize: 12.0,
+        fontWeight: FontWeight.w600,
+        fontSize: 14.0,
+        height: 1.4,
       );
   String get labelLargeFamily => 'Inter';
   bool get labelLargeIsCustom => false;
   TextStyle get labelLarge => GoogleFonts.inter(
         color: theme.secondaryText,
-        fontWeight: FontWeight.normal,
-        fontSize: 16.0,
+        fontWeight: FontWeight.w600,
+        fontSize: 14.0,
+        height: 1.3,
       );
   String get labelMediumFamily => 'Inter';
   bool get labelMediumIsCustom => false;
   TextStyle get labelMedium => GoogleFonts.inter(
         color: theme.secondaryText,
-        fontWeight: FontWeight.normal,
-        fontSize: 13.0,
+        fontWeight: FontWeight.w600,
+        fontSize: 12.0,
+        height: 1.3,
       );
   String get labelSmallFamily => 'Inter';
   bool get labelSmallIsCustom => false;
   TextStyle get labelSmall => GoogleFonts.inter(
         color: theme.secondaryText,
-        fontWeight: FontWeight.normal,
-        fontSize: 12.0,
+        fontWeight: FontWeight.w600,
+        fontSize: 10.0,
+        height: 1.2,
       );
   String get bodyLargeFamily => 'Inter';
   bool get bodyLargeIsCustom => false;
   TextStyle get bodyLarge => GoogleFonts.inter(
-        color: theme.onBoardingColor,
+        color: Color(0xFF2C1A4A),
         fontWeight: FontWeight.normal,
         fontSize: 16.0,
+        height: 1.5,
       );
-  String get bodyMediumFamily => 'Manrope';
+  String get bodyMediumFamily => 'Inter';
   bool get bodyMediumIsCustom => false;
-  TextStyle get bodyMedium => GoogleFonts.manrope(
+  TextStyle get bodyMedium => GoogleFonts.inter(
         color: theme.black,
-        fontWeight: FontWeight.w500,
-        fontSize: 12.0,
+        fontWeight: FontWeight.normal,
+        fontSize: 14.0,
+        height: 1.5,
       );
   String get bodySmallFamily => 'Inter';
   bool get bodySmallIsCustom => false;
   TextStyle get bodySmall => GoogleFonts.inter(
         color: theme.black,
         fontWeight: FontWeight.normal,
-        fontSize: 10.0,
-      );
-  String get pxBoldGreenFamily => 'Manrope';
-  TextStyle get pxBoldGreen => GoogleFonts.manrope(
-        color: theme.primary,
-        fontWeight: FontWeight.w800,
-        fontSize: 14.0,
-      );
-  String get lightGreyDatesFamily => 'Manrope';
-  TextStyle get lightGreyDates => GoogleFonts.manrope(
-        color: Color(0x99999999),
-        fontSize: 13.0,
-      );
-  String get blackBoldFamily => 'Manrope';
-  TextStyle get blackBold => GoogleFonts.manrope(
-        color: Colors.black,
-        fontWeight: FontWeight.bold,
-        fontSize: 14.0,
-      );
-  String get youtubeVideoTitleFamily => 'Manrope';
-  TextStyle get youtubeVideoTitle => GoogleFonts.manrope(
-        color: Colors.black,
-        fontWeight: FontWeight.w600,
         fontSize: 12.0,
+        height: 1.4,
       );
-  String get arabiFontFamily => 'Uthmanic Script';
-  TextStyle get arabiFont => TextStyle(
-        fontFamily: 'Uthmanic Script',
+  String get arabiTitleFamily => 'arabic';
+  TextStyle get arabiTitle => TextStyle(
+        fontFamily: 'arabic',
         color: theme.primary,
         fontWeight: FontWeight.bold,
         fontSize: 22.0,
       );
-  String get counterFontFamily => 'Manrope';
-  TextStyle get counterFont => GoogleFonts.manrope(
-        color: Colors.white,
-        fontWeight: FontWeight.bold,
-        fontSize: 40.0,
-      );
-  String get arabicTextFamily => 'Cairo';
-  TextStyle get arabicText => GoogleFonts.cairo(
+  String get arabicBodyFamily => 'arabic';
+  TextStyle get arabicBody => TextStyle(
+        fontFamily: 'arabic',
         color: theme.black,
+        fontWeight: FontWeight.normal,
         fontSize: 14.0,
       );
-  String get yellowNumberingFamily => 'Manrope';
-  TextStyle get yellowNumbering => GoogleFonts.manrope(
-        color: Color(0xFFFFCE31),
-        fontSize: 9.0,
-      );
-  String get arabicBalckBoldFamily => 'Cairo';
-  TextStyle get arabicBalckBold => GoogleFonts.cairo(
+  String get arabicBalckBoldFamily => 'arabic';
+  TextStyle get arabicBalckBold => TextStyle(
+        fontFamily: 'arabic',
         color: theme.black,
         fontWeight: FontWeight.w800,
         fontSize: 16.0,
       );
-  String get smallTimeTextFamily => 'Manrope';
-  TextStyle get smallTimeText => GoogleFonts.manrope(
-        color: theme.black,
-        fontSize: 8.0,
+  String get svenskaTitleFamily => 'Cairo';
+  TextStyle get svenskaTitle => GoogleFonts.cairo(
+        color: theme.primary,
+        fontWeight: FontWeight.bold,
+        fontSize: 20.0,
       );
-  String get pageTitleFamily => 'Manrope';
-  TextStyle get pageTitle => GoogleFonts.manrope(
+  String get svenskaBodyFamily => 'Manrope';
+  TextStyle get svenskaBody => GoogleFonts.manrope(
         color: theme.black,
         fontWeight: FontWeight.w500,
-        fontSize: 17.0,
+        fontSize: 14.0,
+      );
+  String get ayatNumberFamily => 'Manrope';
+  TextStyle get ayatNumber => GoogleFonts.manrope(
+        color: theme.black,
+        fontSize: 11.0,
       );
 }
 
@@ -450,27 +464,49 @@ class DarkModeTheme extends FlutterFlowTheme {
   @Deprecated('Use tertiary instead')
   Color get tertiaryColor => tertiary;
 
-  late Color primary = const Color(0xFF4B39EF);
-  late Color secondary = const Color(0xFF39D2C0);
-  late Color tertiary = const Color(0xFFEE8B60);
-  late Color alternate = const Color(0xFF262D34);
+  late Color primary = const Color(0xFF00A300);
+  late Color secondary = const Color(0xFF8F9A88);
+  late Color tertiary = const Color(0xFFFF375F);
+  late Color alternate = const Color(0xFF262626);
   late Color primaryText = const Color(0xFFFFFFFF);
-  late Color secondaryText = const Color(0xFF95A1AC);
-  late Color primaryBackground = const Color(0xFF1D2428);
-  late Color secondaryBackground = const Color(0xFF14181B);
+  late Color secondaryText = const Color(0xFFAAAAAA);
+  late Color primaryBackground = const Color(0xFF0F0F0F);
+  late Color secondaryBackground = const Color(0xFF242424);
   late Color accent1 = const Color(0x4C4B39EF);
   late Color accent2 = const Color(0x4D39D2C0);
-  late Color accent3 = const Color(0x4DEE8B60);
+  late Color accent3 = const Color(0xFF707070);
   late Color accent4 = const Color(0xB2262D34);
-  late Color success = const Color(0xFF249689);
-  late Color warning = const Color(0xFFF9CF58);
-  late Color error = const Color(0xFFFF5963);
-  late Color info = const Color(0xFFFFFFFF);
+  late Color success = const Color(0xFF32D74B);
+  late Color warning = const Color(0xFFFFD60A);
+  late Color error = const Color(0xFFFF453A);
+  late Color info = const Color(0xFF0A84FF);
 
-  late Color onBoardingColor = const Color(0xFFA7005E);
   late Color black = const Color(0xFF87A39A);
   late Color containerBg = const Color(0xFF4B327E);
   late Color tint = const Color(0xFFCA0C86);
+  late Color onPrimary = const Color(0xFFFFFFFF);
+  late Color primaryContainer = const Color(0x2400A300);
+  late Color onPrimaryContainer = const Color(0xFFFFFFFF);
+  late Color onSecondary = const Color(0xFFFFFFFF);
+  late Color secondaryContainer = const Color(0x248F9A88);
+  late Color onSecondaryContainer = const Color(0xFFFFFFFF);
+  late Color onAccent = const Color(0xFFFFFFFF);
+  late Color accentContainer = const Color(0x24FF375F);
+  late Color onAccentContainer = const Color(0xFFFFFFFF);
+  late Color onBackground = const Color(0xFFFFFFFF);
+  late Color onSurface = const Color(0xFFFFFFFF);
+  late Color surfaceVariant = const Color(0xFF2C2C2C);
+  late Color onSurfaceVariant = const Color(0xFFAAAAAA);
+  late Color onSuccess = const Color(0xFFFFFFFF);
+  late Color onWarning = const Color(0xFF000000);
+  late Color onError = const Color(0xFFFFFFFF);
+  late Color onInfo = const Color(0xFFFFFFFF);
+  late Color transparent = const Color(0x00000000);
+  late Color surface40 = const Color(0x66242424);
+  late Color background40 = const Color(0x660F0F0F);
+  late Color onPrimary20 = const Color(0x33FFFFFF);
+  late Color onPrimary30 = const Color(0x4DFFFFFF);
+  late Color footerInActive = const Color(0xFF4F8FD2);
 }
 
 class FFDesignTokens {
@@ -483,42 +519,64 @@ class FFDesignTokens {
 
 class FFSpacing {
   const FFSpacing();
+  double get none => 0.0;
   double get xs => 4.0;
   double get sm => 8.0;
   double get md => 16.0;
   double get lg => 24.0;
   double get xl => 32.0;
+  double get xxl => 48.0;
+  double get xxxl => 64.0;
 }
 
 class FFRadius {
   const FFRadius();
+  double get none => 0.0;
+  double get xs => 4.0;
   double get sm => 8.0;
   double get md => 12.0;
-  double get lg => 20.0;
+  double get lg => 16.0;
+  double get xl => 24.0;
+  double get xxl => 32.0;
   double get full => 9999.0;
 }
 
 class FFShadows {
   const FFShadows(this.theme);
   final FlutterFlowTheme theme;
-  BoxShadow get sm => const BoxShadow(
-      blurRadius: 3.0,
-      color: const Color(0x1A000000),
+  BoxShadow get none => const BoxShadow(
+      blurRadius: 0.0,
+      color: const Color(0x00000000),
+      offset: const Offset(0.0, 0.0),
+      spreadRadius: 0.0);
+  BoxShadow get xs => const BoxShadow(
+      blurRadius: 2.0,
+      color: const Color(0x0A000000),
       offset: const Offset(0.0, 1.0),
       spreadRadius: 0.0);
+  BoxShadow get sm => const BoxShadow(
+      blurRadius: 4.0,
+      color: const Color(0x0F000000),
+      offset: const Offset(0.0, 2.0),
+      spreadRadius: 0.0);
   BoxShadow get md => const BoxShadow(
-      blurRadius: 6.0,
-      color: const Color(0x1A000000),
-      offset: const Offset(0.0, 3.0),
+      blurRadius: 8.0,
+      color: const Color(0x14000000),
+      offset: const Offset(0.0, 4.0),
       spreadRadius: 0.0);
   BoxShadow get lg => const BoxShadow(
-      blurRadius: 15.0,
+      blurRadius: 16.0,
       color: const Color(0x1A000000),
       offset: const Offset(0.0, 8.0),
       spreadRadius: 0.0);
   BoxShadow get xl => const BoxShadow(
-      blurRadius: 25.0,
-      color: const Color(0x1A000000),
+      blurRadius: 24.0,
+      color: const Color(0x21000000),
+      offset: const Offset(0.0, 12.0),
+      spreadRadius: 0.0);
+  BoxShadow get xxl => const BoxShadow(
+      blurRadius: 32.0,
+      color: const Color(0x29000000),
       offset: const Offset(0.0, 16.0),
       spreadRadius: 0.0);
 }

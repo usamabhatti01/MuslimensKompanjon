@@ -82,7 +82,7 @@ class _OnBoardingDetailWidgetState extends State<OnBoardingDetailWidget> {
                   'Islamic Holidays and Hijri Calendar',
                 ),
                 style: FlutterFlowTheme.of(context).headlineLarge.override(
-                      font: GoogleFonts.manrope(
+                      font: GoogleFonts.plusJakartaSans(
                         fontWeight: FlutterFlowTheme.of(context)
                             .headlineLarge
                             .fontWeight,
@@ -104,7 +104,7 @@ class _OnBoardingDetailWidgetState extends State<OnBoardingDetailWidget> {
                   'Learn the basics of Islam.',
                 ),
                 style: FlutterFlowTheme.of(context).bodyMedium.override(
-                      font: GoogleFonts.manrope(
+                      font: GoogleFonts.inter(
                         fontWeight:
                             FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                         fontStyle:

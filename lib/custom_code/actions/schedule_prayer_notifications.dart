@@ -20,32 +20,82 @@ import 'package:timezone/data/latest.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
 final FlutterLocalNotificationsPlugin fln = FlutterLocalNotificationsPlugin();
+// Localization mapping for supported languages ('sv' and 'en')
+final Map<String, Map<String, String>> _localizedStrings = {
+  'en': {
+    'prayer_reminder': 'Prayer Reminder',
+    'in_15_minutes': 'in 15 minutes',
+    'fajr': 'Fajr',
+    'fazr': 'Fajr',
+    'shuruq': 'Shuruq',
+    'dhuhr': 'Dhuhr',
+    'dohr': 'Dhuhr',
+    'asr': 'Asr',
+    'maghrib': 'Maghrib',
+    'isha': 'Isha',
+  },
+  'sv': {
+    'prayer_reminder': 'Bönepåminnelse',
+    'in_15_minutes': 'om 15 minuter',
+    'fajr': 'Fajr',
+    'fazr': 'Fajr',
+    'shuruq': 'Shuruq',
+    'dhuhr': 'Dhuhr',
+    'dohr': 'Dhuhr',
+    'asr': 'Asr',
+    'maghrib': 'Maghrib',
+    'isha': 'Isha',
+  }
+};
+String _translate(String key, String lang) {
+  final l = (lang == 'en' || lang == 'sv') ? lang : 'sv';
+  return _localizedStrings[l]?[key.toLowerCase()] ?? key;
+}
+
+bool _getPrayerSetting(String prayer, String settingType) {
+  final n = FFAppState().user.notifications;
+  final normPrayer = prayer.toLowerCase();
+  String altPrayer = normPrayer;
+  if (normPrayer == 'fajr') altPrayer = 'fazr';
+  if (normPrayer == 'fazr') altPrayer = 'fajr';
+  if (normPrayer == 'dhuhr') altPrayer = 'dohr';
+  if (normPrayer == 'dohr') altPrayer = 'dhuhr';
+  final isAdhan = settingType.toLowerCase() == 'adhan';
+  switch (altPrayer) {
+    case 'fazr':
+      return isAdhan ? n.fazr.adhan : n.fazr.notice;
+    case 'shuruq':
+      return isAdhan ? n.shuruq.adhan : n.shuruq.notice;
+    case 'dohr':
+      return isAdhan ? n.dohr.adhan : n.dohr.notice;
+    case 'asr':
+      return isAdhan ? n.asr.adhan : n.asr.notice;
+    case 'maghrib':
+      return isAdhan ? n.maghrib.adhan : n.maghrib.notice;
+    case 'isha':
+      return isAdhan ? n.isha.adhan : n.isha.notice;
+    default:
+      return false;
+  }
+}
 
 Future schedulePrayerNotifications() async {
   // ================= INIT =================
-
   const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
-
   const iosInit = DarwinInitializationSettings(
     requestAlertPermission: true,
     requestBadgePermission: true,
     requestSoundPermission: true,
-
-    // ✅ FIX: THIS is how foreground display works on iOS
     defaultPresentAlert: true,
     defaultPresentBadge: true,
     defaultPresentSound: true,
   );
-
   const settings = InitializationSettings(
     android: androidInit,
     iOS: iosInit,
   );
-
   await fln.initialize(settings);
-
   // ================= PERMISSIONS =================
-
   await fln
       .resolvePlatformSpecificImplementation<
           IOSFlutterLocalNotificationsPlugin>()
@@ -54,14 +104,11 @@ Future schedulePrayerNotifications() async {
         badge: true,
         sound: true,
       );
-
   await fln
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
       ?.requestNotificationsPermission();
-
   // ================= ANDROID CHANNEL =================
-
   await fln
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
@@ -73,38 +120,23 @@ Future schedulePrayerNotifications() async {
           importance: Importance.max,
         ),
       );
-
   if (kIsWeb) return;
-
   // ================= TIMEZONE =================
-
   tzdata.initializeTimeZones();
-
   await fln.cancelAll();
-
   // ================= LOAD DATA =================
-
   final city = FFAppState().user.city.toLowerCase().trim();
-
   final jsonString = await loadPrayerJson(city, DateTime.now().year);
-
   final data = json.decode(jsonString);
-
   final timeZoneName = data['city']['timezone'] ?? 'UTC';
   final location = tz.getLocation(timeZoneName);
-
   final now = tz.TZDateTime.now(location);
-
   final todayKey = _todayKey(now);
-
   final todayData = data['prayer_times']?[todayKey];
-
   if (todayData == null) {
     throw Exception("No prayer data for $todayKey");
   }
-
   // ================= ORDER =================
-
   final List<String> order = [
     "fajr",
     "shuruq",
@@ -113,42 +145,42 @@ Future schedulePrayerNotifications() async {
     "maghrib",
     "isha"
   ];
-
   final Map<String, String> times = {};
-
   for (final p in order) {
     if (todayData[p] != null) {
       times[p] = todayData[p].toString();
     }
   }
-
   print("PRAYER TIMES: $times");
-
   // ================= SCHEDULING =================
-
   for (final prayer in order) {
-    if (!_isPrayerEnabled(prayer)) continue;
-
+    final noticeEnabled = _getPrayerSetting(prayer, 'notice');
+    final soundEnabled = _getPrayerSetting(prayer, 'adhan');
+    // If both are false, we do not schedule anything for this prayer
+    if (!noticeEnabled && !soundEnabled) {
+      print("SKIP (Notice and Adhan both disabled): $prayer");
+      continue;
+    }
     final timeStr = times[prayer];
     if (timeStr == null) continue;
-
     final prayerTime = _toTZ(timeStr, location, now);
-
     final reminderTime = prayerTime.subtract(const Duration(minutes: 15));
-
     if (reminderTime.isBefore(now)) {
       print("SKIP PAST: $prayer");
       continue;
     }
-    final tz.TZDateTime time =
-        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 10));
     final int id = prayer.hashCode;
 
+    final lang = FFAppState().user.language.toLowerCase().trim();
+    final title = _translate('prayer_reminder', lang);
+    final capitalizedPrayer = _capitalize(_translate(prayer, lang));
+    final bodySuffix = _translate('in_15_minutes', lang);
+    final body = "$capitalizedPrayer $bodySuffix";
     await fln.zonedSchedule(
       id,
-      "Prayer Reminder",
-      "${_capitalize(prayer)} in 15 minutes",
-      time,
+      title,
+      body,
+      reminderTime,
       NotificationDetails(
         android: AndroidNotificationDetails(
           'prayer_channel',
@@ -157,26 +189,27 @@ Future schedulePrayerNotifications() async {
           importance: Importance.max,
           priority: Priority.high,
           playSound: true,
-          sound: const RawResourceAndroidNotificationSound('azan'),
+          sound: soundEnabled
+              ? const RawResourceAndroidNotificationSound('azan')
+              : null,
         ),
-        iOS: const DarwinNotificationDetails(
+        iOS: DarwinNotificationDetails(
           presentAlert: true,
           presentBadge: true,
           presentSound: true,
-          sound: 'azan.aiff',
+          sound: soundEnabled ? 'azan 2.aiff' : null,
         ),
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
     );
-
-    print("SCHEDULED: $prayer at $reminderTime");
+    print(
+        "SCHEDULED: $prayer at $reminderTime (Sound: $soundEnabled, Notice: $noticeEnabled)");
   }
 }
 
 // ================= HELPERS =================
-
 String _todayKey(tz.TZDateTime now) {
   return "${now.year.toString().padLeft(4, '0')}-"
       "${now.month.toString().padLeft(2, '0')}-"
@@ -189,7 +222,6 @@ tz.TZDateTime _toTZ(
   tz.TZDateTime now,
 ) {
   final parts = time.split(':');
-
   return tz.TZDateTime(
     location,
     now.year,
@@ -200,25 +232,7 @@ tz.TZDateTime _toTZ(
   );
 }
 
-bool _isPrayerEnabled(String prayer) {
-  final n = FFAppState().user.notifications;
-
-  switch (prayer) {
-    case "fajr":
-      return n.fazr;
-    case "shuruq":
-      return n.shuruq;
-    case "dhuhr":
-      return n.dohr;
-    case "asr":
-      return n.asr;
-    case "maghrib":
-      return n.maghrib;
-    case "isha":
-      return n.isha;
-    default:
-      return false;
-  }
+String _capitalize(String text) {
+  if (text.isEmpty) return text;
+  return text[0].toUpperCase() + text.substring(1);
 }
-
-String _capitalize(String text) => text[0].toUpperCase() + text.substring(1);

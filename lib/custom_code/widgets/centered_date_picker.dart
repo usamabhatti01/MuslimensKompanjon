@@ -17,32 +17,23 @@ class CenteredDatePicker extends StatefulWidget {
     this.height,
     required this.primaryColor,
   });
-
   final double? width;
   final double? height;
   final Color primaryColor;
-
   @override
   State<CenteredDatePicker> createState() => _CenteredDatePickerState();
 }
 
 class _CenteredDatePickerState extends State<CenteredDatePicker> {
   late ScrollController _controller;
-
   late List<DateTime> days;
-
   late int todayIndex;
-
   final double itemWidth = 90.0;
-
   @override
   void initState() {
     super.initState();
-
     _controller = ScrollController();
-
     _generateMonthDays();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToToday();
     });
@@ -50,24 +41,18 @@ class _CenteredDatePickerState extends State<CenteredDatePicker> {
 
   void _generateMonthDays() {
     final now = DateTime.now();
-
     final firstDay = DateTime(now.year, now.month, 1);
-
     final nextMonth = DateTime(now.year, now.month + 1, 1);
-
     final totalDays = nextMonth.difference(firstDay).inDays;
-
     days = List.generate(
       totalDays,
       (index) => DateTime(now.year, now.month, index + 1),
     );
-
     todayIndex = now.day - 1;
   }
 
   void _scrollToToday() {
     if (!_controller.hasClients) return;
-
     _controller.animateTo(
       todayIndex * itemWidth,
       duration: const Duration(milliseconds: 400),
@@ -75,13 +60,32 @@ class _CenteredDatePickerState extends State<CenteredDatePicker> {
     );
   }
 
-  String formatDate(DateTime date) {
-    return DateFormat('EEE d MMM').format(date); // Sun 6 Apr
+  String formatDate(BuildContext context, DateTime date) {
+    if (isToday(date)) {
+      String lang = 'en';
+      try {
+        lang = FFLocalizations.of(context).languageCode;
+      } catch (_) {}
+      if (lang.startsWith('sv')) {
+        return 'Idag';
+      } else {
+        return 'Today';
+      }
+    }
+    String lang = 'en';
+    try {
+      lang = FFLocalizations.of(context).languageCode;
+    } catch (_) {}
+    if (lang.startsWith('sv')) {
+      lang = 'sv';
+    } else {
+      lang = 'en';
+    }
+    return DateFormat('EEE d MMM', lang).format(date);
   }
 
   bool isToday(DateTime date) {
     final now = DateTime.now();
-
     return date.day == now.day &&
         date.month == now.month &&
         date.year == now.year;
@@ -90,7 +94,6 @@ class _CenteredDatePickerState extends State<CenteredDatePicker> {
   @override
   Widget build(BuildContext context) {
     final primary = widget.primaryColor ?? Colors.blue;
-
     return SizedBox(
       height: 70,
       width: widget.width,
@@ -100,9 +103,7 @@ class _CenteredDatePickerState extends State<CenteredDatePicker> {
         itemCount: days.length,
         itemBuilder: (context, index) {
           final date = days[index];
-
           final selected = isToday(date);
-
           return AnimatedContainer(
             duration: const Duration(milliseconds: 200),
             width: itemWidth,
@@ -113,7 +114,7 @@ class _CenteredDatePickerState extends State<CenteredDatePicker> {
             ),
             child: Center(
               child: Text(
-                formatDate(date),
+                formatDate(context, date),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 12,

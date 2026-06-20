@@ -1,18 +1,17 @@
 // ignore_for_file: unnecessary_getters_setters
 
-import '/backend/schema/util/schema_util.dart';
 
 import 'index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
 class NotificationsStruct extends BaseStruct {
   NotificationsStruct({
-    bool? fazr,
-    bool? shuruq,
-    bool? dohr,
-    bool? asr,
-    bool? maghrib,
-    bool? isha,
+    NotificationCheckStruct? fazr,
+    NotificationCheckStruct? shuruq,
+    NotificationCheckStruct? dohr,
+    NotificationCheckStruct? asr,
+    NotificationCheckStruct? maghrib,
+    NotificationCheckStruct? isha,
   })  : _fazr = fazr,
         _shuruq = shuruq,
         _dohr = dohr,
@@ -21,55 +20,91 @@ class NotificationsStruct extends BaseStruct {
         _isha = isha;
 
   // "Fazr" field.
-  bool? _fazr;
-  bool get fazr => _fazr ?? false;
-  set fazr(bool? val) => _fazr = val;
+  NotificationCheckStruct? _fazr;
+  NotificationCheckStruct get fazr => _fazr ?? NotificationCheckStruct();
+  set fazr(NotificationCheckStruct? val) => _fazr = val;
+
+  void updateFazr(Function(NotificationCheckStruct) updateFn) {
+    updateFn(_fazr ??= NotificationCheckStruct());
+  }
 
   bool hasFazr() => _fazr != null;
 
   // "Shuruq" field.
-  bool? _shuruq;
-  bool get shuruq => _shuruq ?? false;
-  set shuruq(bool? val) => _shuruq = val;
+  NotificationCheckStruct? _shuruq;
+  NotificationCheckStruct get shuruq => _shuruq ?? NotificationCheckStruct();
+  set shuruq(NotificationCheckStruct? val) => _shuruq = val;
+
+  void updateShuruq(Function(NotificationCheckStruct) updateFn) {
+    updateFn(_shuruq ??= NotificationCheckStruct());
+  }
 
   bool hasShuruq() => _shuruq != null;
 
   // "Dohr" field.
-  bool? _dohr;
-  bool get dohr => _dohr ?? false;
-  set dohr(bool? val) => _dohr = val;
+  NotificationCheckStruct? _dohr;
+  NotificationCheckStruct get dohr => _dohr ?? NotificationCheckStruct();
+  set dohr(NotificationCheckStruct? val) => _dohr = val;
+
+  void updateDohr(Function(NotificationCheckStruct) updateFn) {
+    updateFn(_dohr ??= NotificationCheckStruct());
+  }
 
   bool hasDohr() => _dohr != null;
 
   // "Asr" field.
-  bool? _asr;
-  bool get asr => _asr ?? false;
-  set asr(bool? val) => _asr = val;
+  NotificationCheckStruct? _asr;
+  NotificationCheckStruct get asr => _asr ?? NotificationCheckStruct();
+  set asr(NotificationCheckStruct? val) => _asr = val;
+
+  void updateAsr(Function(NotificationCheckStruct) updateFn) {
+    updateFn(_asr ??= NotificationCheckStruct());
+  }
 
   bool hasAsr() => _asr != null;
 
   // "Maghrib" field.
-  bool? _maghrib;
-  bool get maghrib => _maghrib ?? false;
-  set maghrib(bool? val) => _maghrib = val;
+  NotificationCheckStruct? _maghrib;
+  NotificationCheckStruct get maghrib => _maghrib ?? NotificationCheckStruct();
+  set maghrib(NotificationCheckStruct? val) => _maghrib = val;
+
+  void updateMaghrib(Function(NotificationCheckStruct) updateFn) {
+    updateFn(_maghrib ??= NotificationCheckStruct());
+  }
 
   bool hasMaghrib() => _maghrib != null;
 
   // "Isha" field.
-  bool? _isha;
-  bool get isha => _isha ?? false;
-  set isha(bool? val) => _isha = val;
+  NotificationCheckStruct? _isha;
+  NotificationCheckStruct get isha => _isha ?? NotificationCheckStruct();
+  set isha(NotificationCheckStruct? val) => _isha = val;
+
+  void updateIsha(Function(NotificationCheckStruct) updateFn) {
+    updateFn(_isha ??= NotificationCheckStruct());
+  }
 
   bool hasIsha() => _isha != null;
 
   static NotificationsStruct fromMap(Map<String, dynamic> data) =>
       NotificationsStruct(
-        fazr: data['Fazr'] as bool?,
-        shuruq: data['Shuruq'] as bool?,
-        dohr: data['Dohr'] as bool?,
-        asr: data['Asr'] as bool?,
-        maghrib: data['Maghrib'] as bool?,
-        isha: data['Isha'] as bool?,
+        fazr: data['Fazr'] is NotificationCheckStruct
+            ? data['Fazr']
+            : NotificationCheckStruct.maybeFromMap(data['Fazr']),
+        shuruq: data['Shuruq'] is NotificationCheckStruct
+            ? data['Shuruq']
+            : NotificationCheckStruct.maybeFromMap(data['Shuruq']),
+        dohr: data['Dohr'] is NotificationCheckStruct
+            ? data['Dohr']
+            : NotificationCheckStruct.maybeFromMap(data['Dohr']),
+        asr: data['Asr'] is NotificationCheckStruct
+            ? data['Asr']
+            : NotificationCheckStruct.maybeFromMap(data['Asr']),
+        maghrib: data['Maghrib'] is NotificationCheckStruct
+            ? data['Maghrib']
+            : NotificationCheckStruct.maybeFromMap(data['Maghrib']),
+        isha: data['Isha'] is NotificationCheckStruct
+            ? data['Isha']
+            : NotificationCheckStruct.maybeFromMap(data['Isha']),
       );
 
   static NotificationsStruct? maybeFromMap(dynamic data) => data is Map
@@ -77,73 +112,79 @@ class NotificationsStruct extends BaseStruct {
       : null;
 
   Map<String, dynamic> toMap() => {
-        'Fazr': _fazr,
-        'Shuruq': _shuruq,
-        'Dohr': _dohr,
-        'Asr': _asr,
-        'Maghrib': _maghrib,
-        'Isha': _isha,
+        'Fazr': _fazr?.toMap(),
+        'Shuruq': _shuruq?.toMap(),
+        'Dohr': _dohr?.toMap(),
+        'Asr': _asr?.toMap(),
+        'Maghrib': _maghrib?.toMap(),
+        'Isha': _isha?.toMap(),
       }.withoutNulls;
 
   @override
   Map<String, dynamic> toSerializableMap() => {
         'Fazr': serializeParam(
           _fazr,
-          ParamType.bool,
+          ParamType.DataStruct,
         ),
         'Shuruq': serializeParam(
           _shuruq,
-          ParamType.bool,
+          ParamType.DataStruct,
         ),
         'Dohr': serializeParam(
           _dohr,
-          ParamType.bool,
+          ParamType.DataStruct,
         ),
         'Asr': serializeParam(
           _asr,
-          ParamType.bool,
+          ParamType.DataStruct,
         ),
         'Maghrib': serializeParam(
           _maghrib,
-          ParamType.bool,
+          ParamType.DataStruct,
         ),
         'Isha': serializeParam(
           _isha,
-          ParamType.bool,
+          ParamType.DataStruct,
         ),
       }.withoutNulls;
 
   static NotificationsStruct fromSerializableMap(Map<String, dynamic> data) =>
       NotificationsStruct(
-        fazr: deserializeParam(
+        fazr: deserializeStructParam(
           data['Fazr'],
-          ParamType.bool,
+          ParamType.DataStruct,
           false,
+          structBuilder: NotificationCheckStruct.fromSerializableMap,
         ),
-        shuruq: deserializeParam(
+        shuruq: deserializeStructParam(
           data['Shuruq'],
-          ParamType.bool,
+          ParamType.DataStruct,
           false,
+          structBuilder: NotificationCheckStruct.fromSerializableMap,
         ),
-        dohr: deserializeParam(
+        dohr: deserializeStructParam(
           data['Dohr'],
-          ParamType.bool,
+          ParamType.DataStruct,
           false,
+          structBuilder: NotificationCheckStruct.fromSerializableMap,
         ),
-        asr: deserializeParam(
+        asr: deserializeStructParam(
           data['Asr'],
-          ParamType.bool,
+          ParamType.DataStruct,
           false,
+          structBuilder: NotificationCheckStruct.fromSerializableMap,
         ),
-        maghrib: deserializeParam(
+        maghrib: deserializeStructParam(
           data['Maghrib'],
-          ParamType.bool,
+          ParamType.DataStruct,
           false,
+          structBuilder: NotificationCheckStruct.fromSerializableMap,
         ),
-        isha: deserializeParam(
+        isha: deserializeStructParam(
           data['Isha'],
-          ParamType.bool,
+          ParamType.DataStruct,
           false,
+          structBuilder: NotificationCheckStruct.fromSerializableMap,
         ),
       );
 
@@ -167,18 +208,18 @@ class NotificationsStruct extends BaseStruct {
 }
 
 NotificationsStruct createNotificationsStruct({
-  bool? fazr,
-  bool? shuruq,
-  bool? dohr,
-  bool? asr,
-  bool? maghrib,
-  bool? isha,
+  NotificationCheckStruct? fazr,
+  NotificationCheckStruct? shuruq,
+  NotificationCheckStruct? dohr,
+  NotificationCheckStruct? asr,
+  NotificationCheckStruct? maghrib,
+  NotificationCheckStruct? isha,
 }) =>
     NotificationsStruct(
-      fazr: fazr,
-      shuruq: shuruq,
-      dohr: dohr,
-      asr: asr,
-      maghrib: maghrib,
-      isha: isha,
+      fazr: fazr ?? NotificationCheckStruct(),
+      shuruq: shuruq ?? NotificationCheckStruct(),
+      dohr: dohr ?? NotificationCheckStruct(),
+      asr: asr ?? NotificationCheckStruct(),
+      maghrib: maghrib ?? NotificationCheckStruct(),
+      isha: isha ?? NotificationCheckStruct(),
     );
