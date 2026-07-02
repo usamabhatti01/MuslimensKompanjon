@@ -1,0 +1,794 @@
+[
+  {
+    "Nr": 1,
+    "Arabiska": "الله",
+    "Transliteration": "Allah",
+    "Svensk översättning": "Gud",
+    "Förklaring (svenska)": "Det största namnet som omfattar alla fullkomliga egenskaper.",
+    "الشرح بالعربية": "الاسم الأعظم الجامع لجميع صفات الكمال."
+  },
+  {
+    "Nr": 2,
+    "Arabiska": "الرحمن",
+    "Transliteration": "Ar-Rahman",
+    "Svensk översättning": "Den Oändligt Barmhärtige",
+    "Förklaring (svenska)": "Visar barmhärtighet mot hela skapelsen.",
+    "الشرح بالعربية": "واسع الرحمة بجميع الخلق."
+  },
+  {
+    "Nr": 3,
+    "Arabiska": "الرحيم",
+    "Transliteration": "Ar-Rahim",
+    "Svensk översättning": "Den Särskilt Barmhärtige",
+    "Förklaring (svenska)": "Visar särskild barmhärtighet mot de troende.",
+    "الشرح بالعربية": "كثير الرحمة بالمؤمنين."
+  },
+  {
+    "Nr": 4,
+    "Arabiska": "الملك",
+    "Transliteration": "Al-Malik",
+    "Svensk översättning": "Konungen",
+    "Förklaring (svenska)": "Härskaren över hela skapelsen.",
+    "الشرح بالعربية": "المتصرف في الكون كله."
+  },
+  {
+    "Nr": 5,
+    "Arabiska": "القدوس",
+    "Transliteration": "Al-Quddus",
+    "Svensk översättning": "Den Helige",
+    "Förklaring (svenska)": "Fullkomligt fri från alla brister.",
+    "الشرح بالعربية": "المنزه عن كل نقص وعيب."
+  },
+  {
+    "Nr": 6,
+    "Arabiska": "السلام",
+    "Transliteration": "As-Salam",
+    "Svensk översättning": "Fridens Källa",
+    "Förklaring (svenska)": "Källan till frid och trygghet.",
+    "الشرح بالعربية": "السالم من كل نقص ومانح السلام."
+  },
+  {
+    "Nr": 7,
+    "Arabiska": "المؤمن",
+    "Transliteration": "Al-Mumin",
+    "Svensk översättning": "Den Trygghetsskapande",
+    "Förklaring (svenska)": "Ger trygghet och skydd.",
+    "الشرح بالعربية": "المؤمن لعباده من الخوف والظلم."
+  },
+  {
+    "Nr": 8,
+    "Arabiska": "المهيمن",
+    "Transliteration": "Al-Muhaymin",
+    "Svensk översättning": "Beskyddaren",
+    "Förklaring (svenska)": "Övervakar allt.",
+    "الشرح بالعربية": "الرقيب الشهيد على كل شيء."
+  },
+  {
+    "Nr": 9,
+    "Arabiska": "العزيز",
+    "Transliteration": "Al-Aziz",
+    "Svensk översättning": "Den Allsmäktige",
+    "Förklaring (svenska)": "Ingen kan besegra Honom.",
+    "الشرح بالعربية": "الغالب الذي لا يُقهر."
+  },
+  {
+    "Nr": 10,
+    "Arabiska": "الجبار",
+    "Transliteration": "Al-Jabbar",
+    "Svensk översättning": "Den Oemotståndlige",
+    "Förklaring (svenska)": "Återupprättar och underkuvar allt.",
+    "الشرح بالعربية": "الذي يجبر الضعيف ويقهر الجبابرة."
+  },
+  {
+    "Nr": 11,
+    "Arabiska": "المتكبر",
+    "Transliteration": "Al-Mutakabbir",
+    "Svensk översättning": "Den Majestätiske",
+    "Förklaring (svenska)": "Ensam värdig all storhet.",
+    "الشرح بالعربية": "المتعالي عن صفات الخلق."
+  },
+  {
+    "Nr": 12,
+    "Arabiska": "الخالق",
+    "Transliteration": "Al-Khaliq",
+    "Svensk översättning": "Skaparen",
+    "Förklaring (svenska)": "Skapar allt från intet.",
+    "الشرح بالعربية": "الموجد للأشياء من العدم."
+  },
+  {
+    "Nr": 13,
+    "Arabiska": "البارئ",
+    "Transliteration": "Al-Bari",
+    "Svensk översättning": "Frambringaren",
+    "Förklaring (svenska)": "Frambringar skapelsen.",
+    "الشرح بالعربية": "الذي أوجد الخلق وأحسن ترتيبهم."
+  },
+  {
+    "Nr": 14,
+    "Arabiska": "المصور",
+    "Transliteration": "Al-Musawwir",
+    "Svensk översättning": "Formgivaren",
+    "Förklaring (svenska)": "Ger skapelsen dess form.",
+    "الشرح بالعربية": "الذي أعطى كل مخلوق صورته."
+  },
+  {
+    "Nr": 15,
+    "Arabiska": "الغفار",
+    "Transliteration": "Al-Ghaffar",
+    "Svensk översättning": "Den Ständigt Förlåtande",
+    "Förklaring (svenska)": "Förlåter gång på gång.",
+    "الشرح بالعربية": "كثير المغفرة لعباده."
+  },
+  {
+    "Nr": 16,
+    "Arabiska": "القهار",
+    "Transliteration": "Al-Qahhar",
+    "Svensk översättning": "Den Allövervinnande",
+    "Förklaring (svenska)": "Har makt över allt.",
+    "الشرح بالعربية": "الغالب لكل شيء."
+  },
+  {
+    "Nr": 17,
+    "Arabiska": "الوهاب",
+    "Transliteration": "Al-Wahhab",
+    "Svensk översättning": "Den Frikostige Givaren",
+    "Förklaring (svenska)": "Ger utan motprestation.",
+    "الشرح بالعربية": "كثير العطاء بلا مقابل."
+  },
+  {
+    "Nr": 18,
+    "Arabiska": "الرزاق",
+    "Transliteration": "Ar-Razzaq",
+    "Svensk översättning": "Försörjaren",
+    "Förklaring (svenska)": "Ger all försörjning.",
+    "الشرح بالعربية": "المتكفل بأرزاق الخلق."
+  },
+  {
+    "Nr": 19,
+    "Arabiska": "الفتاح",
+    "Transliteration": "Al-Fattah",
+    "Svensk översättning": "Öppnaren",
+    "Förklaring (svenska)": "Öppnar vägar till gott.",
+    "الشرح بالعربية": "الذي يفتح أبواب الخير."
+  },
+  {
+    "Nr": 20,
+    "Arabiska": "العليم",
+    "Transliteration": "Al-Alim",
+    "Svensk översättning": "Den Allvetande",
+    "Förklaring (svenska)": "Vet allt.",
+    "الشرح بالعربية": "الذي أحاط بكل شيء علماً."
+  },
+  {
+    "Nr": 21,
+    "Arabiska": "القابض",
+    "Transliteration": "Al-Qabid",
+    "Svensk översättning": "Den Som Håller Tillbaka",
+    "Förklaring (svenska)": "Begränsar enligt Sin visdom.",
+    "الشرح بالعربية": "الذي يقبض بحكمته."
+  },
+  {
+    "Nr": 22,
+    "Arabiska": "الباسط",
+    "Transliteration": "Al-Basit",
+    "Svensk översättning": "Den Som Ger I Överflöd",
+    "Förklaring (svenska)": "Utvidgar nåd och försörjning.",
+    "الشرح بالعربية": "الذي يوسع الرزق والرحمة."
+  },
+  {
+    "Nr": 23,
+    "Arabiska": "الخافض",
+    "Transliteration": "Al-Khafid",
+    "Svensk översättning": "Den Som Sänker",
+    "Förklaring (svenska)": "Sänker vem Han vill.",
+    "الشرح بالعربية": "الذي يخفض من يشاء بعدله."
+  },
+  {
+    "Nr": 24,
+    "Arabiska": "الرافع",
+    "Transliteration": "Ar-Rafi",
+    "Svensk översättning": "Den Som Upphöjer",
+    "Förklaring (svenska)": "Upphöjer vem Han vill.",
+    "الشرح بالعربية": "الذي يرفع من يشاء بفضله."
+  },
+  {
+    "Nr": 25,
+    "Arabiska": "المعز",
+    "Transliteration": "Al-Muizz",
+    "Svensk översättning": "Den Som Ger Ära",
+    "Förklaring (svenska)": "Skänker ära.",
+    "الشرح بالعربية": "الذي يمنح العزة لمن يشاء."
+  },
+  {
+    "Nr": 26,
+    "Arabiska": "المذل",
+    "Transliteration": "Al-Mudhill",
+    "Svensk översättning": "Den Som Förödmjukar",
+    "Förklaring (svenska)": "Förödmjukar vem Han vill.",
+    "الشرح بالعربية": "الذي يذل من يشاء بحكمته."
+  },
+  {
+    "Nr": 27,
+    "Arabiska": "السميع",
+    "Transliteration": "As-Sami",
+    "Svensk översättning": "Den Allhörande",
+    "Förklaring (svenska)": "Hör allt.",
+    "الشرح بالعربية": "الذي يسمع كل الأصوات."
+  },
+  {
+    "Nr": 28,
+    "Arabiska": "البصير",
+    "Transliteration": "Al-Basir",
+    "Svensk översättning": "Den Allseende",
+    "Förklaring (svenska)": "Ser allt.",
+    "الشرح بالعربية": "الذي يرى كل شيء."
+  },
+  {
+    "Nr": 29,
+    "Arabiska": "الحكم",
+    "Transliteration": "Al-Hakam",
+    "Svensk översättning": "Domaren",
+    "Förklaring (svenska)": "Dömer rättvist.",
+    "الشرح بالعربية": "الذي يفصل بين الخلق بالحق."
+  },
+  {
+    "Nr": 30,
+    "Arabiska": "العدل",
+    "Transliteration": "Al-Adl",
+    "Svensk översättning": "Den Rättvise",
+    "Förklaring (svenska)": "Orättfärdigar ingen.",
+    "الشرح بالعربية": "الذي لا يظلم أحداً."
+  },
+  {
+    "Nr": 31,
+    "Arabiska": "اللطيف",
+    "Transliteration": "Al-Latif",
+    "Svensk översättning": "Den Subtile",
+    "Förklaring (svenska)": "Omsorgsfull på dolda sätt.",
+    "الشرح بالعربية": "البر بعباده من حيث لا يشعرون."
+  },
+  {
+    "Nr": 32,
+    "Arabiska": "الخبير",
+    "Transliteration": "Al-Khabir",
+    "Svensk översättning": "Den Välinformerade",
+    "Förklaring (svenska)": "Känner allt i detalj.",
+    "الشرح بالعربية": "العالم بدقائق الأمور."
+  },
+  {
+    "Nr": 33,
+    "Arabiska": "الحليم",
+    "Transliteration": "Al-Halim",
+    "Svensk översättning": "Den Tålmodige",
+    "Förklaring (svenska)": "Skyndar inte med straff.",
+    "الشرح بالعربية": "الذي لا يعاجل بالعقوبة."
+  },
+  {
+    "Nr": 34,
+    "Arabiska": "العظيم",
+    "Transliteration": "Al-Azim",
+    "Svensk översättning": "Den Väldige",
+    "Förklaring (svenska)": "Oändlig i storhet.",
+    "الشرح بالعربية": "المتصف بالعظمة المطلقة."
+  },
+  {
+    "Nr": 35,
+    "Arabiska": "الغفور",
+    "Transliteration": "Al-Ghafur",
+    "Svensk översättning": "Den Förlåtande",
+    "Förklaring (svenska)": "Förlåter stora synder.",
+    "الشرح بالعربية": "كثير المغفرة والستر."
+  },
+  {
+    "Nr": 36,
+    "Arabiska": "الشكور",
+    "Transliteration": "Ash-Shakur",
+    "Svensk översättning": "Den Tacksamme",
+    "Förklaring (svenska)": "Belönar rikligt.",
+    "الشرح بالعربية": "الذي يثيب على العمل القليل."
+  },
+  {
+    "Nr": 37,
+    "Arabiska": "العلي",
+    "Transliteration": "Al-Aliyy",
+    "Svensk översättning": "Den Upphöjde",
+    "Förklaring (svenska)": "Hög över skapelsen.",
+    "الشرح بالعربية": "المرتفع فوق خلقه."
+  },
+  {
+    "Nr": 38,
+    "Arabiska": "الكبير",
+    "Transliteration": "Al-Kabir",
+    "Svensk översättning": "Den Store",
+    "Förklaring (svenska)": "Allt är mindre än Honom.",
+    "الشرح بالعربية": "العظيم الذي كل شيء دونه."
+  },
+  {
+    "Nr": 39,
+    "Arabiska": "الحفيظ",
+    "Transliteration": "Al-Hafiz",
+    "Svensk översättning": "Bevararen",
+    "Förklaring (svenska)": "Skyddar och bevarar allt.",
+    "الشرح بالعربية": "الحافظ لكل شيء."
+  },
+  {
+    "Nr": 40,
+    "Arabiska": "المقيت",
+    "Transliteration": "Al-Muqit",
+    "Svensk översättning": "Försörjaren",
+    "Förklaring (svenska)": "Ger näring och uppehälle.",
+    "الشرح بالعربية": "الموصل الأقوات والأرزاق للخلق."
+  },
+  {
+    "Nr": 41,
+    "Arabiska": "الحسيب",
+    "Transliteration": "Al-Hasib",
+    "Svensk översättning": "Den Tillräcklige",
+    "Förklaring (svenska)": "Räcker till för alla behov.",
+    "الشرح بالعربية": "الكافي والمحاسب لعباده."
+  },
+  {
+    "Nr": 42,
+    "Arabiska": "الجليل",
+    "Transliteration": "Al-Jalil",
+    "Svensk översättning": "Den Majestätiske",
+    "Förklaring (svenska)": "Ägare av majestät.",
+    "الشرح بالعربية": "المتصف بالجلال والعظمة."
+  },
+  {
+    "Nr": 43,
+    "Arabiska": "الكريم",
+    "Transliteration": "Al-Karim",
+    "Svensk översättning": "Den Generöse",
+    "Förklaring (svenska)": "Ger rikligt av Sin nåd.",
+    "الشرح بالعربية": "كثير الخير والعطاء."
+  },
+  {
+    "Nr": 44,
+    "Arabiska": "الرقيب",
+    "Transliteration": "Ar-Raqib",
+    "Svensk översättning": "Väktaren",
+    "Förklaring (svenska)": "Övervakar allt.",
+    "الشرح بالعربية": "المطلع على أحوال العباد."
+  },
+  {
+    "Nr": 45,
+    "Arabiska": "المجيب",
+    "Transliteration": "Al-Mujib",
+    "Svensk översättning": "Den Svarande",
+    "Förklaring (svenska)": "Besvarar böner.",
+    "الشرح بالعربية": "الذي يجيب دعاء الداعين."
+  },
+  {
+    "Nr": 46,
+    "Arabiska": "الواسع",
+    "Transliteration": "Al-Wasi",
+    "Svensk översättning": "Den Oändlige",
+    "Förklaring (svenska)": "Oändlig i kunskap och nåd.",
+    "الشرح بالعربية": "واسع الفضل والعلم والرحمة."
+  },
+  {
+    "Nr": 47,
+    "Arabiska": "الحكيم",
+    "Transliteration": "Al-Hakim",
+    "Svensk översättning": "Den Vise",
+    "Förklaring (svenska)": "Allt Han gör är vist.",
+    "الشرح بالعربية": "الذي يضع الأشياء في مواضعها."
+  },
+  {
+    "Nr": 48,
+    "Arabiska": "الودود",
+    "Transliteration": "Al-Wadud",
+    "Svensk översättning": "Den Kärleksfulle",
+    "Förklaring (svenska)": "Älskar Sina tjänare.",
+    "الشرح بالعربية": "المحب لأوليائه."
+  },
+  {
+    "Nr": 49,
+    "Arabiska": "المجيد",
+    "Transliteration": "Al-Majid",
+    "Svensk översättning": "Den Ärorike",
+    "Förklaring (svenska)": "Full av ära.",
+    "الشرح بالعربية": "العظيم كثير المجد."
+  },
+  {
+    "Nr": 50,
+    "Arabiska": "الباعث",
+    "Transliteration": "Al-Baith",
+    "Svensk översättning": "Uppväckaren",
+    "Förklaring (svenska)": "Återuppväcker de döda.",
+    "الشرح بالعربية": "الذي يبعث الخلق بعد الموت."
+  },
+  {
+    "Nr": 51,
+    "Arabiska": "الشهيد",
+    "Transliteration": "Ash-Shahid",
+    "Svensk översättning": "Vittnet",
+    "Förklaring (svenska)": "Bevittnar allt.",
+    "الشرح بالعربية": "الذي لا يغيب عنه شيء."
+  },
+  {
+    "Nr": 52,
+    "Arabiska": "الحق",
+    "Transliteration": "Al-Haqq",
+    "Svensk översättning": "Sanningen",
+    "Förklaring (svenska)": "Den sanna verkligheten.",
+    "الشرح بالعربية": "الثابت الذي لا شك فيه."
+  },
+  {
+    "Nr": 53,
+    "Arabiska": "الوكيل",
+    "Transliteration": "Al-Wakil",
+    "Svensk översättning": "Förvaltaren",
+    "Förklaring (svenska)": "Den bästa att förlita sig på.",
+    "الشرح بالعربية": "الكافي لمن توكل عليه."
+  },
+  {
+    "Nr": 54,
+    "Arabiska": "القوي",
+    "Transliteration": "Al-Qawiyy",
+    "Svensk översättning": "Den Starke",
+    "Förklaring (svenska)": "Fullkomlig styrka.",
+    "الشرح بالعربية": "كامل القوة والقدرة."
+  },
+  {
+    "Nr": 55,
+    "Arabiska": "المتين",
+    "Transliteration": "Al-Matin",
+    "Svensk översättning": "Den Orubbligt Mäktige",
+    "Förklaring (svenska)": "Hans styrka avtar aldrig.",
+    "الشرح بالعربية": "شديد القوة الذي لا يضعف."
+  },
+  {
+    "Nr": 56,
+    "Arabiska": "الولي",
+    "Transliteration": "Al-Wali",
+    "Svensk översättning": "Beskyddaren",
+    "Förklaring (svenska)": "De troendes beskyddare.",
+    "الشرح بالعربية": "الناصر والمتولي لعباده المؤمنين."
+  },
+  {
+    "Nr": 57,
+    "Arabiska": "الحميد",
+    "Transliteration": "Al-Hamid",
+    "Svensk översättning": "Den Lovprisade",
+    "Förklaring (svenska)": "Förtjänar all lovprisning.",
+    "الشرح بالعربية": "المستحق للحمد كله."
+  },
+  {
+    "Nr": 58,
+    "Arabiska": "المحصي",
+    "Transliteration": "Al-Muhsi",
+    "Svensk översättning": "Den Som Räknar Allt",
+    "Förklaring (svenska)": "Har räknat allt.",
+    "الشرح بالعربية": "الذي أحصى كل شيء عدداً."
+  },
+  {
+    "Nr": 59,
+    "Arabiska": "المبدئ",
+    "Transliteration": "Al-Mubdi",
+    "Svensk översättning": "Upphovsmannen",
+    "Förklaring (svenska)": "Inleder skapelsen.",
+    "الشرح بالعربية": "الذي بدأ الخلق أول مرة."
+  },
+  {
+    "Nr": 60,
+    "Arabiska": "المعيد",
+    "Transliteration": "Al-Muid",
+    "Svensk översättning": "Återställaren",
+    "Förklaring (svenska)": "Återför skapelsen.",
+    "الشرح بالعربية": "الذي يعيد الخلق بعد الموت."
+  },
+  {
+    "Nr": 61,
+    "Arabiska": "المحيي",
+    "Transliteration": "Al-Muhyi",
+    "Svensk översättning": "Livgivaren",
+    "Förklaring (svenska)": "Ger liv.",
+    "الشرح بالعربية": "الذي يهب الحياة."
+  },
+  {
+    "Nr": 62,
+    "Arabiska": "المميت",
+    "Transliteration": "Al-Mumit",
+    "Svensk översättning": "Den Som Ger Döden",
+    "Förklaring (svenska)": "Bestämmer döden.",
+    "الشرح بالعربية": "الذي يقدر الموت على عباده."
+  },
+  {
+    "Nr": 63,
+    "Arabiska": "الحي",
+    "Transliteration": "Al-Hayy",
+    "Svensk översättning": "Den Levande",
+    "Förklaring (svenska)": "Evigt levande.",
+    "الشرح بالعربية": "الكامل الحياة الذي لا يموت."
+  },
+  {
+    "Nr": 64,
+    "Arabiska": "القيوم",
+    "Transliteration": "Al-Qayyum",
+    "Svensk översättning": "Den Självuppehållande",
+    "Förklaring (svenska)": "Upprätthåller allt.",
+    "الشرح بالعربية": "القائم بنفسه المقيم لغيره."
+  },
+  {
+    "Nr": 65,
+    "Arabiska": "الواجد",
+    "Transliteration": "Al-Wajid",
+    "Svensk översättning": "Den Självförsörjande",
+    "Förklaring (svenska)": "Saknar inget.",
+    "الشرح بالعربية": "الغني الذي لا يفتقر إلى شيء."
+  },
+  {
+    "Nr": 66,
+    "Arabiska": "الماجد",
+    "Transliteration": "Al-Majid",
+    "Svensk översättning": "Den Ädle",
+    "Förklaring (svenska)": "Full av ära och ädelhet.",
+    "الشرح بالعربية": "الكامل في الشرف والعظمة."
+  },
+  {
+    "Nr": 67,
+    "Arabiska": "الأحد",
+    "Transliteration": "Al-Ahad",
+    "Svensk översättning": "Den Ende",
+    "Förklaring (svenska)": "Ingen är som Han.",
+    "الشرح بالعربية": "الذي لا شريك له ولا مثيل."
+  },
+  {
+    "Nr": 68,
+    "Arabiska": "الصمد",
+    "Transliteration": "As-Samad",
+    "Svensk översättning": "Den Absoluta Tillflykten",
+    "Förklaring (svenska)": "Alla vänder sig till Honom.",
+    "الشرح بالعربية": "المقصود في الحوائج كلها."
+  },
+  {
+    "Nr": 69,
+    "Arabiska": "القادر",
+    "Transliteration": "Al-Qadir",
+    "Svensk översättning": "Den Allsmäktige",
+    "Förklaring (svenska)": "Har fullkomlig förmåga.",
+    "الشرح بالعربية": "المتصف بالقدرة الكاملة."
+  },
+  {
+    "Nr": 70,
+    "Arabiska": "المقتدر",
+    "Transliteration": "Al-Muqtadir",
+    "Svensk översättning": "Den Fullkomligt Mäktige",
+    "Förklaring (svenska)": "Hans makt är fullständig.",
+    "الشرح بالعربية": "عظيم القدرة والنفوذ."
+  },
+  {
+    "Nr": 71,
+    "Arabiska": "المقدم",
+    "Transliteration": "Al-Muqaddim",
+    "Svensk översättning": "Den Som För Fram",
+    "Förklaring (svenska)": "Låter vem Han vill gå före.",
+    "الشرح بالعربية": "الذي يقدم من يشاء."
+  },
+  {
+    "Nr": 72,
+    "Arabiska": "المؤخر",
+    "Transliteration": "Al-Muakhkhir",
+    "Svensk översättning": "Den Som Fördröjer",
+    "Förklaring (svenska)": "Låter vem Han vill komma efter.",
+    "الشرح بالعربية": "الذي يؤخر من يشاء."
+  },
+  {
+    "Nr": 73,
+    "Arabiska": "الأول",
+    "Transliteration": "Al-Awwal",
+    "Svensk översättning": "Den Förste",
+    "Förklaring (svenska)": "Inget finns före Honom.",
+    "الشرح بالعربية": "الذي ليس قبله شيء."
+  },
+  {
+    "Nr": 74,
+    "Arabiska": "الآخر",
+    "Transliteration": "Al-Akhir",
+    "Svensk översättning": "Den Siste",
+    "Förklaring (svenska)": "Inget finns efter Honom.",
+    "الشرح بالعربية": "الذي ليس بعده شيء."
+  },
+  {
+    "Nr": 75,
+    "Arabiska": "الظاهر",
+    "Transliteration": "Az-Zahir",
+    "Svensk översättning": "Den Uppenbare",
+    "Förklaring (svenska)": "Den Högste över skapelsen.",
+    "الشرح بالعربية": "العالي فوق خلقه."
+  },
+  {
+    "Nr": 76,
+    "Arabiska": "الباطن",
+    "Transliteration": "Al-Batin",
+    "Svensk översättning": "Den Fördolda",
+    "Förklaring (svenska)": "Omsluter allt med Sin kunskap.",
+    "الشرح بالعربية": "القريب المحيط بكل شيء علماً."
+  },
+  {
+    "Nr": 77,
+    "Arabiska": "الوالي",
+    "Transliteration": "Al-Wali",
+    "Svensk översättning": "Styraren",
+    "Förklaring (svenska)": "Styr allt.",
+    "الشرح بالعربية": "المدبر لشؤون خلقه."
+  },
+  {
+    "Nr": 78,
+    "Arabiska": "المتعالي",
+    "Transliteration": "Al-Mutaali",
+    "Svensk översättning": "Den Upphöjde",
+    "Förklaring (svenska)": "Upphöjd över all brist.",
+    "الشرح بالعربية": "المرتفع عن كل نقص."
+  },
+  {
+    "Nr": 79,
+    "Arabiska": "البر",
+    "Transliteration": "Al-Barr",
+    "Svensk översättning": "Den Godgörande",
+    "Förklaring (svenska)": "Full av godhet.",
+    "الشرح بالعربية": "كثير الإحسان والرحمة."
+  },
+  {
+    "Nr": 80,
+    "Arabiska": "التواب",
+    "Transliteration": "At-Tawwab",
+    "Svensk översättning": "Den Som Tar Emot Ånger",
+    "Förklaring (svenska)": "Tar emot omvändelse.",
+    "الشرح بالعربية": "الذي يقبل توبة عباده."
+  },
+  {
+    "Nr": 81,
+    "Arabiska": "المنتقم",
+    "Transliteration": "Al-Muntaqim",
+    "Svensk översättning": "Hämnaren",
+    "Förklaring (svenska)": "Straffar de orättfärdiga.",
+    "الشرح بالعربية": "الذي ينتقم من الظالمين بعدله."
+  },
+  {
+    "Nr": 82,
+    "Arabiska": "العفو",
+    "Transliteration": "Al-Afuww",
+    "Svensk översättning": "Den Överseende",
+    "Förklaring (svenska)": "Utplånar synder.",
+    "الشرح بالعربية": "الذي يمحو الذنوب ويتجاوز عنها."
+  },
+  {
+    "Nr": 83,
+    "Arabiska": "الرؤوف",
+    "Transliteration": "Ar-Rauf",
+    "Svensk översättning": "Den Medkännande",
+    "Förklaring (svenska)": "Ytterst barmhärtig.",
+    "الشرح بالعربية": "شديد الرحمة بعباده."
+  },
+  {
+    "Nr": 84,
+    "Arabiska": "مالك الملك",
+    "Transliteration": "Malik-ul-Mulk",
+    "Svensk översättning": "Ägaren av Allt Herravälde",
+    "Förklaring (svenska)": "Äger all makt.",
+    "الشرح بالعربية": "المتصرف في الملك كله."
+  },
+  {
+    "Nr": 85,
+    "Arabiska": "ذو الجلال والإكرام",
+    "Transliteration": "Dhul-Jalali wal-Ikram",
+    "Svensk översättning": "Herren av Majestät och Generositet",
+    "Förklaring (svenska)": "Ägare av ära och nåd.",
+    "الشرح بالعربية": "صاحب العظمة والفضل والإحسان."
+  },
+  {
+    "Nr": 86,
+    "Arabiska": "المقسط",
+    "Transliteration": "Al-Muqsit",
+    "Svensk översättning": "Den Rättvise",
+    "Förklaring (svenska)": "Fullkomligt rättvis.",
+    "الشرح بالعربية": "العادل في حكمه وقضائه."
+  },
+  {
+    "Nr": 87,
+    "Arabiska": "الجامع",
+    "Transliteration": "Al-Jami",
+    "Svensk översättning": "Samlaren",
+    "Förklaring (svenska)": "Samlar skapelsen.",
+    "الشرح بالعربية": "الذي يجمع الخلق ليوم الحساب."
+  },
+  {
+    "Nr": 88,
+    "Arabiska": "الغني",
+    "Transliteration": "Al-Ghani",
+    "Svensk översättning": "Den Rike",
+    "Förklaring (svenska)": "Fri från alla behov.",
+    "الشرح بالعربية": "المستغني عن جميع خلقه."
+  },
+  {
+    "Nr": 89,
+    "Arabiska": "المغني",
+    "Transliteration": "Al-Mughni",
+    "Svensk översättning": "Den Som Berikar",
+    "Förklaring (svenska)": "Berikar vem Han vill.",
+    "الشرح بالعربية": "الذي يغني من يشاء بفضله."
+  },
+  {
+    "Nr": 90,
+    "Arabiska": "المانع",
+    "Transliteration": "Al-Mani",
+    "Svensk översättning": "Den Som Hindrar",
+    "Förklaring (svenska)": "Hindrar enligt Sin visdom.",
+    "الشرح بالعربية": "الذي يمنع ما يشاء بحكمته."
+  },
+  {
+    "Nr": 91,
+    "Arabiska": "الضار",
+    "Transliteration": "Ad-Darr",
+    "Svensk översättning": "Den Som Låter Skada Drabba",
+    "Förklaring (svenska)": "Skada sker med Hans tillåtelse.",
+    "الشرح بالعربية": "الذي يقدر الضر لحكمة وعدل."
+  },
+  {
+    "Nr": 92,
+    "Arabiska": "النافع",
+    "Transliteration": "An-Nafi",
+    "Svensk översättning": "Den Som Ger Nytta",
+    "Förklaring (svenska)": "Skänker nytta och gott.",
+    "الشرح بالعربية": "الذي يقدر النفع والخير."
+  },
+  {
+    "Nr": 93,
+    "Arabiska": "النور",
+    "Transliteration": "An-Nur",
+    "Svensk översättning": "Ljuset",
+    "Förklaring (svenska)": "Himlarnas och jordens ljus.",
+    "الشرح بالعربية": "منور السماوات والأرض بنوره."
+  },
+  {
+    "Nr": 94,
+    "Arabiska": "الهادي",
+    "Transliteration": "Al-Hadi",
+    "Svensk översättning": "Vägledaren",
+    "Förklaring (svenska)": "Vägleder till sanningen.",
+    "الشرح بالعربية": "المرشد إلى الحق."
+  },
+  {
+    "Nr": 95,
+    "Arabiska": "البديع",
+    "Transliteration": "Al-Badi",
+    "Svensk översättning": "Den Ursprunglige Skaparen",
+    "Förklaring (svenska)": "Skapar utan förebild.",
+    "الشرح بالعربية": "المبدع للخلق بلا مثال سابق."
+  },
+  {
+    "Nr": 96,
+    "Arabiska": "الباقي",
+    "Transliteration": "Al-Baqi",
+    "Svensk översättning": "Den Evige",
+    "Förklaring (svenska)": "Upphör aldrig.",
+    "الشرح بالعربية": "الدائم الذي لا يزول."
+  },
+  {
+    "Nr": 97,
+    "Arabiska": "الوارث",
+    "Transliteration": "Al-Warith",
+    "Svensk översättning": "Arvtagaren",
+    "Förklaring (svenska)": "Består efter allt annat.",
+    "الشرح بالعربية": "الباقي بعد فناء الخلق."
+  },
+  {
+    "Nr": 98,
+    "Arabiska": "الرشيد",
+    "Transliteration": "Ar-Rashid",
+    "Svensk översättning": "Den Rättledande",
+    "Förklaring (svenska)": "Vägleder till det rätta.",
+    "الشرح بالعربية": "الذي يرشد عباده إلى مصالحهم."
+  },
+  {
+    "Nr": 99,
+    "Arabiska": "الصبور",
+    "Transliteration": "As-Sabur",
+    "Svensk översättning": "Den Tålmodige",
+    "Förklaring (svenska)": "Skyndar inte med straff trots Sin makt.",
+    "الشرح بالعربية": "الذي لا يعجل العقوبة مع كمال قدرته."
+  }
+]
