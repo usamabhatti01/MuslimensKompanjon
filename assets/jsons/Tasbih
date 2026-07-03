@@ -1,0 +1,142 @@
+[
+  {
+    "id": "1",
+    "arabic": "سُبْحَانَ الله",
+    "transliteration": "Subḥān Allāh",
+    "swedishMeaning": "Att förklara Allah fri från alla brister och fel, och bekräfta Hans fullkomlighet.",
+    "arabicMeaning": "تنزيه الله تعالى عن كل نقص وعيب، وإثبات كماله سبحانه.",
+    "hadithAr": "قال رسول الله ﷺ: «كَلِمَتَانِ خَفِيفَتَانِ عَلَى اللِّسَانِ، ثَقِيلَتَانِ فِي الْمِيزَانِ، حَبِيبَتَانِ إِلَى الرَّحْمَنِ: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ».",
+    "hadithSv": "Profeten ﷺ sade: “Två ord som är lätta på tungan, tunga på vågen och älskade av den Barmhärtige: Subḥān Allāh wa biḥamdih, Subḥān Allāh al-‘Aẓīm.”",
+    "source": "Bukhari & Muslim"
+  },
+  {
+    "id": "2",
+    "arabic": "الْحَمْدُ لله",
+    "transliteration": "Al-ḥamdu lillāh",
+    "swedishMeaning": "Att prisa Allah med Hans fullkomliga egenskaper och tacka Honom för Hans gåvor.",
+    "arabicMeaning": "الثناء على الله تعالى بصفات الكمال، وشكره على نعمه.",
+    "hadithAr": "قال النبي ﷺ: «الْحَمْدُ لِلَّهِ تَمْلَأُ الْمِيزَانَ».",
+    "hadithSv": "Profeten ﷺ sade: “Al-ḥamdu lillāh fyller vågen.”",
+    "source": "Muslim"
+  },
+  {
+    "id": "3",
+    "arabic": "اللهُ أَكْبَر",
+    "transliteration": "Allāhu akbar",
+    "swedishMeaning": "Allah är större och mer majestätisk än allt.",
+    "arabicMeaning": "الله أعظم وأجلّ من كل شيء.",
+    "hadithAr": "قال ﷺ: «أَحَبُّ الْكَلَامِ إِلَى اللَّهِ: سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَلَا إِلَهَ إِلَّا اللَّهُ، وَاللَّهُ أَكْبَرُ».",
+    "hadithSv": "Profeten ﷺ sade: “De mest älskade orden hos Allah är: Subḥān Allāh, Al-ḥamdu lillāh, Lā ilāha illa Allāh och Allāhu akbar.”",
+    "source": "Muslim"
+  },
+  {
+    "id": "4",
+    "arabic": "لَا إِلَهَ إِلَّا الله",
+    "transliteration": "Lā ilāha illa Allāh",
+    "swedishMeaning": "Det finns ingen sann gud utom Allah.",
+    "arabicMeaning": "لا معبود بحق إلا الله وحده.",
+    "hadithAr": "قال ﷺ: «أَفْضَلُ الذِّكْرِ: لَا إِلَهَ إِلَّا اللَّهُ».",
+    "hadithSv": "Profeten ﷺ sade: “Det bästa minnet (dhikr) är: Lā ilāha illa Allāh.”",
+    "source": "Tirmidhi"
+  },
+  {
+    "id": "5",
+    "arabic": "سُبْحَانَ اللهِ وَبِحَمْدِهِ، سُبْحَانَ اللهِ الْعَظِيم",
+    "transliteration": "Subḥān Allāhi wa biḥamdih, Subḥān Allāh al-‘Aẓīm",
+    "swedishMeaning": "Att rena Allah från brister och prisa Honom.",
+    "arabicMeaning": "تنزيه الله مع الثناء عليه.",
+    "hadithAr": "قال ﷺ: «كَلِمَتَانِ خَفِيفَتَانِ عَلَى اللِّسَانِ، ثَقِيلَتَانِ فِي الْمِيزَانِ، حَبِيبَتَانِ إِلَى الرَّحْمَنِ: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ».",
+    "hadithSv": "",
+    "source": "Bukhari & Muslim"
+  },
+  {
+    "id": "6",
+    "arabic": "سُبْحَانَ اللهِ وَالْحَمْدُ لله وَلَا إِلَهَ إِلَّا الله وَالله أَكْبَر",
+    "transliteration": "Subḥān Allāh, wal-ḥamdu lillāh, wa lā ilāha illa Allāh, wa Allāhu akbar",
+    "swedishMeaning": "De mest omfattande orden av dhikr: rening, pris, tawḥīd och förhärligande.",
+    "arabicMeaning": "أعظم كلمات الذكر الجامعة للتنزيه والثناء والتوحيد والتعظيم.",
+    "hadithAr": "قال ﷺ: «لَأَنْ أَقُولَ: سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَلَا إِلَهَ إِلَّا اللَّهُ، وَاللَّهُ أَكْبَرُ أَحَبُّ إِلَيَّ مِمَّا طَلَعَتْ عَلَيْهِ الشَّمْسُ».",
+    "hadithSv": "",
+    "source": "Muslim"
+  },
+  {
+    "id": "7",
+    "arabic": "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِالله",
+    "transliteration": "Lā ḥawla wa lā quwwata illā billāh",
+    "swedishMeaning": "Ingen förändring och ingen styrka förutom med Allahs hjälp.",
+    "arabicMeaning": "لا تحول من حال إلى حال ولا قوة على الطاعة إلا بمعونة الله.",
+    "hadithAr": "قال ﷺ: «أَلَا أَدُلُّكَ عَلَى كَنْزٍ مِنْ كُنُوزِ الْجَنَّةِ؟ لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ».",
+    "hadithSv": "",
+    "source": "Bukhari & Muslim"
+  },
+  {
+    "id": "8",
+    "arabic": "أَسْتَغْفِرُ اللهَ وَأَتُوبُ إِلَيْهِ",
+    "transliteration": "Astaghfirullāh wa atūbu ilayh",
+    "swedishMeaning": "Jag ber Allah om förlåtelse och vänder mig till Honom i ånger.",
+    "arabicMeaning": "طلب المغفرة والرجوع إلى الله.",
+    "hadithAr": "قال ﷺ: «إِنِّي لَأَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ فِي الْيَوْمِ أَكْثَرَ مِنْ سَبْعِينَ مَرَّةً».",
+    "hadithSv": "",
+    "source": "Bukhari"
+  },
+  {
+    "id": "9",
+    "arabic": "سُبْحَانَ اللهِ وَبِحَمْدِهِ، عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ، وَمِدَادَ كَلِمَاتِهِ",
+    "transliteration": "Subḥān Allāhi wa biḥamdih, ‘adada khalqih, wa riḍā nafsih, wa zinata ‘arshih, wa midāda kalimātih",
+    "swedishMeaning": "Att prisa Allah i en mängd som motsvarar Hans skapelse och Hans storhet.",
+    "arabicMeaning": "",
+    "hadithAr": "النص الكامل: «سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ، وَمِدَادَ كَلِمَاتِهِ». عن جويرية -رضي الله عنها-: أن النبي -صلى الله عليه وسلم- خرج من عندها، ثم رجع بعد أن أضحى وهي جالسة، فقال: \"ما زلتِ على الحال التي فارقتكِ عليها؟قالت: نعم. قال النبي -صلى الله عليه وسلم-: لقد قلت بعدك أربع كلمات، ثلاث مرات، لو وزنت بما قلت منذ اليوم لوزنتهن: سبحان الله وبحمده، عدد خلقه، ورضا نفسه، وزنة عرشه، ومداد كلماته.",
+    "hadithSv": "",
+    "source": "Muslim"
+  },
+  {
+    "id": "10",
+    "arabic": "لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+    "transliteration": "Lā ilāha illa Allāhu waḥdahu lā sharīka lah...",
+    "swedishMeaning": "Det finns ingen gud utom Allah, ensam utan partner.",
+    "arabicMeaning": "",
+    "hadithAr": "قال ﷺ: «مَنْ قَالَهَا مِائَةَ مَرَّةٍ كَانَتْ لَهُ عَدْلَ عَشْرِ رِقَابٍ...».",
+    "hadithSv": "",
+    "source": "Bukhari & Muslim"
+  },
+  {
+    "id": "11",
+    "arabic": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ",
+    "transliteration": "Allāhumma ṣalli ‘alā Muḥammad",
+    "swedishMeaning": "O Allah, välsigna och upphöj Profeten Muhammad ﷺ.",
+    "arabicMeaning": "الدعاء للنبي ﷺ بالثناء والرفعة.",
+    "hadithAr": "قال ﷺ: «مَنْ صَلَّى عَلَيَّ صَلَاةً وَاحِدَةً صَلَّى اللَّهُ عَلَيْهِ بِهَا عَشْرًا».",
+    "hadithSv": "",
+    "source": "Muslim"
+  },
+  {
+    "id": "12",
+    "arabic": "سُبْحَانَ اللَّهِ وَالْحَمْدُ لِلَّهِ وَلَا إِلَهَ إِلَّا اللَّهُ وَاللَّهُ أَكْبَرُ وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
+    "transliteration": "Subḥān Allāh, wal-ḥamdu lillāh, wa lā ilāha illa Allāh, wa Allāhu akbar wa lā ḥawla wa lā quwwata illā billāh",
+    "swedishMeaning": "De mest omfattande och belönade minnesorden.",
+    "arabicMeaning": "من أجمع الأذكار وأعظمها أجراً.",
+    "hadithAr": "قال ﷺ: «الْبَاقِيَاتُ الصَّالِحَاتُ: سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَلَا إِلَهَ إِلَّا اللَّهُ، وَاللَّهُ أَكْبَرُ».",
+    "hadithSv": "",
+    "source": "صححه الألباني."
+  },
+  {
+    "id": "13",
+    "arabic": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ",
+    "transliteration": "Subḥān Allāhi wa biḥamdih, Subḥān Allāh al-‘Aẓīm",
+    "swedishMeaning": "Två lätta ord på tungan men mycket tunga i vågen.",
+    "arabicMeaning": "من أعظم الأذكار وأثقلها في الميزان.",
+    "hadithAr": "قال ﷺ: «كَلِمَتانِ خَفيفَتانِ على اللِّسانِ، ثَقيلَتانِ في الميزانِ، حَبيبَتانِ إلى الرَّحمَنِ: سُبحانَ اللهِ وبحَمدِه، سُبحانَ اللهِ العَظيمِ.».",
+    "hadithSv": "",
+    "source": "Bukhari & Muslim"
+  },
+  {
+    "id": "14",
+    "arabic": "أَفْضَلُ الذِّكْرِ بَعْدَ الصَّلَوَات",
+    "transliteration": "",
+    "swedishMeaning": "",
+    "arabicMeaning": "",
+    "hadithAr": "الذكر: سبحان الله 33 مرة. الحمد لله 33 مرة. الله أكبر 33 مرة. ثم: لا إله إلا الله وحده لا شريك له...",
+    "hadithSv": "Dhikr efter bönen: Subḥān Allāh (33 gånger) Al-ḥamdu lillāh (33 gånger) Allāhu akbar (33 gånger) sedan: Lā ilāha illa Allāh waḥdahu lā sharīka lah...",
+    "source": "Muslim"
+  }
+]
