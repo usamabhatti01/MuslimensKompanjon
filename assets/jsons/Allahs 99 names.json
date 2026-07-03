@@ -1,794 +1,893 @@
 [
   {
-    "Nr": 1,
-    "Arabiska": "الله",
+    "Number": 1,
+    "Arabic": "الله",
     "Transliteration": "Allah",
-    "Svensk översättning": "Gud",
-    "Förklaring (svenska)": "Det största namnet som omfattar alla fullkomliga egenskaper.",
-    "الشرح بالعربية": "الاسم الأعظم الجامع لجميع صفات الكمال."
+    "Swedish Translation": "Gud",
+    "Swedish Explanation": "Det största namnet som omfattar alla fullkomliga egenskaper.",
+    "English Explanation": "The greatest name encompassing all perfect attributes.",
+    "Arabic Explanation": "الاسم الأعظم الجامع لجميع صفات الكمال."
   },
   {
-    "Nr": 2,
-    "Arabiska": "الرحمن",
+    "Number": 2,
+    "Arabic": "الرحمن",
     "Transliteration": "Ar-Rahman",
-    "Svensk översättning": "Den Oändligt Barmhärtige",
-    "Förklaring (svenska)": "Visar barmhärtighet mot hela skapelsen.",
-    "الشرح بالعربية": "واسع الرحمة بجميع الخلق."
+    "Swedish Translation": "Den Oändligt Barmhärtige",
+    "Swedish Explanation": "Visar barmhärtighet mot hela skapelsen.",
+    "English Explanation": "Shows mercy to all creation.",
+    "Arabic Explanation": "واسع الرحمة بجميع الخلق."
   },
   {
-    "Nr": 3,
-    "Arabiska": "الرحيم",
+    "Number": 3,
+    "Arabic": "الرحيم",
     "Transliteration": "Ar-Rahim",
-    "Svensk översättning": "Den Särskilt Barmhärtige",
-    "Förklaring (svenska)": "Visar särskild barmhärtighet mot de troende.",
-    "الشرح بالعربية": "كثير الرحمة بالمؤمنين."
+    "Swedish Translation": "Den Särskilt Barmhärtige",
+    "Swedish Explanation": "Visar särskild barmhärtighet mot de troende.",
+    "English Explanation": "Visar särskild barmhärtighet mot de troende.",
+    "Arabic Explanation": "كثير الرحمة بالمؤمنين."
   },
   {
-    "Nr": 4,
-    "Arabiska": "الملك",
+    "Number": 4,
+    "Arabic": "الملك",
     "Transliteration": "Al-Malik",
-    "Svensk översättning": "Konungen",
-    "Förklaring (svenska)": "Härskaren över hela skapelsen.",
-    "الشرح بالعربية": "المتصرف في الكون كله."
+    "Swedish Translation": "Konungen",
+    "Swedish Explanation": "Härskaren över hela skapelsen.",
+    "English Explanation": "Härskaren över hela skapelsen.",
+    "Arabic Explanation": "المتصرف في الكون كله."
   },
   {
-    "Nr": 5,
-    "Arabiska": "القدوس",
+    "Number": 5,
+    "Arabic": "القدوس",
     "Transliteration": "Al-Quddus",
-    "Svensk översättning": "Den Helige",
-    "Förklaring (svenska)": "Fullkomligt fri från alla brister.",
-    "الشرح بالعربية": "المنزه عن كل نقص وعيب."
+    "Swedish Translation": "Den Helige",
+    "Swedish Explanation": "Fullkomligt fri från alla brister.",
+    "English Explanation": "Fullkomligt fri från alla brister.",
+    "Arabic Explanation": "المنزه عن كل نقص وعيب."
   },
   {
-    "Nr": 6,
-    "Arabiska": "السلام",
+    "Number": 6,
+    "Arabic": "السلام",
     "Transliteration": "As-Salam",
-    "Svensk översättning": "Fridens Källa",
-    "Förklaring (svenska)": "Källan till frid och trygghet.",
-    "الشرح بالعربية": "السالم من كل نقص ومانح السلام."
+    "Swedish Translation": "Fridens Källa",
+    "Swedish Explanation": "Källan till frid och trygghet.",
+    "English Explanation": "Källan till frid och trygghet.",
+    "Arabic Explanation": "السالم من كل نقص ومانح السلام."
   },
   {
-    "Nr": 7,
-    "Arabiska": "المؤمن",
+    "Number": 7,
+    "Arabic": "المؤمن",
     "Transliteration": "Al-Mumin",
-    "Svensk översättning": "Den Trygghetsskapande",
-    "Förklaring (svenska)": "Ger trygghet och skydd.",
-    "الشرح بالعربية": "المؤمن لعباده من الخوف والظلم."
+    "Swedish Translation": "Den Trygghetsskapande",
+    "Swedish Explanation": "Ger trygghet och skydd.",
+    "English Explanation": "Ger trygghet och skydd.",
+    "Arabic Explanation": "المؤمن لعباده من الخوف والظلم."
   },
   {
-    "Nr": 8,
-    "Arabiska": "المهيمن",
+    "Number": 8,
+    "Arabic": "المهيمن",
     "Transliteration": "Al-Muhaymin",
-    "Svensk översättning": "Beskyddaren",
-    "Förklaring (svenska)": "Övervakar allt.",
-    "الشرح بالعربية": "الرقيب الشهيد على كل شيء."
+    "Swedish Translation": "Beskyddaren",
+    "Swedish Explanation": "Övervakar allt.",
+    "English Explanation": "Övervakar allt.",
+    "Arabic Explanation": "الرقيب الشهيد على كل شيء."
   },
   {
-    "Nr": 9,
-    "Arabiska": "العزيز",
+    "Number": 9,
+    "Arabic": "العزيز",
     "Transliteration": "Al-Aziz",
-    "Svensk översättning": "Den Allsmäktige",
-    "Förklaring (svenska)": "Ingen kan besegra Honom.",
-    "الشرح بالعربية": "الغالب الذي لا يُقهر."
+    "Swedish Translation": "Den Allsmäktige",
+    "Swedish Explanation": "Ingen kan besegra Honom.",
+    "English Explanation": "Ingen kan besegra Honom.",
+    "Arabic Explanation": "الغالب الذي لا يُقهر."
   },
   {
-    "Nr": 10,
-    "Arabiska": "الجبار",
+    "Number": 10,
+    "Arabic": "الجبار",
     "Transliteration": "Al-Jabbar",
-    "Svensk översättning": "Den Oemotståndlige",
-    "Förklaring (svenska)": "Återupprättar och underkuvar allt.",
-    "الشرح بالعربية": "الذي يجبر الضعيف ويقهر الجبابرة."
+    "Swedish Translation": "Den Oemotståndlige",
+    "Swedish Explanation": "Återupprättar och underkuvar allt.",
+    "English Explanation": "Återupprättar och underkuvar allt.",
+    "Arabic Explanation": "الذي يجبر الضعيف ويقهر الجبابرة."
   },
   {
-    "Nr": 11,
-    "Arabiska": "المتكبر",
+    "Number": 11,
+    "Arabic": "المتكبر",
     "Transliteration": "Al-Mutakabbir",
-    "Svensk översättning": "Den Majestätiske",
-    "Förklaring (svenska)": "Ensam värdig all storhet.",
-    "الشرح بالعربية": "المتعالي عن صفات الخلق."
+    "Swedish Translation": "Den Majestätiske",
+    "Swedish Explanation": "Ensam värdig all storhet.",
+    "English Explanation": "Ensam värdig all storhet.",
+    "Arabic Explanation": "المتعالي عن صفات الخلق."
   },
   {
-    "Nr": 12,
-    "Arabiska": "الخالق",
+    "Number": 12,
+    "Arabic": "الخالق",
     "Transliteration": "Al-Khaliq",
-    "Svensk översättning": "Skaparen",
-    "Förklaring (svenska)": "Skapar allt från intet.",
-    "الشرح بالعربية": "الموجد للأشياء من العدم."
+    "Swedish Translation": "Skaparen",
+    "Swedish Explanation": "Skapar allt från intet.",
+    "English Explanation": "Skapar allt från intet.",
+    "Arabic Explanation": "الموجد للأشياء من العدم."
   },
   {
-    "Nr": 13,
-    "Arabiska": "البارئ",
+    "Number": 13,
+    "Arabic": "البارئ",
     "Transliteration": "Al-Bari",
-    "Svensk översättning": "Frambringaren",
-    "Förklaring (svenska)": "Frambringar skapelsen.",
-    "الشرح بالعربية": "الذي أوجد الخلق وأحسن ترتيبهم."
+    "Swedish Translation": "Frambringaren",
+    "Swedish Explanation": "Frambringar skapelsen.",
+    "English Explanation": "Frambringar skapelsen.",
+    "Arabic Explanation": "الذي أوجد الخلق وأحسن ترتيبهم."
   },
   {
-    "Nr": 14,
-    "Arabiska": "المصور",
+    "Number": 14,
+    "Arabic": "المصور",
     "Transliteration": "Al-Musawwir",
-    "Svensk översättning": "Formgivaren",
-    "Förklaring (svenska)": "Ger skapelsen dess form.",
-    "الشرح بالعربية": "الذي أعطى كل مخلوق صورته."
+    "Swedish Translation": "Formgivaren",
+    "Swedish Explanation": "Ger skapelsen dess form.",
+    "English Explanation": "Ger skapelsen dess form.",
+    "Arabic Explanation": "الذي أعطى كل مخلوق صورته."
   },
   {
-    "Nr": 15,
-    "Arabiska": "الغفار",
+    "Number": 15,
+    "Arabic": "الغفار",
     "Transliteration": "Al-Ghaffar",
-    "Svensk översättning": "Den Ständigt Förlåtande",
-    "Förklaring (svenska)": "Förlåter gång på gång.",
-    "الشرح بالعربية": "كثير المغفرة لعباده."
+    "Swedish Translation": "Den Ständigt Förlåtande",
+    "Swedish Explanation": "Förlåter gång på gång.",
+    "English Explanation": "Förlåter gång på gång.",
+    "Arabic Explanation": "كثير المغفرة لعباده."
   },
   {
-    "Nr": 16,
-    "Arabiska": "القهار",
+    "Number": 16,
+    "Arabic": "القهار",
     "Transliteration": "Al-Qahhar",
-    "Svensk översättning": "Den Allövervinnande",
-    "Förklaring (svenska)": "Har makt över allt.",
-    "الشرح بالعربية": "الغالب لكل شيء."
+    "Swedish Translation": "Den Allövervinnande",
+    "Swedish Explanation": "Har makt över allt.",
+    "English Explanation": "Har makt över allt.",
+    "Arabic Explanation": "الغالب لكل شيء."
   },
   {
-    "Nr": 17,
-    "Arabiska": "الوهاب",
+    "Number": 17,
+    "Arabic": "الوهاب",
     "Transliteration": "Al-Wahhab",
-    "Svensk översättning": "Den Frikostige Givaren",
-    "Förklaring (svenska)": "Ger utan motprestation.",
-    "الشرح بالعربية": "كثير العطاء بلا مقابل."
+    "Swedish Translation": "Den Frikostige Givaren",
+    "Swedish Explanation": "Ger utan motprestation.",
+    "English Explanation": "Ger utan motprestation.",
+    "Arabic Explanation": "كثير العطاء بلا مقابل."
   },
   {
-    "Nr": 18,
-    "Arabiska": "الرزاق",
+    "Number": 18,
+    "Arabic": "الرزاق",
     "Transliteration": "Ar-Razzaq",
-    "Svensk översättning": "Försörjaren",
-    "Förklaring (svenska)": "Ger all försörjning.",
-    "الشرح بالعربية": "المتكفل بأرزاق الخلق."
+    "Swedish Translation": "Försörjaren",
+    "Swedish Explanation": "Ger all försörjning.",
+    "English Explanation": "Ger all försörjning.",
+    "Arabic Explanation": "المتكفل بأرزاق الخلق."
   },
   {
-    "Nr": 19,
-    "Arabiska": "الفتاح",
+    "Number": 19,
+    "Arabic": "الفتاح",
     "Transliteration": "Al-Fattah",
-    "Svensk översättning": "Öppnaren",
-    "Förklaring (svenska)": "Öppnar vägar till gott.",
-    "الشرح بالعربية": "الذي يفتح أبواب الخير."
+    "Swedish Translation": "Öppnaren",
+    "Swedish Explanation": "Öppnar vägar till gott.",
+    "English Explanation": "Öppnar vägar till gott.",
+    "Arabic Explanation": "الذي يفتح أبواب الخير."
   },
   {
-    "Nr": 20,
-    "Arabiska": "العليم",
+    "Number": 20,
+    "Arabic": "العليم",
     "Transliteration": "Al-Alim",
-    "Svensk översättning": "Den Allvetande",
-    "Förklaring (svenska)": "Vet allt.",
-    "الشرح بالعربية": "الذي أحاط بكل شيء علماً."
+    "Swedish Translation": "Den Allvetande",
+    "Swedish Explanation": "Vet allt.",
+    "English Explanation": "Vet allt.",
+    "Arabic Explanation": "الذي أحاط بكل شيء علماً."
   },
   {
-    "Nr": 21,
-    "Arabiska": "القابض",
+    "Number": 21,
+    "Arabic": "القابض",
     "Transliteration": "Al-Qabid",
-    "Svensk översättning": "Den Som Håller Tillbaka",
-    "Förklaring (svenska)": "Begränsar enligt Sin visdom.",
-    "الشرح بالعربية": "الذي يقبض بحكمته."
+    "Swedish Translation": "Den Som Håller Tillbaka",
+    "Swedish Explanation": "Begränsar enligt Sin visdom.",
+    "English Explanation": "Begränsar enligt Sin visdom.",
+    "Arabic Explanation": "الذي يقبض بحكمته."
   },
   {
-    "Nr": 22,
-    "Arabiska": "الباسط",
+    "Number": 22,
+    "Arabic": "الباسط",
     "Transliteration": "Al-Basit",
-    "Svensk översättning": "Den Som Ger I Överflöd",
-    "Förklaring (svenska)": "Utvidgar nåd och försörjning.",
-    "الشرح بالعربية": "الذي يوسع الرزق والرحمة."
+    "Swedish Translation": "Den Som Ger I Överflöd",
+    "Swedish Explanation": "Utvidgar nåd och försörjning.",
+    "English Explanation": "Utvidgar nåd och försörjning.",
+    "Arabic Explanation": "الذي يوسع الرزق والرحمة."
   },
   {
-    "Nr": 23,
-    "Arabiska": "الخافض",
+    "Number": 23,
+    "Arabic": "الخافض",
     "Transliteration": "Al-Khafid",
-    "Svensk översättning": "Den Som Sänker",
-    "Förklaring (svenska)": "Sänker vem Han vill.",
-    "الشرح بالعربية": "الذي يخفض من يشاء بعدله."
+    "Swedish Translation": "Den Som Sänker",
+    "Swedish Explanation": "Sänker vem Han vill.",
+    "English Explanation": "Sänker vem Han vill.",
+    "Arabic Explanation": "الذي يخفض من يشاء بعدله."
   },
   {
-    "Nr": 24,
-    "Arabiska": "الرافع",
+    "Number": 24,
+    "Arabic": "الرافع",
     "Transliteration": "Ar-Rafi",
-    "Svensk översättning": "Den Som Upphöjer",
-    "Förklaring (svenska)": "Upphöjer vem Han vill.",
-    "الشرح بالعربية": "الذي يرفع من يشاء بفضله."
+    "Swedish Translation": "Den Som Upphöjer",
+    "Swedish Explanation": "Upphöjer vem Han vill.",
+    "English Explanation": "Upphöjer vem Han vill.",
+    "Arabic Explanation": "الذي يرفع من يشاء بفضله."
   },
   {
-    "Nr": 25,
-    "Arabiska": "المعز",
+    "Number": 25,
+    "Arabic": "المعز",
     "Transliteration": "Al-Muizz",
-    "Svensk översättning": "Den Som Ger Ära",
-    "Förklaring (svenska)": "Skänker ära.",
-    "الشرح بالعربية": "الذي يمنح العزة لمن يشاء."
+    "Swedish Translation": "Den Som Ger Ära",
+    "Swedish Explanation": "Skänker ära.",
+    "English Explanation": "Skänker ära.",
+    "Arabic Explanation": "الذي يمنح العزة لمن يشاء."
   },
   {
-    "Nr": 26,
-    "Arabiska": "المذل",
+    "Number": 26,
+    "Arabic": "المذل",
     "Transliteration": "Al-Mudhill",
-    "Svensk översättning": "Den Som Förödmjukar",
-    "Förklaring (svenska)": "Förödmjukar vem Han vill.",
-    "الشرح بالعربية": "الذي يذل من يشاء بحكمته."
+    "Swedish Translation": "Den Som Förödmjukar",
+    "Swedish Explanation": "Förödmjukar vem Han vill.",
+    "English Explanation": "Förödmjukar vem Han vill.",
+    "Arabic Explanation": "الذي يذل من يشاء بحكمته."
   },
   {
-    "Nr": 27,
-    "Arabiska": "السميع",
+    "Number": 27,
+    "Arabic": "السميع",
     "Transliteration": "As-Sami",
-    "Svensk översättning": "Den Allhörande",
-    "Förklaring (svenska)": "Hör allt.",
-    "الشرح بالعربية": "الذي يسمع كل الأصوات."
+    "Swedish Translation": "Den Allhörande",
+    "Swedish Explanation": "Hör allt.",
+    "English Explanation": "Hör allt.",
+    "Arabic Explanation": "الذي يسمع كل الأصوات."
   },
   {
-    "Nr": 28,
-    "Arabiska": "البصير",
+    "Number": 28,
+    "Arabic": "البصير",
     "Transliteration": "Al-Basir",
-    "Svensk översättning": "Den Allseende",
-    "Förklaring (svenska)": "Ser allt.",
-    "الشرح بالعربية": "الذي يرى كل شيء."
+    "Swedish Translation": "Den Allseende",
+    "Swedish Explanation": "Ser allt.",
+    "English Explanation": "Ser allt.",
+    "Arabic Explanation": "الذي يرى كل شيء."
   },
   {
-    "Nr": 29,
-    "Arabiska": "الحكم",
+    "Number": 29,
+    "Arabic": "الحكم",
     "Transliteration": "Al-Hakam",
-    "Svensk översättning": "Domaren",
-    "Förklaring (svenska)": "Dömer rättvist.",
-    "الشرح بالعربية": "الذي يفصل بين الخلق بالحق."
+    "Swedish Translation": "Domaren",
+    "Swedish Explanation": "Dömer rättvist.",
+    "English Explanation": "Dömer rättvist.",
+    "Arabic Explanation": "الذي يفصل بين الخلق بالحق."
   },
   {
-    "Nr": 30,
-    "Arabiska": "العدل",
+    "Number": 30,
+    "Arabic": "العدل",
     "Transliteration": "Al-Adl",
-    "Svensk översättning": "Den Rättvise",
-    "Förklaring (svenska)": "Orättfärdigar ingen.",
-    "الشرح بالعربية": "الذي لا يظلم أحداً."
+    "Swedish Translation": "Den Rättvise",
+    "Swedish Explanation": "Orättfärdigar ingen.",
+    "English Explanation": "Orättfärdigar ingen.",
+    "Arabic Explanation": "الذي لا يظلم أحداً."
   },
   {
-    "Nr": 31,
-    "Arabiska": "اللطيف",
+    "Number": 31,
+    "Arabic": "اللطيف",
     "Transliteration": "Al-Latif",
-    "Svensk översättning": "Den Subtile",
-    "Förklaring (svenska)": "Omsorgsfull på dolda sätt.",
-    "الشرح بالعربية": "البر بعباده من حيث لا يشعرون."
+    "Swedish Translation": "Den Subtile",
+    "Swedish Explanation": "Omsorgsfull på dolda sätt.",
+    "English Explanation": "Omsorgsfull på dolda sätt.",
+    "Arabic Explanation": "البر بعباده من حيث لا يشعرون."
   },
   {
-    "Nr": 32,
-    "Arabiska": "الخبير",
+    "Number": 32,
+    "Arabic": "الخبير",
     "Transliteration": "Al-Khabir",
-    "Svensk översättning": "Den Välinformerade",
-    "Förklaring (svenska)": "Känner allt i detalj.",
-    "الشرح بالعربية": "العالم بدقائق الأمور."
+    "Swedish Translation": "Den Välinformerade",
+    "Swedish Explanation": "Känner allt i detalj.",
+    "English Explanation": "Känner allt i detalj.",
+    "Arabic Explanation": "العالم بدقائق الأمور."
   },
   {
-    "Nr": 33,
-    "Arabiska": "الحليم",
+    "Number": 33,
+    "Arabic": "الحليم",
     "Transliteration": "Al-Halim",
-    "Svensk översättning": "Den Tålmodige",
-    "Förklaring (svenska)": "Skyndar inte med straff.",
-    "الشرح بالعربية": "الذي لا يعاجل بالعقوبة."
+    "Swedish Translation": "Den Tålmodige",
+    "Swedish Explanation": "Skyndar inte med straff.",
+    "English Explanation": "Skyndar inte med straff.",
+    "Arabic Explanation": "الذي لا يعاجل بالعقوبة."
   },
   {
-    "Nr": 34,
-    "Arabiska": "العظيم",
+    "Number": 34,
+    "Arabic": "العظيم",
     "Transliteration": "Al-Azim",
-    "Svensk översättning": "Den Väldige",
-    "Förklaring (svenska)": "Oändlig i storhet.",
-    "الشرح بالعربية": "المتصف بالعظمة المطلقة."
+    "Swedish Translation": "Den Väldige",
+    "Swedish Explanation": "Oändlig i storhet.",
+    "English Explanation": "Oändlig i storhet.",
+    "Arabic Explanation": "المتصف بالعظمة المطلقة."
   },
   {
-    "Nr": 35,
-    "Arabiska": "الغفور",
+    "Number": 35,
+    "Arabic": "الغفور",
     "Transliteration": "Al-Ghafur",
-    "Svensk översättning": "Den Förlåtande",
-    "Förklaring (svenska)": "Förlåter stora synder.",
-    "الشرح بالعربية": "كثير المغفرة والستر."
+    "Swedish Translation": "Den Förlåtande",
+    "Swedish Explanation": "Förlåter stora synder.",
+    "English Explanation": "Förlåter stora synder.",
+    "Arabic Explanation": "كثير المغفرة والستر."
   },
   {
-    "Nr": 36,
-    "Arabiska": "الشكور",
+    "Number": 36,
+    "Arabic": "الشكور",
     "Transliteration": "Ash-Shakur",
-    "Svensk översättning": "Den Tacksamme",
-    "Förklaring (svenska)": "Belönar rikligt.",
-    "الشرح بالعربية": "الذي يثيب على العمل القليل."
+    "Swedish Translation": "Den Tacksamme",
+    "Swedish Explanation": "Belönar rikligt.",
+    "English Explanation": "Belönar rikligt.",
+    "Arabic Explanation": "الذي يثيب على العمل القليل."
   },
   {
-    "Nr": 37,
-    "Arabiska": "العلي",
+    "Number": 37,
+    "Arabic": "العلي",
     "Transliteration": "Al-Aliyy",
-    "Svensk översättning": "Den Upphöjde",
-    "Förklaring (svenska)": "Hög över skapelsen.",
-    "الشرح بالعربية": "المرتفع فوق خلقه."
+    "Swedish Translation": "Den Upphöjde",
+    "Swedish Explanation": "Hög över skapelsen.",
+    "English Explanation": "Hög över skapelsen.",
+    "Arabic Explanation": "المرتفع فوق خلقه."
   },
   {
-    "Nr": 38,
-    "Arabiska": "الكبير",
+    "Number": 38,
+    "Arabic": "الكبير",
     "Transliteration": "Al-Kabir",
-    "Svensk översättning": "Den Store",
-    "Förklaring (svenska)": "Allt är mindre än Honom.",
-    "الشرح بالعربية": "العظيم الذي كل شيء دونه."
+    "Swedish Translation": "Den Store",
+    "Swedish Explanation": "Allt är mindre än Honom.",
+    "English Explanation": "Allt är mindre än Honom.",
+    "Arabic Explanation": "العظيم الذي كل شيء دونه."
   },
   {
-    "Nr": 39,
-    "Arabiska": "الحفيظ",
+    "Number": 39,
+    "Arabic": "الحفيظ",
     "Transliteration": "Al-Hafiz",
-    "Svensk översättning": "Bevararen",
-    "Förklaring (svenska)": "Skyddar och bevarar allt.",
-    "الشرح بالعربية": "الحافظ لكل شيء."
+    "Swedish Translation": "Bevararen",
+    "Swedish Explanation": "Skyddar och bevarar allt.",
+    "English Explanation": "Skyddar och bevarar allt.",
+    "Arabic Explanation": "الحافظ لكل شيء."
   },
   {
-    "Nr": 40,
-    "Arabiska": "المقيت",
+    "Number": 40,
+    "Arabic": "المقيت",
     "Transliteration": "Al-Muqit",
-    "Svensk översättning": "Försörjaren",
-    "Förklaring (svenska)": "Ger näring och uppehälle.",
-    "الشرح بالعربية": "الموصل الأقوات والأرزاق للخلق."
+    "Swedish Translation": "Försörjaren",
+    "Swedish Explanation": "Ger näring och uppehälle.",
+    "English Explanation": "Ger näring och uppehälle.",
+    "Arabic Explanation": "الموصل الأقوات والأرزاق للخلق."
   },
   {
-    "Nr": 41,
-    "Arabiska": "الحسيب",
+    "Number": 41,
+    "Arabic": "الحسيب",
     "Transliteration": "Al-Hasib",
-    "Svensk översättning": "Den Tillräcklige",
-    "Förklaring (svenska)": "Räcker till för alla behov.",
-    "الشرح بالعربية": "الكافي والمحاسب لعباده."
+    "Swedish Translation": "Den Tillräcklige",
+    "Swedish Explanation": "Räcker till för alla behov.",
+    "English Explanation": "Räcker till för alla behov.",
+    "Arabic Explanation": "الكافي والمحاسب لعباده."
   },
   {
-    "Nr": 42,
-    "Arabiska": "الجليل",
+    "Number": 42,
+    "Arabic": "الجليل",
     "Transliteration": "Al-Jalil",
-    "Svensk översättning": "Den Majestätiske",
-    "Förklaring (svenska)": "Ägare av majestät.",
-    "الشرح بالعربية": "المتصف بالجلال والعظمة."
+    "Swedish Translation": "Den Majestätiske",
+    "Swedish Explanation": "Ägare av majestät.",
+    "English Explanation": "Ägare av majestät.",
+    "Arabic Explanation": "المتصف بالجلال والعظمة."
   },
   {
-    "Nr": 43,
-    "Arabiska": "الكريم",
+    "Number": 43,
+    "Arabic": "الكريم",
     "Transliteration": "Al-Karim",
-    "Svensk översättning": "Den Generöse",
-    "Förklaring (svenska)": "Ger rikligt av Sin nåd.",
-    "الشرح بالعربية": "كثير الخير والعطاء."
+    "Swedish Translation": "Den Generöse",
+    "Swedish Explanation": "Ger rikligt av Sin nåd.",
+    "English Explanation": "Ger rikligt av Sin nåd.",
+    "Arabic Explanation": "كثير الخير والعطاء."
   },
   {
-    "Nr": 44,
-    "Arabiska": "الرقيب",
+    "Number": 44,
+    "Arabic": "الرقيب",
     "Transliteration": "Ar-Raqib",
-    "Svensk översättning": "Väktaren",
-    "Förklaring (svenska)": "Övervakar allt.",
-    "الشرح بالعربية": "المطلع على أحوال العباد."
+    "Swedish Translation": "Väktaren",
+    "Swedish Explanation": "Övervakar allt.",
+    "English Explanation": "Övervakar allt.",
+    "Arabic Explanation": "المطلع على أحوال العباد."
   },
   {
-    "Nr": 45,
-    "Arabiska": "المجيب",
+    "Number": 45,
+    "Arabic": "المجيب",
     "Transliteration": "Al-Mujib",
-    "Svensk översättning": "Den Svarande",
-    "Förklaring (svenska)": "Besvarar böner.",
-    "الشرح بالعربية": "الذي يجيب دعاء الداعين."
+    "Swedish Translation": "Den Svarande",
+    "Swedish Explanation": "Besvarar böner.",
+    "English Explanation": "Besvarar böner.",
+    "Arabic Explanation": "الذي يجيب دعاء الداعين."
   },
   {
-    "Nr": 46,
-    "Arabiska": "الواسع",
+    "Number": 46,
+    "Arabic": "الواسع",
     "Transliteration": "Al-Wasi",
-    "Svensk översättning": "Den Oändlige",
-    "Förklaring (svenska)": "Oändlig i kunskap och nåd.",
-    "الشرح بالعربية": "واسع الفضل والعلم والرحمة."
+    "Swedish Translation": "Den Oändlige",
+    "Swedish Explanation": "Oändlig i kunskap och nåd.",
+    "English Explanation": "Oändlig i kunskap och nåd.",
+    "Arabic Explanation": "واسع الفضل والعلم والرحمة."
   },
   {
-    "Nr": 47,
-    "Arabiska": "الحكيم",
+    "Number": 47,
+    "Arabic": "الحكيم",
     "Transliteration": "Al-Hakim",
-    "Svensk översättning": "Den Vise",
-    "Förklaring (svenska)": "Allt Han gör är vist.",
-    "الشرح بالعربية": "الذي يضع الأشياء في مواضعها."
+    "Swedish Translation": "Den Vise",
+    "Swedish Explanation": "Allt Han gör är vist.",
+    "English Explanation": "Allt Han gör är vist.",
+    "Arabic Explanation": "الذي يضع الأشياء في مواضعها."
   },
   {
-    "Nr": 48,
-    "Arabiska": "الودود",
+    "Number": 48,
+    "Arabic": "الودود",
     "Transliteration": "Al-Wadud",
-    "Svensk översättning": "Den Kärleksfulle",
-    "Förklaring (svenska)": "Älskar Sina tjänare.",
-    "الشرح بالعربية": "المحب لأوليائه."
+    "Swedish Translation": "Den Kärleksfulle",
+    "Swedish Explanation": "Älskar Sina tjänare.",
+    "English Explanation": "Älskar Sina tjänare.",
+    "Arabic Explanation": "المحب لأوليائه."
   },
   {
-    "Nr": 49,
-    "Arabiska": "المجيد",
+    "Number": 49,
+    "Arabic": "المجيد",
     "Transliteration": "Al-Majid",
-    "Svensk översättning": "Den Ärorike",
-    "Förklaring (svenska)": "Full av ära.",
-    "الشرح بالعربية": "العظيم كثير المجد."
+    "Swedish Translation": "Den Ärorike",
+    "Swedish Explanation": "Full av ära.",
+    "English Explanation": "Full av ära.",
+    "Arabic Explanation": "العظيم كثير المجد."
   },
   {
-    "Nr": 50,
-    "Arabiska": "الباعث",
+    "Number": 50,
+    "Arabic": "الباعث",
     "Transliteration": "Al-Baith",
-    "Svensk översättning": "Uppväckaren",
-    "Förklaring (svenska)": "Återuppväcker de döda.",
-    "الشرح بالعربية": "الذي يبعث الخلق بعد الموت."
+    "Swedish Translation": "Uppväckaren",
+    "Swedish Explanation": "Återuppväcker de döda.",
+    "English Explanation": "Återuppväcker de döda.",
+    "Arabic Explanation": "الذي يبعث الخلق بعد الموت."
   },
   {
-    "Nr": 51,
-    "Arabiska": "الشهيد",
+    "Number": 51,
+    "Arabic": "الشهيد",
     "Transliteration": "Ash-Shahid",
-    "Svensk översättning": "Vittnet",
-    "Förklaring (svenska)": "Bevittnar allt.",
-    "الشرح بالعربية": "الذي لا يغيب عنه شيء."
+    "Swedish Translation": "Vittnet",
+    "Swedish Explanation": "Bevittnar allt.",
+    "English Explanation": "Bevittnar allt.",
+    "Arabic Explanation": "الذي لا يغيب عنه شيء."
   },
   {
-    "Nr": 52,
-    "Arabiska": "الحق",
+    "Number": 52,
+    "Arabic": "الحق",
     "Transliteration": "Al-Haqq",
-    "Svensk översättning": "Sanningen",
-    "Förklaring (svenska)": "Den sanna verkligheten.",
-    "الشرح بالعربية": "الثابت الذي لا شك فيه."
+    "Swedish Translation": "Sanningen",
+    "Swedish Explanation": "Den sanna verkligheten.",
+    "English Explanation": "Den sanna verkligheten.",
+    "Arabic Explanation": "الثابت الذي لا شك فيه."
   },
   {
-    "Nr": 53,
-    "Arabiska": "الوكيل",
+    "Number": 53,
+    "Arabic": "الوكيل",
     "Transliteration": "Al-Wakil",
-    "Svensk översättning": "Förvaltaren",
-    "Förklaring (svenska)": "Den bästa att förlita sig på.",
-    "الشرح بالعربية": "الكافي لمن توكل عليه."
+    "Swedish Translation": "Förvaltaren",
+    "Swedish Explanation": "Den bästa att förlita sig på.",
+    "English Explanation": "Den bästa att förlita sig på.",
+    "Arabic Explanation": "الكافي لمن توكل عليه."
   },
   {
-    "Nr": 54,
-    "Arabiska": "القوي",
+    "Number": 54,
+    "Arabic": "القوي",
     "Transliteration": "Al-Qawiyy",
-    "Svensk översättning": "Den Starke",
-    "Förklaring (svenska)": "Fullkomlig styrka.",
-    "الشرح بالعربية": "كامل القوة والقدرة."
+    "Swedish Translation": "Den Starke",
+    "Swedish Explanation": "Fullkomlig styrka.",
+    "English Explanation": "Fullkomlig styrka.",
+    "Arabic Explanation": "كامل القوة والقدرة."
   },
   {
-    "Nr": 55,
-    "Arabiska": "المتين",
+    "Number": 55,
+    "Arabic": "المتين",
     "Transliteration": "Al-Matin",
-    "Svensk översättning": "Den Orubbligt Mäktige",
-    "Förklaring (svenska)": "Hans styrka avtar aldrig.",
-    "الشرح بالعربية": "شديد القوة الذي لا يضعف."
+    "Swedish Translation": "Den Orubbligt Mäktige",
+    "Swedish Explanation": "Hans styrka avtar aldrig.",
+    "English Explanation": "Hans styrka avtar aldrig.",
+    "Arabic Explanation": "شديد القوة الذي لا يضعف."
   },
   {
-    "Nr": 56,
-    "Arabiska": "الولي",
+    "Number": 56,
+    "Arabic": "الولي",
     "Transliteration": "Al-Wali",
-    "Svensk översättning": "Beskyddaren",
-    "Förklaring (svenska)": "De troendes beskyddare.",
-    "الشرح بالعربية": "الناصر والمتولي لعباده المؤمنين."
+    "Swedish Translation": "Beskyddaren",
+    "Swedish Explanation": "De troendes beskyddare.",
+    "English Explanation": "De troendes beskyddare.",
+    "Arabic Explanation": "الناصر والمتولي لعباده المؤمنين."
   },
   {
-    "Nr": 57,
-    "Arabiska": "الحميد",
+    "Number": 57,
+    "Arabic": "الحميد",
     "Transliteration": "Al-Hamid",
-    "Svensk översättning": "Den Lovprisade",
-    "Förklaring (svenska)": "Förtjänar all lovprisning.",
-    "الشرح بالعربية": "المستحق للحمد كله."
+    "Swedish Translation": "Den Lovprisade",
+    "Swedish Explanation": "Förtjänar all lovprisning.",
+    "English Explanation": "Förtjänar all lovprisning.",
+    "Arabic Explanation": "المستحق للحمد كله."
   },
   {
-    "Nr": 58,
-    "Arabiska": "المحصي",
+    "Number": 58,
+    "Arabic": "المحصي",
     "Transliteration": "Al-Muhsi",
-    "Svensk översättning": "Den Som Räknar Allt",
-    "Förklaring (svenska)": "Har räknat allt.",
-    "الشرح بالعربية": "الذي أحصى كل شيء عدداً."
+    "Swedish Translation": "Den Som Räknar Allt",
+    "Swedish Explanation": "Har räknat allt.",
+    "English Explanation": "Har räknat allt.",
+    "Arabic Explanation": "الذي أحصى كل شيء عدداً."
   },
   {
-    "Nr": 59,
-    "Arabiska": "المبدئ",
+    "Number": 59,
+    "Arabic": "المبدئ",
     "Transliteration": "Al-Mubdi",
-    "Svensk översättning": "Upphovsmannen",
-    "Förklaring (svenska)": "Inleder skapelsen.",
-    "الشرح بالعربية": "الذي بدأ الخلق أول مرة."
+    "Swedish Translation": "Upphovsmannen",
+    "Swedish Explanation": "Inleder skapelsen.",
+    "English Explanation": "Inleder skapelsen.",
+    "Arabic Explanation": "الذي بدأ الخلق أول مرة."
   },
   {
-    "Nr": 60,
-    "Arabiska": "المعيد",
+    "Number": 60,
+    "Arabic": "المعيد",
     "Transliteration": "Al-Muid",
-    "Svensk översättning": "Återställaren",
-    "Förklaring (svenska)": "Återför skapelsen.",
-    "الشرح بالعربية": "الذي يعيد الخلق بعد الموت."
+    "Swedish Translation": "Återställaren",
+    "Swedish Explanation": "Återför skapelsen.",
+    "English Explanation": "Återför skapelsen.",
+    "Arabic Explanation": "الذي يعيد الخلق بعد الموت."
   },
   {
-    "Nr": 61,
-    "Arabiska": "المحيي",
+    "Number": 61,
+    "Arabic": "المحيي",
     "Transliteration": "Al-Muhyi",
-    "Svensk översättning": "Livgivaren",
-    "Förklaring (svenska)": "Ger liv.",
-    "الشرح بالعربية": "الذي يهب الحياة."
+    "Swedish Translation": "Livgivaren",
+    "Swedish Explanation": "Ger liv.",
+    "English Explanation": "Ger liv.",
+    "Arabic Explanation": "الذي يهب الحياة."
   },
   {
-    "Nr": 62,
-    "Arabiska": "المميت",
+    "Number": 62,
+    "Arabic": "المميت",
     "Transliteration": "Al-Mumit",
-    "Svensk översättning": "Den Som Ger Döden",
-    "Förklaring (svenska)": "Bestämmer döden.",
-    "الشرح بالعربية": "الذي يقدر الموت على عباده."
+    "Swedish Translation": "Den Som Ger Döden",
+    "Swedish Explanation": "Bestämmer döden.",
+    "English Explanation": "Bestämmer döden.",
+    "Arabic Explanation": "الذي يقدر الموت على عباده."
   },
   {
-    "Nr": 63,
-    "Arabiska": "الحي",
+    "Number": 63,
+    "Arabic": "الحي",
     "Transliteration": "Al-Hayy",
-    "Svensk översättning": "Den Levande",
-    "Förklaring (svenska)": "Evigt levande.",
-    "الشرح بالعربية": "الكامل الحياة الذي لا يموت."
+    "Swedish Translation": "Den Levande",
+    "Swedish Explanation": "Evigt levande.",
+    "English Explanation": "Evigt levande.",
+    "Arabic Explanation": "الكامل الحياة الذي لا يموت."
   },
   {
-    "Nr": 64,
-    "Arabiska": "القيوم",
+    "Number": 64,
+    "Arabic": "القيوم",
     "Transliteration": "Al-Qayyum",
-    "Svensk översättning": "Den Självuppehållande",
-    "Förklaring (svenska)": "Upprätthåller allt.",
-    "الشرح بالعربية": "القائم بنفسه المقيم لغيره."
+    "Swedish Translation": "Den Självuppehållande",
+    "Swedish Explanation": "Upprätthåller allt.",
+    "English Explanation": "Upprätthåller allt.",
+    "Arabic Explanation": "القائم بنفسه المقيم لغيره."
   },
   {
-    "Nr": 65,
-    "Arabiska": "الواجد",
+    "Number": 65,
+    "Arabic": "الواجد",
     "Transliteration": "Al-Wajid",
-    "Svensk översättning": "Den Självförsörjande",
-    "Förklaring (svenska)": "Saknar inget.",
-    "الشرح بالعربية": "الغني الذي لا يفتقر إلى شيء."
+    "Swedish Translation": "Den Självförsörjande",
+    "Swedish Explanation": "Saknar inget.",
+    "English Explanation": "Saknar inget.",
+    "Arabic Explanation": "الغني الذي لا يفتقر إلى شيء."
   },
   {
-    "Nr": 66,
-    "Arabiska": "الماجد",
+    "Number": 66,
+    "Arabic": "الماجد",
     "Transliteration": "Al-Majid",
-    "Svensk översättning": "Den Ädle",
-    "Förklaring (svenska)": "Full av ära och ädelhet.",
-    "الشرح بالعربية": "الكامل في الشرف والعظمة."
+    "Swedish Translation": "Den Ädle",
+    "Swedish Explanation": "Full av ära och ädelhet.",
+    "English Explanation": "Full av ära och ädelhet.",
+    "Arabic Explanation": "الكامل في الشرف والعظمة."
   },
   {
-    "Nr": 67,
-    "Arabiska": "الأحد",
+    "Number": 67,
+    "Arabic": "الأحد",
     "Transliteration": "Al-Ahad",
-    "Svensk översättning": "Den Ende",
-    "Förklaring (svenska)": "Ingen är som Han.",
-    "الشرح بالعربية": "الذي لا شريك له ولا مثيل."
+    "Swedish Translation": "Den Ende",
+    "Swedish Explanation": "Ingen är som Han.",
+    "English Explanation": "Ingen är som Han.",
+    "Arabic Explanation": "الذي لا شريك له ولا مثيل."
   },
   {
-    "Nr": 68,
-    "Arabiska": "الصمد",
+    "Number": 68,
+    "Arabic": "الصمد",
     "Transliteration": "As-Samad",
-    "Svensk översättning": "Den Absoluta Tillflykten",
-    "Förklaring (svenska)": "Alla vänder sig till Honom.",
-    "الشرح بالعربية": "المقصود في الحوائج كلها."
+    "Swedish Translation": "Den Absoluta Tillflykten",
+    "Swedish Explanation": "Alla vänder sig till Honom.",
+    "English Explanation": "Alla vänder sig till Honom.",
+    "Arabic Explanation": "المقصود في الحوائج كلها."
   },
   {
-    "Nr": 69,
-    "Arabiska": "القادر",
+    "Number": 69,
+    "Arabic": "القادر",
     "Transliteration": "Al-Qadir",
-    "Svensk översättning": "Den Allsmäktige",
-    "Förklaring (svenska)": "Har fullkomlig förmåga.",
-    "الشرح بالعربية": "المتصف بالقدرة الكاملة."
+    "Swedish Translation": "Den Allsmäktige",
+    "Swedish Explanation": "Har fullkomlig förmåga.",
+    "English Explanation": "Har fullkomlig förmåga.",
+    "Arabic Explanation": "المتصف بالقدرة الكاملة."
   },
   {
-    "Nr": 70,
-    "Arabiska": "المقتدر",
+    "Number": 70,
+    "Arabic": "المقتدر",
     "Transliteration": "Al-Muqtadir",
-    "Svensk översättning": "Den Fullkomligt Mäktige",
-    "Förklaring (svenska)": "Hans makt är fullständig.",
-    "الشرح بالعربية": "عظيم القدرة والنفوذ."
+    "Swedish Translation": "Den Fullkomligt Mäktige",
+    "Swedish Explanation": "Hans makt är fullständig.",
+    "English Explanation": "Hans makt är fullständig.",
+    "Arabic Explanation": "عظيم القدرة والنفوذ."
   },
   {
-    "Nr": 71,
-    "Arabiska": "المقدم",
+    "Number": 71,
+    "Arabic": "المقدم",
     "Transliteration": "Al-Muqaddim",
-    "Svensk översättning": "Den Som För Fram",
-    "Förklaring (svenska)": "Låter vem Han vill gå före.",
-    "الشرح بالعربية": "الذي يقدم من يشاء."
+    "Swedish Translation": "Den Som För Fram",
+    "Swedish Explanation": "Låter vem Han vill gå före.",
+    "English Explanation": "Låter vem Han vill gå före.",
+    "Arabic Explanation": "الذي يقدم من يشاء."
   },
   {
-    "Nr": 72,
-    "Arabiska": "المؤخر",
+    "Number": 72,
+    "Arabic": "المؤخر",
     "Transliteration": "Al-Muakhkhir",
-    "Svensk översättning": "Den Som Fördröjer",
-    "Förklaring (svenska)": "Låter vem Han vill komma efter.",
-    "الشرح بالعربية": "الذي يؤخر من يشاء."
+    "Swedish Translation": "Den Som Fördröjer",
+    "Swedish Explanation": "Låter vem Han vill komma efter.",
+    "English Explanation": "Låter vem Han vill komma efter.",
+    "Arabic Explanation": "الذي يؤخر من يشاء."
   },
   {
-    "Nr": 73,
-    "Arabiska": "الأول",
+    "Number": 73,
+    "Arabic": "الأول",
     "Transliteration": "Al-Awwal",
-    "Svensk översättning": "Den Förste",
-    "Förklaring (svenska)": "Inget finns före Honom.",
-    "الشرح بالعربية": "الذي ليس قبله شيء."
+    "Swedish Translation": "Den Förste",
+    "Swedish Explanation": "Inget finns före Honom.",
+    "English Explanation": "Inget finns före Honom.",
+    "Arabic Explanation": "الذي ليس قبله شيء."
   },
   {
-    "Nr": 74,
-    "Arabiska": "الآخر",
+    "Number": 74,
+    "Arabic": "الآخر",
     "Transliteration": "Al-Akhir",
-    "Svensk översättning": "Den Siste",
-    "Förklaring (svenska)": "Inget finns efter Honom.",
-    "الشرح بالعربية": "الذي ليس بعده شيء."
+    "Swedish Translation": "Den Siste",
+    "Swedish Explanation": "Inget finns efter Honom.",
+    "English Explanation": "Inget finns efter Honom.",
+    "Arabic Explanation": "الذي ليس بعده شيء."
   },
   {
-    "Nr": 75,
-    "Arabiska": "الظاهر",
+    "Number": 75,
+    "Arabic": "الظاهر",
     "Transliteration": "Az-Zahir",
-    "Svensk översättning": "Den Uppenbare",
-    "Förklaring (svenska)": "Den Högste över skapelsen.",
-    "الشرح بالعربية": "العالي فوق خلقه."
+    "Swedish Translation": "Den Uppenbare",
+    "Swedish Explanation": "Den Högste över skapelsen.",
+    "English Explanation": "Den Högste över skapelsen.",
+    "Arabic Explanation": "العالي فوق خلقه."
   },
   {
-    "Nr": 76,
-    "Arabiska": "الباطن",
+    "Number": 76,
+    "Arabic": "الباطن",
     "Transliteration": "Al-Batin",
-    "Svensk översättning": "Den Fördolda",
-    "Förklaring (svenska)": "Omsluter allt med Sin kunskap.",
-    "الشرح بالعربية": "القريب المحيط بكل شيء علماً."
+    "Swedish Translation": "Den Fördolda",
+    "Swedish Explanation": "Omsluter allt med Sin kunskap.",
+    "English Explanation": "Omsluter allt med Sin kunskap.",
+    "Arabic Explanation": "القريب المحيط بكل شيء علماً."
   },
   {
-    "Nr": 77,
-    "Arabiska": "الوالي",
+    "Number": 77,
+    "Arabic": "الوالي",
     "Transliteration": "Al-Wali",
-    "Svensk översättning": "Styraren",
-    "Förklaring (svenska)": "Styr allt.",
-    "الشرح بالعربية": "المدبر لشؤون خلقه."
+    "Swedish Translation": "Styraren",
+    "Swedish Explanation": "Styr allt.",
+    "English Explanation": "Styr allt.",
+    "Arabic Explanation": "المدبر لشؤون خلقه."
   },
   {
-    "Nr": 78,
-    "Arabiska": "المتعالي",
+    "Number": 78,
+    "Arabic": "المتعالي",
     "Transliteration": "Al-Mutaali",
-    "Svensk översättning": "Den Upphöjde",
-    "Förklaring (svenska)": "Upphöjd över all brist.",
-    "الشرح بالعربية": "المرتفع عن كل نقص."
+    "Swedish Translation": "Den Upphöjde",
+    "Swedish Explanation": "Upphöjd över all brist.",
+    "English Explanation": "Upphöjd över all brist.",
+    "Arabic Explanation": "المرتفع عن كل نقص."
   },
   {
-    "Nr": 79,
-    "Arabiska": "البر",
+    "Number": 79,
+    "Arabic": "البر",
     "Transliteration": "Al-Barr",
-    "Svensk översättning": "Den Godgörande",
-    "Förklaring (svenska)": "Full av godhet.",
-    "الشرح بالعربية": "كثير الإحسان والرحمة."
+    "Swedish Translation": "Den Godgörande",
+    "Swedish Explanation": "Full av godhet.",
+    "English Explanation": "Full av godhet.",
+    "Arabic Explanation": "كثير الإحسان والرحمة."
   },
   {
-    "Nr": 80,
-    "Arabiska": "التواب",
+    "Number": 80,
+    "Arabic": "التواب",
     "Transliteration": "At-Tawwab",
-    "Svensk översättning": "Den Som Tar Emot Ånger",
-    "Förklaring (svenska)": "Tar emot omvändelse.",
-    "الشرح بالعربية": "الذي يقبل توبة عباده."
+    "Swedish Translation": "Den Som Tar Emot Ånger",
+    "Swedish Explanation": "Tar emot omvändelse.",
+    "English Explanation": "Tar emot omvändelse.",
+    "Arabic Explanation": "الذي يقبل توبة عباده."
   },
   {
-    "Nr": 81,
-    "Arabiska": "المنتقم",
+    "Number": 81,
+    "Arabic": "المنتقم",
     "Transliteration": "Al-Muntaqim",
-    "Svensk översättning": "Hämnaren",
-    "Förklaring (svenska)": "Straffar de orättfärdiga.",
-    "الشرح بالعربية": "الذي ينتقم من الظالمين بعدله."
+    "Swedish Translation": "Hämnaren",
+    "Swedish Explanation": "Straffar de orättfärdiga.",
+    "English Explanation": "Straffar de orättfärdiga.",
+    "Arabic Explanation": "الذي ينتقم من الظالمين بعدله."
   },
   {
-    "Nr": 82,
-    "Arabiska": "العفو",
+    "Number": 82,
+    "Arabic": "العفو",
     "Transliteration": "Al-Afuww",
-    "Svensk översättning": "Den Överseende",
-    "Förklaring (svenska)": "Utplånar synder.",
-    "الشرح بالعربية": "الذي يمحو الذنوب ويتجاوز عنها."
+    "Swedish Translation": "Den Överseende",
+    "Swedish Explanation": "Utplånar synder.",
+    "English Explanation": "Utplånar synder.",
+    "Arabic Explanation": "الذي يمحو الذنوب ويتجاوز عنها."
   },
   {
-    "Nr": 83,
-    "Arabiska": "الرؤوف",
+    "Number": 83,
+    "Arabic": "الرؤوف",
     "Transliteration": "Ar-Rauf",
-    "Svensk översättning": "Den Medkännande",
-    "Förklaring (svenska)": "Ytterst barmhärtig.",
-    "الشرح بالعربية": "شديد الرحمة بعباده."
+    "Swedish Translation": "Den Medkännande",
+    "Swedish Explanation": "Ytterst barmhärtig.",
+    "English Explanation": "Ytterst barmhärtig.",
+    "Arabic Explanation": "شديد الرحمة بعباده."
   },
   {
-    "Nr": 84,
-    "Arabiska": "مالك الملك",
+    "Number": 84,
+    "Arabic": "مالك الملك",
     "Transliteration": "Malik-ul-Mulk",
-    "Svensk översättning": "Ägaren av Allt Herravälde",
-    "Förklaring (svenska)": "Äger all makt.",
-    "الشرح بالعربية": "المتصرف في الملك كله."
+    "Swedish Translation": "Ägaren av Allt Herravälde",
+    "Swedish Explanation": "Äger all makt.",
+    "English Explanation": "Äger all makt.",
+    "Arabic Explanation": "المتصرف في الملك كله."
   },
   {
-    "Nr": 85,
-    "Arabiska": "ذو الجلال والإكرام",
+    "Number": 85,
+    "Arabic": "ذو الجلال والإكرام",
     "Transliteration": "Dhul-Jalali wal-Ikram",
-    "Svensk översättning": "Herren av Majestät och Generositet",
-    "Förklaring (svenska)": "Ägare av ära och nåd.",
-    "الشرح بالعربية": "صاحب العظمة والفضل والإحسان."
+    "Swedish Translation": "Herren av Majestät och Generositet",
+    "Swedish Explanation": "Ägare av ära och nåd.",
+    "English Explanation": "Ägare av ära och nåd.",
+    "Arabic Explanation": "صاحب العظمة والفضل والإحسان."
   },
   {
-    "Nr": 86,
-    "Arabiska": "المقسط",
+    "Number": 86,
+    "Arabic": "المقسط",
     "Transliteration": "Al-Muqsit",
-    "Svensk översättning": "Den Rättvise",
-    "Förklaring (svenska)": "Fullkomligt rättvis.",
-    "الشرح بالعربية": "العادل في حكمه وقضائه."
+    "Swedish Translation": "Den Rättvise",
+    "Swedish Explanation": "Fullkomligt rättvis.",
+    "English Explanation": "Fullkomligt rättvis.",
+    "Arabic Explanation": "العادل في حكمه وقضائه."
   },
   {
-    "Nr": 87,
-    "Arabiska": "الجامع",
+    "Number": 87,
+    "Arabic": "الجامع",
     "Transliteration": "Al-Jami",
-    "Svensk översättning": "Samlaren",
-    "Förklaring (svenska)": "Samlar skapelsen.",
-    "الشرح بالعربية": "الذي يجمع الخلق ليوم الحساب."
+    "Swedish Translation": "Samlaren",
+    "Swedish Explanation": "Samlar skapelsen.",
+    "English Explanation": "Samlar skapelsen.",
+    "Arabic Explanation": "الذي يجمع الخلق ليوم الحساب."
   },
   {
-    "Nr": 88,
-    "Arabiska": "الغني",
+    "Number": 88,
+    "Arabic": "الغني",
     "Transliteration": "Al-Ghani",
-    "Svensk översättning": "Den Rike",
-    "Förklaring (svenska)": "Fri från alla behov.",
-    "الشرح بالعربية": "المستغني عن جميع خلقه."
+    "Swedish Translation": "Den Rike",
+    "Swedish Explanation": "Fri från alla behov.",
+    "English Explanation": "Fri från alla behov.",
+    "Arabic Explanation": "المستغني عن جميع خلقه."
   },
   {
-    "Nr": 89,
-    "Arabiska": "المغني",
+    "Number": 89,
+    "Arabic": "المغني",
     "Transliteration": "Al-Mughni",
-    "Svensk översättning": "Den Som Berikar",
-    "Förklaring (svenska)": "Berikar vem Han vill.",
-    "الشرح بالعربية": "الذي يغني من يشاء بفضله."
+    "Swedish Translation": "Den Som Berikar",
+    "Swedish Explanation": "Berikar vem Han vill.",
+    "English Explanation": "Berikar vem Han vill.",
+    "Arabic Explanation": "الذي يغني من يشاء بفضله."
   },
   {
-    "Nr": 90,
-    "Arabiska": "المانع",
+    "Number": 90,
+    "Arabic": "المانع",
     "Transliteration": "Al-Mani",
-    "Svensk översättning": "Den Som Hindrar",
-    "Förklaring (svenska)": "Hindrar enligt Sin visdom.",
-    "الشرح بالعربية": "الذي يمنع ما يشاء بحكمته."
+    "Swedish Translation": "Den Som Hindrar",
+    "Swedish Explanation": "Hindrar enligt Sin visdom.",
+    "English Explanation": "Hindrar enligt Sin visdom.",
+    "Arabic Explanation": "الذي يمنع ما يشاء بحكمته."
   },
   {
-    "Nr": 91,
-    "Arabiska": "الضار",
+    "Number": 91,
+    "Arabic": "الضار",
     "Transliteration": "Ad-Darr",
-    "Svensk översättning": "Den Som Låter Skada Drabba",
-    "Förklaring (svenska)": "Skada sker med Hans tillåtelse.",
-    "الشرح بالعربية": "الذي يقدر الضر لحكمة وعدل."
+    "Swedish Translation": "Den Som Låter Skada Drabba",
+    "Swedish Explanation": "Skada sker med Hans tillåtelse.",
+    "English Explanation": "Skada sker med Hans tillåtelse.",
+    "Arabic Explanation": "الذي يقدر الضر لحكمة وعدل."
   },
   {
-    "Nr": 92,
-    "Arabiska": "النافع",
+    "Number": 92,
+    "Arabic": "النافع",
     "Transliteration": "An-Nafi",
-    "Svensk översättning": "Den Som Ger Nytta",
-    "Förklaring (svenska)": "Skänker nytta och gott.",
-    "الشرح بالعربية": "الذي يقدر النفع والخير."
+    "Swedish Translation": "Den Som Ger Nytta",
+    "Swedish Explanation": "Skänker nytta och gott.",
+    "English Explanation": "Skänker nytta och gott.",
+    "Arabic Explanation": "الذي يقدر النفع والخير."
   },
   {
-    "Nr": 93,
-    "Arabiska": "النور",
+    "Number": 93,
+    "Arabic": "النور",
     "Transliteration": "An-Nur",
-    "Svensk översättning": "Ljuset",
-    "Förklaring (svenska)": "Himlarnas och jordens ljus.",
-    "الشرح بالعربية": "منور السماوات والأرض بنوره."
+    "Swedish Translation": "Ljuset",
+    "Swedish Explanation": "Himlarnas och jordens ljus.",
+    "English Explanation": "Himlarnas och jordens ljus.",
+    "Arabic Explanation": "منور السماوات والأرض بنوره."
   },
   {
-    "Nr": 94,
-    "Arabiska": "الهادي",
+    "Number": 94,
+    "Arabic": "الهادي",
     "Transliteration": "Al-Hadi",
-    "Svensk översättning": "Vägledaren",
-    "Förklaring (svenska)": "Vägleder till sanningen.",
-    "الشرح بالعربية": "المرشد إلى الحق."
+    "Swedish Translation": "Vägledaren",
+    "Swedish Explanation": "Vägleder till sanningen.",
+    "English Explanation": "Vägleder till sanningen.",
+    "Arabic Explanation": "المرشد إلى الحق."
   },
   {
-    "Nr": 95,
-    "Arabiska": "البديع",
+    "Number": 95,
+    "Arabic": "البديع",
     "Transliteration": "Al-Badi",
-    "Svensk översättning": "Den Ursprunglige Skaparen",
-    "Förklaring (svenska)": "Skapar utan förebild.",
-    "الشرح بالعربية": "المبدع للخلق بلا مثال سابق."
+    "Swedish Translation": "Den Ursprunglige Skaparen",
+    "Swedish Explanation": "Skapar utan förebild.",
+    "English Explanation": "Skapar utan förebild.",
+    "Arabic Explanation": "المبدع للخلق بلا مثال سابق."
   },
   {
-    "Nr": 96,
-    "Arabiska": "الباقي",
+    "Number": 96,
+    "Arabic": "الباقي",
     "Transliteration": "Al-Baqi",
-    "Svensk översättning": "Den Evige",
-    "Förklaring (svenska)": "Upphör aldrig.",
-    "الشرح بالعربية": "الدائم الذي لا يزول."
+    "Swedish Translation": "Den Evige",
+    "Swedish Explanation": "Upphör aldrig.",
+    "English Explanation": "Upphör aldrig.",
+    "Arabic Explanation": "الدائم الذي لا يزول."
   },
   {
-    "Nr": 97,
-    "Arabiska": "الوارث",
+    "Number": 97,
+    "Arabic": "الوارث",
     "Transliteration": "Al-Warith",
-    "Svensk översättning": "Arvtagaren",
-    "Förklaring (svenska)": "Består efter allt annat.",
-    "الشرح بالعربية": "الباقي بعد فناء الخلق."
+    "Swedish Translation": "Arvtagaren",
+    "Swedish Explanation": "Består efter allt annat.",
+    "English Explanation": "Består efter allt annat.",
+    "Arabic Explanation": "الباقي بعد فناء الخلق."
   },
   {
-    "Nr": 98,
-    "Arabiska": "الرشيد",
+    "Number": 98,
+    "Arabic": "الرشيد",
     "Transliteration": "Ar-Rashid",
-    "Svensk översättning": "Den Rättledande",
-    "Förklaring (svenska)": "Vägleder till det rätta.",
-    "الشرح بالعربية": "الذي يرشد عباده إلى مصالحهم."
+    "Swedish Translation": "Den Rättledande",
+    "Swedish Explanation": "Vägleder till det rätta.",
+    "English Explanation": "Vägleder till det rätta.",
+    "Arabic Explanation": "الذي يرشد عباده إلى مصالحهم."
   },
   {
-    "Nr": 99,
-    "Arabiska": "الصبور",
+    "Number": 99,
+    "Arabic": "الصبور",
     "Transliteration": "As-Sabur",
-    "Svensk översättning": "Den Tålmodige",
-    "Förklaring (svenska)": "Skyndar inte med straff trots Sin makt.",
-    "الشرح بالعربية": "الذي لا يعجل العقوبة مع كمال قدرته."
+    "Swedish Translation": "Den Tålmodige",
+    "Swedish Explanation": "Skyndar inte med straff trots Sin makt.",
+    "English Explanation": "Skyndar inte med straff trots Sin makt.",
+    "Arabic Explanation": "الذي لا يعجل العقوبة مع كمال قدرته."
   }
 ]
