@@ -32,7 +32,6 @@ class _SplashScreenWidgetState extends State<SplashScreenWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      await actions.schedulePrayerNotifications();
       await actions.loadAzkharFromGit();
       await actions.youtubeChannelData();
       await actions.fetchYoutubeVideos();
@@ -40,17 +39,18 @@ class _SplashScreenWidgetState extends State<SplashScreenWidget> {
         null,
       );
       await actions.loadTodayHijriData();
-      if (FFAppState().user.mode == Mode.Light.name) {
-        setDarkModeSetting(context, ThemeMode.light);
-      } else {
-        if (FFAppState().user.mode == Mode.Dark.name) {
-          setDarkModeSetting(context, ThemeMode.dark);
-        } else {
-          setDarkModeSetting(context, ThemeMode.system);
-        }
-      }
-
       if (FFAppState().user.onBoarding) {
+        await actions.schedulePrayerNotifications();
+        if (FFAppState().user.mode == Mode.Light.name) {
+          setDarkModeSetting(context, ThemeMode.light);
+        } else {
+          if (FFAppState().user.mode == Mode.Dark.name) {
+            setDarkModeSetting(context, ThemeMode.dark);
+          } else {
+            setDarkModeSetting(context, ThemeMode.system);
+          }
+        }
+
         context.pushNamed(HomeWidget.routeName);
       } else {
         context.pushNamed(OnBoarding01Widget.routeName);
