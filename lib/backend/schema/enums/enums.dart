@@ -23,6 +23,13 @@ enum AdhanSound {
   AdhanMadinah,
 }
 
+enum SoundName {
+  adhan_madinah,
+  adhan_makkah,
+  short_adhan,
+  standard_adhan,
+}
+
 extension FFEnumExtensions<T extends Enum> on T {
   String serialize() => name;
 }
@@ -40,6 +47,8 @@ T? deserializeEnum<T>(String? value) {
       return Mode.values.deserialize(value) as T?;
     case (AdhanSound):
       return AdhanSound.values.deserialize(value) as T?;
+    case (SoundName):
+      return SoundName.values.deserialize(value) as T?;
     default:
       return null;
   }

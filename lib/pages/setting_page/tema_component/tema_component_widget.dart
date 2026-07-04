@@ -1,5 +1,6 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'tema_component_model.dart';
@@ -13,6 +14,7 @@ class TemaComponentWidget extends StatefulWidget {
     required this.subLabel,
     required this.checkValue,
     required this.onCheck,
+    required this.azanName,
   });
 
   final String? label;
@@ -20,6 +22,7 @@ class TemaComponentWidget extends StatefulWidget {
   final String? subLabel;
   final bool? checkValue;
   final Future Function()? onCheck;
+  final String? azanName;
 
   @override
   State<TemaComponentWidget> createState() => _TemaComponentWidgetState();
@@ -170,6 +173,9 @@ class _TemaComponentWidgetState extends State<TemaComponentWidget> {
                                   hoverColor: Colors.transparent,
                                   highlightColor: Colors.transparent,
                                   onTap: () async {
+                                    await actions.audioPlay(
+                                      widget.azanName!,
+                                    );
                                     await widget.onCheck?.call();
                                   },
                                   child: Container(

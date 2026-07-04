@@ -149,6 +149,7 @@ class _TemaWidgetState extends State<TemaWidget> {
                           ),
                           subLabel: 'Följer telefonens tema automatiskt',
                           checkValue: _model.selectedCard == Mode.System.name,
+                          azanName: FFAppConstants.NullValue,
                           onCheck: () async {
                             _model.selectedCard = Mode.System.name;
                             safeSetState(() {});
@@ -166,6 +167,7 @@ class _TemaWidgetState extends State<TemaWidget> {
                           ),
                           subLabel: 'Ljust och rent utseende',
                           checkValue: _model.selectedCard == Mode.Light.name,
+                          azanName: FFAppConstants.NullValue,
                           onCheck: () async {
                             _model.selectedCard = Mode.Light.name;
                             safeSetState(() {});
@@ -183,6 +185,7 @@ class _TemaWidgetState extends State<TemaWidget> {
                           ),
                           subLabel: 'Bekvämt för mörka miljöer',
                           checkValue: _model.selectedCard == Mode.Dark.name,
+                          azanName: FFAppConstants.NullValue,
                           onCheck: () async {
                             _model.selectedCard = Mode.Dark.name;
                             safeSetState(() {});

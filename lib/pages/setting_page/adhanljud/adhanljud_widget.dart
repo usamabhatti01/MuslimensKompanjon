@@ -150,6 +150,7 @@ class _AdhanljudWidgetState extends State<AdhanljudWidget> {
                           subLabel: 'Ingen ljudsignal, endast vibration',
                           checkValue:
                               _model.selectedCard == AdhanSound.Vibration.name,
+                          azanName: FFAppConstants.NullValue,
                           onCheck: () async {
                             _model.selectedCard = AdhanSound.Vibration.name;
                             safeSetState(() {});
@@ -168,6 +169,7 @@ class _AdhanljudWidgetState extends State<AdhanljudWidget> {
                           subLabel: 'Kort standardnotis från telefonen',
                           checkValue:
                               _model.selectedCard == AdhanSound.Standard.name,
+                          azanName: SoundName.standard_adhan.name,
                           onCheck: () async {
                             _model.selectedCard = AdhanSound.Standard.name;
                             safeSetState(() {});
@@ -186,6 +188,7 @@ class _AdhanljudWidgetState extends State<AdhanljudWidget> {
                           subLabel: 'Kortare version av Adhan',
                           checkValue:
                               _model.selectedCard == AdhanSound.ShortAdhan.name,
+                          azanName: SoundName.short_adhan.name,
                           onCheck: () async {
                             _model.selectedCard = AdhanSound.ShortAdhan.name;
                             safeSetState(() {});
@@ -204,6 +207,7 @@ class _AdhanljudWidgetState extends State<AdhanljudWidget> {
                           subLabel: 'Traditionellt Adhan från Makkah',
                           checkValue: _model.selectedCard ==
                               AdhanSound.AdhanMakkah.name,
+                          azanName: SoundName.adhan_makkah.name,
                           onCheck: () async {
                             _model.selectedCard = AdhanSound.AdhanMakkah.name;
                             safeSetState(() {});
@@ -222,6 +226,7 @@ class _AdhanljudWidgetState extends State<AdhanljudWidget> {
                           subLabel: 'Vackert Adhan från Madinah',
                           checkValue: _model.selectedCard ==
                               AdhanSound.AdhanMadinah.name,
+                          azanName: SoundName.adhan_madinah.name,
                           onCheck: () async {
                             _model.selectedCard = AdhanSound.AdhanMadinah.name;
                             safeSetState(() {});
@@ -240,6 +245,10 @@ class _AdhanljudWidgetState extends State<AdhanljudWidget> {
                 );
                 safeSetState(() {});
                 await actions.schedulePrayerNotifications();
+                await actions.testNotifications();
+                await actions.audioPlay(
+                  FFAppConstants.NullValue,
+                );
                 Navigator.pop(context);
               },
               text: 'Spara',
