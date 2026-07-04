@@ -31,6 +31,8 @@ class _AkallanDuaBoxArWidgetState extends State<AkallanDuaBoxArWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => AkallanDuaBoxArModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

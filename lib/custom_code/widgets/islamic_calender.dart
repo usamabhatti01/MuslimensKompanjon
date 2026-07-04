@@ -13,6 +13,61 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 import 'package:hijri/hijri_calendar.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
+import '/custom_code/actions/constants.dart';
+
+Future<String> loadJsonFromAssetOrGit(String filePath) async {
+  try {
+    return await rootBundle.loadString(filePath);
+  } catch (e) {
+    print("Asset not found ($filePath): $e. Trying cache/network.");
+  }
+
+  final fileName = filePath.split('/').last;
+
+  try {
+    final directory = await getApplicationDocumentsDirectory();
+    final localFile = File('${directory.path}/$fileName');
+    if (await localFile.exists()) {
+      print("Cache hit: Loaded $fileName from documents cache.");
+      return await localFile.readAsString();
+    }
+  } catch (e) {
+    print("Error reading from local documents cache: $e");
+  }
+
+  final gitHubOwner = GitConstants.gitHubOwner;
+  final gitHubRepo = GitConstants.gitHubRepo;
+  final branches = GitConstants.branches;
+
+  for (final branch in branches) {
+    final url =
+        'https://raw.githubusercontent.com/$gitHubOwner/$gitHubRepo/$branch/$filePath';
+    try {
+      print("Attempting to download from $url");
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final content = response.body;
+        try {
+          final directory = await getApplicationDocumentsDirectory();
+          final localFile = File('${directory.path}/$fileName');
+          await localFile.writeAsString(content);
+          print("Cached $fileName locally.");
+        } catch (cacheError) {
+          print("Error caching $fileName: $cacheError");
+        }
+        return content;
+      }
+    } catch (netError) {
+      print("Error downloading from $url: $netError");
+    }
+  }
+
+  throw Exception(
+      "Failed to load JSON file $filePath from assets, cache, or GitHub.");
+}
 
 class IslamicCalender extends StatefulWidget {
   const IslamicCalender({
@@ -280,8 +335,9 @@ class _IslamicCalenderState extends State<IslamicCalender> {
     setState(() => isLoading = true);
     try {
       for (final hijriYear in [1447, 1448]) {
-        final String filePath = 'assets/jsons/hijri-calendar_$hijriYear.json';
-        final String jsonString = await rootBundle.loadString(filePath);
+        final String filePath =
+            '${FileConstants.hijriCalendarPathPrefix}$hijriYear.json';
+        final String jsonString = await loadJsonFromAssetOrGit(filePath);
         final List<dynamic> jsonData = json.decode(jsonString);
         for (final dynamic row in jsonData) {
           final Map<String, dynamic> entry =

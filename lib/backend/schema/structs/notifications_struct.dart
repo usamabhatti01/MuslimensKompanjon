@@ -6,12 +6,12 @@ import '/flutter_flow/flutter_flow_util.dart';
 
 class NotificationsStruct extends BaseStruct {
   NotificationsStruct({
-    NotificationCheckStruct? fazr,
-    NotificationCheckStruct? shuruq,
-    NotificationCheckStruct? dohr,
-    NotificationCheckStruct? asr,
-    NotificationCheckStruct? maghrib,
-    NotificationCheckStruct? isha,
+    NotificationTpyeStruct? fazr,
+    NotificationTpyeStruct? shuruq,
+    NotificationTpyeStruct? dohr,
+    NotificationTpyeStruct? asr,
+    NotificationTpyeStruct? maghrib,
+    NotificationTpyeStruct? isha,
   })  : _fazr = fazr,
         _shuruq = shuruq,
         _dohr = dohr,
@@ -20,91 +20,91 @@ class NotificationsStruct extends BaseStruct {
         _isha = isha;
 
   // "Fazr" field.
-  NotificationCheckStruct? _fazr;
-  NotificationCheckStruct get fazr => _fazr ?? NotificationCheckStruct();
-  set fazr(NotificationCheckStruct? val) => _fazr = val;
+  NotificationTpyeStruct? _fazr;
+  NotificationTpyeStruct get fazr => _fazr ?? NotificationTpyeStruct();
+  set fazr(NotificationTpyeStruct? val) => _fazr = val;
 
-  void updateFazr(Function(NotificationCheckStruct) updateFn) {
-    updateFn(_fazr ??= NotificationCheckStruct());
+  void updateFazr(Function(NotificationTpyeStruct) updateFn) {
+    updateFn(_fazr ??= NotificationTpyeStruct());
   }
 
   bool hasFazr() => _fazr != null;
 
   // "Shuruq" field.
-  NotificationCheckStruct? _shuruq;
-  NotificationCheckStruct get shuruq => _shuruq ?? NotificationCheckStruct();
-  set shuruq(NotificationCheckStruct? val) => _shuruq = val;
+  NotificationTpyeStruct? _shuruq;
+  NotificationTpyeStruct get shuruq => _shuruq ?? NotificationTpyeStruct();
+  set shuruq(NotificationTpyeStruct? val) => _shuruq = val;
 
-  void updateShuruq(Function(NotificationCheckStruct) updateFn) {
-    updateFn(_shuruq ??= NotificationCheckStruct());
+  void updateShuruq(Function(NotificationTpyeStruct) updateFn) {
+    updateFn(_shuruq ??= NotificationTpyeStruct());
   }
 
   bool hasShuruq() => _shuruq != null;
 
   // "Dohr" field.
-  NotificationCheckStruct? _dohr;
-  NotificationCheckStruct get dohr => _dohr ?? NotificationCheckStruct();
-  set dohr(NotificationCheckStruct? val) => _dohr = val;
+  NotificationTpyeStruct? _dohr;
+  NotificationTpyeStruct get dohr => _dohr ?? NotificationTpyeStruct();
+  set dohr(NotificationTpyeStruct? val) => _dohr = val;
 
-  void updateDohr(Function(NotificationCheckStruct) updateFn) {
-    updateFn(_dohr ??= NotificationCheckStruct());
+  void updateDohr(Function(NotificationTpyeStruct) updateFn) {
+    updateFn(_dohr ??= NotificationTpyeStruct());
   }
 
   bool hasDohr() => _dohr != null;
 
   // "Asr" field.
-  NotificationCheckStruct? _asr;
-  NotificationCheckStruct get asr => _asr ?? NotificationCheckStruct();
-  set asr(NotificationCheckStruct? val) => _asr = val;
+  NotificationTpyeStruct? _asr;
+  NotificationTpyeStruct get asr => _asr ?? NotificationTpyeStruct();
+  set asr(NotificationTpyeStruct? val) => _asr = val;
 
-  void updateAsr(Function(NotificationCheckStruct) updateFn) {
-    updateFn(_asr ??= NotificationCheckStruct());
+  void updateAsr(Function(NotificationTpyeStruct) updateFn) {
+    updateFn(_asr ??= NotificationTpyeStruct());
   }
 
   bool hasAsr() => _asr != null;
 
   // "Maghrib" field.
-  NotificationCheckStruct? _maghrib;
-  NotificationCheckStruct get maghrib => _maghrib ?? NotificationCheckStruct();
-  set maghrib(NotificationCheckStruct? val) => _maghrib = val;
+  NotificationTpyeStruct? _maghrib;
+  NotificationTpyeStruct get maghrib => _maghrib ?? NotificationTpyeStruct();
+  set maghrib(NotificationTpyeStruct? val) => _maghrib = val;
 
-  void updateMaghrib(Function(NotificationCheckStruct) updateFn) {
-    updateFn(_maghrib ??= NotificationCheckStruct());
+  void updateMaghrib(Function(NotificationTpyeStruct) updateFn) {
+    updateFn(_maghrib ??= NotificationTpyeStruct());
   }
 
   bool hasMaghrib() => _maghrib != null;
 
   // "Isha" field.
-  NotificationCheckStruct? _isha;
-  NotificationCheckStruct get isha => _isha ?? NotificationCheckStruct();
-  set isha(NotificationCheckStruct? val) => _isha = val;
+  NotificationTpyeStruct? _isha;
+  NotificationTpyeStruct get isha => _isha ?? NotificationTpyeStruct();
+  set isha(NotificationTpyeStruct? val) => _isha = val;
 
-  void updateIsha(Function(NotificationCheckStruct) updateFn) {
-    updateFn(_isha ??= NotificationCheckStruct());
+  void updateIsha(Function(NotificationTpyeStruct) updateFn) {
+    updateFn(_isha ??= NotificationTpyeStruct());
   }
 
   bool hasIsha() => _isha != null;
 
   static NotificationsStruct fromMap(Map<String, dynamic> data) =>
       NotificationsStruct(
-        fazr: data['Fazr'] is NotificationCheckStruct
+        fazr: data['Fazr'] is NotificationTpyeStruct
             ? data['Fazr']
-            : NotificationCheckStruct.maybeFromMap(data['Fazr']),
-        shuruq: data['Shuruq'] is NotificationCheckStruct
+            : NotificationTpyeStruct.maybeFromMap(data['Fazr']),
+        shuruq: data['Shuruq'] is NotificationTpyeStruct
             ? data['Shuruq']
-            : NotificationCheckStruct.maybeFromMap(data['Shuruq']),
-        dohr: data['Dohr'] is NotificationCheckStruct
+            : NotificationTpyeStruct.maybeFromMap(data['Shuruq']),
+        dohr: data['Dohr'] is NotificationTpyeStruct
             ? data['Dohr']
-            : NotificationCheckStruct.maybeFromMap(data['Dohr']),
-        asr: data['Asr'] is NotificationCheckStruct
+            : NotificationTpyeStruct.maybeFromMap(data['Dohr']),
+        asr: data['Asr'] is NotificationTpyeStruct
             ? data['Asr']
-            : NotificationCheckStruct.maybeFromMap(data['Asr']),
-        maghrib: data['Maghrib'] is NotificationCheckStruct
+            : NotificationTpyeStruct.maybeFromMap(data['Asr']),
+        maghrib: data['Maghrib'] is NotificationTpyeStruct
             ? data['Maghrib']
-            : NotificationCheckStruct.maybeFromMap(data['Maghrib']),
-        isha: data['Isha'] is NotificationCheckStruct
+            : NotificationTpyeStruct.maybeFromMap(data['Maghrib']),
+        isha: data['Isha'] is NotificationTpyeStruct
             ? data['Isha']
-            : NotificationCheckStruct.maybeFromMap(data['Isha']),
+            : NotificationTpyeStruct.maybeFromMap(data['Isha']),
       );
 
   static NotificationsStruct? maybeFromMap(dynamic data) => data is Map
@@ -154,37 +154,37 @@ class NotificationsStruct extends BaseStruct {
           data['Fazr'],
           ParamType.DataStruct,
           false,
-          structBuilder: NotificationCheckStruct.fromSerializableMap,
+          structBuilder: NotificationTpyeStruct.fromSerializableMap,
         ),
         shuruq: deserializeStructParam(
           data['Shuruq'],
           ParamType.DataStruct,
           false,
-          structBuilder: NotificationCheckStruct.fromSerializableMap,
+          structBuilder: NotificationTpyeStruct.fromSerializableMap,
         ),
         dohr: deserializeStructParam(
           data['Dohr'],
           ParamType.DataStruct,
           false,
-          structBuilder: NotificationCheckStruct.fromSerializableMap,
+          structBuilder: NotificationTpyeStruct.fromSerializableMap,
         ),
         asr: deserializeStructParam(
           data['Asr'],
           ParamType.DataStruct,
           false,
-          structBuilder: NotificationCheckStruct.fromSerializableMap,
+          structBuilder: NotificationTpyeStruct.fromSerializableMap,
         ),
         maghrib: deserializeStructParam(
           data['Maghrib'],
           ParamType.DataStruct,
           false,
-          structBuilder: NotificationCheckStruct.fromSerializableMap,
+          structBuilder: NotificationTpyeStruct.fromSerializableMap,
         ),
         isha: deserializeStructParam(
           data['Isha'],
           ParamType.DataStruct,
           false,
-          structBuilder: NotificationCheckStruct.fromSerializableMap,
+          structBuilder: NotificationTpyeStruct.fromSerializableMap,
         ),
       );
 
@@ -208,18 +208,18 @@ class NotificationsStruct extends BaseStruct {
 }
 
 NotificationsStruct createNotificationsStruct({
-  NotificationCheckStruct? fazr,
-  NotificationCheckStruct? shuruq,
-  NotificationCheckStruct? dohr,
-  NotificationCheckStruct? asr,
-  NotificationCheckStruct? maghrib,
-  NotificationCheckStruct? isha,
+  NotificationTpyeStruct? fazr,
+  NotificationTpyeStruct? shuruq,
+  NotificationTpyeStruct? dohr,
+  NotificationTpyeStruct? asr,
+  NotificationTpyeStruct? maghrib,
+  NotificationTpyeStruct? isha,
 }) =>
     NotificationsStruct(
-      fazr: fazr ?? NotificationCheckStruct(),
-      shuruq: shuruq ?? NotificationCheckStruct(),
-      dohr: dohr ?? NotificationCheckStruct(),
-      asr: asr ?? NotificationCheckStruct(),
-      maghrib: maghrib ?? NotificationCheckStruct(),
-      isha: isha ?? NotificationCheckStruct(),
+      fazr: fazr ?? NotificationTpyeStruct(),
+      shuruq: shuruq ?? NotificationTpyeStruct(),
+      dohr: dohr ?? NotificationTpyeStruct(),
+      asr: asr ?? NotificationTpyeStruct(),
+      maghrib: maghrib ?? NotificationTpyeStruct(),
+      isha: isha ?? NotificationTpyeStruct(),
     );

@@ -1,0 +1,212 @@
+import '/custom_header_footer/page_footer/page_footer_widget.dart';
+import '/custom_header_footer/page_sub_header_with_icon/page_sub_header_with_icon_widget.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/index.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'akallan_and_dua_model.dart';
+export 'akallan_and_dua_model.dart';
+
+class AkallanAndDuaWidget extends StatefulWidget {
+  const AkallanAndDuaWidget({super.key});
+
+  static String routeName = 'AkallanAndDua';
+  static String routePath = '/akallanAndDua';
+
+  @override
+  State<AkallanAndDuaWidget> createState() => _AkallanAndDuaWidgetState();
+}
+
+class _AkallanAndDuaWidgetState extends State<AkallanAndDuaWidget> {
+  late AkallanAndDuaModel _model;
+
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => AkallanAndDuaModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _model.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: Scaffold(
+        key: scaffoldKey,
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        body: Padding(
+          padding: EdgeInsets.all(
+              FlutterFlowTheme.of(context).designToken.spacing.md),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    focusColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: () async {
+                      context.pushNamed(
+                        HomeWidget.routeName,
+                        extra: <String, dynamic>{
+                          '__transition_info__': TransitionInfo(
+                            hasTransition: true,
+                            transitionType: PageTransitionType.fade,
+                            duration: Duration(milliseconds: 0),
+                          ),
+                        },
+                      );
+                    },
+                    child: Icon(
+                      Icons.chevron_left,
+                      color: FlutterFlowTheme.of(context).primaryText,
+                      size: 24.0,
+                    ),
+                  ),
+                  Expanded(
+                    child: wrapWithModel(
+                      model: _model.pageSubHeaderWithIconModel,
+                      updateCallback: () => safeSetState(() {}),
+                      child: PageSubHeaderWithIconWidget(
+                        pageName: 'Åkallan & Dua',
+                      ),
+                    ),
+                  ),
+                ].divide(SizedBox(
+                    width:
+                        FlutterFlowTheme.of(context).designToken.spacing.lg)),
+              ),
+              Expanded(
+                child: Builder(
+                  builder: (context) {
+                    final duaCategory = FFAppState().duaList.toList();
+
+                    return Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children:
+                          List.generate(duaCategory.length, (duaCategoryIndex) {
+                        final duaCategoryItem = duaCategory[duaCategoryIndex];
+                        return InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.pushNamed(
+                              AkallanDuaWidget.routeName,
+                              queryParameters: {
+                                'adkarList': serializeParam(
+                                  duaCategoryItem.dua,
+                                  ParamType.DataStruct,
+                                  isList: true,
+                                ),
+                                'pageHeader': serializeParam(
+                                  'Åkallan & Dua',
+                                  ParamType.String,
+                                ),
+                              }.withoutNulls,
+                            );
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            height: 50.0,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context)
+                                  .primaryBackground,
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 3.0,
+                                  color: Color(0x33000000),
+                                  offset: Offset(
+                                    0.0,
+                                    1.0,
+                                  ),
+                                )
+                              ],
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(12.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    duaCategoryItem.categoryId,
+                                    style: FlutterFlowTheme.of(context)
+                                        .labelMedium
+                                        .override(
+                                          font: GoogleFonts.inter(
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .labelMedium
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .labelMedium
+                                                    .fontStyle,
+                                          ),
+                                          letterSpacing: 0.0,
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .fontStyle,
+                                        ),
+                                  ),
+                                  Icon(
+                                    Icons.chevron_right_rounded,
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    size: 24.0,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }).divide(SizedBox(height: 20.0)),
+                    );
+                  },
+                ),
+              ),
+              wrapWithModel(
+                model: _model.pageFooterModel,
+                updateCallback: () => safeSetState(() {}),
+                child: PageFooterWidget(
+                  activeTab: 3,
+                ),
+              ),
+            ].divide(SizedBox(height: 20.0)).addToStart(SizedBox(
+                height: FlutterFlowTheme.of(context).designToken.spacing.xxl)),
+          ),
+        ),
+      ),
+    );
+  }
+}

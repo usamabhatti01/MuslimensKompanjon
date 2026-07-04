@@ -33,6 +33,8 @@ class _KalenderPageSubHeaderWidgetState
   void initState() {
     super.initState();
     _model = createModel(context, () => KalenderPageSubHeaderModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

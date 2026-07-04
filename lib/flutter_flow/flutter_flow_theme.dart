@@ -174,6 +174,8 @@ abstract class FlutterFlowTheme {
   TextStyle get svenskaBody => typography.svenskaBody;
   String get ayatNumberFamily => typography.ayatNumberFamily;
   TextStyle get ayatNumber => typography.ayatNumber;
+  String get durationFamily => typography.durationFamily;
+  TextStyle get duration => typography.duration;
 
   Typography get typography => ThemeTypography(this);
 }
@@ -289,6 +291,8 @@ abstract class Typography {
   TextStyle get svenskaBody;
   String get ayatNumberFamily;
   TextStyle get ayatNumber;
+  String get durationFamily;
+  TextStyle get duration;
 }
 
 class ThemeTypography extends Typography {
@@ -437,8 +441,8 @@ class ThemeTypography extends Typography {
         fontWeight: FontWeight.w800,
         fontSize: 16.0,
       );
-  String get svenskaTitleFamily => 'Cairo';
-  TextStyle get svenskaTitle => GoogleFonts.cairo(
+  String get svenskaTitleFamily => 'Manrope';
+  TextStyle get svenskaTitle => GoogleFonts.manrope(
         color: theme.primary,
         fontWeight: FontWeight.bold,
         fontSize: 20.0,
@@ -454,6 +458,11 @@ class ThemeTypography extends Typography {
         color: theme.black,
         fontSize: 11.0,
       );
+  String get durationFamily => 'Primary Family';
+  TextStyle get duration => GoogleFonts.roboto(
+        color: Colors.white,
+        fontSize: 12.0,
+      );
 }
 
 class DarkModeTheme extends FlutterFlowTheme {
@@ -465,7 +474,7 @@ class DarkModeTheme extends FlutterFlowTheme {
   Color get tertiaryColor => tertiary;
 
   late Color primary = const Color(0xFF00A300);
-  late Color secondary = const Color(0xFF8F9A88);
+  late Color secondary = const Color(0xFF385749);
   late Color tertiary = const Color(0xFFFF375F);
   late Color alternate = const Color(0xFF262626);
   late Color primaryText = const Color(0xFFFFFFFF);

@@ -33,6 +33,8 @@ class _AdkharBoxWidgetState extends State<AdkharBoxWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => AdkharBoxModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

@@ -26,6 +26,8 @@ class _QiblaFinderWidgetState extends State<QiblaFinderWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => QiblaFinderModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

@@ -30,6 +30,8 @@ class _OnBoarding02WidgetState extends State<OnBoarding02Widget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => OnBoarding02Model());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -124,12 +126,12 @@ class _OnBoarding02WidgetState extends State<OnBoarding02Widget> {
                     onPressed: () async {
                       currentUserLocationValue = await getCurrentUserLocation(
                           defaultLocation: LatLng(0.0, 0.0));
-                      _model.cities = await actions.loadCitiesFromAsset(
-                        currentUserLocationValue,
+                      _model.latlonResult = await actions.searchCitiesByLatLon(
+                        currentUserLocationValue!,
                       );
-                      if (_model.cities?.length == 1) {
+                      if (_model.latlonResult != null) {
                         FFAppState().updateUserStruct(
-                          (e) => e..city = _model.cities?.firstOrNull?.name,
+                          (e) => e..city = _model.latlonResult?.name,
                         );
                         safeSetState(() {});
 
@@ -253,26 +255,6 @@ class _OnBoarding02WidgetState extends State<OnBoarding02Widget> {
                       elevation: 0.0,
                       borderRadius: BorderRadius.circular(12.0),
                     ),
-                  ),
-                  Text(
-                    'Hoppa över',
-                    style: FlutterFlowTheme.of(context).titleSmall.override(
-                          font: GoogleFonts.plusJakartaSans(
-                            fontWeight: FlutterFlowTheme.of(context)
-                                .titleSmall
-                                .fontWeight,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .titleSmall
-                                .fontStyle,
-                          ),
-                          letterSpacing: 0.0,
-                          fontWeight: FlutterFlowTheme.of(context)
-                              .titleSmall
-                              .fontWeight,
-                          fontStyle:
-                              FlutterFlowTheme.of(context).titleSmall.fontStyle,
-                          decoration: TextDecoration.underline,
-                        ),
                   ),
                 ].divide(SizedBox(height: 20.0)),
               ),

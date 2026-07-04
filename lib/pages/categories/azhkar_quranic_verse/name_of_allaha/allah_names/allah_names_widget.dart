@@ -1,9 +1,11 @@
 import '/custom_header_footer/adhkar_header/adhkar_header_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/pages/categories/azhkar_quranic_verse/name_of_allaha/name_box/name_box_widget.dart';
+import '/pages/categories/azhkar_quranic_verse/name_of_allaha/name_arabic_box/name_arabic_box_widget.dart';
 import '/pages/categories/azhkar_quranic_verse/name_of_allaha/name_meaning_popup/name_meaning_popup_widget.dart';
+import '/pages/categories/azhkar_quranic_verse/name_of_allaha/name_svenska_box/name_svenska_box_widget.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -42,6 +44,8 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
       length: 2,
       initialIndex: 0,
     )..addListener(() => safeSetState(() {}));
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -70,12 +74,45 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              wrapWithModel(
-                model: _model.adhkarHeaderModel,
-                updateCallback: () => safeSetState(() {}),
-                child: AdhkarHeaderWidget(
-                  pageName: widget.adkar!,
-                ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    focusColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: () async {
+                      context.pushNamed(
+                        AdhkarWidget.routeName,
+                        extra: <String, dynamic>{
+                          '__transition_info__': TransitionInfo(
+                            hasTransition: true,
+                            transitionType: PageTransitionType.fade,
+                            duration: Duration(milliseconds: 0),
+                          ),
+                        },
+                      );
+                    },
+                    child: Icon(
+                      Icons.chevron_left,
+                      color: FlutterFlowTheme.of(context).primaryText,
+                      size: 24.0,
+                    ),
+                  ),
+                  Expanded(
+                    child: wrapWithModel(
+                      model: _model.adhkarHeaderModel,
+                      updateCallback: () => safeSetState(() {}),
+                      child: AdhkarHeaderWidget(
+                        pageName: widget.adkar!,
+                        volume: true,
+                      ),
+                    ),
+                  ),
+                ].divide(SizedBox(
+                    width:
+                        FlutterFlowTheme.of(context).designToken.spacing.lg)),
               ),
               Expanded(
                 child: Column(
@@ -235,10 +272,9 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                                       Expanded(
                                         child: Builder(
                                           builder: (context) {
-                                            final myNamesList = getJsonField(
-                                              FFAppState().namesList,
-                                              r'''$.names''',
-                                            ).toList();
+                                            final arabicName = FFAppState()
+                                                .AllahNames
+                                                .toList();
 
                                             return GridView.builder(
                                               padding: EdgeInsets.zero,
@@ -250,100 +286,68 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                                                 childAspectRatio: 1.0,
                                               ),
                                               scrollDirection: Axis.vertical,
-                                              itemCount: myNamesList.length,
+                                              itemCount: arabicName.length,
                                               itemBuilder:
-                                                  (context, myNamesListIndex) {
-                                                final myNamesListItem =
-                                                    myNamesList[
-                                                        myNamesListIndex];
-                                                return Builder(
-                                                  builder: (context) => InkWell(
-                                                    splashColor:
-                                                        Colors.transparent,
-                                                    focusColor:
-                                                        Colors.transparent,
-                                                    hoverColor:
-                                                        Colors.transparent,
-                                                    highlightColor:
-                                                        Colors.transparent,
-                                                    onTap: () async {
-                                                      await showDialog(
-                                                        context: context,
-                                                        builder:
-                                                            (dialogContext) {
-                                                          return Dialog(
-                                                            elevation: 0,
-                                                            insetPadding:
-                                                                EdgeInsets.zero,
-                                                            backgroundColor:
-                                                                Colors
-                                                                    .transparent,
-                                                            alignment: AlignmentDirectional(
-                                                                    0.0, 0.0)
-                                                                .resolve(
-                                                                    Directionality.of(
-                                                                        context)),
-                                                            child: WebViewAware(
+                                                  (context, arabicNameIndex) {
+                                                final arabicNameItem =
+                                                    arabicName[arabicNameIndex];
+                                                return InkWell(
+                                                  splashColor:
+                                                      Colors.transparent,
+                                                  focusColor:
+                                                      Colors.transparent,
+                                                  hoverColor:
+                                                      Colors.transparent,
+                                                  highlightColor:
+                                                      Colors.transparent,
+                                                  onTap: () async {
+                                                    await showModalBottomSheet(
+                                                      isScrollControlled: true,
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      isDismissible: false,
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return WebViewAware(
+                                                          child:
+                                                              GestureDetector(
+                                                            onTap: () {
+                                                              FocusScope.of(
+                                                                      context)
+                                                                  .unfocus();
+                                                              FocusManager
+                                                                  .instance
+                                                                  .primaryFocus
+                                                                  ?.unfocus();
+                                                            },
+                                                            child: Padding(
+                                                              padding: MediaQuery
+                                                                  .viewInsetsOf(
+                                                                      context),
                                                               child:
-                                                                  GestureDetector(
-                                                                onTap: () {
-                                                                  FocusScope.of(
-                                                                          dialogContext)
-                                                                      .unfocus();
-                                                                  FocusManager
-                                                                      .instance
-                                                                      .primaryFocus
-                                                                      ?.unfocus();
-                                                                },
-                                                                child:
-                                                                    NameMeaningPopupWidget(
-                                                                  popupNameArabic:
-                                                                      getJsonField(
-                                                                    myNamesListItem,
-                                                                    r'''$.arabic''',
-                                                                  ).toString(),
-                                                                  popupNameEnglish:
-                                                                      getJsonField(
-                                                                    myNamesListItem,
-                                                                    r'''$.english''',
-                                                                  ).toString(),
-                                                                  popupMeaningEn:
-                                                                      valueOrDefault<
-                                                                          String>(
-                                                                    getJsonField(
-                                                                      myNamesListItem,
-                                                                      r'''$.meaning_en''',
-                                                                    )?.toString(),
-                                                                    '.meaning_en',
-                                                                  ),
-                                                                  popupMeaningAr:
-                                                                      getJsonField(
-                                                                    myNamesListItem,
-                                                                    r'''$.meaning_ar''',
-                                                                  ).toString(),
-                                                                ),
+                                                                  NameMeaningPopupWidget(
+                                                                name:
+                                                                    arabicNameItem
+                                                                        .arabic,
+                                                                translation:
+                                                                    arabicNameItem
+                                                                        .transliteration,
+                                                                explanation:
+                                                                    arabicNameItem
+                                                                        .arabicExplanation,
                                                               ),
                                                             ),
-                                                          );
-                                                        },
-                                                      );
-                                                    },
-                                                    child: NameBoxWidget(
-                                                      key: Key(
-                                                          'Keyxcc_${myNamesListIndex}_of_${myNamesList.length}'),
-                                                      arabicName: getJsonField(
-                                                        myNamesListItem,
-                                                        r'''$.arabic''',
-                                                      ).toString(),
-                                                      engishName: getJsonField(
-                                                        myNamesListItem,
-                                                        r'''$.english''',
-                                                      ).toString(),
-                                                      nameId: getJsonField(
-                                                        myNamesListItem,
-                                                        r'''$.id''',
-                                                      ),
-                                                    ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ).then((value) =>
+                                                        safeSetState(() {}));
+                                                  },
+                                                  child: NameArabicBoxWidget(
+                                                    key: Key(
+                                                        'Keyxcc_${arabicNameIndex}_of_${arabicName.length}'),
+                                                    allahName:
+                                                        arabicNameItem.arabic,
                                                   ),
                                                 );
                                               },
@@ -416,10 +420,9 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                                       Expanded(
                                         child: Builder(
                                           builder: (context) {
-                                            final myNamesList = getJsonField(
-                                              FFAppState().namesList,
-                                              r'''$.names''',
-                                            ).toList();
+                                            final svenskaName = FFAppState()
+                                                .AllahNames
+                                                .toList();
 
                                             return GridView.builder(
                                               padding: EdgeInsets.zero,
@@ -449,100 +452,68 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                                                 childAspectRatio: 1.0,
                                               ),
                                               scrollDirection: Axis.vertical,
-                                              itemCount: myNamesList.length,
+                                              itemCount: svenskaName.length,
                                               itemBuilder:
-                                                  (context, myNamesListIndex) {
-                                                final myNamesListItem =
-                                                    myNamesList[
-                                                        myNamesListIndex];
-                                                return Builder(
-                                                  builder: (context) => InkWell(
-                                                    splashColor:
-                                                        Colors.transparent,
-                                                    focusColor:
-                                                        Colors.transparent,
-                                                    hoverColor:
-                                                        Colors.transparent,
-                                                    highlightColor:
-                                                        Colors.transparent,
-                                                    onTap: () async {
-                                                      await showDialog(
-                                                        context: context,
-                                                        builder:
-                                                            (dialogContext) {
-                                                          return Dialog(
-                                                            elevation: 0,
-                                                            insetPadding:
-                                                                EdgeInsets.zero,
-                                                            backgroundColor:
-                                                                Colors
-                                                                    .transparent,
-                                                            alignment: AlignmentDirectional(
-                                                                    0.0, 0.0)
-                                                                .resolve(
-                                                                    Directionality.of(
-                                                                        context)),
-                                                            child: WebViewAware(
+                                                  (context, svenskaNameIndex) {
+                                                final svenskaNameItem =
+                                                    svenskaName[
+                                                        svenskaNameIndex];
+                                                return InkWell(
+                                                  splashColor:
+                                                      Colors.transparent,
+                                                  focusColor:
+                                                      Colors.transparent,
+                                                  hoverColor:
+                                                      Colors.transparent,
+                                                  highlightColor:
+                                                      Colors.transparent,
+                                                  onTap: () async {
+                                                    await showModalBottomSheet(
+                                                      isScrollControlled: true,
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      enableDrag: false,
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return WebViewAware(
+                                                          child:
+                                                              GestureDetector(
+                                                            onTap: () {
+                                                              FocusScope.of(
+                                                                      context)
+                                                                  .unfocus();
+                                                              FocusManager
+                                                                  .instance
+                                                                  .primaryFocus
+                                                                  ?.unfocus();
+                                                            },
+                                                            child: Padding(
+                                                              padding: MediaQuery
+                                                                  .viewInsetsOf(
+                                                                      context),
                                                               child:
-                                                                  GestureDetector(
-                                                                onTap: () {
-                                                                  FocusScope.of(
-                                                                          dialogContext)
-                                                                      .unfocus();
-                                                                  FocusManager
-                                                                      .instance
-                                                                      .primaryFocus
-                                                                      ?.unfocus();
-                                                                },
-                                                                child:
-                                                                    NameMeaningPopupWidget(
-                                                                  popupNameArabic:
-                                                                      getJsonField(
-                                                                    myNamesListItem,
-                                                                    r'''$.arabic''',
-                                                                  ).toString(),
-                                                                  popupNameEnglish:
-                                                                      getJsonField(
-                                                                    myNamesListItem,
-                                                                    r'''$.english''',
-                                                                  ).toString(),
-                                                                  popupMeaningEn:
-                                                                      valueOrDefault<
-                                                                          String>(
-                                                                    getJsonField(
-                                                                      myNamesListItem,
-                                                                      r'''$.meaning_en''',
-                                                                    )?.toString(),
-                                                                    '.meaning_en',
-                                                                  ),
-                                                                  popupMeaningAr:
-                                                                      getJsonField(
-                                                                    myNamesListItem,
-                                                                    r'''$.meaning_ar''',
-                                                                  ).toString(),
-                                                                ),
+                                                                  NameMeaningPopupWidget(
+                                                                name: svenskaNameItem
+                                                                    .transliteration,
+                                                                translation:
+                                                                    svenskaNameItem
+                                                                        .swedishTranslation,
+                                                                explanation:
+                                                                    svenskaNameItem
+                                                                        .swedishExplanation,
                                                               ),
                                                             ),
-                                                          );
-                                                        },
-                                                      );
-                                                    },
-                                                    child: NameBoxWidget(
-                                                      key: Key(
-                                                          'Keyv02_${myNamesListIndex}_of_${myNamesList.length}'),
-                                                      arabicName: getJsonField(
-                                                        myNamesListItem,
-                                                        r'''$.arabic''',
-                                                      ).toString(),
-                                                      engishName: getJsonField(
-                                                        myNamesListItem,
-                                                        r'''$.english''',
-                                                      ).toString(),
-                                                      nameId: getJsonField(
-                                                        myNamesListItem,
-                                                        r'''$.id''',
-                                                      ),
-                                                    ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ).then((value) =>
+                                                        safeSetState(() {}));
+                                                  },
+                                                  child: NameSvenskaBoxWidget(
+                                                    key: Key(
+                                                        'Keyi6h_${svenskaNameIndex}_of_${svenskaName.length}'),
+                                                    allahName: svenskaNameItem
+                                                        .transliteration,
                                                   ),
                                                 );
                                               },

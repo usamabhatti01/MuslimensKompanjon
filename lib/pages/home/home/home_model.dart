@@ -1,4 +1,3 @@
-import '/backend/schema/structs/index.dart';
 import '/custom_header_footer/page_footer/page_footer_widget.dart';
 import '/custom_header_footer/section_header/section_header_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -10,8 +9,6 @@ import 'package:flutter/material.dart';
 class HomeModel extends FlutterFlowModel<HomeWidget> {
   ///  State fields for stateful widgets in this page.
 
-  // Stores action output result for [Custom Action - loadCitiesFromAsset] action in Home widget.
-  List<CityRecordStruct>? cityResult;
   // State field(s) for DropDown widget.
   String? dropDownValue;
   FormFieldController<String>? dropDownValueController;
@@ -19,7 +16,7 @@ class HomeModel extends FlutterFlowModel<HomeWidget> {
   late SectionHeaderModel sectionHeaderModel1;
   // Model for SectionHeader component.
   late SectionHeaderModel sectionHeaderModel2;
-  // Model for pageFooter component.
+  // Model for PageFooter component.
   late PageFooterModel pageFooterModel;
 
   @override

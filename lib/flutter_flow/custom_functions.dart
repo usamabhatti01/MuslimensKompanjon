@@ -3,3 +3,6 @@ export '/custom_code/functions/datetime_to_month.dart';
 export '/custom_code/functions/datetime_to_year.dart';
 export '/custom_code/functions/format_time.dart';
 export '/custom_code/functions/return_month_name.dart';
+export '/custom_code/functions/days_ago.dart';
+export '/custom_code/functions/video_to_string.dart';
+export '/custom_code/functions/return_value.dart';

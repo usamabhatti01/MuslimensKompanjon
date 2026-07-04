@@ -14,6 +14,61 @@ import '/flutter_flow/custom_functions.dart';
 
 import 'package:flutter/services.dart';
 import 'dart:convert';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
+import '/custom_code/actions/constants.dart';
+
+Future<String> loadJsonFromAssetOrGit(String filePath) async {
+  try {
+    return await rootBundle.loadString(filePath);
+  } catch (e) {
+    print("Asset not found ($filePath): $e. Trying cache/network.");
+  }
+
+  final fileName = filePath.split('/').last;
+
+  try {
+    final directory = await getApplicationDocumentsDirectory();
+    final localFile = File('${directory.path}/$fileName');
+    if (await localFile.exists()) {
+      print("Cache hit: Loaded $fileName from documents cache.");
+      return await localFile.readAsString();
+    }
+  } catch (e) {
+    print("Error reading from local documents cache: $e");
+  }
+
+  final gitHubOwner = GitConstants.gitHubOwner;
+  final gitHubRepo = GitConstants.gitHubRepo;
+  final branches = GitConstants.branches;
+
+  for (final branch in branches) {
+    final url =
+        'https://raw.githubusercontent.com/$gitHubOwner/$gitHubRepo/$branch/$filePath';
+    try {
+      print("Attempting to download from $url");
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final content = response.body;
+        try {
+          final directory = await getApplicationDocumentsDirectory();
+          final localFile = File('${directory.path}/$fileName');
+          await localFile.writeAsString(content);
+          print("Cached $fileName locally.");
+        } catch (cacheError) {
+          print("Error caching $fileName: $cacheError");
+        }
+        return content;
+      }
+    } catch (netError) {
+      print("Error downloading from $url: $netError");
+    }
+  }
+
+  throw Exception(
+      "Failed to load JSON file $filePath from assets, cache, or GitHub.");
+}
 
 Future<List<CityRecordStruct>> loadCitiesFromAsset(
   LatLng? value,
@@ -23,8 +78,8 @@ Future<List<CityRecordStruct>> loadCitiesFromAsset(
   try {
     print("📦 Loading JSON from assets...");
 
-    final jsonString = await rootBundle.loadString(
-      'assets/jsons/cities.json',
+    final jsonString = await loadJsonFromAssetOrGit(
+      FileConstants.citiesJsonPath,
     );
 
     print("✅ JSON loaded successfully");

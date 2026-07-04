@@ -26,6 +26,8 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => OnBoarding01Model());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

@@ -10,9 +10,11 @@ class AdhkarHeaderWidget extends StatefulWidget {
   const AdhkarHeaderWidget({
     super.key,
     required this.pageName,
+    required this.volume,
   });
 
   final String? pageName;
+  final bool? volume;
 
   @override
   State<AdhkarHeaderWidget> createState() => _AdhkarHeaderWidgetState();
@@ -31,6 +33,8 @@ class _AdhkarHeaderWidgetState extends State<AdhkarHeaderWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => AdhkarHeaderModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -49,20 +53,6 @@ class _AdhkarHeaderWidgetState extends State<AdhkarHeaderWidget> {
         Row(
           mainAxisSize: MainAxisSize.max,
           children: [
-            InkWell(
-              splashColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              onTap: () async {
-                context.safePop();
-              },
-              child: Icon(
-                Icons.chevron_left_outlined,
-                color: FlutterFlowTheme.of(context).black,
-                size: 24.0,
-              ),
-            ),
             Text(
               valueOrDefault<String>(
                 widget.pageName,

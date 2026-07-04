@@ -3,7 +3,7 @@ import '/custom_header_footer/page_sub_header/page_sub_header_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/pages/setting_pages/setting_page/bnetidsnotiser_without_time/bnetidsnotiser_without_time_widget.dart';
+import '/pages/setting_page/bnetidsnotiser_without_time/bnetidsnotiser_without_time_widget.dart';
 import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +32,8 @@ class _OnBoarding04WidgetState extends State<OnBoarding04Widget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => OnBoarding04Model());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -368,52 +370,36 @@ class _OnBoarding04WidgetState extends State<OnBoarding04Widget> {
                           ),
                           FFButtonWidget(
                             onPressed: () async {
-                              if (FFAppState().user.city != '') {
-                                FFAppState().updateUserStruct(
-                                  (e) => e
-                                    ..notifications = NotificationsStruct(
-                                      fazr: NotificationCheckStruct(
-                                        notice: _model.fajrModel.notisValue,
-                                        adhan: _model.fajrModel.adhanValue,
-                                      ),
-                                      dohr: NotificationCheckStruct(
-                                        notice: _model.dhohrModel.notisValue,
-                                        adhan: _model.dhohrModel.adhanValue,
-                                      ),
-                                      asr: NotificationCheckStruct(
-                                        notice: _model.asrModel.notisValue,
-                                        adhan: _model.asrModel.adhanValue,
-                                      ),
-                                      maghrib: NotificationCheckStruct(
-                                        notice: _model.maghribModel.notisValue,
-                                        adhan: _model.maghribModel.adhanValue,
-                                      ),
-                                      isha: NotificationCheckStruct(
-                                        notice: _model.ishaModel.notisValue,
-                                        adhan: _model.ishaModel.adhanValue,
-                                      ),
+                              FFAppState().updateUserStruct(
+                                (e) => e
+                                  ..notifications = NotificationsStruct(
+                                    fazr: NotificationTpyeStruct(
+                                      notice: _model.fajrModel.notisValue,
+                                      adhan: _model.fajrModel.adhanValue,
                                     ),
-                                );
-                                safeSetState(() {});
-                                await actions.schedulePrayerNotifications();
+                                    dohr: NotificationTpyeStruct(
+                                      notice: _model.dhohrModel.notisValue,
+                                      adhan: _model.dhohrModel.adhanValue,
+                                    ),
+                                    asr: NotificationTpyeStruct(
+                                      notice: _model.asrModel.notisValue,
+                                      adhan: _model.asrModel.adhanValue,
+                                    ),
+                                    maghrib: NotificationTpyeStruct(
+                                      notice: _model.maghribModel.notisValue,
+                                      adhan: _model.maghribModel.adhanValue,
+                                    ),
+                                    isha: NotificationTpyeStruct(
+                                      notice: _model.ishaModel.notisValue,
+                                      adhan: _model.ishaModel.adhanValue,
+                                    ),
+                                  )
+                                  ..onBoarding = true,
+                              );
+                              safeSetState(() {});
+                              await actions.schedulePrayerNotifications();
 
-                                context.pushNamed(HomeWidget.routeName);
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      'CityNot Select',
-                                      style: TextStyle(
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                      ),
-                                    ),
-                                    duration: Duration(milliseconds: 4000),
-                                    backgroundColor:
-                                        FlutterFlowTheme.of(context).secondary,
-                                  ),
-                                );
-                              }
+                              context.pushNamed(HomeWidget.routeName);
                             },
                             text: 'Aktivera notiser',
                             options: FFButtonOptions(
@@ -446,38 +432,6 @@ class _OnBoarding04WidgetState extends State<OnBoarding04Widget> {
                                   ),
                               elevation: 0.0,
                               borderRadius: BorderRadius.circular(12.0),
-                            ),
-                          ),
-                          InkWell(
-                            splashColor: Colors.transparent,
-                            focusColor: Colors.transparent,
-                            hoverColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            onTap: () async {
-                              context.pushNamed(HomeWidget.routeName);
-                            },
-                            child: Text(
-                              'Hoppa över',
-                              style: FlutterFlowTheme.of(context)
-                                  .titleSmall
-                                  .override(
-                                    font: GoogleFonts.plusJakartaSans(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .fontStyle,
-                                    ),
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .titleSmall
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .titleSmall
-                                        .fontStyle,
-                                    decoration: TextDecoration.underline,
-                                  ),
                             ),
                           ),
                         ].divide(SizedBox(height: 10.0)),

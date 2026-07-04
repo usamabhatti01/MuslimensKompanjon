@@ -33,6 +33,8 @@ class _PageSubHeaderWithIconWidgetState
   void initState() {
     super.initState();
     _model = createModel(context, () => PageSubHeaderWithIconModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -51,20 +53,6 @@ class _PageSubHeaderWithIconWidgetState
         Row(
           mainAxisSize: MainAxisSize.max,
           children: [
-            InkWell(
-              splashColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              onTap: () async {
-                context.safePop();
-              },
-              child: Icon(
-                Icons.chevron_left_outlined,
-                color: FlutterFlowTheme.of(context).black,
-                size: 24.0,
-              ),
-            ),
             Text(
               valueOrDefault<String>(
                 widget.pageName,

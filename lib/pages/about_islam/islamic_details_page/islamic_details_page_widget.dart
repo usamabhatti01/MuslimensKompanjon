@@ -45,6 +45,8 @@ class _IslamicDetailsPageWidgetState extends State<IslamicDetailsPageWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => IslamicDetailsPageModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

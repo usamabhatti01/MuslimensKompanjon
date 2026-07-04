@@ -33,6 +33,8 @@ class _AdkhaPageComponentWidgetState extends State<AdkhaPageComponentWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => AdkhaPageComponentModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

@@ -32,6 +32,8 @@ class _AkallanDuaBoxSvWidgetState extends State<AkallanDuaBoxSvWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => AkallanDuaBoxSvModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

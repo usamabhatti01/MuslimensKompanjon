@@ -29,6 +29,8 @@ class _AboutIslamDetailsPageWidgetState
   void initState() {
     super.initState();
     _model = createModel(context, () => AboutIslamDetailsPageModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -56,12 +58,26 @@ class _AboutIslamDetailsPageWidgetState
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                wrapWithModel(
-                  model: _model.pageSubHeaderWithIconModel,
-                  updateCallback: () => safeSetState(() {}),
-                  child: PageSubHeaderWithIconWidget(
-                    pageName: 'Om islamdetaljer',
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Icon(
+                      Icons.chevron_left,
+                      color: FlutterFlowTheme.of(context).primaryText,
+                      size: 24.0,
+                    ),
+                    Expanded(
+                      child: wrapWithModel(
+                        model: _model.pageSubHeaderWithIconModel,
+                        updateCallback: () => safeSetState(() {}),
+                        child: PageSubHeaderWithIconWidget(
+                          pageName: 'Om islamdetaljer',
+                        ),
+                      ),
+                    ),
+                  ].divide(SizedBox(
+                      width:
+                          FlutterFlowTheme.of(context).designToken.spacing.lg)),
                 ),
                 Expanded(
                   child: SingleChildScrollView(

@@ -5,6 +5,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/pages/categories/azhkar_quranic_verse/adkha_page_component/adkha_page_component_widget.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'adhkar_model.dart';
 export 'adhkar_model.dart';
 
@@ -27,6 +28,8 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => AdhkarModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -38,6 +41,8 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -53,12 +58,35 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              wrapWithModel(
-                model: _model.pageSubHeaderWithIconModel,
-                updateCallback: () => safeSetState(() {}),
-                child: PageSubHeaderWithIconWidget(
-                  pageName: 'Adhkar',
-                ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    focusColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: () async {
+                      context.pushNamed(HomeWidget.routeName);
+                    },
+                    child: Icon(
+                      Icons.chevron_left,
+                      color: FlutterFlowTheme.of(context).primaryText,
+                      size: 24.0,
+                    ),
+                  ),
+                  Expanded(
+                    child: wrapWithModel(
+                      model: _model.pageSubHeaderWithIconModel,
+                      updateCallback: () => safeSetState(() {}),
+                      child: PageSubHeaderWithIconWidget(
+                        pageName: 'Adhkar',
+                      ),
+                    ),
+                  ),
+                ].divide(SizedBox(
+                    width:
+                        FlutterFlowTheme.of(context).designToken.spacing.xxl)),
               ),
               Expanded(
                 child: Column(
@@ -102,6 +130,11 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
                                     'Morgon Adhkar',
                                     ParamType.String,
                                   ),
+                                  'adhkar': serializeParam(
+                                    FFAppState().morningAdhkar,
+                                    ParamType.DataStruct,
+                                    isList: true,
+                                  ),
                                 }.withoutNulls,
                               );
                             },
@@ -130,6 +163,11 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
                                   'adkar': serializeParam(
                                     'KvällAdhkar',
                                     ParamType.String,
+                                  ),
+                                  'adhkar': serializeParam(
+                                    FFAppState().eveningAdhkar,
+                                    ParamType.DataStruct,
+                                    isList: true,
                                   ),
                                 }.withoutNulls,
                               );
@@ -211,15 +249,7 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
                             hoverColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                             onTap: () async {
-                              context.pushNamed(
-                                AkallanDuaWidget.routeName,
-                                queryParameters: {
-                                  'adkar': serializeParam(
-                                    'Åkallan & Dua',
-                                    ParamType.String,
-                                  ),
-                                }.withoutNulls,
-                              );
+                              context.pushNamed(AkallanAndDuaWidget.routeName);
                             },
                             child: wrapWithModel(
                               model: _model.adkhaPageComponentModel5,

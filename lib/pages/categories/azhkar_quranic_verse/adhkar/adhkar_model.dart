@@ -21,7 +21,7 @@ class AdhkarModel extends FlutterFlowModel<AdhkarWidget> {
   late AdkhaPageComponentModel adkhaPageComponentModel4;
   // Model for AdkhaPageComponent component.
   late AdkhaPageComponentModel adkhaPageComponentModel5;
-  // Model for pageFooter component.
+  // Model for PageFooter component.
   late PageFooterModel pageFooterModel;
 
   @override

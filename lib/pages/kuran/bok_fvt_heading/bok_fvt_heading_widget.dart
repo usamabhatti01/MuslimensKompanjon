@@ -36,6 +36,8 @@ class _BokFvtHeadingWidgetState extends State<BokFvtHeadingWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => BokFvtHeadingModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

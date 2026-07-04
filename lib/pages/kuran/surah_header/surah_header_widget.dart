@@ -36,6 +36,8 @@ class _SurahHeaderWidgetState extends State<SurahHeaderWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => SurahHeaderModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

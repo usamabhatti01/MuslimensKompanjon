@@ -32,6 +32,8 @@ class _PageFooterWidgetState extends State<PageFooterWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => PageFooterModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -234,7 +236,7 @@ class _PageFooterWidgetState extends State<PageFooterWidget> {
                             : FlutterFlowTheme.of(context).footerInActive,
                         FlutterFlowTheme.of(context).footerInActive,
                       ),
-                      size: 18.0,
+                      size: 20.0,
                     ),
                     name: 'Mer',
                   ),

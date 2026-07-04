@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 class OnBoarding02Model extends FlutterFlowModel<OnBoarding02Widget> {
   ///  State fields for stateful widgets in this page.
 
-  // Stores action output result for [Custom Action - loadCitiesFromAsset] action in Button widget.
-  List<CityRecordStruct>? cities;
+  // Stores action output result for [Custom Action - searchCitiesByLatLon] action in Button widget.
+  CityRecordStruct? latlonResult;
 
   @override
   void initState(BuildContext context) {}

@@ -36,6 +36,8 @@ class _BokmrkeHeadingWidgetState extends State<BokmrkeHeadingWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => BokmrkeHeadingModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

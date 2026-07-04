@@ -35,12 +35,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
-      errorBuilder: (context, state) => HomeWidget(),
+      errorBuilder: (context, state) => SplashScreenWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
-          builder: (context, _) => HomeWidget(),
+          builder: (context, _) => SplashScreenWidget(),
         ),
         FFRoute(
           name: OnBoarding01Widget.routeName,
@@ -66,9 +66,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: TashbihCounterWidget.routeName,
           path: TashbihCounterWidget.routePath,
           builder: (context, params) => TashbihCounterWidget(
-            arabicValeue: params.getParam(
-              'arabicValeue',
+            language: params.getParam(
+              'language',
               ParamType.String,
+            ),
+            index: params.getParam(
+              'index',
+              ParamType.int,
             ),
           ),
         ),
@@ -90,6 +94,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               'adkar',
               ParamType.String,
             ),
+            adhkar: params.getParam<AdhkarStruct>(
+              'adhkar',
+              ParamType.DataStruct,
+              isList: true,
+              structBuilder: AdhkarStruct.fromSerializableMap,
+            ),
           ),
         ),
         FFRoute(
@@ -106,11 +116,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: SettingWidget.routeName,
           path: SettingWidget.routePath,
           builder: (context, params) => SettingWidget(),
-        ),
-        FFRoute(
-          name: InPage2Widget.routeName,
-          path: InPage2Widget.routePath,
-          builder: (context, params) => InPage2Widget(),
         ),
         FFRoute(
           name: FullCalenderWidget.routeName,
@@ -143,14 +148,56 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => ShortsWidget(),
         ),
         FFRoute(
-          name: SenasteLiveWidget.routeName,
-          path: SenasteLiveWidget.routePath,
-          builder: (context, params) => SenasteLiveWidget(),
+          name: VideoPlayerHomeWidget.routeName,
+          path: VideoPlayerHomeWidget.routePath,
+          builder: (context, params) => VideoPlayerHomeWidget(
+            videoLink: params.getParam(
+              'videoLink',
+              ParamType.String,
+            ),
+            title: params.getParam(
+              'title',
+              ParamType.String,
+            ),
+            views: params.getParam(
+              'views',
+              ParamType.String,
+            ),
+            postedDuration: params.getParam(
+              'postedDuration',
+              ParamType.DateTime,
+            ),
+            videoDetail: params.getParam(
+              'videoDetail',
+              ParamType.String,
+            ),
+            likes: params.getParam(
+              'likes',
+              ParamType.String,
+            ),
+            isFav: params.getParam(
+              'isFav',
+              ParamType.bool,
+            ),
+            index: params.getParam(
+              'index',
+              ParamType.int,
+            ),
+          ),
         ),
         FFRoute(
           name: ReelsWidget.routeName,
           path: ReelsWidget.routePath,
-          builder: (context, params) => ReelsWidget(),
+          builder: (context, params) => ReelsWidget(
+            index: params.getParam(
+              'index',
+              ParamType.int,
+            ),
+            desc: params.getParam(
+              'desc',
+              ParamType.String,
+            ),
+          ),
         ),
         FFRoute(
           name: TestWidget.routeName,
@@ -171,8 +218,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: AkallanDuaWidget.routeName,
           path: AkallanDuaWidget.routePath,
           builder: (context, params) => AkallanDuaWidget(
-            adkar: params.getParam(
-              'adkar',
+            adkarList: params.getParam<DuaChildStruct>(
+              'adkarList',
+              ParamType.DataStruct,
+              isList: true,
+              structBuilder: DuaChildStruct.fromSerializableMap,
+            ),
+            pageHeader: params.getParam(
+              'pageHeader',
               ParamType.String,
             ),
           ),
@@ -196,6 +249,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: KuranCopyWidget.routeName,
           path: KuranCopyWidget.routePath,
           builder: (context, params) => KuranCopyWidget(),
+        ),
+        FFRoute(
+          name: SplashScreenWidget.routeName,
+          path: SplashScreenWidget.routePath,
+          builder: (context, params) => SplashScreenWidget(),
+        ),
+        FFRoute(
+          name: AkallanAndDuaWidget.routeName,
+          path: AkallanAndDuaWidget.routePath,
+          builder: (context, params) => AkallanAndDuaWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
       observers: [routeObserver],

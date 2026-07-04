@@ -40,6 +40,8 @@ class _JuzHeadingWidgetState extends State<JuzHeadingWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => JuzHeadingModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

@@ -16,6 +16,10 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:hijri/hijri_calendar.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
+import '/custom_code/actions/constants.dart';
 
 Future<void> loadTodayHijriData() async {
   try {
@@ -32,9 +36,66 @@ Future<void> loadTodayHijriData() async {
     final int year = hijri.hYear;
 
     // Load correct JSON file
-    final String filePath = 'assets/jsons/hijri-calendar_$year.json';
+    final String filePath =
+        '${FileConstants.hijriCalendarPathPrefix}$year.json';
+    final String fileName = '${FileConstants.hijriCalendarPrefix}$year.json';
     print(filePath);
-    final String jsonString = await rootBundle.loadString(filePath);
+
+    String jsonString;
+
+    // 1. Try to load from assets first
+    try {
+      jsonString = await rootBundle.loadString(filePath);
+    } catch (e) {
+      print("Asset not found ($filePath): $e. Trying cache/network.");
+
+      // 2. Try local documents cache
+      try {
+        final directory = await getApplicationDocumentsDirectory();
+        final localFile = File('${directory.path}/$fileName');
+        if (await localFile.exists()) {
+          print("Cache hit: Loaded $fileName from documents cache.");
+          jsonString = await localFile.readAsString();
+        } else {
+          // 3. Try to download from GitHub repository
+          final gitHubOwner = GitConstants.gitHubOwner;
+          final gitHubRepo = GitConstants.gitHubRepo;
+          final branches = GitConstants.branches;
+          String? downloadedContent;
+
+          for (final branch in branches) {
+            final url =
+                'https://raw.githubusercontent.com/$gitHubOwner/$gitHubRepo/$branch/$filePath';
+            try {
+              print("Attempting to download from $url");
+              final response = await http.get(Uri.parse(url));
+              if (response.statusCode == 200) {
+                downloadedContent = response.body;
+                // Save successfully downloaded file to local cache
+                try {
+                  await localFile.writeAsString(downloadedContent);
+                  print("Cached $fileName locally.");
+                } catch (cacheError) {
+                  print("Error caching $fileName: $cacheError");
+                }
+                break;
+              }
+            } catch (netError) {
+              print("Error downloading from $url: $netError");
+            }
+          }
+          if (downloadedContent != null) {
+            jsonString = downloadedContent;
+          } else {
+            throw Exception("Failed to download from GitHub.");
+          }
+        }
+      } catch (cacheOrNetError) {
+        throw Exception(
+            "Failed to load JSON file from cache or GitHub: $cacheOrNetError");
+      }
+    }
+
     final List<dynamic> jsonData = json.decode(jsonString);
 
     // Find today's record safely

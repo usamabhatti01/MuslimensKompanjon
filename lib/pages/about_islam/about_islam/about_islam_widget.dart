@@ -28,6 +28,8 @@ class _AboutIslamWidgetState extends State<AboutIslamWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => AboutIslamModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -57,12 +59,35 @@ class _AboutIslamWidgetState extends State<AboutIslamWidget> {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                wrapWithModel(
-                  model: _model.pageSubHeaderWithIconModel,
-                  updateCallback: () => safeSetState(() {}),
-                  child: PageSubHeaderWithIconWidget(
-                    pageName: 'Om Islam',
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        context.pushNamed(HomeWidget.routeName);
+                      },
+                      child: Icon(
+                        Icons.chevron_left,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        size: 24.0,
+                      ),
+                    ),
+                    Expanded(
+                      child: wrapWithModel(
+                        model: _model.pageSubHeaderWithIconModel,
+                        updateCallback: () => safeSetState(() {}),
+                        child: PageSubHeaderWithIconWidget(
+                          pageName: 'Om Islam',
+                        ),
+                      ),
+                    ),
+                  ].divide(SizedBox(
+                      width:
+                          FlutterFlowTheme.of(context).designToken.spacing.lg)),
                 ),
                 Expanded(
                   child: Column(
@@ -104,7 +129,6 @@ class _AboutIslamWidgetState extends State<AboutIslamWidget> {
 
                             return ListView.separated(
                               padding: EdgeInsets.zero,
-                              shrinkWrap: true,
                               scrollDirection: Axis.vertical,
                               itemCount: aboutIslamicTabs.length,
                               separatorBuilder: (_, __) =>

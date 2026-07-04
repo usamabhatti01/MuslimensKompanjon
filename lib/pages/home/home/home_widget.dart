@@ -1,4 +1,3 @@
-import '/backend/schema/structs/index.dart';
 import '/custom_header_footer/page_footer/page_footer_widget.dart';
 import '/custom_header_footer/section_header/section_header_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
@@ -6,12 +5,11 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_youtube_player.dart';
 import '/flutter_flow/form_field_controller.dart';
+import '/pages/home/youtube_reels_item/youtube_reels_item_widget.dart';
 import '/pages/home/youtube_video_item/youtube_video_item_widget.dart';
-import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/index.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'home_model.dart';
@@ -37,17 +35,7 @@ class _HomeWidgetState extends State<HomeWidget> {
     super.initState();
     _model = createModel(context, () => HomeModel());
 
-    // On page load action.
-    SchedulerBinding.instance.addPostFrameCallback((_) async {
-      await actions.loadTodayHijriData();
-      _model.cityResult = await actions.loadCitiesFromAsset(
-        null,
-      );
-      FFAppState().cityList =
-          _model.cityResult!.toList().cast<CityRecordStruct>();
-      safeSetState(() {});
-      safeSetState(() {});
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -155,13 +143,10 @@ class _HomeWidgetState extends State<HomeWidget> {
                                       'EmptyString',
                                     ),
                                   ),
-                                  options: _model.cityResult != null &&
-                                          (_model.cityResult)!.isNotEmpty
-                                      ? _model.cityResult!
-                                          .map((e) => valueOrDefault<String>(
-                                                e.name,
-                                                '.',
-                                              ))
+                                  options: FFAppState().cityList.isNotEmpty
+                                      ? FFAppState()
+                                          .cityList
+                                          .map((e) => e.name)
                                           .toList()
                                       : ([]),
                                   onChanged: (val) async {
@@ -338,187 +323,250 @@ class _HomeWidgetState extends State<HomeWidget> {
                             fit: BoxFit.fitWidth,
                           ),
                         ),
-                        Container(
-                          width: double.infinity,
-                          height: 210.0,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  wrapWithModel(
-                                    model: _model.sectionHeaderModel1,
-                                    updateCallback: () => safeSetState(() {}),
-                                    child: SectionHeaderWidget(
-                                      title: 'MK-kanalen',
+                        if (responsiveVisibility(
+                          context: context,
+                          phone: false,
+                          tablet: false,
+                          tabletLandscape: false,
+                          desktop: false,
+                        ))
+                          Container(
+                            width: double.infinity,
+                            height: 210.0,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    wrapWithModel(
+                                      model: _model.sectionHeaderModel1,
+                                      updateCallback: () => safeSetState(() {}),
+                                      child: SectionHeaderWidget(
+                                        title: 'MK-kanalen',
+                                      ),
                                     ),
-                                  ),
-                                  InkWell(
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () async {
-                                      context
-                                          .pushNamed(MKkanalenWidget.routeName);
-                                    },
-                                    child: Text(
-                                      'Visa alla',
-                                      style: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .override(
-                                            font: GoogleFonts.inter(
+                                    InkWell(
+                                      splashColor: Colors.transparent,
+                                      focusColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onTap: () async {
+                                        context.pushNamed(
+                                            MKkanalenWidget.routeName);
+                                      },
+                                      child: Text(
+                                        'Visa alla',
+                                        style: FlutterFlowTheme.of(context)
+                                            .labelMedium
+                                            .override(
+                                              font: GoogleFonts.inter(
+                                                fontWeight: FontWeight.w300,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .labelMedium
+                                                        .fontStyle,
+                                              ),
+                                              letterSpacing: 0.0,
                                               fontWeight: FontWeight.w300,
                                               fontStyle:
                                                   FlutterFlowTheme.of(context)
                                                       .labelMedium
                                                       .fontStyle,
+                                              lineHeight: 1.3,
                                             ),
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w300,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .labelMedium
-                                                    .fontStyle,
-                                            lineHeight: 1.3,
-                                          ),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              Builder(
-                                builder: (context) {
-                                  final youtubeVideo =
-                                      FFAppState().youtubeData.toList();
+                                  ],
+                                ),
+                                Expanded(
+                                  child: Builder(
+                                    builder: (context) {
+                                      final youtubeVideo = FFAppState()
+                                          .youtubeData
+                                          .toList()
+                                          .take(5)
+                                          .toList();
 
-                                  return SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children:
-                                          List.generate(youtubeVideo.length,
-                                              (youtubeVideoIndex) {
-                                        final youtubeVideoItem =
-                                            youtubeVideo[youtubeVideoIndex];
-                                        return Container(
-                                          width: 200.0,
-                                          height: 160.0,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                                FlutterFlowTheme.of(context)
-                                                    .designToken
-                                                    .radius
-                                                    .sm),
-                                          ),
-                                          child: YoutubeVideoItemWidget(
-                                            key: Key(
-                                                'Key37y_${youtubeVideoIndex}_of_${youtubeVideo.length}'),
-                                            youtubeLink: youtubeVideoItem.video,
-                                            videoTitle: youtubeVideoItem.title,
-                                            videoTopic: youtubeVideoItem.topic,
-                                          ),
-                                        );
-                                      }).divide(SizedBox(width: 10.0)),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ].divide(SizedBox(height: 10.0)),
-                          ),
-                        ),
-                        Container(
-                          width: double.infinity,
-                          height: 210.0,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  wrapWithModel(
-                                    model: _model.sectionHeaderModel2,
-                                    updateCallback: () => safeSetState(() {}),
-                                    child: SectionHeaderWidget(
-                                      title: 'Rekommenderat innehåll',
-                                    ),
-                                  ),
-                                  Text(
-                                    'Visa alla',
-                                    style: FlutterFlowTheme.of(context)
-                                        .labelMedium
-                                        .override(
-                                          font: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w300,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .labelMedium
-                                                    .fontStyle,
-                                          ),
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w300,
-                                          fontStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .labelMedium
-                                                  .fontStyle,
-                                          lineHeight: 1.3,
+                                      return SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children:
+                                              List.generate(youtubeVideo.length,
+                                                  (youtubeVideoIndex) {
+                                            final youtubeVideoItem =
+                                                youtubeVideo[youtubeVideoIndex];
+                                            return Container(
+                                              width: 200.0,
+                                              height: 160.0,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .designToken
+                                                            .radius
+                                                            .sm),
+                                              ),
+                                              child: YoutubeVideoItemWidget(
+                                                key: Key(
+                                                    'Keyc9e_${youtubeVideoIndex}_of_${youtubeVideo.length}'),
+                                                youtubeLink:
+                                                    youtubeVideoItem.video,
+                                                videoTitle:
+                                                    youtubeVideoItem.title,
+                                                videoTopic:
+                                                    youtubeVideoItem.topic,
+                                              ),
+                                            );
+                                          }).divide(SizedBox(width: 10.0)),
                                         ),
+                                      );
+                                    },
                                   ),
-                                ],
-                              ),
-                              Builder(
-                                builder: (context) {
-                                  final content =
-                                      FFAppState().youtubeData.toList();
-
-                                  return SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: List.generate(content.length,
-                                          (contentIndex) {
-                                        final contentItem =
-                                            content[contentIndex];
-                                        return Container(
-                                          width: 200.0,
-                                          height: 160.0,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                                FlutterFlowTheme.of(context)
-                                                    .designToken
-                                                    .radius
-                                                    .sm),
-                                          ),
-                                          child: YoutubeVideoItemWidget(
-                                            key: Key(
-                                                'Key02g_${contentIndex}_of_${content.length}'),
-                                            youtubeLink: contentItem.video,
-                                            videoTitle: contentItem.title,
-                                            videoTopic: contentItem.topic,
-                                          ),
-                                        );
-                                      }).divide(SizedBox(width: 10.0)),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ].divide(SizedBox(height: 10.0)),
+                                ),
+                              ].divide(SizedBox(height: 10.0)),
+                            ),
                           ),
-                        ),
+                        if (responsiveVisibility(
+                          context: context,
+                          tablet: false,
+                          tabletLandscape: false,
+                          desktop: false,
+                        ))
+                          Container(
+                            width: double.infinity,
+                            height: 210.0,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    wrapWithModel(
+                                      model: _model.sectionHeaderModel2,
+                                      updateCallback: () => safeSetState(() {}),
+                                      child: SectionHeaderWidget(
+                                        title: 'MK-kanalen',
+                                      ),
+                                    ),
+                                    InkWell(
+                                      splashColor: Colors.transparent,
+                                      focusColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onTap: () async {
+                                        context.pushNamed(
+                                            MKkanalenWidget.routeName);
+                                      },
+                                      child: Text(
+                                        'Visa alla',
+                                        style: FlutterFlowTheme.of(context)
+                                            .labelMedium
+                                            .override(
+                                              font: GoogleFonts.inter(
+                                                fontWeight: FontWeight.w300,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .labelMedium
+                                                        .fontStyle,
+                                              ),
+                                              letterSpacing: 0.0,
+                                              fontWeight: FontWeight.w300,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelMedium
+                                                      .fontStyle,
+                                              lineHeight: 1.3,
+                                            ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Expanded(
+                                  child: Builder(
+                                    builder: (context) {
+                                      final content = FFAppState()
+                                          .reelsData
+                                          .toList()
+                                          .take(5)
+                                          .toList();
+
+                                      return SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: List.generate(
+                                              content.length, (contentIndex) {
+                                            final contentItem =
+                                                content[contentIndex];
+                                            return Container(
+                                              width: 200.0,
+                                              height: 170.0,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .designToken
+                                                            .radius
+                                                            .sm),
+                                              ),
+                                              child: InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () async {
+                                                  context.pushNamed(
+                                                    ReelsWidget.routeName,
+                                                    queryParameters: {
+                                                      'index': serializeParam(
+                                                        contentIndex,
+                                                        ParamType.int,
+                                                      ),
+                                                      'desc': serializeParam(
+                                                        contentItem.title,
+                                                        ParamType.String,
+                                                      ),
+                                                    }.withoutNulls,
+                                                  );
+                                                },
+                                                child: YoutubeReelsItemWidget(
+                                                  key: Key(
+                                                      'Key02g_${contentIndex}_of_${content.length}'),
+                                                  thumbnail:
+                                                      contentItem.thumbnail,
+                                                  videoTitle: contentItem.title,
+                                                  videoTopic: contentItem.topic,
+                                                ),
+                                              ),
+                                            );
+                                          }).divide(SizedBox(width: 10.0)),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ].divide(SizedBox(height: 10.0)),
+                            ),
+                          ),
                         Container(
                           height: 214.0,
                           decoration: BoxDecoration(

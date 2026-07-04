@@ -27,6 +27,8 @@ class _KuranCopyWidgetState extends State<KuranCopyWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => KuranCopyModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

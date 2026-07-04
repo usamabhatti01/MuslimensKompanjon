@@ -8,16 +8,22 @@ class UserDataStruct extends BaseStruct {
   UserDataStruct({
     String? name,
     String? city,
-    String? language,
+    String? languageCode,
     NotificationsStruct? notifications,
-    bool? switchToEnglish,
     String? mode,
+    bool? onBoarding,
+    int? prayerReminder,
+    String? adhanSound,
+    RatingTypeStruct? rating,
   })  : _name = name,
         _city = city,
-        _language = language,
+        _languageCode = languageCode,
         _notifications = notifications,
-        _switchToEnglish = switchToEnglish,
-        _mode = mode;
+        _mode = mode,
+        _onBoarding = onBoarding,
+        _prayerReminder = prayerReminder,
+        _adhanSound = adhanSound,
+        _rating = rating;
 
   // "name" field.
   String? _name;
@@ -33,12 +39,12 @@ class UserDataStruct extends BaseStruct {
 
   bool hasCity() => _city != null;
 
-  // "language" field.
-  String? _language;
-  String get language => _language ?? '';
-  set language(String? val) => _language = val;
+  // "languageCode" field.
+  String? _languageCode;
+  String get languageCode => _languageCode ?? '';
+  set languageCode(String? val) => _languageCode = val;
 
-  bool hasLanguage() => _language != null;
+  bool hasLanguageCode() => _languageCode != null;
 
   // "notifications" field.
   NotificationsStruct? _notifications;
@@ -52,29 +58,62 @@ class UserDataStruct extends BaseStruct {
 
   bool hasNotifications() => _notifications != null;
 
-  // "switchToEnglish" field.
-  bool? _switchToEnglish;
-  bool get switchToEnglish => _switchToEnglish ?? false;
-  set switchToEnglish(bool? val) => _switchToEnglish = val;
-
-  bool hasSwitchToEnglish() => _switchToEnglish != null;
-
   // "mode" field.
   String? _mode;
-  String get mode => _mode ?? '';
+  String get mode => _mode ?? 'System';
   set mode(String? val) => _mode = val;
 
   bool hasMode() => _mode != null;
 
+  // "onBoarding" field.
+  bool? _onBoarding;
+  bool get onBoarding => _onBoarding ?? false;
+  set onBoarding(bool? val) => _onBoarding = val;
+
+  bool hasOnBoarding() => _onBoarding != null;
+
+  // "prayerReminder" field.
+  int? _prayerReminder;
+  int get prayerReminder => _prayerReminder ?? 5;
+  set prayerReminder(int? val) => _prayerReminder = val;
+
+  void incrementPrayerReminder(int amount) =>
+      prayerReminder = prayerReminder + amount;
+
+  bool hasPrayerReminder() => _prayerReminder != null;
+
+  // "adhanSound" field.
+  String? _adhanSound;
+  String get adhanSound => _adhanSound ?? 'Vibration';
+  set adhanSound(String? val) => _adhanSound = val;
+
+  bool hasAdhanSound() => _adhanSound != null;
+
+  // "rating" field.
+  RatingTypeStruct? _rating;
+  RatingTypeStruct get rating => _rating ?? RatingTypeStruct();
+  set rating(RatingTypeStruct? val) => _rating = val;
+
+  void updateRating(Function(RatingTypeStruct) updateFn) {
+    updateFn(_rating ??= RatingTypeStruct());
+  }
+
+  bool hasRating() => _rating != null;
+
   static UserDataStruct fromMap(Map<String, dynamic> data) => UserDataStruct(
         name: data['name'] as String?,
         city: data['city'] as String?,
-        language: data['language'] as String?,
+        languageCode: data['languageCode'] as String?,
         notifications: data['notifications'] is NotificationsStruct
             ? data['notifications']
             : NotificationsStruct.maybeFromMap(data['notifications']),
-        switchToEnglish: data['switchToEnglish'] as bool?,
         mode: data['mode'] as String?,
+        onBoarding: data['onBoarding'] as bool?,
+        prayerReminder: castToType<int>(data['prayerReminder']),
+        adhanSound: data['adhanSound'] as String?,
+        rating: data['rating'] is RatingTypeStruct
+            ? data['rating']
+            : RatingTypeStruct.maybeFromMap(data['rating']),
       );
 
   static UserDataStruct? maybeFromMap(dynamic data) =>
@@ -83,10 +122,13 @@ class UserDataStruct extends BaseStruct {
   Map<String, dynamic> toMap() => {
         'name': _name,
         'city': _city,
-        'language': _language,
+        'languageCode': _languageCode,
         'notifications': _notifications?.toMap(),
-        'switchToEnglish': _switchToEnglish,
         'mode': _mode,
+        'onBoarding': _onBoarding,
+        'prayerReminder': _prayerReminder,
+        'adhanSound': _adhanSound,
+        'rating': _rating?.toMap(),
       }.withoutNulls;
 
   @override
@@ -99,21 +141,33 @@ class UserDataStruct extends BaseStruct {
           _city,
           ParamType.String,
         ),
-        'language': serializeParam(
-          _language,
+        'languageCode': serializeParam(
+          _languageCode,
           ParamType.String,
         ),
         'notifications': serializeParam(
           _notifications,
           ParamType.DataStruct,
         ),
-        'switchToEnglish': serializeParam(
-          _switchToEnglish,
-          ParamType.bool,
-        ),
         'mode': serializeParam(
           _mode,
           ParamType.String,
+        ),
+        'onBoarding': serializeParam(
+          _onBoarding,
+          ParamType.bool,
+        ),
+        'prayerReminder': serializeParam(
+          _prayerReminder,
+          ParamType.int,
+        ),
+        'adhanSound': serializeParam(
+          _adhanSound,
+          ParamType.String,
+        ),
+        'rating': serializeParam(
+          _rating,
+          ParamType.DataStruct,
         ),
       }.withoutNulls;
 
@@ -129,8 +183,8 @@ class UserDataStruct extends BaseStruct {
           ParamType.String,
           false,
         ),
-        language: deserializeParam(
-          data['language'],
+        languageCode: deserializeParam(
+          data['languageCode'],
           ParamType.String,
           false,
         ),
@@ -140,15 +194,31 @@ class UserDataStruct extends BaseStruct {
           false,
           structBuilder: NotificationsStruct.fromSerializableMap,
         ),
-        switchToEnglish: deserializeParam(
-          data['switchToEnglish'],
-          ParamType.bool,
-          false,
-        ),
         mode: deserializeParam(
           data['mode'],
           ParamType.String,
           false,
+        ),
+        onBoarding: deserializeParam(
+          data['onBoarding'],
+          ParamType.bool,
+          false,
+        ),
+        prayerReminder: deserializeParam(
+          data['prayerReminder'],
+          ParamType.int,
+          false,
+        ),
+        adhanSound: deserializeParam(
+          data['adhanSound'],
+          ParamType.String,
+          false,
+        ),
+        rating: deserializeStructParam(
+          data['rating'],
+          ParamType.DataStruct,
+          false,
+          structBuilder: RatingTypeStruct.fromSerializableMap,
         ),
       );
 
@@ -160,30 +230,48 @@ class UserDataStruct extends BaseStruct {
     return other is UserDataStruct &&
         name == other.name &&
         city == other.city &&
-        language == other.language &&
+        languageCode == other.languageCode &&
         notifications == other.notifications &&
-        switchToEnglish == other.switchToEnglish &&
-        mode == other.mode;
+        mode == other.mode &&
+        onBoarding == other.onBoarding &&
+        prayerReminder == other.prayerReminder &&
+        adhanSound == other.adhanSound &&
+        rating == other.rating;
   }
 
   @override
-  int get hashCode => const ListEquality()
-      .hash([name, city, language, notifications, switchToEnglish, mode]);
+  int get hashCode => const ListEquality().hash([
+        name,
+        city,
+        languageCode,
+        notifications,
+        mode,
+        onBoarding,
+        prayerReminder,
+        adhanSound,
+        rating
+      ]);
 }
 
 UserDataStruct createUserDataStruct({
   String? name,
   String? city,
-  String? language,
+  String? languageCode,
   NotificationsStruct? notifications,
-  bool? switchToEnglish,
   String? mode,
+  bool? onBoarding,
+  int? prayerReminder,
+  String? adhanSound,
+  RatingTypeStruct? rating,
 }) =>
     UserDataStruct(
       name: name,
       city: city,
-      language: language,
+      languageCode: languageCode,
       notifications: notifications ?? NotificationsStruct(),
-      switchToEnglish: switchToEnglish,
       mode: mode,
+      onBoarding: onBoarding,
+      prayerReminder: prayerReminder,
+      adhanSound: adhanSound,
+      rating: rating ?? RatingTypeStruct(),
     );

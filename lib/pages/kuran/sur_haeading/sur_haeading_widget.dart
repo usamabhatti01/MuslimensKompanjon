@@ -42,6 +42,8 @@ class _SurHaeadingWidgetState extends State<SurHaeadingWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => SurHaeadingModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

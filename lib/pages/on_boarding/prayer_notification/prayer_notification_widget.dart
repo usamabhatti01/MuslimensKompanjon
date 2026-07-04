@@ -35,6 +35,7 @@ class _PrayerNotificationWidgetState extends State<PrayerNotificationWidget> {
     _model = createModel(context, () => PrayerNotificationModel());
 
     _model.switchValue = widget.notificationCheck!;
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

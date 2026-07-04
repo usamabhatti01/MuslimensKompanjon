@@ -34,6 +34,8 @@ class _CategoriesSubTabWidgetState extends State<CategoriesSubTabWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => CategoriesSubTabModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

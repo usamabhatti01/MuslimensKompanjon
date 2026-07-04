@@ -10,9 +10,17 @@ enum NamazName {
 }
 
 enum Mode {
-  system,
-  light,
-  dark,
+  System,
+  Light,
+  Dark,
+}
+
+enum AdhanSound {
+  Vibration,
+  Standard,
+  ShortAdhan,
+  AdhanMakkah,
+  AdhanMadinah,
 }
 
 extension FFEnumExtensions<T extends Enum> on T {
@@ -30,6 +38,8 @@ T? deserializeEnum<T>(String? value) {
       return NamazName.values.deserialize(value) as T?;
     case (Mode):
       return Mode.values.deserialize(value) as T?;
+    case (AdhanSound):
+      return AdhanSound.values.deserialize(value) as T?;
     default:
       return null;
   }

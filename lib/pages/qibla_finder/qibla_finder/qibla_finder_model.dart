@@ -9,7 +9,7 @@ class QiblaFinderModel extends FlutterFlowModel<QiblaFinderWidget> {
 
   // Model for PageSubHeaderWithIcon component.
   late PageSubHeaderWithIconModel pageSubHeaderWithIconModel;
-  // Model for pageFooter component.
+  // Model for PageFooter component.
   late PageFooterModel pageFooterModel;
 
   @override

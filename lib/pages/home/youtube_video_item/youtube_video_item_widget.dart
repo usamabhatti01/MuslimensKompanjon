@@ -36,6 +36,8 @@ class _YoutubeVideoItemWidgetState extends State<YoutubeVideoItemWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => YoutubeVideoItemModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -76,19 +78,22 @@ class _YoutubeVideoItemWidgetState extends State<YoutubeVideoItemWidget> {
               ),
           overflow: TextOverflow.ellipsis,
         ),
-        Text(
-          widget.videoTopic,
-          maxLines: 1,
-          style: FlutterFlowTheme.of(context).bodySmall.override(
-                font: GoogleFonts.inter(
+        Expanded(
+          child: Text(
+            widget.videoTopic,
+            maxLines: 1,
+            style: FlutterFlowTheme.of(context).bodySmall.override(
+                  font: GoogleFonts.inter(
+                    fontWeight:
+                        FlutterFlowTheme.of(context).bodySmall.fontWeight,
+                    fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                  ),
+                  letterSpacing: 0.0,
                   fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
                   fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
                 ),
-                letterSpacing: 0.0,
-                fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
-                fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
-              ),
-          overflow: TextOverflow.ellipsis,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ].divide(SizedBox(height: 3.0)),
     );

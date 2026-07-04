@@ -3,10 +3,8 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
-import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'on_boarding03_model.dart';
@@ -33,13 +31,7 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
     super.initState();
     _model = createModel(context, () => OnBoarding03Model());
 
-    // On component load action.
-    SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.allResult = await actions.loadCitiesFromAsset(
-        null,
-      );
-      safeSetState(() {});
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -136,13 +128,10 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
                                           )
                                         : '',
                               ),
-                              options: _model.allResult != null &&
-                                      (_model.allResult)!.isNotEmpty
-                                  ? _model.allResult!
-                                      .map((e) => valueOrDefault<String>(
-                                            e.name,
-                                            'EmptyString',
-                                          ))
+                              options: FFAppState().cityList.isNotEmpty
+                                  ? FFAppState()
+                                      .cityList
+                                      .map((e) => e.name)
                                       .toList()
                                   : ([]),
                               onChanged: (val) async {

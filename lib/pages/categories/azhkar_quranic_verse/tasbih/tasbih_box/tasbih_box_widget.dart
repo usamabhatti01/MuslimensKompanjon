@@ -32,6 +32,8 @@ class _TasbihBoxWidgetState extends State<TasbihBoxWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => TasbihBoxModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

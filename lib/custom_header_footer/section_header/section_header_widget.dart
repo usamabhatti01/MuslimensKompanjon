@@ -30,6 +30,8 @@ class _SectionHeaderWidgetState extends State<SectionHeaderWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => SectionHeaderModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

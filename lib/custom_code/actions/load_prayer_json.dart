@@ -9,14 +9,16 @@ import 'package:flutter/material.dart';
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
+import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
+import '/custom_code/actions/constants.dart';
 
 Future<String> loadPrayerJson(
   String cityName,
   int year,
 ) async {
-  List<String>? _cachedAssets;
-
   String toNfd(String input) {
     const decomposed = <String, String>{
       'å': 'a\u030A',
@@ -52,21 +54,82 @@ Future<String> loadPrayerJson(
     return false;
   }
 
+  final slug = cityName.trim().toLowerCase();
+  final fileName = '${slug}_$year.json';
+  final fileNameNfd = toNfd(fileName);
+
+  // 1. Try to read from local device cache first
+  try {
+    final directory = await getApplicationDocumentsDirectory();
+    final localFilePath = '${directory.path}/$fileName';
+    final localFile = File(localFilePath);
+
+    if (await localFile.exists()) {
+      print("Offline Cache Hit: Loaded local file for $cityName ($year).");
+      return await localFile.readAsString();
+    }
+  } catch (e) {
+    print("Error reading from local device cache: $e");
+  }
+
+  // 2. Local cache missed. Try to download from GitHub repository
+  // Change these two values if you ever change your GitHub username or repository:
+  final gitHubOwner = GitConstants.gitHubOwner;
+  final gitHubRepo = GitConstants.gitHubRepo;
+  final branches = GitConstants.branches;
+  final possibleUrls = <String>[];
+  for (final b in branches) {
+    possibleUrls.addAll([
+      'https://raw.githubusercontent.com/$gitHubOwner/$gitHubRepo/$b/assets/jsons/$fileName',
+      'https://raw.githubusercontent.com/$gitHubOwner/$gitHubRepo/$b/assets/jsons/$fileNameNfd',
+      'https://raw.githubusercontent.com/$gitHubOwner/$gitHubRepo/$b/assets/jsons/$year/$fileName',
+      'https://raw.githubusercontent.com/$gitHubOwner/$gitHubRepo/$b/assets/jsons/$year/$fileNameNfd',
+    ]);
+  }
+
+  String? downloadedContent;
+  for (final url in possibleUrls) {
+    try {
+      print("Attempting download from: $url");
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        downloadedContent = response.body;
+        print("Successfully downloaded JSON from: $url");
+        break;
+      }
+    } catch (e) {
+      print("Failed to download from $url: $e");
+    }
+  }
+
+  // 3. Save successfully downloaded file to local cache
+  if (downloadedContent != null) {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final localFilePath = '${directory.path}/$fileName';
+      final localFile = File(localFilePath);
+      await localFile.writeAsString(downloadedContent);
+      print("Cached JSON locally at: $localFilePath");
+    } catch (e) {
+      print("Failed to write JSON to local cache: $e");
+    }
+    return downloadedContent;
+  }
+
+  // 4. Download failed / offline & not in cache: fallback to local bundled assets (if any)
+  print(
+      "Cache missed and download failed/offline. Falling back to local bundle assets.");
+
+  List<String>? _cachedAssets;
+
   Future<List<String>> allAssets() async {
     if (_cachedAssets != null) return _cachedAssets!;
-
     final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
-
     _cachedAssets = manifest.listAssets();
-
     return _cachedAssets!;
   }
 
   Future<String?> resolvePath() async {
-    final slug = cityName.trim().toLowerCase();
-    final fileName = '${slug}_$year.json';
-    final fileNameNfd = toNfd(fileName);
-
     final assets = await allAssets();
 
     final directPaths = <String>[
@@ -101,10 +164,16 @@ Future<String> loadPrayerJson(
   final path = await resolvePath();
 
   if (path == null) {
-    return await rootBundle.loadString(
-      'assets/jsons/$year/default_$year.json',
-    );
+    print("Asset path not resolved. Trying default_year fallback.");
+    try {
+      return await rootBundle.loadString(
+        'assets/jsons/$year/default_$year.json',
+      );
+    } catch (e) {
+      print("Fallback failed. Trying default.json.");
+      return await rootBundle.loadString('assets/jsons/alingsås_2026.json');
+    }
   }
 
   return rootBundle.loadString(path);
-}
+} ////

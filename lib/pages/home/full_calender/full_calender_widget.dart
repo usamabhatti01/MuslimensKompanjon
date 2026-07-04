@@ -37,6 +37,8 @@ class _FullCalenderWidgetState extends State<FullCalenderWidget> {
       safeSetState(() {});
       safeSetState(() {});
     });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

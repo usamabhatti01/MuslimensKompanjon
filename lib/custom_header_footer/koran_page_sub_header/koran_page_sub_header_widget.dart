@@ -33,6 +33,8 @@ class _KoranPageSubHeaderWidgetState extends State<KoranPageSubHeaderWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => KoranPageSubHeaderModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

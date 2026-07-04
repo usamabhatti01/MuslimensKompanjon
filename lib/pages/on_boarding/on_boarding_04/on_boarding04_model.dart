@@ -1,6 +1,6 @@
 import '/custom_header_footer/page_sub_header/page_sub_header_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/pages/setting_pages/setting_page/bnetidsnotiser_without_time/bnetidsnotiser_without_time_widget.dart';
+import '/pages/setting_page/bnetidsnotiser_without_time/bnetidsnotiser_without_time_widget.dart';
 import '/index.dart';
 import 'on_boarding04_widget.dart' show OnBoarding04Widget;
 import 'package:flutter/material.dart';

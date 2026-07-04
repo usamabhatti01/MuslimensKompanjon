@@ -32,6 +32,8 @@ class _AdhkarComponentWidgetState extends State<AdhkarComponentWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => AdhkarComponentModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
