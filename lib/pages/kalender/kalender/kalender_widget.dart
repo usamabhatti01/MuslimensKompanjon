@@ -2,6 +2,7 @@ import '/custom_header_footer/kalender_page_sub_header/kalender_page_sub_header_
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'kalender_model.dart';
 export 'kalender_model.dart';
@@ -52,12 +53,43 @@ class _KalenderWidgetState extends State<KalenderWidget> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              wrapWithModel(
-                model: _model.kalenderPageSubHeaderModel,
-                updateCallback: () => safeSetState(() {}),
-                child: KalenderPageSubHeaderWidget(
-                  pageName: 'Kalender',
-                ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    focusColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: () async {
+                      context.pushNamed(
+                        HomeWidget.routeName,
+                        extra: <String, dynamic>{
+                          '__transition_info__': TransitionInfo(
+                            hasTransition: true,
+                            transitionType: PageTransitionType.rightToLeft,
+                          ),
+                        },
+                      );
+                    },
+                    child: Icon(
+                      Icons.chevron_left,
+                      color: FlutterFlowTheme.of(context).primaryText,
+                      size: 24.0,
+                    ),
+                  ),
+                  Expanded(
+                    child: wrapWithModel(
+                      model: _model.kalenderPageSubHeaderModel,
+                      updateCallback: () => safeSetState(() {}),
+                      child: KalenderPageSubHeaderWidget(
+                        pageName: 'Kalender',
+                      ),
+                    ),
+                  ),
+                ].divide(SizedBox(
+                    width:
+                        FlutterFlowTheme.of(context).designToken.spacing.xxl)),
               ),
               Expanded(
                 child: Column(

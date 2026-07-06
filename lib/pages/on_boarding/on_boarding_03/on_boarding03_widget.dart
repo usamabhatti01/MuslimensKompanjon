@@ -7,6 +7,7 @@ import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:webviewx_plus/webviewx_plus.dart';
 import 'on_boarding03_model.dart';
 export 'on_boarding03_model.dart';
 
@@ -240,8 +241,28 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
                             (e) => e..city = _model.dropDownValue,
                           );
                           safeSetState(() {});
-
-                          context.pushNamed(OnBoarding04Widget.routeName);
+                          if (FFAppState().user.city != '') {
+                            context.pushNamed(OnBoarding04Widget.routeName);
+                          } else {
+                            await showDialog(
+                              context: context,
+                              builder: (alertDialogContext) {
+                                return WebViewAware(
+                                  child: AlertDialog(
+                                    title: Text('Warning '),
+                                    content: Text('Please Select City.'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(alertDialogContext),
+                                        child: Text('Ok'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          }
                         },
                         text: 'Kom igång  ',
                         icon: Icon(

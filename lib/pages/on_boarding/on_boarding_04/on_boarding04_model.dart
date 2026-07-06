@@ -1,4 +1,4 @@
-import '/custom_header_footer/page_sub_header/page_sub_header_widget.dart';
+import '/custom_header_footer/mk_home_page_header/mk_home_page_header_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/pages/setting_page/bnetidsnotiser_without_time/bnetidsnotiser_without_time_widget.dart';
 import '/index.dart';
@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 class OnBoarding04Model extends FlutterFlowModel<OnBoarding04Widget> {
   ///  State fields for stateful widgets in this page.
 
-  // Model for PageSubHeader component.
-  late PageSubHeaderModel pageSubHeaderModel;
+  // Model for MkHomePageHeader component.
+  late MkHomePageHeaderModel mkHomePageHeaderModel;
   // Model for Fajr.
   late BnetidsnotiserWithoutTimeModel fajrModel;
   // Model for Dhohr.
@@ -23,7 +23,7 @@ class OnBoarding04Model extends FlutterFlowModel<OnBoarding04Widget> {
 
   @override
   void initState(BuildContext context) {
-    pageSubHeaderModel = createModel(context, () => PageSubHeaderModel());
+    mkHomePageHeaderModel = createModel(context, () => MkHomePageHeaderModel());
     fajrModel = createModel(context, () => BnetidsnotiserWithoutTimeModel());
     dhohrModel = createModel(context, () => BnetidsnotiserWithoutTimeModel());
     asrModel = createModel(context, () => BnetidsnotiserWithoutTimeModel());
@@ -33,7 +33,7 @@ class OnBoarding04Model extends FlutterFlowModel<OnBoarding04Widget> {
 
   @override
   void dispose() {
-    pageSubHeaderModel.dispose();
+    mkHomePageHeaderModel.dispose();
     fajrModel.dispose();
     dhohrModel.dispose();
     asrModel.dispose();

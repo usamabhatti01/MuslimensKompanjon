@@ -2,13 +2,12 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'koran_page_sub_header_model.dart';
-export 'koran_page_sub_header_model.dart';
+import 'mk_home_page_header_model.dart';
+export 'mk_home_page_header_model.dart';
 
-class KoranPageSubHeaderWidget extends StatefulWidget {
-  const KoranPageSubHeaderWidget({
+class MkHomePageHeaderWidget extends StatefulWidget {
+  const MkHomePageHeaderWidget({
     super.key,
     required this.pageName,
   });
@@ -16,12 +15,11 @@ class KoranPageSubHeaderWidget extends StatefulWidget {
   final String? pageName;
 
   @override
-  State<KoranPageSubHeaderWidget> createState() =>
-      _KoranPageSubHeaderWidgetState();
+  State<MkHomePageHeaderWidget> createState() => _MkHomePageHeaderWidgetState();
 }
 
-class _KoranPageSubHeaderWidgetState extends State<KoranPageSubHeaderWidget> {
-  late KoranPageSubHeaderModel _model;
+class _MkHomePageHeaderWidgetState extends State<MkHomePageHeaderWidget> {
+  late MkHomePageHeaderModel _model;
 
   @override
   void setState(VoidCallback callback) {
@@ -32,7 +30,7 @@ class _KoranPageSubHeaderWidgetState extends State<KoranPageSubHeaderWidget> {
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => KoranPageSubHeaderModel());
+    _model = createModel(context, () => MkHomePageHeaderModel());
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
@@ -52,6 +50,7 @@ class _KoranPageSubHeaderWidgetState extends State<KoranPageSubHeaderWidget> {
       children: [
         Row(
           mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               valueOrDefault<String>(
@@ -78,12 +77,7 @@ class _KoranPageSubHeaderWidgetState extends State<KoranPageSubHeaderWidget> {
           mainAxisSize: MainAxisSize.max,
           children: [
             Icon(
-              Icons.search,
-              color: FlutterFlowTheme.of(context).black,
-              size: 24.0,
-            ),
-            Icon(
-              Icons.menu_book,
+              Icons.share_outlined,
               color: FlutterFlowTheme.of(context).black,
               size: 24.0,
             ),
@@ -93,24 +87,24 @@ class _KoranPageSubHeaderWidgetState extends State<KoranPageSubHeaderWidget> {
               hoverColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onTap: () async {
-                context.pushNamed(SettingWidget.routeName);
+                context.pushNamed(
+                  SettingWidget.routeName,
+                  queryParameters: {
+                    'headerNav': serializeParam(
+                      true,
+                      ParamType.bool,
+                    ),
+                  }.withoutNulls,
+                  extra: <String, dynamic>{
+                    '__transition_info__': TransitionInfo(
+                      hasTransition: true,
+                      transitionType: PageTransitionType.bottomToTop,
+                    ),
+                  },
+                );
               },
               child: Icon(
-                Icons.settings_sharp,
-                color: FlutterFlowTheme.of(context).black,
-                size: 24.0,
-              ),
-            ),
-            InkWell(
-              splashColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              onTap: () async {
-                context.pushNamed(SettingWidget.routeName);
-              },
-              child: FaIcon(
-                FontAwesomeIcons.moon,
+                Icons.notifications_none_sharp,
                 color: FlutterFlowTheme.of(context).black,
                 size: 24.0,
               ),

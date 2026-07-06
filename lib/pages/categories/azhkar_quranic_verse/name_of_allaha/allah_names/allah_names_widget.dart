@@ -1,3 +1,4 @@
+import '/backend/schema/enums/enums.dart';
 import '/custom_header_footer/adhkar_header/adhkar_header_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -5,6 +6,7 @@ import '/pages/categories/azhkar_quranic_verse/name_of_allaha/name_arabic_box/na
 import '/pages/categories/azhkar_quranic_verse/name_of_allaha/name_meaning_popup/name_meaning_popup_widget.dart';
 import '/pages/categories/azhkar_quranic_verse/name_of_allaha/name_svenska_box/name_svenska_box_widget.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -205,7 +207,7 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                                                   1.0,
                                           height: 110.0,
                                           audioUrl:
-                                              'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+                                              AllahNames.AllahNamesAr.name,
                                         ),
                                       ),
                                       Padding(
@@ -270,89 +272,97 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                                         ),
                                       ),
                                       Expanded(
-                                        child: Builder(
-                                          builder: (context) {
-                                            final arabicName = FFAppState()
-                                                .AllahNames
-                                                .toList();
+                                        child: Container(
+                                          decoration: BoxDecoration(),
+                                          alignment:
+                                              AlignmentDirectional(0.0, -1.0),
+                                          child: Builder(
+                                            builder: (context) {
+                                              final arabicName = functions
+                                                  .reverseGridList(FFAppState()
+                                                      .AllahNames
+                                                      .toList())
+                                                  .toList();
 
-                                            return GridView.builder(
-                                              padding: EdgeInsets.zero,
-                                              gridDelegate:
-                                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                                crossAxisCount: 3,
-                                                crossAxisSpacing: 10.0,
-                                                mainAxisSpacing: 10.0,
-                                                childAspectRatio: 1.0,
-                                              ),
-                                              scrollDirection: Axis.vertical,
-                                              itemCount: arabicName.length,
-                                              itemBuilder:
-                                                  (context, arabicNameIndex) {
-                                                final arabicNameItem =
-                                                    arabicName[arabicNameIndex];
-                                                return InkWell(
-                                                  splashColor:
-                                                      Colors.transparent,
-                                                  focusColor:
-                                                      Colors.transparent,
-                                                  hoverColor:
-                                                      Colors.transparent,
-                                                  highlightColor:
-                                                      Colors.transparent,
-                                                  onTap: () async {
-                                                    await showModalBottomSheet(
-                                                      isScrollControlled: true,
-                                                      backgroundColor:
-                                                          Colors.transparent,
-                                                      isDismissible: false,
-                                                      context: context,
-                                                      builder: (context) {
-                                                        return WebViewAware(
-                                                          child:
-                                                              GestureDetector(
-                                                            onTap: () {
-                                                              FocusScope.of(
-                                                                      context)
-                                                                  .unfocus();
-                                                              FocusManager
-                                                                  .instance
-                                                                  .primaryFocus
-                                                                  ?.unfocus();
-                                                            },
-                                                            child: Padding(
-                                                              padding: MediaQuery
-                                                                  .viewInsetsOf(
-                                                                      context),
-                                                              child:
-                                                                  NameMeaningPopupWidget(
-                                                                name:
-                                                                    arabicNameItem
-                                                                        .arabic,
-                                                                translation:
-                                                                    arabicNameItem
-                                                                        .transliteration,
-                                                                explanation:
-                                                                    arabicNameItem
-                                                                        .arabicExplanation,
+                                              return GridView.builder(
+                                                padding: EdgeInsets.zero,
+                                                gridDelegate:
+                                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 3,
+                                                  crossAxisSpacing: 10.0,
+                                                  mainAxisSpacing: 10.0,
+                                                  childAspectRatio: 1.0,
+                                                ),
+                                                scrollDirection: Axis.vertical,
+                                                itemCount: arabicName.length,
+                                                itemBuilder:
+                                                    (context, arabicNameIndex) {
+                                                  final arabicNameItem =
+                                                      arabicName[
+                                                          arabicNameIndex];
+                                                  return InkWell(
+                                                    splashColor:
+                                                        Colors.transparent,
+                                                    focusColor:
+                                                        Colors.transparent,
+                                                    hoverColor:
+                                                        Colors.transparent,
+                                                    highlightColor:
+                                                        Colors.transparent,
+                                                    onTap: () async {
+                                                      await showModalBottomSheet(
+                                                        isScrollControlled:
+                                                            true,
+                                                        backgroundColor:
+                                                            Colors.transparent,
+                                                        isDismissible: false,
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return WebViewAware(
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap: () {
+                                                                FocusScope.of(
+                                                                        context)
+                                                                    .unfocus();
+                                                                FocusManager
+                                                                    .instance
+                                                                    .primaryFocus
+                                                                    ?.unfocus();
+                                                              },
+                                                              child: Padding(
+                                                                padding: MediaQuery
+                                                                    .viewInsetsOf(
+                                                                        context),
+                                                                child:
+                                                                    NameMeaningPopupWidget(
+                                                                  name: arabicNameItem
+                                                                      .arabic,
+                                                                  translation:
+                                                                      arabicNameItem
+                                                                          .transliteration,
+                                                                  explanation:
+                                                                      arabicNameItem
+                                                                          .arabicExplanation,
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                        );
-                                                      },
-                                                    ).then((value) =>
-                                                        safeSetState(() {}));
-                                                  },
-                                                  child: NameArabicBoxWidget(
-                                                    key: Key(
-                                                        'Keyxcc_${arabicNameIndex}_of_${arabicName.length}'),
-                                                    allahName:
-                                                        arabicNameItem.arabic,
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          },
+                                                          );
+                                                        },
+                                                      ).then((value) =>
+                                                          safeSetState(() {}));
+                                                    },
+                                                    child: NameArabicBoxWidget(
+                                                      key: Key(
+                                                          'Keyxcc_${arabicNameIndex}_of_${arabicName.length}'),
+                                                      allahName:
+                                                          arabicNameItem.arabic,
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                          ),
                                         ),
                                       ),
                                     ].divide(SizedBox(height: 10.0)),
@@ -371,7 +381,7 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                                                   1.0,
                                           height: 120.0,
                                           audioUrl:
-                                              'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+                                              AllahNames.AllahNamesSv.name,
                                         ),
                                       ),
                                       Padding(

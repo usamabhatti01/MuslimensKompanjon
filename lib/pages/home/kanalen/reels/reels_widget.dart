@@ -17,11 +17,9 @@ class ReelsWidget extends StatefulWidget {
   const ReelsWidget({
     super.key,
     required this.index,
-    required this.desc,
   });
 
   final int? index;
-  final String? desc;
 
   static String routeName = 'reels';
   static String routePath = '/reels';
@@ -231,7 +229,7 @@ class _ReelsWidgetState extends State<ReelsWidget> {
                                                   child: ClipRRect(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            0.0),
+                                                            8.0),
                                                     child: Image.network(
                                                       FFAppState()
                                                           .channelData
@@ -385,10 +383,7 @@ class _ReelsWidgetState extends State<ReelsWidget> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  valueOrDefault<String>(
-                                                    widget.desc,
-                                                    'Påminnelse om sabr och tawakkul 🙌 Allahs plan är alltid bättre än vår egen.',
-                                                  ),
+                                                  videoListItem.topic,
                                                   maxLines: 2,
                                                   style: FlutterFlowTheme.of(
                                                           context)
@@ -502,7 +497,7 @@ class _ReelsWidgetState extends State<ReelsWidget> {
                                                               ),
                                                     ),
                                                     Text(
-                                                      '12K visningar',
+                                                      videoListItem.views,
                                                       style: FlutterFlowTheme
                                                               .of(context)
                                                           .labelSmall

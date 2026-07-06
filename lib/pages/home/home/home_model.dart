@@ -13,23 +13,19 @@ class HomeModel extends FlutterFlowModel<HomeWidget> {
   String? dropDownValue;
   FormFieldController<String>? dropDownValueController;
   // Model for SectionHeader component.
-  late SectionHeaderModel sectionHeaderModel1;
-  // Model for SectionHeader component.
-  late SectionHeaderModel sectionHeaderModel2;
+  late SectionHeaderModel sectionHeaderModel;
   // Model for PageFooter component.
   late PageFooterModel pageFooterModel;
 
   @override
   void initState(BuildContext context) {
-    sectionHeaderModel1 = createModel(context, () => SectionHeaderModel());
-    sectionHeaderModel2 = createModel(context, () => SectionHeaderModel());
+    sectionHeaderModel = createModel(context, () => SectionHeaderModel());
     pageFooterModel = createModel(context, () => PageFooterModel());
   }
 
   @override
   void dispose() {
-    sectionHeaderModel1.dispose();
-    sectionHeaderModel2.dispose();
+    sectionHeaderModel.dispose();
     pageFooterModel.dispose();
   }
 }

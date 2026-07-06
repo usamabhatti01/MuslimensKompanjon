@@ -52,22 +52,9 @@ class _KalenderPageSubHeaderWidgetState
       children: [
         Row(
           mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            InkWell(
-              splashColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              onTap: () async {
-                context.safePop();
-              },
-              child: Icon(
-                Icons.chevron_left_outlined,
-                color: FlutterFlowTheme.of(context).black,
-                size: 24.0,
-              ),
-            ),
             Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -134,10 +121,33 @@ class _KalenderPageSubHeaderWidgetState
               color: FlutterFlowTheme.of(context).black,
               size: 24.0,
             ),
-            Icon(
-              Icons.notifications_none_sharp,
-              color: FlutterFlowTheme.of(context).black,
-              size: 24.0,
+            InkWell(
+              splashColor: Colors.transparent,
+              focusColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onTap: () async {
+                context.pushNamed(
+                  SettingWidget.routeName,
+                  queryParameters: {
+                    'headerNav': serializeParam(
+                      true,
+                      ParamType.bool,
+                    ),
+                  }.withoutNulls,
+                  extra: <String, dynamic>{
+                    '__transition_info__': TransitionInfo(
+                      hasTransition: true,
+                      transitionType: PageTransitionType.bottomToTop,
+                    ),
+                  },
+                );
+              },
+              child: Icon(
+                Icons.notifications_none_sharp,
+                color: FlutterFlowTheme.of(context).black,
+                size: 24.0,
+              ),
             ),
             InkWell(
               splashColor: Colors.transparent,

@@ -72,7 +72,7 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
                     child: Icon(
                       Icons.chevron_left,
                       color: FlutterFlowTheme.of(context).primaryText,
-                      size: 24.0,
+                      size: 0.0,
                     ),
                   ),
                   Expanded(

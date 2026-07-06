@@ -53,42 +53,37 @@ class _OnBoarding02WidgetState extends State<OnBoarding02Widget> {
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         body: SafeArea(
           top: true,
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(),
-            child: Padding(
-              padding: EdgeInsets.all(
-                  FlutterFlowTheme.of(context).designToken.spacing.lg),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.asset(
-                      'assets/images/My_workflow.png',
-                      width: 60.0,
-                      height: 60.0,
-                      fit: BoxFit.cover,
+          child: Align(
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(),
+              child: Padding(
+                padding: EdgeInsets.all(
+                    FlutterFlowTheme.of(context).designToken.spacing.lg),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.asset(
+                        'assets/images/My_workflow.png',
+                        width: 60.0,
+                        height: 60.0,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
-                  Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Text(
-                        'Plats',
-                        style:
-                            FlutterFlowTheme.of(context).headlineLarge.override(
-                                  font: GoogleFonts.plusJakartaSans(
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .headlineLarge
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .headlineLarge
-                                        .fontStyle,
-                                  ),
-                                  letterSpacing: 0.0,
+                    Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(
+                          'Plats',
+                          style: FlutterFlowTheme.of(context)
+                              .headlineLarge
+                              .override(
+                                font: GoogleFonts.plusJakartaSans(
                                   fontWeight: FlutterFlowTheme.of(context)
                                       .headlineLarge
                                       .fontWeight,
@@ -96,51 +91,128 @@ class _OnBoarding02WidgetState extends State<OnBoarding02Widget> {
                                       .headlineLarge
                                       .fontStyle,
                                 ),
-                      ),
-                      Text(
-                        'För att kunna ange korrekta bönetider behöver appen veta din plats.',
-                        textAlign: TextAlign.center,
-                        style: FlutterFlowTheme.of(context).bodyLarge.override(
-                              font: GoogleFonts.inter(
+                                letterSpacing: 0.0,
                                 fontWeight: FlutterFlowTheme.of(context)
-                                    .bodyLarge
+                                    .headlineLarge
                                     .fontWeight,
                                 fontStyle: FlutterFlowTheme.of(context)
-                                    .bodyLarge
+                                    .headlineLarge
                                     .fontStyle,
                               ),
-                              letterSpacing: 0.0,
-                              fontWeight: FlutterFlowTheme.of(context)
-                                  .bodyLarge
-                                  .fontWeight,
-                              fontStyle: FlutterFlowTheme.of(context)
-                                  .bodyLarge
-                                  .fontStyle,
-                            ),
-                      ),
-                    ]
-                        .addToStart(SizedBox(height: 80.0))
-                        .addToEnd(SizedBox(height: 50.0)),
-                  ),
-                  FFButtonWidget(
-                    onPressed: () async {
-                      currentUserLocationValue = await getCurrentUserLocation(
-                          defaultLocation: LatLng(0.0, 0.0));
-                      _model.latlonResult = await actions.searchCitiesByLatLon(
-                        currentUserLocationValue!,
-                      );
-                      if (_model.latlonResult != null) {
-                        FFAppState().updateUserStruct(
-                          (e) => e..city = _model.latlonResult?.name,
+                        ),
+                        Text(
+                          'För att kunna ange korrekta bönetider behöver appen veta din plats.',
+                          textAlign: TextAlign.center,
+                          style:
+                              FlutterFlowTheme.of(context).bodyLarge.override(
+                                    font: GoogleFonts.inter(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyLarge
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyLarge
+                                          .fontStyle,
+                                    ),
+                                    letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodyLarge
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyLarge
+                                        .fontStyle,
+                                  ),
+                        ),
+                      ]
+                          .addToStart(SizedBox(height: 80.0))
+                          .addToEnd(SizedBox(height: 50.0)),
+                    ),
+                    FFButtonWidget(
+                      onPressed: () async {
+                        currentUserLocationValue = await getCurrentUserLocation(
+                            defaultLocation: LatLng(0.0, 0.0));
+                        _model.latlonResult =
+                            await actions.searchCitiesByLatLon(
+                          currentUserLocationValue!,
                         );
-                        safeSetState(() {});
+                        if (_model.latlonResult != null) {
+                          FFAppState().updateUserStruct(
+                            (e) => e..city = _model.latlonResult?.name,
+                          );
+                          safeSetState(() {});
 
-                        context.pushNamed(OnBoarding04Widget.routeName);
-                      } else {
+                          context.pushNamed(OnBoarding04Widget.routeName);
+                        } else {
+                          await showModalBottomSheet(
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            enableDrag: false,
+                            context: context,
+                            builder: (context) {
+                              return WebViewAware(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    FocusScope.of(context).unfocus();
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
+                                  },
+                                  child: Padding(
+                                    padding: MediaQuery.viewInsetsOf(context),
+                                    child: OnBoarding03Widget(),
+                                  ),
+                                ),
+                              );
+                            },
+                          ).then((value) => safeSetState(() {}));
+                        }
+
+                        safeSetState(() {});
+                      },
+                      text: 'Använd min nuvarande plats',
+                      icon: Icon(
+                        Icons.gps_fixed,
+                        size: 18.0,
+                      ),
+                      options: FFButtonOptions(
+                        width: 250.0,
+                        height: 50.0,
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            16.0, 0.0, 16.0, 0.0),
+                        iconAlignment: IconAlignment.start,
+                        iconPadding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        iconColor:
+                            FlutterFlowTheme.of(context).primaryBackground,
+                        color: FlutterFlowTheme.of(context).primary,
+                        textStyle:
+                            FlutterFlowTheme.of(context).titleMedium.override(
+                                  font: GoogleFonts.plusJakartaSans(
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .titleMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .titleMedium
+                                        .fontStyle,
+                                  ),
+                                  color: FlutterFlowTheme.of(context)
+                                      .primaryBackground,
+                                  letterSpacing: 0.0,
+                                  fontWeight: FlutterFlowTheme.of(context)
+                                      .titleMedium
+                                      .fontWeight,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .titleMedium
+                                      .fontStyle,
+                                ),
+                        elevation: 0.0,
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                    ),
+                    FFButtonWidget(
+                      onPressed: () async {
                         await showModalBottomSheet(
                           isScrollControlled: true,
                           backgroundColor: Colors.transparent,
-                          enableDrag: false,
+                          useSafeArea: true,
                           context: context,
                           builder: (context) {
                             return WebViewAware(
@@ -157,86 +229,28 @@ class _OnBoarding02WidgetState extends State<OnBoarding02Widget> {
                             );
                           },
                         ).then((value) => safeSetState(() {}));
-                      }
-
-                      safeSetState(() {});
-                    },
-                    text: 'Använd min nuvarande plats',
-                    icon: Icon(
-                      Icons.gps_fixed,
-                      size: 18.0,
-                    ),
-                    options: FFButtonOptions(
-                      width: 250.0,
-                      height: 50.0,
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
-                      iconAlignment: IconAlignment.start,
-                      iconPadding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                      iconColor: FlutterFlowTheme.of(context).primaryBackground,
-                      color: FlutterFlowTheme.of(context).primary,
-                      textStyle: FlutterFlowTheme.of(context)
-                          .titleMedium
-                          .override(
-                            font: GoogleFonts.plusJakartaSans(
-                              fontWeight: FlutterFlowTheme.of(context)
-                                  .titleMedium
-                                  .fontWeight,
-                              fontStyle: FlutterFlowTheme.of(context)
-                                  .titleMedium
-                                  .fontStyle,
-                            ),
-                            color:
-                                FlutterFlowTheme.of(context).primaryBackground,
-                            letterSpacing: 0.0,
-                            fontWeight: FlutterFlowTheme.of(context)
-                                .titleMedium
-                                .fontWeight,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .titleMedium
-                                .fontStyle,
-                          ),
-                      elevation: 0.0,
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                  ),
-                  FFButtonWidget(
-                    onPressed: () async {
-                      await showModalBottomSheet(
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                        useSafeArea: true,
-                        context: context,
-                        builder: (context) {
-                          return WebViewAware(
-                            child: GestureDetector(
-                              onTap: () {
-                                FocusScope.of(context).unfocus();
-                                FocusManager.instance.primaryFocus?.unfocus();
-                              },
-                              child: Padding(
-                                padding: MediaQuery.viewInsetsOf(context),
-                                child: OnBoarding03Widget(),
-                              ),
-                            ),
-                          );
-                        },
-                      ).then((value) => safeSetState(() {}));
-                    },
-                    text: 'Välj plats manuellt',
-                    options: FFButtonOptions(
-                      width: 250.0,
-                      height: 50.0,
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
-                      iconAlignment: IconAlignment.end,
-                      iconPadding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                      color: FlutterFlowTheme.of(context).containerBg,
-                      textStyle:
-                          FlutterFlowTheme.of(context).titleMedium.override(
-                                font: GoogleFonts.plusJakartaSans(
+                      },
+                      text: 'Välj plats manuellt',
+                      options: FFButtonOptions(
+                        width: 250.0,
+                        height: 50.0,
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            16.0, 0.0, 16.0, 0.0),
+                        iconAlignment: IconAlignment.end,
+                        iconPadding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        color: FlutterFlowTheme.of(context).containerBg,
+                        textStyle:
+                            FlutterFlowTheme.of(context).titleMedium.override(
+                                  font: GoogleFonts.plusJakartaSans(
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .titleMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .titleMedium
+                                        .fontStyle,
+                                  ),
+                                  letterSpacing: 0.0,
                                   fontWeight: FlutterFlowTheme.of(context)
                                       .titleMedium
                                       .fontWeight,
@@ -244,19 +258,12 @@ class _OnBoarding02WidgetState extends State<OnBoarding02Widget> {
                                       .titleMedium
                                       .fontStyle,
                                 ),
-                                letterSpacing: 0.0,
-                                fontWeight: FlutterFlowTheme.of(context)
-                                    .titleMedium
-                                    .fontWeight,
-                                fontStyle: FlutterFlowTheme.of(context)
-                                    .titleMedium
-                                    .fontStyle,
-                              ),
-                      elevation: 0.0,
-                      borderRadius: BorderRadius.circular(12.0),
+                        elevation: 0.0,
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
                     ),
-                  ),
-                ].divide(SizedBox(height: 20.0)),
+                  ].divide(SizedBox(height: 20.0)),
+                ),
               ),
             ),
           ),

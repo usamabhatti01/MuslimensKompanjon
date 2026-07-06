@@ -55,12 +55,26 @@ class _QiblaFinderWidgetState extends State<QiblaFinderWidget> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              wrapWithModel(
-                model: _model.pageSubHeaderWithIconModel,
-                updateCallback: () => safeSetState(() {}),
-                child: PageSubHeaderWithIconWidget(
-                  pageName: 'Qibla Finder',
-                ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Icon(
+                    Icons.arrow_back,
+                    color: FlutterFlowTheme.of(context).primaryText,
+                    size: 0.0,
+                  ),
+                  Expanded(
+                    child: wrapWithModel(
+                      model: _model.pageSubHeaderWithIconModel,
+                      updateCallback: () => safeSetState(() {}),
+                      child: PageSubHeaderWithIconWidget(
+                        pageName: 'Qibla Finder',
+                      ),
+                    ),
+                  ),
+                ].divide(SizedBox(
+                    width:
+                        FlutterFlowTheme.of(context).designToken.spacing.xxl)),
               ),
               Expanded(
                 child: Column(

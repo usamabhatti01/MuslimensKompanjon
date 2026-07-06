@@ -1,10 +1,11 @@
-import '/custom_header_footer/page_sub_header_with_icon/page_sub_header_with_icon_widget.dart';
+import '/custom_header_footer/mk_home_page_header/mk_home_page_header_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_youtube_player.dart';
 import '/pages/home/kanalen/m_kkanalen_video_card/m_kkanalen_video_card_widget.dart';
 import '/pages/home/kanalen/video_action/video_action_widget.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -80,12 +81,37 @@ class _VideoPlayerHomeWidgetState extends State<VideoPlayerHomeWidget> {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                wrapWithModel(
-                  model: _model.pageSubHeaderWithIconModel,
-                  updateCallback: () => safeSetState(() {}),
-                  child: PageSubHeaderWithIconWidget(
-                    pageName: ' ',
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        context.pushNamed(VideorWidget.routeName);
+                      },
+                      child: Icon(
+                        Icons.chevron_left,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        size: 24.0,
+                      ),
+                    ),
+                    Expanded(
+                      child: wrapWithModel(
+                        model: _model.mkHomePageHeaderModel,
+                        updateCallback: () => safeSetState(() {}),
+                        child: MkHomePageHeaderWidget(
+                          pageName: 'Video',
+                        ),
+                      ),
+                    ),
+                  ].divide(SizedBox(
+                      width: FlutterFlowTheme.of(context)
+                          .designToken
+                          .spacing
+                          .xxl)),
                 ),
                 Expanded(
                   child: Container(

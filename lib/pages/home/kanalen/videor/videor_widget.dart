@@ -1,5 +1,5 @@
 import '/backend/schema/structs/index.dart';
-import '/custom_header_footer/page_sub_header/page_sub_header_widget.dart';
+import '/custom_header_footer/mk_home_page_header/mk_home_page_header_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_youtube_player.dart';
@@ -83,16 +83,20 @@ class _VideorWidgetState extends State<VideorWidget> {
                         size: 24.0,
                       ),
                     ),
-                    wrapWithModel(
-                      model: _model.pageSubHeaderModel,
-                      updateCallback: () => safeSetState(() {}),
-                      child: PageSubHeaderWidget(
-                        pageName: 'Videor',
+                    Expanded(
+                      child: wrapWithModel(
+                        model: _model.mkHomePageHeaderModel,
+                        updateCallback: () => safeSetState(() {}),
+                        child: MkHomePageHeaderWidget(
+                          pageName: 'Video',
+                        ),
                       ),
                     ),
                   ].divide(SizedBox(
-                      width:
-                          FlutterFlowTheme.of(context).designToken.spacing.lg)),
+                      width: FlutterFlowTheme.of(context)
+                          .designToken
+                          .spacing
+                          .xxl)),
                 ),
                 Flexible(
                   child: Column(
@@ -141,7 +145,7 @@ class _VideorWidgetState extends State<VideorWidget> {
                                       .labelMedium
                                       .fontStyle,
                                 ),
-                            hintText: 'Sök shorts...',
+                            hintText: 'Sök videor...',
                             hintStyle: FlutterFlowTheme.of(context)
                                 .labelLarge
                                 .override(

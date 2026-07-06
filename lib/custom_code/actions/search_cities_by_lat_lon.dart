@@ -11,25 +11,30 @@ import 'package:flutter/material.dart';
 
 import '/app_state.dart';
 
-Future<CityRecordStruct> searchCitiesByLatLon(LatLng latLog) async {
+Future<CityRecordStruct?> searchCitiesByLatLon(LatLng latLog) async {
   try {
     final List<CityRecordStruct> cities = FFAppState().cityList;
 
     if (cities.isNotEmpty) {
       CityRecordStruct? closestCity;
       double minDistance = double.maxFinite;
+      const double threshold = 0.5;
 
       for (final city in cities) {
         final lat = city.lat;
         final lng = city.lng;
 
-        // Compute squared Euclidean distance
-        final distance = (lat - latLog.latitude) * (lat - latLog.latitude) +
-            (lng - latLog.longitude) * (lng - latLog.longitude);
+        final latDiff = (lat - latLog.latitude).abs();
+        final lngDiff = (lng - latLog.longitude).abs();
 
-        if (distance < minDistance) {
-          minDistance = distance;
-          closestCity = city;
+        if (latDiff <= threshold && lngDiff <= threshold) {
+          // Compute squared Euclidean distance
+          final distance = latDiff * latDiff + lngDiff * lngDiff;
+
+          if (distance < minDistance) {
+            minDistance = distance;
+            closestCity = city;
+          }
         }
       }
 
@@ -41,10 +46,5 @@ Future<CityRecordStruct> searchCitiesByLatLon(LatLng latLog) async {
     print("Error in searchCitiesByLatLon: $e");
   }
 
-  // Fallback to Stockholm if anything fails
-  return CityRecordStruct(
-    name: 'Stockholm',
-    lat: 59.3293,
-    lng: 18.0686,
-  );
+  return null;
 }

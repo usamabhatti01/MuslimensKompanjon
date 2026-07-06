@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/form_field_controller.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -69,12 +70,37 @@ class _FullCalenderWidgetState extends State<FullCalenderWidget> {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                wrapWithModel(
-                  model: _model.pageSubHeaderWithIconModel,
-                  updateCallback: () => safeSetState(() {}),
-                  child: PageSubHeaderWithIconWidget(
-                    pageName: 'Månads bönetider',
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        context.pushNamed(HomeWidget.routeName);
+                      },
+                      child: Icon(
+                        Icons.chevron_left,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        size: 24.0,
+                      ),
+                    ),
+                    Expanded(
+                      child: wrapWithModel(
+                        model: _model.pageSubHeaderWithIconModel,
+                        updateCallback: () => safeSetState(() {}),
+                        child: PageSubHeaderWithIconWidget(
+                          pageName: 'Månads bönetider',
+                        ),
+                      ),
+                    ),
+                  ].divide(SizedBox(
+                      width: FlutterFlowTheme.of(context)
+                          .designToken
+                          .spacing
+                          .xxl)),
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.max,

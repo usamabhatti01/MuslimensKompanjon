@@ -115,7 +115,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: SettingWidget.routeName,
           path: SettingWidget.routePath,
-          builder: (context, params) => SettingWidget(),
+          builder: (context, params) => SettingWidget(
+            headerNav: params.getParam(
+              'headerNav',
+              ParamType.bool,
+            ),
+          ),
         ),
         FFRoute(
           name: FullCalenderWidget.routeName,
@@ -192,10 +197,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             index: params.getParam(
               'index',
               ParamType.int,
-            ),
-            desc: params.getParam(
-              'desc',
-              ParamType.String,
             ),
           ),
         ),

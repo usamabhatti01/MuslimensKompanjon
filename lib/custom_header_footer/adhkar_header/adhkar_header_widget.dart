@@ -1,6 +1,7 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'adhkar_header_model.dart';
@@ -77,18 +78,36 @@ class _AdhkarHeaderWidgetState extends State<AdhkarHeaderWidget> {
         Row(
           mainAxisSize: MainAxisSize.max,
           children: [
-            Container(
-              width: 75.0,
-              height: 30.0,
-              child: custom_widgets.CustomPowerSwitch(
+            if (widget.volume ?? true)
+              Container(
                 width: 75.0,
                 height: 30.0,
+                child: custom_widgets.CustomPowerSwitch(
+                  width: 75.0,
+                  height: 30.0,
+                ),
               ),
-            ),
-            Icon(
-              Icons.notifications_none_sharp,
-              color: FlutterFlowTheme.of(context).black,
-              size: 24.0,
+            InkWell(
+              splashColor: Colors.transparent,
+              focusColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onTap: () async {
+                context.pushNamed(
+                  SettingWidget.routeName,
+                  extra: <String, dynamic>{
+                    '__transition_info__': TransitionInfo(
+                      hasTransition: true,
+                      transitionType: PageTransitionType.bottomToTop,
+                    ),
+                  },
+                );
+              },
+              child: Icon(
+                Icons.notifications_none_sharp,
+                color: FlutterFlowTheme.of(context).black,
+                size: 24.0,
+              ),
             ),
             Icon(
               FFIcons.kmenu,

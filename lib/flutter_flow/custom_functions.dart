@@ -6,3 +6,4 @@ export '/custom_code/functions/return_month_name.dart';
 export '/custom_code/functions/days_ago.dart';
 export '/custom_code/functions/video_to_string.dart';
 export '/custom_code/functions/return_value.dart';
+export '/custom_code/functions/reverse_grid_list.dart';

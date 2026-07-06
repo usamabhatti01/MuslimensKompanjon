@@ -75,8 +75,8 @@ class _MKkanalenVideoCardWidgetState extends State<MKkanalenVideoCardWidget> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                width: 180.0,
-                height: 150.0,
+                width: 160.0,
+                height: 130.0,
                 decoration: BoxDecoration(
                   color: FlutterFlowTheme.of(context).secondaryBackground,
                   borderRadius: BorderRadius.circular(16.0),
@@ -87,7 +87,7 @@ class _MKkanalenVideoCardWidgetState extends State<MKkanalenVideoCardWidget> {
                       borderRadius: BorderRadius.circular(8.0),
                       child: Image.network(
                         widget.image!,
-                        width: 350.0,
+                        width: 300.0,
                         height: 200.0,
                         fit: BoxFit.cover,
                       ),
@@ -236,7 +236,7 @@ class _MKkanalenVideoCardWidgetState extends State<MKkanalenVideoCardWidget> {
                           child: Text(
                             valueOrDefault<String>(
                               functions.daysAgo(widget.postedDuration!),
-                              '1 vecka sedan',
+                              '1 month ago',
                             ),
                             style: FlutterFlowTheme.of(context)
                                 .labelSmall

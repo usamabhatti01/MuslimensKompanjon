@@ -4,6 +4,7 @@ import '/pages/kuran/bok_fvt_heading/bok_fvt_heading_widget.dart';
 import '/pages/kuran/bokmrke_heading/bokmrke_heading_widget.dart';
 import '/pages/kuran/juz_heading/juz_heading_widget.dart';
 import '/pages/kuran/sur_haeading/sur_haeading_widget.dart';
+import '/index.dart';
 import 'kuran_home_widget.dart' show KuranHomeWidget;
 import 'package:flutter/material.dart';
 

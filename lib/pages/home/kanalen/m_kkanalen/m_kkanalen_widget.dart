@@ -1,4 +1,4 @@
-import '/custom_header_footer/page_sub_header_with_icon/page_sub_header_with_icon_widget.dart';
+import '/custom_header_footer/mk_home_page_header/mk_home_page_header_widget.dart';
 import '/custom_header_footer/section_header/section_header_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -80,16 +80,16 @@ class _MKkanalenWidgetState extends State<MKkanalenWidget> {
                   ),
                   Expanded(
                     child: wrapWithModel(
-                      model: _model.pageSubHeaderWithIconModel,
+                      model: _model.mkHomePageHeaderModel,
                       updateCallback: () => safeSetState(() {}),
-                      child: PageSubHeaderWithIconWidget(
+                      child: MkHomePageHeaderWidget(
                         pageName: 'MK-kanalen',
                       ),
                     ),
                   ),
                 ].divide(SizedBox(
                     width:
-                        FlutterFlowTheme.of(context).designToken.spacing.lg)),
+                        FlutterFlowTheme.of(context).designToken.spacing.xxl)),
               ),
               Expanded(
                 child: Container(
@@ -591,11 +591,30 @@ class _MKkanalenWidgetState extends State<MKkanalenWidget> {
                                                 reels.length, (reelsIndex) {
                                               final reelsItem =
                                                   reels[reelsIndex];
-                                              return MKKanalenShortCardWidget(
-                                                key: Key(
-                                                    'Key300_${reelsIndex}_of_${reels.length}'),
-                                                imageDesc: reelsItem.thumbnail,
-                                                title: reelsItem.title,
+                                              return InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () async {
+                                                  context.pushNamed(
+                                                    ReelsWidget.routeName,
+                                                    queryParameters: {
+                                                      'index': serializeParam(
+                                                        reelsIndex,
+                                                        ParamType.int,
+                                                      ),
+                                                    }.withoutNulls,
+                                                  );
+                                                },
+                                                child: MKKanalenShortCardWidget(
+                                                  key: Key(
+                                                      'Key300_${reelsIndex}_of_${reels.length}'),
+                                                  imageDesc:
+                                                      reelsItem.thumbnail,
+                                                  title: reelsItem.title,
+                                                ),
                                               );
                                             }).divide(SizedBox(width: 16.0)),
                                           );

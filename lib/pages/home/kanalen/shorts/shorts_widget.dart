@@ -1,5 +1,5 @@
 import '/backend/schema/structs/index.dart';
-import '/custom_header_footer/page_sub_header/page_sub_header_widget.dart';
+import '/custom_header_footer/mk_home_page_header/mk_home_page_header_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/pages/home/kanalen/short_card2/short_card2_widget.dart';
@@ -82,11 +82,13 @@ class _ShortsWidgetState extends State<ShortsWidget> {
                       size: 24.0,
                     ),
                   ),
-                  wrapWithModel(
-                    model: _model.pageSubHeaderModel,
-                    updateCallback: () => safeSetState(() {}),
-                    child: PageSubHeaderWidget(
-                      pageName: 'Shorts',
+                  Expanded(
+                    child: wrapWithModel(
+                      model: _model.mkHomePageHeaderModel,
+                      updateCallback: () => safeSetState(() {}),
+                      child: MkHomePageHeaderWidget(
+                        pageName: 'Shorts',
+                      ),
                     ),
                   ),
                 ].divide(SizedBox(
@@ -257,10 +259,6 @@ class _ShortsWidgetState extends State<ShortsWidget> {
                                               'index': serializeParam(
                                                 reelsIndex,
                                                 ParamType.int,
-                                              ),
-                                              'desc': serializeParam(
-                                                reelsItem.topic,
-                                                ParamType.String,
                                               ),
                                             }.withoutNulls,
                                           );

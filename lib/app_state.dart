@@ -71,6 +71,10 @@ class FFAppState extends ChangeNotifier {
           _cityList;
     });
     await _safeInitAsync(() async {
+      _adhkarSound =
+          await secureStorage.getBool('ff_adhkarSound') ?? _adhkarSound;
+    });
+    await _safeInitAsync(() async {
       _reelsData = (await secureStorage.getStringList('ff_reelsData'))
               ?.map((x) {
                 try {
@@ -282,6 +286,11 @@ class FFAppState extends ChangeNotifier {
   bool get adhkarSound => _adhkarSound;
   set adhkarSound(bool value) {
     _adhkarSound = value;
+    secureStorage.setBool('ff_adhkarSound', value);
+  }
+
+  void deleteAdhkarSound() {
+    secureStorage.delete(key: 'ff_adhkarSound');
   }
 
   List<YoutubeStruct> _reelsData = [];

@@ -1,4 +1,4 @@
-import '/custom_header_footer/page_sub_header_with_icon/page_sub_header_with_icon_widget.dart';
+import '/custom_header_footer/mk_home_page_header/mk_home_page_header_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/pages/home/kanalen/video_action/video_action_widget.dart';
 import '/index.dart';
@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 class VideoPlayerHomeModel extends FlutterFlowModel<VideoPlayerHomeWidget> {
   ///  State fields for stateful widgets in this page.
 
-  // Model for PageSubHeaderWithIcon component.
-  late PageSubHeaderWithIconModel pageSubHeaderWithIconModel;
+  // Model for MkHomePageHeader component.
+  late MkHomePageHeaderModel mkHomePageHeaderModel;
   // Model for VideoAction.
   late VideoActionModel videoActionModel1;
   // Model for VideoAction.
@@ -17,15 +17,14 @@ class VideoPlayerHomeModel extends FlutterFlowModel<VideoPlayerHomeWidget> {
 
   @override
   void initState(BuildContext context) {
-    pageSubHeaderWithIconModel =
-        createModel(context, () => PageSubHeaderWithIconModel());
+    mkHomePageHeaderModel = createModel(context, () => MkHomePageHeaderModel());
     videoActionModel1 = createModel(context, () => VideoActionModel());
     videoActionModel2 = createModel(context, () => VideoActionModel());
   }
 
   @override
   void dispose() {
-    pageSubHeaderWithIconModel.dispose();
+    mkHomePageHeaderModel.dispose();
     videoActionModel1.dispose();
     videoActionModel2.dispose();
   }

@@ -5,6 +5,7 @@ import '/pages/kuran/bok_fvt_heading/bok_fvt_heading_widget.dart';
 import '/pages/kuran/bokmrke_heading/bokmrke_heading_widget.dart';
 import '/pages/kuran/juz_heading/juz_heading_widget.dart';
 import '/pages/kuran/sur_haeading/sur_haeading_widget.dart';
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'kuran_home_model.dart';
@@ -66,12 +67,37 @@ class _KuranHomeWidgetState extends State<KuranHomeWidget>
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                wrapWithModel(
-                  model: _model.koranPageSubHeaderModel,
-                  updateCallback: () => safeSetState(() {}),
-                  child: KoranPageSubHeaderWidget(
-                    pageName: 'Koran',
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        context.pushNamed(HomeWidget.routeName);
+                      },
+                      child: Icon(
+                        Icons.chevron_left,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        size: 24.0,
+                      ),
+                    ),
+                    Expanded(
+                      child: wrapWithModel(
+                        model: _model.koranPageSubHeaderModel,
+                        updateCallback: () => safeSetState(() {}),
+                        child: KoranPageSubHeaderWidget(
+                          pageName: 'Koran',
+                        ),
+                      ),
+                    ),
+                  ].divide(SizedBox(
+                      width: FlutterFlowTheme.of(context)
+                          .designToken
+                          .spacing
+                          .xxl)),
                 ),
                 Expanded(
                   child: Column(

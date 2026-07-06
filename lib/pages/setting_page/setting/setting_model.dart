@@ -1,5 +1,5 @@
 import '/custom_header_footer/page_footer/page_footer_widget.dart';
-import '/custom_header_footer/page_sub_header/page_sub_header_widget.dart';
+import '/custom_header_footer/page_sub_header_with_icon/page_sub_header_with_icon_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/pages/setting_page/setting_tab/setting_tab_widget.dart';
 import '/pages/setting_page/setting_tab_with_switch/setting_tab_with_switch_widget.dart';
@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 class SettingModel extends FlutterFlowModel<SettingWidget> {
   ///  State fields for stateful widgets in this page.
 
-  // Model for PageSubHeader component.
-  late PageSubHeaderModel pageSubHeaderModel;
+  // Model for PageSubHeaderWithIcon component.
+  late PageSubHeaderWithIconModel pageSubHeaderWithIconModel;
   // Model for SettingTabWithSwitch component.
   late SettingTabWithSwitchModel settingTabWithSwitchModel1;
   // Model for SettingTabWithSwitch component.
@@ -34,7 +34,8 @@ class SettingModel extends FlutterFlowModel<SettingWidget> {
 
   @override
   void initState(BuildContext context) {
-    pageSubHeaderModel = createModel(context, () => PageSubHeaderModel());
+    pageSubHeaderWithIconModel =
+        createModel(context, () => PageSubHeaderWithIconModel());
     settingTabWithSwitchModel1 =
         createModel(context, () => SettingTabWithSwitchModel());
     settingTabWithSwitchModel2 =
@@ -54,7 +55,7 @@ class SettingModel extends FlutterFlowModel<SettingWidget> {
 
   @override
   void dispose() {
-    pageSubHeaderModel.dispose();
+    pageSubHeaderWithIconModel.dispose();
     settingTabWithSwitchModel1.dispose();
     settingTabWithSwitchModel2.dispose();
     settingTabWithSwitchModel3.dispose();

@@ -48,53 +48,69 @@ class _YoutubeReelsItemWidgetState extends State<YoutubeReelsItemWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          child: Image.network(
-            widget.thumbnail!,
-            width: 180.0,
-            height: 120.0,
-            fit: BoxFit.cover,
-          ),
-        ),
-        Text(
-          widget.videoTitle,
-          maxLines: 1,
-          style: FlutterFlowTheme.of(context).titleSmall.override(
-                font: GoogleFonts.plusJakartaSans(
-                  fontWeight:
-                      FlutterFlowTheme.of(context).titleSmall.fontWeight,
-                  fontStyle: FlutterFlowTheme.of(context).titleSmall.fontStyle,
-                ),
-                letterSpacing: 0.0,
-                fontWeight: FlutterFlowTheme.of(context).titleSmall.fontWeight,
-                fontStyle: FlutterFlowTheme.of(context).titleSmall.fontStyle,
+    return Align(
+      alignment: AlignmentDirectional(0.0, 0.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: Image.network(
+              valueOrDefault<String>(
+                widget.thumbnail,
+                'https://dummyimage.com/600x400/000/fff',
               ),
-          overflow: TextOverflow.ellipsis,
-        ),
-        Expanded(
-          child: Text(
-            widget.videoTopic,
-            maxLines: 1,
-            style: FlutterFlowTheme.of(context).bodySmall.override(
-                  font: GoogleFonts.inter(
+              width: MediaQuery.sizeOf(context).width * 1.0,
+              height: 120.0,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Align(
+            alignment: AlignmentDirectional(-1.0, 0.0),
+            child: Text(
+              widget.videoTitle,
+              maxLines: 1,
+              style: FlutterFlowTheme.of(context).titleSmall.override(
+                    font: GoogleFonts.plusJakartaSans(
+                      fontWeight:
+                          FlutterFlowTheme.of(context).titleSmall.fontWeight,
+                      fontStyle:
+                          FlutterFlowTheme.of(context).titleSmall.fontStyle,
+                    ),
+                    letterSpacing: 0.0,
+                    fontWeight:
+                        FlutterFlowTheme.of(context).titleSmall.fontWeight,
+                    fontStyle:
+                        FlutterFlowTheme.of(context).titleSmall.fontStyle,
+                  ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          Align(
+            alignment: AlignmentDirectional(-1.0, 0.0),
+            child: Text(
+              widget.videoTopic,
+              textAlign: TextAlign.start,
+              maxLines: 1,
+              style: FlutterFlowTheme.of(context).bodySmall.override(
+                    font: GoogleFonts.inter(
+                      fontWeight:
+                          FlutterFlowTheme.of(context).bodySmall.fontWeight,
+                      fontStyle:
+                          FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                    ),
+                    letterSpacing: 0.0,
                     fontWeight:
                         FlutterFlowTheme.of(context).bodySmall.fontWeight,
                     fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
                   ),
-                  letterSpacing: 0.0,
-                  fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
-                  fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
-                ),
-            overflow: TextOverflow.ellipsis,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
-        ),
-      ].divide(SizedBox(height: 3.0)),
+        ].divide(SizedBox(height: 3.0)),
+      ),
     );
   }
 }

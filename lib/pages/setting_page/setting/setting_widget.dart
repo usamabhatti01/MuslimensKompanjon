@@ -1,5 +1,5 @@
 import '/custom_header_footer/page_footer/page_footer_widget.dart';
-import '/custom_header_footer/page_sub_header/page_sub_header_widget.dart';
+import '/custom_header_footer/page_sub_header_with_icon/page_sub_header_with_icon_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/pages/setting_page/adhanljud/adhanljud_widget.dart';
@@ -13,6 +13,7 @@ import '/pages/setting_page/setting_tab/setting_tab_widget.dart';
 import '/pages/setting_page/setting_tab_with_switch/setting_tab_with_switch_widget.dart';
 import '/pages/setting_page/tema/tema_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
@@ -20,7 +21,12 @@ import 'setting_model.dart';
 export 'setting_model.dart';
 
 class SettingWidget extends StatefulWidget {
-  const SettingWidget({super.key});
+  const SettingWidget({
+    super.key,
+    this.headerNav,
+  });
+
+  final bool? headerNav;
 
   static String routeName = 'Setting';
   static String routePath = '/setting';
@@ -38,6 +44,35 @@ class _SettingWidgetState extends State<SettingWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => SettingModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      if (widget.headerNav!) {
+        await showModalBottomSheet(
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          enableDrag: false,
+          context: context,
+          builder: (context) {
+            return WebViewAware(
+              child: GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).unfocus();
+                  FocusManager.instance.primaryFocus?.unfocus();
+                },
+                child: Padding(
+                  padding: MediaQuery.viewInsetsOf(context),
+                  child: Container(
+                    height: MediaQuery.sizeOf(context).height * 0.8,
+                    child: BnetidsnotiserWidget(),
+                  ),
+                ),
+              ),
+            );
+          },
+        ).then((value) => safeSetState(() {}));
+      }
+    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
@@ -68,9 +103,9 @@ class _SettingWidgetState extends State<SettingWidget> {
             mainAxisSize: MainAxisSize.max,
             children: [
               wrapWithModel(
-                model: _model.pageSubHeaderModel,
+                model: _model.pageSubHeaderWithIconModel,
                 updateCallback: () => safeSetState(() {}),
-                child: PageSubHeaderWidget(
+                child: PageSubHeaderWithIconWidget(
                   pageName: 'Inställningar',
                 ),
               ),

@@ -30,6 +30,11 @@ enum SoundName {
   standard_adhan,
 }
 
+enum AllahNames {
+  AllahNamesAr,
+  AllahNamesSv,
+}
+
 extension FFEnumExtensions<T extends Enum> on T {
   String serialize() => name;
 }
@@ -49,6 +54,8 @@ T? deserializeEnum<T>(String? value) {
       return AdhanSound.values.deserialize(value) as T?;
     case (SoundName):
       return SoundName.values.deserialize(value) as T?;
+    case (AllahNames):
+      return AllahNames.values.deserialize(value) as T?;
     default:
       return null;
   }

@@ -2,6 +2,8 @@ import '/backend/schema/structs/index.dart';
 import '/custom_header_footer/adhkar_header/adhkar_header_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/pages/categories/azhkar_quranic_verse/mornng_and_evebing_adhkar/adhkar_ar_component/adhkar_ar_component_widget.dart';
+import '/pages/categories/azhkar_quranic_verse/mornng_and_evebing_adhkar/adhkar_sv_component/adhkar_sv_component_widget.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/index.dart';
 import 'package:flutter/material.dart';
@@ -188,73 +190,103 @@ class _MorningEveningAdhkarWidgetState extends State<MorningEveningAdhkarWidget>
                               child: TabBarView(
                                 controller: _model.tabBarController,
                                 children: [
-                                  Builder(
-                                    builder: (context) {
-                                      final adhkarList =
-                                          widget.adhkar?.toList() ?? [];
-
-                                      return SingleChildScrollView(
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children:
-                                              List.generate(adhkarList.length,
-                                                  (adhkarListIndex) {
-                                            final adhkarListItem =
-                                                adhkarList[adhkarListIndex];
-                                            return Container(
-                                              width: MediaQuery.sizeOf(context)
-                                                      .width *
+                                  Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Container(
+                                        width:
+                                            MediaQuery.sizeOf(context).width *
+                                                1.0,
+                                        height: 120.0,
+                                        child: custom_widgets.SimpleAudioPlayer(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
                                                   1.0,
-                                              height: 120.0,
-                                              child: custom_widgets
-                                                  .SimpleAudioPlayer(
-                                                width:
-                                                    MediaQuery.sizeOf(context)
-                                                            .width *
-                                                        1.0,
-                                                height: 120.0,
-                                                audioUrl:
-                                                    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+                                          height: 120.0,
+                                          audioUrl:
+                                              'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Builder(
+                                          builder: (context) {
+                                            final adhkarList =
+                                                widget.adhkar?.toList() ?? [];
+
+                                            return SingleChildScrollView(
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: List.generate(
+                                                    adhkarList.length,
+                                                    (adhkarListIndex) {
+                                                  final adhkarListItem =
+                                                      adhkarList[
+                                                          adhkarListIndex];
+                                                  return AdhkarArComponentWidget(
+                                                    key: Key(
+                                                        'Keyzqr_${adhkarListIndex}_of_${adhkarList.length}'),
+                                                    value:
+                                                        adhkarListItem.arabic,
+                                                    total:
+                                                        adhkarListItem.counter,
+                                                  );
+                                                }).divide(
+                                                    SizedBox(height: 10.0)),
                                               ),
                                             );
-                                          }).divide(SizedBox(height: 10.0)),
+                                          },
                                         ),
-                                      );
-                                    },
+                                      ),
+                                    ],
                                   ),
-                                  Builder(
-                                    builder: (context) {
-                                      final adhkarListSv =
-                                          widget.adhkar?.toList() ?? [];
-
-                                      return SingleChildScrollView(
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children:
-                                              List.generate(adhkarListSv.length,
-                                                  (adhkarListSvIndex) {
-                                            final adhkarListSvItem =
-                                                adhkarListSv[adhkarListSvIndex];
-                                            return Container(
-                                              width: MediaQuery.sizeOf(context)
-                                                      .width *
+                                  Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Container(
+                                        width:
+                                            MediaQuery.sizeOf(context).width *
+                                                1.0,
+                                        height: 120.0,
+                                        child: custom_widgets.SimpleAudioPlayer(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
                                                   1.0,
-                                              height: 120.0,
-                                              child: custom_widgets
-                                                  .SimpleAudioPlayer(
-                                                width:
-                                                    MediaQuery.sizeOf(context)
-                                                            .width *
-                                                        1.0,
-                                                height: 120.0,
-                                                audioUrl:
-                                                    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+                                          height: 120.0,
+                                          audioUrl:
+                                              'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Builder(
+                                          builder: (context) {
+                                            final adhkarListSv =
+                                                widget.adhkar?.toList() ?? [];
+
+                                            return SingleChildScrollView(
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: List.generate(
+                                                    adhkarListSv.length,
+                                                    (adhkarListSvIndex) {
+                                                  final adhkarListSvItem =
+                                                      adhkarListSv[
+                                                          adhkarListSvIndex];
+                                                  return AdhkarSvComponentWidget(
+                                                    key: Key(
+                                                        'Keynsu_${adhkarListSvIndex}_of_${adhkarListSv.length}'),
+                                                    value: adhkarListSvItem
+                                                        .swedish,
+                                                    total: adhkarListSvItem
+                                                        .counter,
+                                                  );
+                                                }).divide(
+                                                    SizedBox(height: 10.0)),
                                               ),
                                             );
-                                          }).divide(SizedBox(height: 10.0)),
+                                          },
                                         ),
-                                      );
-                                    },
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
