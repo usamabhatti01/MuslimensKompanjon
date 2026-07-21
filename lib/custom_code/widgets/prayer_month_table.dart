@@ -95,7 +95,8 @@ class PrayerMonthTable extends StatefulWidget {
   State<PrayerMonthTable> createState() => _PrayerMonthTableState();
 }
 
-class _PrayerMonthTableState extends State<PrayerMonthTable> {
+class _PrayerMonthTableState extends State<PrayerMonthTable>
+    with WidgetsBindingObserver {
   // =========================================================================
   // CUSTOMIZABLE DESIGN PARAMETERS: Change header/body cell sizes & padding here
   // =========================================================================
@@ -112,16 +113,18 @@ class _PrayerMonthTableState extends State<PrayerMonthTable> {
   late int selectedMonth;
   late int selectedYear;
   late ScrollController _monthScrollController;
+  bool _scrolledToSelectedMonth = false;
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _monthScrollController = ScrollController();
     final now = DateTime.now();
     // Start with the current calendar month
     selectedMonth = now.month;
     selectedYear = widget.year ?? now.year;
     loadPrayerTimes();
-    // Scroll to center the active month in the horizontal selector on load
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToActiveMonth();
     });
@@ -141,6 +144,7 @@ class _PrayerMonthTableState extends State<PrayerMonthTable> {
       needReload = true;
     }
     if (needReload) {
+      _scrolledToSelectedMonth = false;
       setState(() {
         isLoading = true;
         prayerTimes = [];
@@ -152,28 +156,44 @@ class _PrayerMonthTableState extends State<PrayerMonthTable> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _monthScrollController.dispose();
     super.dispose();
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      setState(
+          () {}); // Re-evaluates isToday(date) highlights for the current calendar day
+    }
+  }
+
   // =========================================================================
-  // SCROLLER POSITIONING: Adjust scrolling math if month pill widths change
+  // SCROLLER POSITIONING: Adjust scrolling math to center active month pill
   // =========================================================================
-  void _scrollToActiveMonth() {
-    if (!_monthScrollController.hasClients) return;
+  void _scrollToActiveMonth([double? viewportWidth]) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_monthScrollController.hasClients) return;
 
-    // Width of one month pill including margins (item width is ~75 + 10 margin = 85)
-    final double itemWidth = 85.0;
+      final double width = viewportWidth ??
+          (_monthScrollController.position.viewportDimension > 0
+              ? _monthScrollController.position.viewportDimension
+              : (widget.width ?? MediaQuery.sizeOf(context).width));
 
-    // Target offset calculation to align the active month in the center
-    final double targetOffset = (selectedMonth - 1) * itemWidth - 100.0;
+      final double itemWidth = 78.0; // width (70) + horizontal margins (4 * 2)
+      final double itemCenter =
+          (selectedMonth - 1) * itemWidth + (itemWidth / 2);
+      final double targetOffset = itemCenter - (width / 2);
+      final double maxScroll = _monthScrollController.position.maxScrollExtent;
 
-    _monthScrollController.animateTo(
-      math.max(0.0, targetOffset),
-      duration:
-          const Duration(milliseconds: 300), // Change scroll duration here
-      curve: Curves.easeOut, // Change scroll animation type here
-    );
+      _monthScrollController.animateTo(
+        targetOffset.clamp(0.0, maxScroll > 0 ? maxScroll : 0.0),
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    });
   }
 
   // Helper method to detect language code from FlutterFlow and return translations
@@ -261,8 +281,20 @@ class _PrayerMonthTableState extends State<PrayerMonthTable> {
     String text, {
     bool highlighted = false,
     bool isHeader = false,
-    int flex = 3, // Relative width weight (Day col = 2, prayer cols = 3)
+    int flex = 3,
   }) {
+    final theme = FlutterFlowTheme.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    Color textColor;
+    if (isHeader) {
+      textColor = theme.primary;
+    } else if (highlighted) {
+      textColor = Colors.white;
+    } else {
+      textColor = isDark ? Colors.white : const Color(0xFF1D1D1F);
+    }
+
     return Expanded(
       flex: flex,
       child: Container(
@@ -270,22 +302,23 @@ class _PrayerMonthTableState extends State<PrayerMonthTable> {
         padding: EdgeInsets.symmetric(
           vertical: isHeader ? headerVerticalPadding : bodyRowVerticalPadding,
         ),
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontSize: isHeader ? headerFontSize : bodyCellFontSize,
-            fontWeight: isHeader
-                ? FontWeight.w600
-                : highlighted
-                    ? FontWeight.w600
-                    : FontWeight.w400,
-            color: isHeader
-                ? const Color(0xFF0B7A12)
-                : highlighted
-                    ? Colors.black
-                    : Colors.black87,
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            softWrap: false,
+            style: TextStyle(
+              fontSize: isHeader ? headerFontSize : bodyCellFontSize,
+              fontWeight: isHeader
+                  ? FontWeight.w600
+                  : highlighted
+                      ? FontWeight.w700
+                      : FontWeight.w600,
+              color: textColor,
+              letterSpacing: 0.2,
+            ),
           ),
         ),
       ),
@@ -293,9 +326,10 @@ class _PrayerMonthTableState extends State<PrayerMonthTable> {
   }
 
   // =========================================================================
-  // MONTH SCROLLER WIDGET: Edit the horizontal selector pills styling here
+  // MONTH SCROLLER WIDGET: Horizontal month selector pills styling
   // =========================================================================
   Widget _buildMonthScroller() {
+    final theme = FlutterFlowTheme.of(context);
     String lang = 'en';
     try {
       if (mounted) {
@@ -309,55 +343,61 @@ class _PrayerMonthTableState extends State<PrayerMonthTable> {
     }
     final labels = PrayerTableStrings.monthLabels[lang] ??
         PrayerTableStrings.monthLabels['en']!;
+
     return SizedBox(
-      height: 48, // Month bar height
-      child: ListView.builder(
-        controller: _monthScrollController,
-        scrollDirection: Axis.horizontal,
-        itemCount: 12,
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        itemBuilder: (context, index) {
-          final monthNum = index + 1;
-          final isSelected = selectedMonth == monthNum;
-          final label = labels[index];
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                selectedMonth = monthNum;
-                isLoading = true; // Shows progress indicator while reloading
-              });
-              loadPrayerTimes();
-            },
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              margin: const EdgeInsets.symmetric(
-                  horizontal: 5, vertical: 6), // spacing between month pills
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 18, vertical: 6), // internal margins of pill
-              decoration: BoxDecoration(
-                // Color mapping: Active/Selected pill vs Inactive pill background
-                color: isSelected
-                    ? const Color(
-                        0xFF0B7A12) // Selected Month Background (Green)
-                    : const Color(
-                        0xFFF2F2F2), // Inactive Month Background (Light Grey)
-                borderRadius: BorderRadius.circular(
-                    30), // Rounded corners (make it pill-shaped)
-              ),
-              child: Center(
-                child: Text(
-                  label.toLowerCase(), // Converts month labels to lowercase
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    // Color mapping: Active/Selected pill vs Inactive pill font color
-                    color: isSelected
-                        ? Colors.white // Active month text (White)
-                        : Colors.black54, // Inactive month text (Grey)
+      height: 36, // Compact month bar height
+      width: double.infinity,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final double viewportWidth = constraints.maxWidth;
+          if (viewportWidth > 0 && !_scrolledToSelectedMonth) {
+            _scrolledToSelectedMonth = true;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _scrollToActiveMonth(viewportWidth);
+            });
+          }
+
+          return ListView.builder(
+            controller: _monthScrollController,
+            scrollDirection: Axis.horizontal,
+            itemCount: 12,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            itemBuilder: (context, index) {
+              final monthNum = index + 1;
+              final isSelected = selectedMonth == monthNum;
+              final label = labels[index];
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectedMonth = monthNum;
+                    isLoading = true;
+                  });
+                  _scrollToActiveMonth(viewportWidth);
+                  loadPrayerTimes();
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  width: 70.0,
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  decoration: BoxDecoration(
+                    color:
+                        isSelected ? theme.primary : theme.secondaryBackground,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Center(
+                    child: Text(
+                      label.toLowerCase(),
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: isSelected ? Colors.white : theme.secondaryText,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
+              );
+            },
           );
         },
       ),
@@ -365,76 +405,81 @@ class _PrayerMonthTableState extends State<PrayerMonthTable> {
   }
 
   // =========================================================================
-  // MAIN BUILDER: Modifies overall spacing, header, row styles, highlights
+  // MAIN BUILDER: Compact single-screen width layout with zebra striping
   // =========================================================================
   @override
   Widget build(BuildContext context) {
+    final theme = FlutterFlowTheme.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       width: widget.width,
       height: widget.height,
-      color: Colors.white, // Table background color
+      color: Colors.transparent,
       child: Column(
         children: [
           // 1. Month Selector scroller
           _buildMonthScroller(),
-          const SizedBox(height: 10), // Spacing between month selector & header
-          // 2. Table Header Container
+          const SizedBox(height: 6),
+
+          // 2. Table Header Container (Fits single screen width without horizontal scroll)
           Container(
-            padding: EdgeInsets.symmetric(
-              vertical:
-                  headerRowContainerPadding, // Customizable extra container padding
-              horizontal: 8, // //
+            padding: const EdgeInsets.symmetric(
+              vertical: 2.0,
+              horizontal: 4.0,
             ),
             decoration: BoxDecoration(
-              color:
-                  const Color(0xFFEAF5EA), // Header Row Background (Mint Green)
-              borderRadius:
-                  BorderRadius.circular(6), // Rounded corners of header row
+              color: isDark ? const Color(0x292ECC71) : const Color(0xFFEAF5EA),
+              borderRadius: BorderRadius.circular(6),
             ),
             child: Row(
               children: [
                 buildCell(
                   _translate('day'),
-                  flex: 2, // Day column is narrower
+                  flex: 2,
                   isHeader: true,
                 ),
                 buildCell(
                   _translate('fajr'),
+                  flex: 3,
                   isHeader: true,
                 ),
                 buildCell(
                   _translate('shuroq'),
+                  flex: 3,
                   isHeader: true,
                 ),
                 buildCell(
                   _translate('dhohr'),
+                  flex: 3,
                   isHeader: true,
                 ),
                 buildCell(
                   _translate('asr'),
+                  flex: 3,
                   isHeader: true,
                 ),
                 buildCell(
                   _translate('magrib'),
+                  flex: 3,
                   isHeader: true,
                 ),
                 buildCell(
                   _translate('isha'),
+                  flex: 3,
                   isHeader: true,
                 ),
               ],
             ),
           ),
-          const SizedBox(
-              height: 10), // Spacing between Header row & first data row
-          // 3. Grid list showing monthly prayer times
+          const SizedBox(height: 6),
+
+          // 3. Grid list showing monthly prayer times with zebra striping & orange today highlight
           Expanded(
             child: isLoading
-                ? const Center(
-                    child:
-                        CircularProgressIndicator(), // Loading spinner color/styles
-                  )
+                ? const Center(child: CircularProgressIndicator())
                 : ListView.builder(
+                    padding: EdgeInsets.zero,
                     itemCount: prayerTimes.length,
                     itemBuilder: (context, index) {
                       final item = prayerTimes[index];
@@ -442,51 +487,56 @@ class _PrayerMonthTableState extends State<PrayerMonthTable> {
                       final highlighted = isToday(date);
                       final isEven = index % 2 == 0;
                       return Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 1), // Spacing between table rows
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        margin: const EdgeInsets.symmetric(vertical: 1.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
                         decoration: BoxDecoration(
-                          // Row color logic: highlighted today vs alternating zebra stripes (even/odd)
+                          // Today highlighted in vibrant orange, compact alternating zebra striping
                           color: highlighted
-                              ? const Color(
-                                  0xFFFFB547) // Background for today (Gold/Yellow)
+                              ? const Color(0xFFFF9500)
                               : (isEven
-                                  ? const Color(
-                                      0xFFF9F9F9) // Even index row color (Very Light Grey)
-                                  : Colors
-                                      .white), // Odd index row color (White)
-                          borderRadius: BorderRadius.circular(
-                              4), // Subtle rounded corners on rows
+                                  ? (isDark
+                                      ? const Color(0xFF26262A)
+                                      : const Color(0xFFF2F2F7))
+                                  : (isDark
+                                      ? const Color(0xFF1C1C1E)
+                                      : Colors.white)),
+                          borderRadius: BorderRadius.circular(4),
                         ),
                         child: Row(
                           children: [
                             buildCell(
                               date.day.toString(),
-                              flex: 2, // Day column is narrower
+                              flex: 2,
                               highlighted: highlighted,
                             ),
                             buildCell(
                               item['fajr'],
+                              flex: 3,
                               highlighted: highlighted,
                             ),
                             buildCell(
                               item['shuruq'],
+                              flex: 3,
                               highlighted: highlighted,
                             ),
                             buildCell(
                               item['dhuhr'],
+                              flex: 3,
                               highlighted: highlighted,
                             ),
                             buildCell(
                               item['asr'],
+                              flex: 3,
                               highlighted: highlighted,
                             ),
                             buildCell(
                               item['maghrib'],
+                              flex: 3,
                               highlighted: highlighted,
                             ),
                             buildCell(
                               item['isha'],
+                              flex: 3,
                               highlighted: highlighted,
                             ),
                           ],

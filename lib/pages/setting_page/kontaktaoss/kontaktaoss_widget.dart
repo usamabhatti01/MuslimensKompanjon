@@ -2,6 +2,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/pages/setting_page/kontaktaoss_component/kontaktaoss_component_widget.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -91,8 +92,9 @@ class _KontaktaossWidgetState extends State<KontaktaossWidget> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  AutoSizeText(
                     'Kontakta oss',
+                    minFontSize: FFAppConstants.heading.toDouble(),
                     style: FlutterFlowTheme.of(context).titleMedium.override(
                           font: GoogleFonts.plusJakartaSans(
                             fontWeight: FlutterFlowTheme.of(context)
@@ -117,11 +119,12 @@ class _KontaktaossWidgetState extends State<KontaktaossWidget> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Expanded(
-                    child: Text(
+                    child: AutoSizeText(
                       'Har du frågor, feedback eller problem med appen? Vi hjälper dig gärna och försöker svara så snabbt som möjligt.',
                       textAlign: TextAlign.center,
+                      minFontSize: FFAppConstants.body.toDouble(),
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            font: GoogleFonts.inter(
+                            font: GoogleFonts.manrope(
                               fontWeight: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .fontWeight,
@@ -129,6 +132,7 @@ class _KontaktaossWidgetState extends State<KontaktaossWidget> {
                                   .bodyMedium
                                   .fontStyle,
                             ),
+                            color: FlutterFlowTheme.of(context).primaryText,
                             letterSpacing: 0.0,
                             fontWeight: FlutterFlowTheme.of(context)
                                 .bodyMedium
@@ -230,7 +234,7 @@ class _KontaktaossWidgetState extends State<KontaktaossWidget> {
                 decoration: InputDecoration(
                   isDense: true,
                   labelStyle: FlutterFlowTheme.of(context).labelMedium.override(
-                        font: GoogleFonts.inter(
+                        font: GoogleFonts.manrope(
                           fontWeight: FlutterFlowTheme.of(context)
                               .labelMedium
                               .fontWeight,
@@ -246,7 +250,7 @@ class _KontaktaossWidgetState extends State<KontaktaossWidget> {
                       ),
                   hintText: 'Ditt namn',
                   hintStyle: FlutterFlowTheme.of(context).labelMedium.override(
-                        font: GoogleFonts.inter(
+                        font: GoogleFonts.manrope(
                           fontWeight: FlutterFlowTheme.of(context)
                               .labelMedium
                               .fontWeight,
@@ -292,12 +296,13 @@ class _KontaktaossWidgetState extends State<KontaktaossWidget> {
                   fillColor: FlutterFlowTheme.of(context).secondaryBackground,
                 ),
                 style: FlutterFlowTheme.of(context).bodyMedium.override(
-                      font: GoogleFonts.inter(
+                      font: GoogleFonts.manrope(
                         fontWeight:
                             FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                         fontStyle:
                             FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                       ),
+                      color: FlutterFlowTheme.of(context).primaryText,
                       letterSpacing: 0.0,
                       fontWeight:
                           FlutterFlowTheme.of(context).bodyMedium.fontWeight,
@@ -317,7 +322,7 @@ class _KontaktaossWidgetState extends State<KontaktaossWidget> {
                 decoration: InputDecoration(
                   isDense: true,
                   labelStyle: FlutterFlowTheme.of(context).labelMedium.override(
-                        font: GoogleFonts.inter(
+                        font: GoogleFonts.manrope(
                           fontWeight: FlutterFlowTheme.of(context)
                               .labelMedium
                               .fontWeight,
@@ -333,7 +338,7 @@ class _KontaktaossWidgetState extends State<KontaktaossWidget> {
                       ),
                   hintText: 'Din e-post',
                   hintStyle: FlutterFlowTheme.of(context).labelMedium.override(
-                        font: GoogleFonts.inter(
+                        font: GoogleFonts.manrope(
                           fontWeight: FlutterFlowTheme.of(context)
                               .labelMedium
                               .fontWeight,
@@ -379,12 +384,13 @@ class _KontaktaossWidgetState extends State<KontaktaossWidget> {
                   fillColor: FlutterFlowTheme.of(context).secondaryBackground,
                 ),
                 style: FlutterFlowTheme.of(context).bodyMedium.override(
-                      font: GoogleFonts.inter(
+                      font: GoogleFonts.manrope(
                         fontWeight:
                             FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                         fontStyle:
                             FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                       ),
+                      color: FlutterFlowTheme.of(context).primaryText,
                       letterSpacing: 0.0,
                       fontWeight:
                           FlutterFlowTheme.of(context).bodyMedium.fontWeight,
@@ -404,7 +410,7 @@ class _KontaktaossWidgetState extends State<KontaktaossWidget> {
                 decoration: InputDecoration(
                   isDense: true,
                   labelStyle: FlutterFlowTheme.of(context).labelMedium.override(
-                        font: GoogleFonts.inter(
+                        font: GoogleFonts.manrope(
                           fontWeight: FlutterFlowTheme.of(context)
                               .labelMedium
                               .fontWeight,
@@ -420,7 +426,7 @@ class _KontaktaossWidgetState extends State<KontaktaossWidget> {
                       ),
                   hintText: 'Skriv din meddelande har...',
                   hintStyle: FlutterFlowTheme.of(context).labelMedium.override(
-                        font: GoogleFonts.inter(
+                        font: GoogleFonts.manrope(
                           fontWeight: FlutterFlowTheme.of(context)
                               .labelMedium
                               .fontWeight,
@@ -466,12 +472,13 @@ class _KontaktaossWidgetState extends State<KontaktaossWidget> {
                   fillColor: FlutterFlowTheme.of(context).secondaryBackground,
                 ),
                 style: FlutterFlowTheme.of(context).bodyMedium.override(
-                      font: GoogleFonts.inter(
+                      font: GoogleFonts.manrope(
                         fontWeight:
                             FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                         fontStyle:
                             FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                       ),
+                      color: FlutterFlowTheme.of(context).primaryText,
                       letterSpacing: 0.0,
                       fontWeight:
                           FlutterFlowTheme.of(context).bodyMedium.fontWeight,
@@ -511,16 +518,20 @@ class _KontaktaossWidgetState extends State<KontaktaossWidget> {
                             FlutterFlowTheme.of(context).titleSmall.fontStyle,
                       ),
                   elevation: 0.0,
+                  borderSide: BorderSide(
+                    color: FlutterFlowTheme.of(context).alternate,
+                  ),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text(
+                  AutoSizeText(
                     'Tack för att du använder Muslimens Kompanjon ',
+                    minFontSize: FFAppConstants.body.toDouble(),
                     style: FlutterFlowTheme.of(context).labelMedium.override(
-                          font: GoogleFonts.inter(
+                          font: GoogleFonts.manrope(
                             fontWeight: FlutterFlowTheme.of(context)
                                 .labelMedium
                                 .fontWeight,

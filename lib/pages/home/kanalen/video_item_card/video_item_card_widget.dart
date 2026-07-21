@@ -2,6 +2,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_youtube_player.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'video_item_card_model.dart';
@@ -84,12 +85,13 @@ class _VideoItemCardWidgetState extends State<VideoItemCardWidget> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  AutoSizeText(
                     valueOrDefault<String>(
                       widget.title,
                       'Hur man förbättrar sin Salah steg för steg',
                     ),
                     maxLines: 2,
+                    minFontSize: FFAppConstants.heading.toDouble(),
                     style: FlutterFlowTheme.of(context).titleMedium.override(
                           font: GoogleFonts.plusJakartaSans(
                             fontWeight: FlutterFlowTheme.of(context)
@@ -114,10 +116,11 @@ class _VideoItemCardWidgetState extends State<VideoItemCardWidget> {
                   Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Text(
+                      AutoSizeText(
                         widget.views,
+                        minFontSize: FFAppConstants.body.toDouble(),
                         style: FlutterFlowTheme.of(context).labelSmall.override(
-                              font: GoogleFonts.inter(
+                              font: GoogleFonts.manrope(
                                 fontWeight: FontWeight.normal,
                                 fontStyle: FlutterFlowTheme.of(context)
                                     .labelSmall
@@ -140,15 +143,16 @@ class _VideoItemCardWidgetState extends State<VideoItemCardWidget> {
                         ),
                       ),
                       Expanded(
-                        child: Text(
+                        child: AutoSizeText(
                           valueOrDefault<String>(
                             functions.daysAgo(widget.postedDate!),
                             '1 vecka sedan',
                           ),
+                          minFontSize: FFAppConstants.body.toDouble(),
                           style: FlutterFlowTheme.of(context)
                               .labelSmall
                               .override(
-                                font: GoogleFonts.inter(
+                                font: GoogleFonts.manrope(
                                   fontWeight: FontWeight.normal,
                                   fontStyle: FlutterFlowTheme.of(context)
                                       .labelSmall

@@ -3,6 +3,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/pages/about_islam/about_islam_tabs/about_islam_tabs_widget.dart';
 import '/index.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -54,8 +55,11 @@ class _AboutIslamWidgetState extends State<AboutIslamWidget> {
         body: SafeArea(
           top: true,
           child: Padding(
-            padding: EdgeInsets.all(
-                FlutterFlowTheme.of(context).designToken.spacing.md),
+            padding: EdgeInsetsDirectional.fromSTEB(
+                FlutterFlowTheme.of(context).designToken.spacing.md,
+                0.0,
+                FlutterFlowTheme.of(context).designToken.spacing.md,
+                0.0),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
@@ -73,7 +77,7 @@ class _AboutIslamWidgetState extends State<AboutIslamWidget> {
                       child: Icon(
                         Icons.chevron_left,
                         color: FlutterFlowTheme.of(context).primaryText,
-                        size: 24.0,
+                        size: FFAppConstants.iconSize.toDouble(),
                       ),
                     ),
                     Expanded(
@@ -87,7 +91,7 @@ class _AboutIslamWidgetState extends State<AboutIslamWidget> {
                     ),
                   ].divide(SizedBox(
                       width:
-                          FlutterFlowTheme.of(context).designToken.spacing.lg)),
+                          FlutterFlowTheme.of(context).designToken.spacing.sm)),
                 ),
                 Expanded(
                   child: Column(
@@ -97,35 +101,36 @@ class _AboutIslamWidgetState extends State<AboutIslamWidget> {
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(
                             15.0, 0.0, 15.0, 0.0),
-                        child: Text(
+                        child: AutoSizeText(
                           '11 korta videor. Från grunden.\nIngen press. Inga svåra ord. Bara islam från hjärtat.\nOavsett var du står idag – här börjar du där du är.',
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
+                          minFontSize: FFAppConstants.body.toDouble(),
+                          style: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .override(
+                                font: GoogleFonts.manrope(
+                                  fontWeight: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .fontWeight,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .fontStyle,
+                                ),
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                letterSpacing: 0.0,
+                                fontWeight: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontWeight,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontStyle,
+                              ),
                         ),
                       ),
                       Expanded(
                         child: Builder(
                           builder: (context) {
-                            final aboutIslamicTabs = getJsonField(
-                              FFAppState().AboutIslam,
-                              r'''$.tabs''',
-                            ).toList();
+                            final aboutIslamicTabs =
+                                FFAppState().aboutIslam.toList();
 
                             return ListView.separated(
                               padding: EdgeInsets.zero,
@@ -136,27 +141,21 @@ class _AboutIslamWidgetState extends State<AboutIslamWidget> {
                               itemBuilder: (context, aboutIslamicTabsIndex) {
                                 final aboutIslamicTabsItem =
                                     aboutIslamicTabs[aboutIslamicTabsIndex];
-                                return InkWell(
-                                  splashColor: Colors.transparent,
-                                  focusColor: Colors.transparent,
-                                  hoverColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  onTap: () async {
-                                    context.pushNamed(
-                                        AboutIslamDetailsPageWidget.routeName);
-                                  },
+                                return wrapWithModel(
+                                  model: _model.aboutIslamTabsModels.getModel(
+                                    aboutIslamicTabsIndex.toString(),
+                                    aboutIslamicTabsIndex,
+                                  ),
+                                  updateCallback: () => safeSetState(() {}),
                                   child: AboutIslamTabsWidget(
                                     key: Key(
-                                        'Keytvu_${aboutIslamicTabsIndex}_of_${aboutIslamicTabs.length}'),
-                                    title: getJsonField(
-                                      aboutIslamicTabsItem,
-                                      r'''$.title''',
-                                    ).toString(),
-                                    subtitle: getJsonField(
-                                      aboutIslamicTabsItem,
-                                      r'''$.subtitle''',
-                                    ).toString(),
-                                    alreadyready: true,
+                                      'Keytvu_${aboutIslamicTabsIndex.toString()}',
+                                    ),
+                                    title: aboutIslamicTabsItem.title,
+                                    subtitle: aboutIslamicTabsItem.introduction,
+                                    alreadyready:
+                                        aboutIslamicTabsItem.alreadyRead,
+                                    index: aboutIslamicTabsIndex,
                                   ),
                                 );
                               },
@@ -167,7 +166,7 @@ class _AboutIslamWidgetState extends State<AboutIslamWidget> {
                     ].divide(SizedBox(height: 10.0)),
                   ),
                 ),
-              ].divide(SizedBox(height: 20.0)).around(SizedBox(height: 20.0)),
+              ].divide(SizedBox(height: 20.0)),
             ),
           ),
         ),

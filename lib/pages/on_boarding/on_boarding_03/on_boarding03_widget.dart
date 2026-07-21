@@ -146,7 +146,7 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
                               searchHintTextStyle: FlutterFlowTheme.of(context)
                                   .labelMedium
                                   .override(
-                                    font: GoogleFonts.inter(
+                                    font: GoogleFonts.manrope(
                                       fontWeight: FlutterFlowTheme.of(context)
                                           .labelMedium
                                           .fontWeight,
@@ -167,7 +167,7 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
                               searchTextStyle: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    font: GoogleFonts.inter(
+                                    font: GoogleFonts.manrope(
                                       fontWeight: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .fontWeight,
@@ -186,7 +186,7 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
                               textStyle: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    font: GoogleFonts.inter(
+                                    font: GoogleFonts.manrope(
                                       fontWeight: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .fontWeight,
@@ -277,8 +277,7 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
                           iconAlignment: IconAlignment.end,
                           iconPadding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 0.0, 0.0, 0.0),
-                          iconColor:
-                              FlutterFlowTheme.of(context).primaryBackground,
+                          iconColor: Colors.white,
                           color: FlutterFlowTheme.of(context).primary,
                           textStyle:
                               FlutterFlowTheme.of(context).titleSmall.override(
@@ -300,6 +299,9 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
                                         .fontStyle,
                                   ),
                           elevation: 0.0,
+                          borderSide: BorderSide(
+                            color: FlutterFlowTheme.of(context).alternate,
+                          ),
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                       ),

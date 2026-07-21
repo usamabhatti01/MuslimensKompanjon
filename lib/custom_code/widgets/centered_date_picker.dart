@@ -24,19 +24,41 @@ class CenteredDatePicker extends StatefulWidget {
   State<CenteredDatePicker> createState() => _CenteredDatePickerState();
 }
 
-class _CenteredDatePickerState extends State<CenteredDatePicker> {
+class _CenteredDatePickerState extends State<CenteredDatePicker>
+    with WidgetsBindingObserver {
   late ScrollController _controller;
   late List<DateTime> days;
   late int todayIndex;
   final double itemWidth = 90.0;
+  bool _scrolledToToday = false;
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _controller = ScrollController();
     _generateMonthDays();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollToToday();
-    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      // Reload Hijri calendar data for today
+      loadTodayHijriData();
+
+      setState(() {
+        _generateMonthDays();
+        _scrolledToToday = false; // Trigger re-scrolling to today
+      });
+    }
   }
 
   void _generateMonthDays() {
@@ -51,10 +73,23 @@ class _CenteredDatePickerState extends State<CenteredDatePicker> {
     todayIndex = now.day - 1;
   }
 
-  void _scrollToToday() {
-    if (!_controller.hasClients) return;
+  void _scrollToToday(double viewportWidth) {
+    if (!_controller.hasClients) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollToToday(viewportWidth);
+      });
+      return;
+    }
+
+    final double totalItemWidth =
+        itemWidth + 12.0; // itemWidth (90) + horizontal margins (6 * 2)
+    final double itemCenter =
+        (todayIndex * totalItemWidth) + (totalItemWidth / 2);
+    final double targetOffset = itemCenter - (viewportWidth / 2);
+    final double maxScroll = (days.length * totalItemWidth) - viewportWidth;
+
     _controller.animateTo(
-      todayIndex * itemWidth,
+      targetOffset.clamp(0.0, maxScroll > 0 ? maxScroll : 0.0),
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeInOut,
     );
@@ -97,32 +132,44 @@ class _CenteredDatePickerState extends State<CenteredDatePicker> {
     return SizedBox(
       height: 70,
       width: widget.width,
-      child: ListView.builder(
-        controller: _controller,
-        scrollDirection: Axis.horizontal,
-        itemCount: days.length,
-        itemBuilder: (context, index) {
-          final date = days[index];
-          final selected = isToday(date);
-          return AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            width: itemWidth,
-            margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 10),
-            decoration: BoxDecoration(
-              color: selected ? primary : Colors.grey.shade200,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Center(
-              child: Text(
-                formatDate(context, date),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: selected ? Colors.white : Colors.black87,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final double viewportWidth = constraints.maxWidth;
+          if (viewportWidth > 0 && !_scrolledToToday) {
+            _scrolledToToday = true;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _scrollToToday(viewportWidth);
+            });
+          }
+
+          return ListView.builder(
+            controller: _controller,
+            scrollDirection: Axis.horizontal,
+            itemCount: days.length,
+            itemBuilder: (context, index) {
+              final date = days[index];
+              final selected = isToday(date);
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: itemWidth,
+                margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 10),
+                decoration: BoxDecoration(
+                  color: selected ? primary : Colors.grey.shade200,
+                  borderRadius: BorderRadius.circular(12),
                 ),
-              ),
-            ),
+                child: Center(
+                  child: Text(
+                    formatDate(context, date),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: selected ? Colors.white : Colors.black87,
+                    ),
+                  ),
+                ),
+              );
+            },
           );
         },
       ),

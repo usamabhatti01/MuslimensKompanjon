@@ -12,61 +12,74 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
-import 'package:hijri/hijri_calendar.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:hijri/hijri_calendar.dart';
 import '/custom_code/actions/constants.dart';
 
-Future<String> loadJsonFromAssetOrGit(String filePath) async {
-  try {
-    return await rootBundle.loadString(filePath);
-  } catch (e) {
-    print("Asset not found ($filePath): $e. Trying cache/network.");
+Future<String?> loadJsonFromUrlOrCache({
+  required String fileName,
+  required List<String> urls,
+  required List<String> assetPaths,
+}) async {
+  // 1. Download from online URL first to get latest data
+  for (final url in urls) {
+    try {
+      print("Attempting download from: $url");
+      final response =
+          await http.get(Uri.parse(url)).timeout(const Duration(seconds: 5));
+      if (response.statusCode == 200 && response.body.isNotEmpty) {
+        final downloadedContent = response.body;
+        print("Successfully downloaded JSON from: $url");
+
+        // Save to local device storage for future offline access
+        try {
+          final directory = await getApplicationDocumentsDirectory();
+          final localFile = File('${directory.path}/$fileName');
+          await localFile.writeAsString(downloadedContent);
+          print("Cached JSON locally at: ${localFile.path}");
+        } catch (e) {
+          print("Failed to save $fileName to local cache: $e");
+        }
+        return downloadedContent;
+      }
+    } catch (e) {
+      print("Failed to download from $url: $e");
+    }
   }
 
-  final fileName = filePath.split('/').last;
-
+  // 2. Read from local device cache if network failed/offline
   try {
     final directory = await getApplicationDocumentsDirectory();
     final localFile = File('${directory.path}/$fileName');
     if (await localFile.exists()) {
-      print("Cache hit: Loaded $fileName from documents cache.");
-      return await localFile.readAsString();
-    }
-  } catch (e) {
-    print("Error reading from local documents cache: $e");
-  }
-
-  final gitHubOwner = GitConstants.gitHubOwner;
-  final gitHubRepo = GitConstants.gitHubRepo;
-  final branches = GitConstants.branches;
-
-  for (final branch in branches) {
-    final url =
-        'https://raw.githubusercontent.com/$gitHubOwner/$gitHubRepo/$branch/$filePath';
-    try {
-      print("Attempting to download from $url");
-      final response = await http.get(Uri.parse(url));
-      if (response.statusCode == 200) {
-        final content = response.body;
-        try {
-          final directory = await getApplicationDocumentsDirectory();
-          final localFile = File('${directory.path}/$fileName');
-          await localFile.writeAsString(content);
-          print("Cached $fileName locally.");
-        } catch (cacheError) {
-          print("Error caching $fileName: $cacheError");
-        }
+      final content = await localFile.readAsString();
+      if (content.isNotEmpty) {
+        print("Offline Cache Hit: Loaded local file $fileName");
         return content;
       }
-    } catch (netError) {
-      print("Error downloading from $url: $netError");
     }
+  } catch (e) {
+    print("Error reading local cache ($fileName): $e");
   }
 
-  throw Exception(
-      "Failed to load JSON file $filePath from assets, cache, or GitHub.");
+  // 3. Fallback to bundled asset
+  for (final assetPath in assetPaths) {
+    try {
+      final content = await rootBundle.loadString(assetPath);
+      if (content.isNotEmpty) {
+        print("Loaded asset fallback: $assetPath");
+        return content;
+      }
+    } catch (_) {}
+  }
+
+  return null;
+}
+
+Future<String> loadJsonFromAssetOrGit(String filePath) async {
+  return await rootBundle.loadString(filePath);
 }
 
 class IslamicCalender extends StatefulWidget {
@@ -89,18 +102,85 @@ class IslamicEvent {
   final String subtitle;
   final int hijriMonth;
   final int hijriDay;
+  final int hijriYear;
   final String description;
   final String iconType; // 'mosque', 'kaaba', 'moon'
   final bool isMajorHoliday;
+  final String hijriDate;
+  final String gregorianDate;
+
   IslamicEvent({
     required this.title,
     required this.subtitle,
     required this.hijriMonth,
     required this.hijriDay,
+    required this.hijriYear,
     required this.description,
     required this.iconType,
+    required this.hijriDate,
+    required this.gregorianDate,
     this.isMajorHoliday = false,
   });
+
+  factory IslamicEvent.fromJson(
+      Map<String, dynamic> json, bool isSwedish, int fallbackHijriYear) {
+    final String titleStr = (isSwedish
+            ? (json['title_sv'] ?? json['Event'] ?? json['title'])
+            : (json['title_en'] ?? json['Event'] ?? json['title'])) ??
+        json['Event'] ??
+        json['title'] ??
+        '';
+
+    final String subtitleStr = (isSwedish
+            ? (json['subtitle_sv'] ?? json['subtitle'])
+            : (json['subtitle_en'] ?? json['subtitle'])) ??
+        json['subtitle'] ??
+        '';
+
+    final int month = castToType<int>(json['hijriMonth'] ??
+            json['Hijri_Month_No'] ??
+            json['HijriMonthNo']) ??
+        1;
+
+    final int day = castToType<int>(
+            json['hijriDay'] ?? json['Hijri_Day'] ?? json['HijriDay']) ??
+        1;
+
+    final int year = castToType<int>(
+            json['hijriYear'] ?? json['Hijri_Year'] ?? json['HijriYear']) ??
+        fallbackHijriYear;
+
+    final String monthName =
+        json['Hijri_Month_Name'] ?? json['HijriMonthName'] ?? '';
+    final String fallbackHijriDate =
+        '$day ${monthName.isNotEmpty ? monthName : month} $year'.trim();
+    final String rawHijriDate =
+        (isSwedish ? json['hijriDate_sv'] : json['hijriDate_en']) ??
+            json['hijriDate'] ??
+            '';
+    final String finalHijriDate =
+        rawHijriDate.isNotEmpty ? rawHijriDate : fallbackHijriDate;
+
+    return IslamicEvent(
+      title: titleStr,
+      subtitle: subtitleStr,
+      hijriMonth: month,
+      hijriDay: day,
+      hijriYear: year,
+      description:
+          (isSwedish ? json['description_sv'] : json['description_en']) ??
+              json['description'] ??
+              '',
+      iconType: json['iconType'] ?? 'moon',
+      hijriDate: finalHijriDate,
+      gregorianDate:
+          (isSwedish ? json['gregorianDate_sv'] : json['gregorianDate_en']) ??
+              json['gregorianDate'] ??
+              json['Gregorian_Date'] ??
+              '',
+      isMajorHoliday: json['isMajorHoliday'] as bool? ?? false,
+    );
+  }
 }
 
 class EventOccurrence {
@@ -126,181 +206,15 @@ class _IslamicCalenderState extends State<IslamicCalender> {
   bool isLoading = true;
   // Notification states: keys are event titles
   Map<String, bool> activeNotifications = {};
-  // Static list of Islamic Events
+  List<Map<String, dynamic>> _rawIslamicEvents = [];
   bool get _isSwedish => Localizations.localeOf(context).languageCode == 'sv';
 
   List<IslamicEvent> get islamicEvents {
     final sv = _isSwedish;
-    return [
-      IslamicEvent(
-        title: sv ? "Islamiskt nyår" : "Islamic New Year",
-        subtitle: sv
-            ? "Början på det nya islamiska året"
-            : "Beginning of the new Islamic year",
-        hijriMonth: 1,
-        hijriDay: 1,
-        description: sv
-            ? "Början på det nya islamiska året (1448 / 1449 AH). Muslimer reflekterar över tidens gång och emigrationen (Hijrah) som profeten Muhammed gjorde från Mecka till Medina."
-            : "The start of the new Islamic year (1448 / 1449 AH). Muslims reflect on the passage of time and the migration (Hijrah) of the Prophet Muhammad from Mecca to Medina.",
-        iconType: "moon",
-        isMajorHoliday: false,
-      ),
-      IslamicEvent(
-        title: sv ? "Ashura-dagen" : "Day of Ashura",
-        subtitle: sv
-            ? "Rekommenderad fasta. Speciella böner vid berget Muharram"
-            : "Recommended fasting. Special prayers on the day of Muharram",
-        hijriMonth: 1,
-        hijriDay: 10,
-        description: sv
-            ? "Ashura-dagen firas till minne av att Gud räddade profeten Musa (Moses) och Israels barn från Farao genom att dela Röda havet. Det rekommenderas att fasta denna dag."
-            : "The Day of Ashura commemorates the day God saved Prophet Musa (Moses) and the Children of Israel from Pharaoh by parting the Red Sea. Fasting on this day is highly recommended.",
-        iconType: "moon",
-        isMajorHoliday: true,
-      ),
-      IslamicEvent(
-        title: sv
-            ? "Profetens födelsedag (Mawlid)"
-            : "Prophet's Birthday (Mawlid)",
-        subtitle: sv
-            ? "Födelsen av profeten Muhammed"
-            : "The birth of Prophet Muhammad",
-        hijriMonth: 3,
-        hijriDay: 12,
-        description: sv
-            ? "Mawlid an-Nabi markerar födelsen av profeten Muhammed, Guds sista sändebud. Denna dag används ofta för att lära sig mer om hans liv och läror."
-            : "Mawlid an-Nabi marks the birth of the Prophet Muhammad, God's final messenger. This day is often spent learning more about his life and teachings.",
-        iconType: "mosque",
-        isMajorHoliday: false,
-      ),
-      IslamicEvent(
-        title: sv ? "Isra' och Mi'raj" : "Isra' and Mi'raj",
-        subtitle: sv
-            ? "Det sändebudets himmelsfärd"
-            : "The Prophet's night journey and ascension",
-        hijriMonth: 7,
-        hijriDay: 27,
-        description: sv
-            ? "Den nattliga resan och himmelsfärden. Profeten Muhammed reste mirakulöst från Mecka till Jerusalem och steg sedan upp till himlen."
-            : "The Night Journey and Ascension. The Prophet Muhammad miraculously traveled from Mecca to Jerusalem and then ascended to the heavens.",
-        iconType: "moon",
-        isMajorHoliday: false,
-      ),
-      IslamicEvent(
-        title: sv ? "Laylat al-Bara'at" : "Laylat al-Bara'at",
-        subtitle: sv
-            ? "Förlåtelsens och ödets natt"
-            : "Night of forgiveness and salvation",
-        hijriMonth: 8,
-        hijriDay: 15,
-        description: sv
-            ? "Förlåtelsens natt, där muslimer ber om förlåtelse för sina synder och andas hopp inför det kommande året."
-            : "The Night of Forgiveness, on which Muslims pray for forgiveness for their sins and look forward to the coming year with hope.",
-        iconType: "moon",
-        isMajorHoliday: false,
-      ),
-      IslamicEvent(
-        title: sv ? "Ramadan börjar" : "Ramadan Begins",
-        subtitle: sv ? "Muslimernas faste-månad" : "The holy month of fasting",
-        hijriMonth: 9,
-        hijriDay: 1,
-        description: sv
-            ? "Faste-månaden Ramadan börjar. Muslimer världen över fastar från gryning till solnedgång. Det är en månad av bön och andlig reflektion."
-            : "The holy month of Ramadan begins. Muslims worldwide fast from dawn to sunset. It is a month of prayer, charity, and spiritual reflection.",
-        iconType: "moon",
-        isMajorHoliday: false,
-      ),
-      IslamicEvent(
-        title: sv ? "Laylat al-Qadr" : "Laylat al-Qadr",
-        subtitle: sv
-            ? "Allmaktens natt. Bättre än tusen månader"
-            : "The Night of Decree. Better than a thousand months",
-        hijriMonth: 9,
-        hijriDay: 27,
-        description: sv
-            ? "Allmaktens natt, då Koranen först uppenbarades för profeten Muhammed. Den anses vara bättre än tusen månader."
-            : "The Night of Power, when the Quran was first revealed to the Prophet Muhammad. It is considered better than a thousand months.",
-        iconType: "moon",
-        isMajorHoliday: false,
-      ),
-      IslamicEvent(
-        title: sv ? "Eid al-Fitr (festival)" : "Eid al-Fitr (festival)",
-        subtitle: sv
-            ? "Firandet av fastemånadens slut"
-            : "Celebration marking the end of Ramadan",
-        hijriMonth: 10,
-        hijriDay: 1,
-        description: sv
-            ? "Eid al-Fitr markerar slutet på fastemånaden Ramadan. Det är en glädjefylld högtid som firas med gemensam bön, familjebesök och festmåltider."
-            : "Eid al-Fitr marks the end of the fasting month of Ramadan. It is a joyful celebration marked by congregational prayers, family visits, and festive meals.",
-        iconType: "mosque",
-        isMajorHoliday: true,
-      ),
-      IslamicEvent(
-        title: sv ? "Början av Dhu al-Hijjah" : "Start of Dhu al-Hijjah",
-        subtitle:
-            sv ? "Hajj-pilgrimsfärd börjar" : "Sacred month of Hajj begins",
-        hijriMonth: 12,
-        hijriDay: 1,
-        description: sv
-            ? "Början på den heliga månaden Dhu al-Hijjah. De första tio dagarna av denna månad anses vara de bästa dagarna på året för goda gärningar."
-            : "The start of the holy month of Dhu al-Hijjah. The first ten days of this month are considered the best days of the year for performing good deeds.",
-        iconType: "kaaba",
-        isMajorHoliday: false,
-      ),
-      IslamicEvent(
-        title: sv ? "Hajj-pilgrimsfärd börjar" : "Hajj Pilgrimage Begins",
-        subtitle:
-            sv ? "Pilgrimerna reser till Mina" : "Pilgrims travel to Mina",
-        hijriMonth: 12,
-        hijriDay: 8,
-        description: sv
-            ? "Hajj-pilgrimsfärden börjar i Mecka. Pilgrimer beger sig till Mina för att påbörja riterna för Hajj, en av islams fem pelare."
-            : "The Hajj pilgrimage begins in Mecca. Pilgrims head to Mina to start the Hajj rites, one of the five pillars of Islam.",
-        iconType: "kaaba",
-        isMajorHoliday: false,
-      ),
-      IslamicEvent(
-        title: sv ? "Arafah-dagen (Fasta)" : "Day of Arafah (Fasting)",
-        subtitle: sv
-            ? "Rekommenderad fasta. Speciella böner vid berget Arafah"
-            : "Recommended fasting. Special prayers at Mount Arafah",
-        hijriMonth: 12,
-        hijriDay: 9,
-        description: sv
-            ? "Profeten Muhammed frid vare med honom, lärde dem som inte gör Hajj att fasta på Arafah-dagen med löftet att detta utplånar hela det föregående årets synder och de synder som begås under det kommande året."
-            : "Prophet Muhammad, peace be upon him, taught those not performing Hajj to fast on the Day of Arafah with the promise that it expiates the sins of the past year and the coming year.",
-        iconType: "moon",
-        isMajorHoliday: true,
-      ),
-      IslamicEvent(
-        title: sv ? "Eid al-Adha (festival)" : "Eid al-Adha (festival)",
-        subtitle: sv
-            ? "Offerhögtiden till minne av profeten Ibrahim"
-            : "Festival of Sacrifice honoring Prophet Ibrahim",
-        hijriMonth: 12,
-        hijriDay: 10,
-        description: sv
-            ? "Offerhögtiden Eid al-Adha firas till minne av profeten Ibrahims villighet och trofasthet. Muslimer delar köttet med familj, vänner och behövande."
-            : "The Festival of Sacrifice, Eid al-Adha, honors the willingness of Prophet Ibrahim (Abraham) to sacrifice his son in obedience to God's command. Muslims share meat with family, friends, and the needy.",
-        iconType: "mosque",
-        isMajorHoliday: true,
-      ),
-      IslamicEvent(
-        title:
-            sv ? "Sista dagen av Dhu al-Hijjah" : "Last Day of Dhu al-Hijjah",
-        subtitle: sv
-            ? "Rekommenderad fasta. Speciella böner vid slutet av året"
-            : "Recommended fasting. Special prayers at the end of the year",
-        hijriMonth: 12,
-        hijriDay: 29,
-        description: sv
-            ? "Den sista dagen på det islamiska kalenderåret. Muslimer reflekterar över det gångna året och förbereder sig andligen inför det nya året."
-            : "The final day of the Islamic calendar year. Muslims reflect on the past year and prepare spiritually for the coming new year.",
-        iconType: "moon",
-        isMajorHoliday: false,
-      ),
-    ];
+    return _rawIslamicEvents
+        .map((json) => IslamicEvent.fromJson(json, sv,
+            castToType<int>(json['hijriYear'] ?? json['Hijri_Year']) ?? 1448))
+        .toList();
   }
 
   @override
@@ -334,22 +248,104 @@ class _IslamicCalenderState extends State<IslamicCalender> {
     }
     setState(() => isLoading = true);
     try {
-      for (final hijriYear in [1447, 1448]) {
-        final String filePath =
-            '${FileConstants.hijriCalendarPathPrefix}$hijriYear.json';
-        final String jsonString = await loadJsonFromAssetOrGit(filePath);
-        final List<dynamic> jsonData = json.decode(jsonString);
-        for (final dynamic row in jsonData) {
-          final Map<String, dynamic> entry =
-              Map<String, dynamic>.from(row as Map);
-          final String? dateKey = entry['Gregorian_Date'] as String?;
-          if (dateKey != null) {
-            hijriDateCache[dateKey] = entry;
+      HijriCalendar.setLocal("en");
+      final int currentHijriYear = HijriCalendar.now().hYear;
+
+      // Define candidate years dynamically centered around current Hijri year (e.g. 1447, 1448)
+      final List<int> candidateYears = [
+        currentHijriYear - 1,
+        currentHijriYear,
+        currentHijriYear + 1,
+        1447,
+        1448,
+      ].toSet().toList();
+
+      // Local helper to load and parse a specific calendar dates year
+      Future<int?> loadYear(int y) async {
+        final String fileName = 'Islamic_dates_$y.json';
+        final List<String> urls = [
+          '${FileConstants.islamicDatesUrlPrefix}$y.json',
+        ];
+        final List<String> assetPaths = [
+          'assets/jsons/Islamic_dates_$y.json',
+        ];
+        try {
+          final String? jsonString = await loadJsonFromUrlOrCache(
+            fileName: fileName,
+            urls: urls,
+            assetPaths: assetPaths,
+          );
+          if (jsonString == null) return null;
+
+          final List<dynamic> jsonData = json.decode(jsonString);
+          for (final dynamic row in jsonData) {
+            final Map<String, dynamic> entry =
+                Map<String, dynamic>.from(row as Map);
+            final String? dateKey = entry['Gregorian_Date'] as String?;
+            if (dateKey != null) {
+              hijriDateCache[dateKey] = entry;
+            }
           }
+          return y;
+        } catch (e) {
+          return null;
         }
       }
+
+      // Load all candidate calendar years in parallel
+      final List<int?> loadedYears = await Future.wait(
+        candidateYears.map((y) => loadYear(y)),
+      );
+      final List<int> yearsToLoad = loadedYears.whereType<int>().toList()
+        ..sort();
+
+      // If nothing was loaded (fallback failsafe)
+      if (yearsToLoad.isEmpty) {
+        await loadYear(1447);
+        await loadYear(1448);
+        yearsToLoad.addAll([1447, 1448]);
+      }
+
+      // Load all available holiday files in parallel for the loaded years
+      final List<Future<List<dynamic>>> holidayTasks =
+          yearsToLoad.map((y) async {
+        final String fileName = 'Islamic-holiday_$y.json';
+        final List<String> urls = [
+          '${FileConstants.islamicHolidaysUrlPrefix}$y.json',
+          'https://ifis.se/mkprod/data/Islamic_holidays_$y.json',
+        ];
+        final List<String> assetPaths = [
+          'assets/jsons/Islamic-holiday_$y.json',
+        ];
+        try {
+          final String? holidaysJsonString = await loadJsonFromUrlOrCache(
+            fileName: fileName,
+            urls: urls,
+            assetPaths: assetPaths,
+          );
+          if (holidaysJsonString == null) return [];
+
+          final List<dynamic> holidaysData = json.decode(holidaysJsonString);
+          for (var item in holidaysData) {
+            if (item is Map) {
+              item['hijriYear'] = y; // Inject the Hijri year dynamically
+            }
+          }
+          return holidaysData;
+        } catch (e) {
+          return [];
+        }
+      }).toList();
+
+      final List<List<dynamic>> holidaysResults =
+          await Future.wait(holidayTasks);
+      final List<dynamic> allHolidays =
+          holidaysResults.expand((x) => x).toList();
+
+      _rawIslamicEvents =
+          allHolidays.map((e) => Map<String, dynamic>.from(e as Map)).toList();
     } catch (e) {
-      print("Error loading Hijri calendar data: $e");
+      print("Error loading Hijri calendar or holidays data: $e");
     } finally {
       if (mounted) {
         setState(() => isLoading = false);
@@ -470,13 +466,16 @@ class _IslamicCalenderState extends State<IslamicCalender> {
 
   // Resolves the Gregorian date for a specific IslamicEvent in the viewed year
   DateTime? getGregorianDateOfEvent(IslamicEvent event, int year) {
-    // Search the flat cache for the event's Hijri month+day within the given
-    // Gregorian year so results stay scoped to the visible year.
+    // Search the flat cache for the event's Hijri year+month+day within the
+    // given Gregorian year so results stay scoped to the visible year and the
+    // correct Hijri year (avoids duplicates when two Hijri years overlap the
+    // same Gregorian year, e.g. 1447 Muharram and 1448 Muharram both in 2026).
     for (final entry in hijriDateCache.values) {
       final gregDate = entry['Gregorian_Date'] as String?;
       if (gregDate == null) continue;
       if (!gregDate.startsWith(year.toString())) continue;
-      if (entry['Hijri_Month_No'] == event.hijriMonth &&
+      if (entry['Hijri_Year'] == event.hijriYear &&
+          entry['Hijri_Month_No'] == event.hijriMonth &&
           entry['Hijri_Day'] == event.hijriDay) {
         return DateTime.parse(gregDate);
       }
@@ -493,10 +492,14 @@ class _IslamicCalenderState extends State<IslamicCalender> {
     for (int d = 1; d <= daysInMonth; d++) {
       final dayDate = DateTime(currentDate.year, currentDate.month, d);
       final hj = getHijriDate(dayDate);
-      final hjMonth = hj['Hijri_Month_No'] as int;
-      final hjDay = hj['Hijri_Day'] as int;
-      final matches = islamicEvents
-          .where((e) => e.hijriMonth == hjMonth && e.hijriDay == hjDay);
+      final int? hjYear = castToType<int>(hj['Hijri_Year'] ?? hj['HijriYear']);
+      final int? hjMonth =
+          castToType<int>(hj['Hijri_Month_No'] ?? hj['HijriMonthNo']);
+      final int? hjDay = castToType<int>(hj['Hijri_Day'] ?? hj['HijriDay']);
+      final matches = islamicEvents.where((e) =>
+          (hjYear == null || e.hijriYear == hjYear) &&
+          (hjMonth == null || e.hijriMonth == hjMonth) &&
+          (hjDay == null || e.hijriDay == hjDay));
       for (var ev in matches) {
         list.add(EventOccurrence(
           event: ev,
@@ -609,10 +612,11 @@ class _IslamicCalenderState extends State<IslamicCalender> {
   // =========================================================================
   @override
   Widget build(BuildContext context) {
+    final theme = FlutterFlowTheme.of(context);
     return Container(
       width: widget.width ?? double.infinity,
       height: widget.height ?? double.infinity,
-      color: Colors.white,
+      color: theme.primaryBackground,
       child: Column(
         children: [
           // 1. Custom Tab Bar (placed at the top of the widget, no nav header!)
@@ -631,11 +635,12 @@ class _IslamicCalenderState extends State<IslamicCalender> {
 
   // TAB BAR WIDGET
   Widget _buildTabBar() {
+    final theme = FlutterFlowTheme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 10.0),
       padding: const EdgeInsets.all(4.0),
       decoration: BoxDecoration(
-        color: const Color(0xFFF5F5F5),
+        color: theme.secondaryBackground,
         borderRadius: BorderRadius.circular(30.0),
       ),
       child: Row(
@@ -663,7 +668,8 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                       fontFamily: 'Manrope',
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: selectedTab == 0 ? Colors.white : Colors.black54,
+                      color:
+                          selectedTab == 0 ? Colors.white : theme.secondaryText,
                     ),
                   ),
                 ),
@@ -693,7 +699,8 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                       fontFamily: 'Manrope',
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: selectedTab == 1 ? Colors.white : Colors.black54,
+                      color:
+                          selectedTab == 1 ? Colors.white : theme.secondaryText,
                     ),
                   ),
                 ),
@@ -707,13 +714,14 @@ class _IslamicCalenderState extends State<IslamicCalender> {
 
   // 1. MÅNADSVY SCREEN
   Widget _buildCalendarMainView() {
+    final theme = FlutterFlowTheme.of(context);
     final firstDay = DateTime(currentDate.year, currentDate.month, 1);
     final emptyCells = firstDay.weekday - 1; // Mon=1, ..., Sun=7
     final totalDays = DateTime(currentDate.year, currentDate.month + 1, 0).day;
     List<Widget> cellWidgets = [];
     // Empty cells for grid alignment
     for (int i = 0; i < emptyCells; i++) {
-      cellWidgets.add(Container(color: Colors.white));
+      cellWidgets.add(Container(color: theme.secondaryBackground));
     }
     // Days of month
     for (int d = 1; d <= totalDays; d++) {
@@ -722,7 +730,7 @@ class _IslamicCalenderState extends State<IslamicCalender> {
     }
     // Align grid
     while (cellWidgets.length % 7 != 0) {
-      cellWidgets.add(Container(color: Colors.white));
+      cellWidgets.add(Container(color: theme.secondaryBackground));
     }
     List<TableRow> tableRows = [];
     for (int i = 0; i < cellWidgets.length; i += 7) {
@@ -743,8 +751,8 @@ class _IslamicCalenderState extends State<IslamicCalender> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                  icon: const Icon(Icons.arrow_left,
-                      size: 36, color: Colors.black),
+                  icon: Icon(Icons.arrow_left,
+                      size: 36, color: theme.primaryText),
                   onPressed: prevMonth,
                 ),
                 const SizedBox(width: 20),
@@ -752,11 +760,11 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                   children: [
                     Text(
                       '${_getGregorianMonthNameSwedish(currentDate.month)} ${currentDate.year}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Manrope',
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: theme.primaryText,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -766,15 +774,15 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                         fontFamily: 'Manrope',
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
-                        color: Colors.black.withOpacity(0.54),
+                        color: theme.secondaryText,
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(width: 20),
                 IconButton(
-                  icon: const Icon(Icons.arrow_right,
-                      size: 36, color: Colors.black),
+                  icon: Icon(Icons.arrow_right,
+                      size: 36, color: theme.primaryText),
                   onPressed: nextMonth,
                 ),
               ],
@@ -788,11 +796,11 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                   child: Center(
                     child: Text(
                       _getWeekdayAbbrSwedish(index + 1),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Manrope',
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: Colors.black,
+                        color: theme.primaryText,
                       ),
                     ),
                   ),
@@ -803,14 +811,14 @@ class _IslamicCalenderState extends State<IslamicCalender> {
             // Visual Grid Calendar
             Container(
               decoration: BoxDecoration(
-                border: Border.all(color: const Color(0xFFE2E2E2), width: 1.0),
+                border: Border.all(color: theme.alternate, width: 1.0),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: Table(
-                  border: const TableBorder.symmetric(
-                    inside: BorderSide(color: Color(0xFFE2E2E2), width: 1.0),
+                  border: TableBorder.symmetric(
+                    inside: BorderSide(color: theme.alternate, width: 1.0),
                   ),
                   children: tableRows,
                 ),
@@ -818,13 +826,13 @@ class _IslamicCalenderState extends State<IslamicCalender> {
             ),
             const SizedBox(height: 25),
             // Title
-            const Text(
+            Text(
               'Viktigt kommande datum',
               style: TextStyle(
                 fontFamily: 'Manrope',
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: theme.primaryText,
               ),
             ),
             const SizedBox(height: 12),
@@ -838,7 +846,7 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                     style: TextStyle(
                       fontFamily: 'Manrope',
                       fontSize: 14,
-                      color: Colors.grey[500],
+                      color: theme.secondaryText,
                       fontStyle: FontStyle.italic,
                     ),
                   ),
@@ -858,13 +866,15 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                   return Container(
                     decoration: BoxDecoration(
                       color: isMajorFestival
-                          ? const Color(0xFFEAF5EA)
-                          : const Color(0xFFF9F9F9),
+                          ? (Theme.of(context).brightness == Brightness.dark
+                              ? const Color(0xFF0F3A15)
+                              : const Color(0xFFEAF5EA))
+                          : theme.secondaryBackground,
                       borderRadius: BorderRadius.circular(16),
                       border: isMajorFestival
                           ? Border.all(
                               color: const Color(0xFF0B7A12), width: 1.0)
-                          : null,
+                          : Border.all(color: theme.alternate, width: 1.0),
                     ),
                     child: Material(
                       color: Colors.transparent,
@@ -881,7 +891,7 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                                 width: 44,
                                 height: 44,
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: theme.secondaryBackground,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Center(
@@ -899,21 +909,21 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                                   children: [
                                     Text(
                                       occurrence.event.title,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontFamily: 'Manrope',
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black,
+                                        color: theme.primaryText,
                                       ),
                                     ),
                                     const SizedBox(height: 2),
                                     Text(
-                                      '${occurrence.event.subtitle} / ${_getWeekdayAbbrSwedish(occurrence.gregorianDate.weekday)}, ${occurrence.gregorianDate.day} ${_getGregorianMonthNameSwedish(occurrence.gregorianDate.month).toLowerCase()} ${occurrence.gregorianDate.year}',
-                                      style: const TextStyle(
+                                      '${occurrence.event.hijriDate} • ${occurrence.event.gregorianDate}',
+                                      style: TextStyle(
                                         fontFamily: 'Manrope',
                                         fontSize: 12,
                                         fontWeight: FontWeight.normal,
-                                        color: Color(0xFF737373),
+                                        color: theme.secondaryText,
                                       ),
                                     ),
                                   ],
@@ -938,11 +948,17 @@ class _IslamicCalenderState extends State<IslamicCalender> {
 
   // CALENDAR CELL
   Widget _buildCalendarCell(DateTime date) {
+    final theme = FlutterFlowTheme.of(context);
     final hj = getHijriDate(date);
     final int hijriDay = hj['Hijri_Day'];
     final int hjMonth = hj['Hijri_Month_No'];
-    final matchingEvents = islamicEvents
-        .where((e) => e.hijriMonth == hjMonth && e.hijriDay == hijriDay);
+    final matchingEvents = islamicEvents.where((e) {
+      final eventDate = getGregorianDateOfEvent(e, date.year);
+      return eventDate != null &&
+          eventDate.year == date.year &&
+          eventDate.month == date.month &&
+          eventDate.day == date.day;
+    });
     final hasEvent = matchingEvents.isNotEmpty;
     final now = DateTime.now();
     final isToday =
@@ -958,27 +974,33 @@ class _IslamicCalenderState extends State<IslamicCalender> {
     if (isToday) {
       cellMargin = const EdgeInsets.all(3.0);
       cellDecoration = BoxDecoration(
-        color: const Color(0xFFEAF5EA),
+        color: Theme.of(context).brightness == Brightness.dark
+            ? const Color(0xFF0F3A15)
+            : const Color(0xFFEAF5EA),
         borderRadius: BorderRadius.circular(10.0),
         border: Border.all(color: const Color(0xFF0B7A12), width: 1.5),
       );
     } else if (isSelected) {
       cellMargin = const EdgeInsets.all(3.0);
       cellDecoration = BoxDecoration(
-        color: const Color(0xFFEAF5EA),
+        color: Theme.of(context).brightness == Brightness.dark
+            ? const Color(0xFF0F3A15)
+            : const Color(0xFFEAF5EA),
         borderRadius: BorderRadius.circular(10.0),
         border: Border.all(
             color: const Color(0xFF0B7A12).withOpacity(0.5), width: 1.0),
       );
     } else if (hasEvent) {
       cellMargin = EdgeInsets.zero;
-      cellDecoration = const BoxDecoration(
-        color: Color(0xFFEAF5EA),
+      cellDecoration = BoxDecoration(
+        color: Theme.of(context).brightness == Brightness.dark
+            ? const Color(0xFF0D2F12)
+            : const Color(0xFFEAF5EA),
       );
     } else {
       cellMargin = EdgeInsets.zero;
-      cellDecoration = const BoxDecoration(
-        color: Colors.white,
+      cellDecoration = BoxDecoration(
+        color: theme.primaryBackground,
       );
     }
     return AspectRatio(
@@ -1016,7 +1038,9 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                         fontWeight: isToday || isSelected
                             ? FontWeight.bold
                             : FontWeight.w600,
-                        color: isToday ? const Color(0xFF0B7A12) : Colors.black,
+                        color: isToday
+                            ? const Color(0xFF0B7A12)
+                            : theme.primaryText,
                         height: 1.1,
                       ),
                     ),
@@ -1028,7 +1052,7 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                         fontSize: 10.5,
                         color: isToday
                             ? const Color(0xFF0B7A12).withOpacity(0.7)
-                            : Colors.grey[500],
+                            : theme.secondaryText,
                         height: 1.1,
                       ),
                     ),
@@ -1054,15 +1078,19 @@ class _IslamicCalenderState extends State<IslamicCalender> {
 
   // 2. KOMMANDE HÄNDELSER SCREEN (Middle screen layout!)
   Widget _buildUpcomingEventsView() {
+    final theme = FlutterFlowTheme.of(context);
     final yearEvents = getEventsForYear(currentDate.year);
     // Grouping events
     // Section 1: Major Holidays
     final majorHolidays =
         yearEvents.where((oe) => oe.event.isMajorHoliday).toList();
-    // Section 2: Grouped by Hijri Month
+    // Section 2: Grouped by Hijri Month (excluding major holidays to avoid duplicates)
     Map<int, List<EventOccurrence>> groupedByMonth = {};
     for (var oe in yearEvents) {
-      final monthNo = oe.hijriDate['Hijri_Month_No'] as int;
+      if (oe.event.isMajorHoliday) continue;
+      final int monthNo = castToType<int>(
+              oe.hijriDate['Hijri_Month_No'] ?? oe.hijriDate['HijriMonthNo']) ??
+          oe.event.hijriMonth;
       if (!groupedByMonth.containsKey(monthNo)) {
         groupedByMonth[monthNo] = [];
       }
@@ -1081,13 +1109,13 @@ class _IslamicCalenderState extends State<IslamicCalender> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'ALLA ISLAMISKA HELGDAGAR',
                   style: TextStyle(
                     fontFamily: 'Manrope',
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: theme.primaryText,
                     letterSpacing: 0.5,
                   ),
                 ),
@@ -1136,11 +1164,11 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                       padding: const EdgeInsets.only(top: 15.0, bottom: 8.0),
                       child: Text(
                         'MÅNADEN $monthName',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Manrope',
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: theme.primaryText,
                           letterSpacing: 0.5,
                         ),
                       ),
@@ -1169,6 +1197,7 @@ class _IslamicCalenderState extends State<IslamicCalender> {
 
   // BUILD YEAR TOGGLE CHIP
   Widget _buildYearChip(int year) {
+    final theme = FlutterFlowTheme.of(context);
     final isSelected = currentDate.year == year;
     return GestureDetector(
       onTap: () {
@@ -1182,7 +1211,8 @@ class _IslamicCalenderState extends State<IslamicCalender> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF0B7A12) : const Color(0xFFF2F2F2),
+          color:
+              isSelected ? const Color(0xFF0B7A12) : theme.secondaryBackground,
           borderRadius: BorderRadius.circular(15),
         ),
         child: Text(
@@ -1191,7 +1221,7 @@ class _IslamicCalenderState extends State<IslamicCalender> {
             fontFamily: 'Manrope',
             fontSize: 12,
             fontWeight: FontWeight.bold,
-            color: isSelected ? Colors.white : Colors.black54,
+            color: isSelected ? Colors.white : theme.secondaryText,
           ),
         ),
       ),
@@ -1200,6 +1230,7 @@ class _IslamicCalenderState extends State<IslamicCalender> {
 
   // DATE BADGE WIDGET FOR EVENT CARD
   Widget _buildDateBadge(EventOccurrence occ) {
+    final theme = FlutterFlowTheme.of(context);
     final hjMonthName =
         _mapHijriMonthToSwedish(occ.hijriDate['Hijri_Month_Name'])
             .toUpperCase();
@@ -1214,7 +1245,9 @@ class _IslamicCalenderState extends State<IslamicCalender> {
       width: 65,
       height: 75,
       decoration: BoxDecoration(
-        color: const Color(0xFFEFF7EF),
+        color: Theme.of(context).brightness == Brightness.dark
+            ? const Color(0xFF0F3A15)
+            : const Color(0xFFEFF7EF),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: const Color(0xFF0B7A12), width: 1.5),
       ),
@@ -1247,32 +1280,32 @@ class _IslamicCalenderState extends State<IslamicCalender> {
               children: [
                 Text(
                   hijriDay,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Manrope',
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: theme.primaryText,
                     height: 1.0,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   '$gregDay $gregMonth',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Manrope',
                     fontSize: 9.5,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black,
+                    color: theme.primaryText,
                     height: 1.1,
                   ),
                 ),
                 Text(
                   weekday,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Manrope',
                     fontSize: 9.0,
                     fontWeight: FontWeight.w500,
-                    color: Colors.black,
+                    color: theme.primaryText,
                     height: 1.1,
                   ),
                 ),
@@ -1285,11 +1318,16 @@ class _IslamicCalenderState extends State<IslamicCalender> {
   }
 
   Widget _buildUpcomingEventCard(EventOccurrence occurrence) {
+    final theme = FlutterFlowTheme.of(context);
     final isNotifActive = activeNotifications[occurrence.event.title] ?? false;
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFF9F9F9),
+        color: theme.secondaryBackground,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: theme.alternate,
+          width: 1.0,
+        ),
       ),
       child: Material(
         color: Colors.transparent,
@@ -1312,21 +1350,30 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                     children: [
                       Text(
                         occurrence.event.title,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Manrope',
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: theme.primaryText,
                         ),
                       ),
-                      const SizedBox(height: 4),
                       Text(
-                        occurrence.event.subtitle,
+                        '${occurrence.event.hijriDate} • ${occurrence.event.gregorianDate}',
                         style: const TextStyle(
                           fontFamily: 'Manrope',
                           fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF0B7A12),
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        occurrence.event.description,
+                        style: TextStyle(
+                          fontFamily: 'Manrope',
+                          fontSize: 12,
                           fontWeight: FontWeight.normal,
-                          color: Color(0xFF737373),
+                          color: theme.secondaryText,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -1384,21 +1431,16 @@ class _IslamicCalenderState extends State<IslamicCalender> {
   // 3. EVENT DETAIL VIEW
   // 3. EVENT DETAIL BOTTOM SHEET
   void _showEventDetailBottomSheet(EventOccurrence occ) {
-    final weekdayStr = _getWeekdayAbbrSwedish(occ.gregorianDate.weekday);
-    final hijriMonthName =
-        _mapHijriMonthToSwedish(occ.hijriDate['Hijri_Month_Name']);
-    final gregMonthName =
-        _getGregorianMonthNameSwedish(occ.gregorianDate.month);
-
+    final theme = FlutterFlowTheme.of(context);
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
         return Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
+          decoration: BoxDecoration(
+            color: theme.secondaryBackground,
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(24.0),
               topRight: Radius.circular(24.0),
             ),
@@ -1415,7 +1457,7 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                     width: 40,
                     height: 5,
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
+                      color: theme.alternate,
                       borderRadius: BorderRadius.circular(2.5),
                     ),
                   ),
@@ -1428,69 +1470,56 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                         .replaceAll(" (festival)", "")
                         .replaceAll(" (Fasta)", ""),
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Manrope',
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: theme.primaryText,
                     ),
                   ),
                 ),
                 const SizedBox(height: 20),
-                // Three-column Detail Card
+                // Two-column Detail Card
                 Container(
                   padding:
                       const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFEAF5EA),
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? const Color(0xFF0F3A15)
+                        : const Color(0xFFEAF5EA),
                     borderRadius: BorderRadius.circular(16),
                     border:
                         Border.all(color: const Color(0xFF0B7A12), width: 1.0),
                   ),
                   child: Row(
                     children: [
-                      // Weekday Column
+                      // Hijri Column
                       Expanded(
-                        child: Center(
-                          child: Text(
-                            weekdayStr,
-                            style: const TextStyle(
-                              fontFamily: 'Manrope',
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                      // Divider
-                      Container(
-                          height: 40,
-                          width: 1,
-                          color: const Color(0xFF0B7A12).withOpacity(0.2)),
-                      // Hijri Day/Month Column
-                      Expanded(
-                        flex: 2,
                         child: Column(
                           children: [
-                            Text(
-                              occ.hijriDate['Hijri_Day'].toString(),
-                              style: const TextStyle(
-                                fontFamily: 'Manrope',
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              hijriMonthName,
+                            const Text(
+                              'HIJRI',
                               style: TextStyle(
                                 fontFamily: 'Manrope',
-                                fontSize: 12,
-                                color: Colors.grey[700],
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF0B7A12),
+                                letterSpacing: 0.5,
                               ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              occ.event.hijriDate.isNotEmpty
+                                  ? occ.event.hijriDate
+                                  : '${occ.hijriDate['Hijri_Day'] ?? ''} ${occ.hijriDate['Hijri_Month_Name'] ?? ''} ${occ.hijriDate['Hijri_Year'] ?? ''}'
+                                      .trim(),
                               textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: 'Manrope',
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: theme.primaryText,
+                              ),
                             ),
                           ],
                         ),
@@ -1500,29 +1529,30 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                           height: 40,
                           width: 1,
                           color: const Color(0xFF0B7A12).withOpacity(0.2)),
-                      // Gregorian Day/Month Column
+                      // Gregorian Column
                       Expanded(
-                        flex: 2,
                         child: Column(
                           children: [
-                            Text(
-                              occ.gregorianDate.day.toString(),
-                              style: const TextStyle(
-                                fontFamily: 'Manrope',
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              gregMonthName,
+                            const Text(
+                              'GREGORIANSK',
                               style: TextStyle(
                                 fontFamily: 'Manrope',
-                                fontSize: 12,
-                                color: Colors.grey[700],
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF0B7A12),
+                                letterSpacing: 0.5,
                               ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              occ.event.gregorianDate,
                               textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: 'Manrope',
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: theme.primaryText,
+                              ),
                             ),
                           ],
                         ),
@@ -1532,24 +1562,24 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                 ),
                 const SizedBox(height: 24),
                 // About Section
-                const Text(
+                Text(
                   'OM DENNA DAG',
                   style: TextStyle(
                     fontFamily: 'Manrope',
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 0.5,
-                    color: Colors.black,
+                    color: theme.primaryText,
                   ),
                 ),
                 const SizedBox(height: 10),
                 Text(
                   occ.event.description,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Manrope',
                     fontSize: 14,
                     height: 1.5,
-                    color: Colors.black87,
+                    color: theme.secondaryText,
                   ),
                 ),
               ],

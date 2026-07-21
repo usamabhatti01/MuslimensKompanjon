@@ -35,6 +35,16 @@ enum AllahNames {
   AllahNamesSv,
 }
 
+enum Direction {
+  portrait,
+  landscape,
+}
+
+enum Quran {
+  juz,
+  sura,
+}
+
 extension FFEnumExtensions<T extends Enum> on T {
   String serialize() => name;
 }
@@ -56,6 +66,10 @@ T? deserializeEnum<T>(String? value) {
       return SoundName.values.deserialize(value) as T?;
     case (AllahNames):
       return AllahNames.values.deserialize(value) as T?;
+    case (Direction):
+      return Direction.values.deserialize(value) as T?;
+    case (Quran):
+      return Quran.values.deserialize(value) as T?;
     default:
       return null;
   }

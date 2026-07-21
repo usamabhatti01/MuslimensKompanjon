@@ -2,6 +2,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/index.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'on_boarding01_model.dart';
@@ -49,17 +50,16 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         body: SafeArea(
           top: true,
-          child: Align(
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(
-                  FlutterFlowTheme.of(context).designToken.spacing.lg,
-                  FlutterFlowTheme.of(context).designToken.spacing.lg,
-                  FlutterFlowTheme.of(context).designToken.spacing.lg,
-                  0.0),
+          child: Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(
+                FlutterFlowTheme.of(context).designToken.spacing.lg,
+                0.0,
+                FlutterFlowTheme.of(context).designToken.spacing.lg,
+                0.0),
+            child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
                     decoration: BoxDecoration(),
@@ -82,13 +82,14 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                           child: Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 15.0, 0.0, 0.0),
-                            child: Text(
+                            child: AutoSizeText(
                               'Din vardagliga kompanjon för ett rikare muslimskt liv – med allt från Koranen på arabiska, svenska och engelska (text och ljud), MK-videokanalen och Dhikr till information om islam. Appen innehåller även viktiga verktyg som bönetider, Hijri-kalender, Qibla, to-do-lista och en karta över Sveriges moskéer.',
                               textAlign: TextAlign.start,
+                              minFontSize: FFAppConstants.body.toDouble(),
                               style: FlutterFlowTheme.of(context)
                                   .bodyLarge
                                   .override(
-                                    font: GoogleFonts.inter(
+                                    font: GoogleFonts.manrope(
                                       fontWeight: FlutterFlowTheme.of(context)
                                           .bodyLarge
                                           .fontWeight,
@@ -96,6 +97,8 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                           .bodyLarge
                                           .fontStyle,
                                     ),
+                                    color: FlutterFlowTheme.of(context)
+                                        .onBoardingColor,
                                     letterSpacing: 0.0,
                                     fontWeight: FlutterFlowTheme.of(context)
                                         .bodyLarge
@@ -156,8 +159,10 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    AutoSizeText(
                                       'Koranen',
+                                      minFontSize:
+                                          FFAppConstants.heading.toDouble(),
                                       style: FlutterFlowTheme.of(context)
                                           .headlineSmall
                                           .override(
@@ -171,6 +176,7 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                                       .headlineSmall
                                                       .fontStyle,
                                             ),
+                                            fontSize: 20.0,
                                             letterSpacing: 0.0,
                                             fontWeight:
                                                 FlutterFlowTheme.of(context)
@@ -182,12 +188,14 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                                     .fontStyle,
                                           ),
                                     ),
-                                    Text(
+                                    AutoSizeText(
                                       'Arabisk/svensk/Engelsk text och ljud.',
+                                      minFontSize:
+                                          FFAppConstants.body.toDouble(),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
-                                            font: GoogleFonts.inter(
+                                            font: GoogleFonts.manrope(
                                               fontWeight:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -197,6 +205,8 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                                       .bodyMedium
                                                       .fontStyle,
                                             ),
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryText,
                                             letterSpacing: 0.0,
                                             fontWeight:
                                                 FlutterFlowTheme.of(context)
@@ -246,8 +256,10 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    AutoSizeText(
                                       'Information om islam',
+                                      minFontSize:
+                                          FFAppConstants.heading.toDouble(),
                                       style: FlutterFlowTheme.of(context)
                                           .headlineLarge
                                           .override(
@@ -273,12 +285,14 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                                     .fontStyle,
                                           ),
                                     ),
-                                    Text(
+                                    AutoSizeText(
                                       'Lär dig islams grunder.',
+                                      minFontSize:
+                                          FFAppConstants.body.toDouble(),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
-                                            font: GoogleFonts.inter(
+                                            font: GoogleFonts.manrope(
                                               fontWeight:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -288,6 +302,8 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                                       .bodyMedium
                                                       .fontStyle,
                                             ),
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryText,
                                             letterSpacing: 0.0,
                                             fontWeight:
                                                 FlutterFlowTheme.of(context)
@@ -337,8 +353,10 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    AutoSizeText(
                                       'MK-videokanalen',
+                                      minFontSize:
+                                          FFAppConstants.heading.toDouble(),
                                       style: FlutterFlowTheme.of(context)
                                           .headlineLarge
                                           .override(
@@ -364,12 +382,14 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                                     .fontStyle,
                                           ),
                                     ),
-                                    Text(
+                                    AutoSizeText(
                                       'Inspirerande och lärorika videor.',
+                                      minFontSize:
+                                          FFAppConstants.body.toDouble(),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
-                                            font: GoogleFonts.inter(
+                                            font: GoogleFonts.manrope(
                                               fontWeight:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -379,6 +399,8 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                                       .bodyMedium
                                                       .fontStyle,
                                             ),
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryText,
                                             letterSpacing: 0.0,
                                             fontWeight:
                                                 FlutterFlowTheme.of(context)
@@ -428,8 +450,10 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    AutoSizeText(
                                       'Bönetider & Verktyg',
+                                      minFontSize:
+                                          FFAppConstants.heading.toDouble(),
                                       style: FlutterFlowTheme.of(context)
                                           .headlineLarge
                                           .override(
@@ -455,12 +479,14 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                                     .fontStyle,
                                           ),
                                     ),
-                                    Text(
+                                    AutoSizeText(
                                       'Bönetider, Qibla, Dhikr och to-do-lista.',
+                                      minFontSize:
+                                          FFAppConstants.body.toDouble(),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
-                                            font: GoogleFonts.inter(
+                                            font: GoogleFonts.manrope(
                                               fontWeight:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -470,6 +496,8 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                                       .bodyMedium
                                                       .fontStyle,
                                             ),
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryText,
                                             letterSpacing: 0.0,
                                             fontWeight:
                                                 FlutterFlowTheme.of(context)
@@ -519,8 +547,10 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    AutoSizeText(
                                       'Hijri-kalender & Kartor',
+                                      minFontSize:
+                                          FFAppConstants.heading.toDouble(),
                                       style: FlutterFlowTheme.of(context)
                                           .headlineLarge
                                           .override(
@@ -546,12 +576,14 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                                     .fontStyle,
                                           ),
                                     ),
-                                    Text(
+                                    AutoSizeText(
                                       'Viktiga datum och karta över moskéer.',
+                                      minFontSize:
+                                          FFAppConstants.body.toDouble(),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
-                                            font: GoogleFonts.inter(
+                                            font: GoogleFonts.manrope(
                                               fontWeight:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -561,6 +593,8 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                                       .bodyMedium
                                                       .fontStyle,
                                             ),
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryText,
                                             letterSpacing: 0.0,
                                             fontWeight:
                                                 FlutterFlowTheme.of(context)
@@ -604,8 +638,7 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                         iconAlignment: IconAlignment.end,
                         iconPadding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        iconColor:
-                            FlutterFlowTheme.of(context).primaryBackground,
+                        iconColor: Colors.white,
                         color: FlutterFlowTheme.of(context).primary,
                         textStyle:
                             FlutterFlowTheme.of(context).titleSmall.override(

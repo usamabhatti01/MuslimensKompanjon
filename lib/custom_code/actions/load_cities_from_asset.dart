@@ -27,6 +27,10 @@ Future<List<CityRecordStruct>> loadCitiesFromAsset(
   LatLng? value,
 ) async {
   print("🚀 FUNCTION STARTED");
+  if (FFAppState().cityList.isNotEmpty) {
+    print("📋 Cities already loaded in App State. Skipping asset load.");
+    return FFAppState().cityList;
+  }
 
   try {
     print("📦 Loading JSON from assets...");
@@ -41,6 +45,7 @@ Future<List<CityRecordStruct>> loadCitiesFromAsset(
 
     if (decoded is! List) {
       print("❌ Decoded JSON is NOT a List");
+
       return [];
     }
 
@@ -56,10 +61,13 @@ Future<List<CityRecordStruct>> loadCitiesFromAsset(
       }
 
       final name = item['name']?.toString() ?? '';
+
       final latStr = item['lat']?.toString() ?? '';
+
       final lngStr = item['lng']?.toString() ?? '';
 
       final lat = double.tryParse(latStr) ?? 0.0;
+
       final lng = double.tryParse(lngStr) ?? 0.0;
 
       cities.add(
@@ -73,45 +81,57 @@ Future<List<CityRecordStruct>> loadCitiesFromAsset(
 
     print("✅ Total cities parsed: ${cities.length}");
 
-    // LOCATION CHECK
-    print("📍 Checking user location... value = $value");
+    List<CityRecordStruct> result = cities;
 
-    if (value == null) {
-      print("⚠️ value is NULL → returning all cities");
-      return cities;
+    if (value != null) {
+      print("📍 User location: ${value.latitude}, ${value.longitude}");
+
+      final double userLat = value.latitude;
+
+      final double userLng = value.longitude;
+
+      const double threshold = 0.5;
+
+      final filtered = cities.where((city) {
+        final lat = city.lat ?? 0.0;
+
+        final lng = city.lng ?? 0.0;
+
+        return (lat - userLat).abs() <= threshold &&
+            (lng - userLng).abs() <= threshold;
+      }).toList();
+
+      print("🎯 Filtered cities count: ${filtered.length}");
+
+      if (filtered.isNotEmpty) {
+        result = filtered;
+      }
+    } else {
+      print("⚠️ Location is NULL → using all cities");
     }
 
-    print("📍 Extracting latitude/longitude...");
+    // STORE IN APP STATE
 
-    final double userLat = value.latitude;
-    final double userLng = value.longitude;
+    FFAppState().cityList = result;
 
-    print("👤 userLat=$userLat userLng=$userLng");
+    print("✅ App State Updated");
 
-    const double threshold = 0.5;
+    print("📊 cityList count: ${FFAppState().cityList.length}");
 
-    print("🔍 Filtering cities...");
+    if (FFAppState().cityList.isNotEmpty) {
+      print(
+        "🏙️ First city: ${FFAppState().cityList.first.name}",
+      );
+    }
 
-    final filtered = cities.where((city) {
-      final lat = city.lat ?? 0.0;
-      final lng = city.lng ?? 0.0;
-
-      final latDiff = (lat - userLat).abs();
-      final lngDiff = (lng - userLng).abs();
-
-      print("➡️ city=${city.name} latDiff=$latDiff lngDiff=$lngDiff");
-
-      return latDiff <= threshold && lngDiff <= threshold;
-    }).toList();
-
-    print("🎯 Filtered result: ${filtered.length} cities");
-
-    return filtered.isEmpty ? cities : filtered;
+    return result;
   } catch (e, stack) {
     print("❌ ERROR OCCURRED:");
+
     print(e);
-    print("📛 STACK TRACE:");
+
     print(stack);
+
     return [];
   }
 }

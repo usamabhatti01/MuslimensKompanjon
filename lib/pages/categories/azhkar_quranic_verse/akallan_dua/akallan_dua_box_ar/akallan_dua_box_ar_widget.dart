@@ -1,5 +1,6 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'akallan_dua_box_ar_model.dart';
 export 'akallan_dua_box_ar_model.dart';
@@ -51,7 +52,7 @@ class _AkallanDuaBoxArWidgetState extends State<AkallanDuaBoxArWidget> {
         borderRadius: BorderRadius.circular(
             FlutterFlowTheme.of(context).designToken.radius.md),
         border: Border.all(
-          color: FlutterFlowTheme.of(context).containerBg,
+          color: FlutterFlowTheme.of(context).alternate,
         ),
       ),
       child: Padding(
@@ -64,9 +65,10 @@ class _AkallanDuaBoxArWidgetState extends State<AkallanDuaBoxArWidget> {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text(
+            AutoSizeText(
               widget.tasbihName!,
               textAlign: TextAlign.end,
+              minFontSize: FFAppConstants.body.toDouble(),
               style: FlutterFlowTheme.of(context).arabiTitle.override(
                     fontFamily: 'arabic',
                     color: FlutterFlowTheme.of(context).primary,
@@ -75,12 +77,13 @@ class _AkallanDuaBoxArWidgetState extends State<AkallanDuaBoxArWidget> {
                     fontWeight: FontWeight.bold,
                   ),
             ),
-            Text(
+            AutoSizeText(
               widget.tasbih!,
               textAlign: TextAlign.end,
+              minFontSize: FFAppConstants.body.toDouble(),
               style: FlutterFlowTheme.of(context).arabicBody.override(
                     fontFamily: 'arabic',
-                    color: FlutterFlowTheme.of(context).black,
+                    color: FlutterFlowTheme.of(context).primaryText,
                     fontSize: 16.0,
                     letterSpacing: 0.0,
                     lineHeight: 2.0,

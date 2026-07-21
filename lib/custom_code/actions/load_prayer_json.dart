@@ -72,20 +72,17 @@ Future<String> loadPrayerJson(
     print("Error reading from local device cache: $e");
   }
 
-  // 2. Local cache missed. Try to download from GitHub repository
-  // Change these two values if you ever change your GitHub username or repository:
-  final gitHubOwner = GitConstants.gitHubOwner;
-  final gitHubRepo = GitConstants.gitHubRepo;
-  final branches = GitConstants.branches;
-  final possibleUrls = <String>[];
-  for (final b in branches) {
-    possibleUrls.addAll([
-      'https://raw.githubusercontent.com/$gitHubOwner/$gitHubRepo/$b/assets/jsons/$fileName',
-      'https://raw.githubusercontent.com/$gitHubOwner/$gitHubRepo/$b/assets/jsons/$fileNameNfd',
-      'https://raw.githubusercontent.com/$gitHubOwner/$gitHubRepo/$b/assets/jsons/$year/$fileName',
-      'https://raw.githubusercontent.com/$gitHubOwner/$gitHubRepo/$b/assets/jsons/$year/$fileNameNfd',
-    ]);
-  }
+  // 2. Local cache missed. Try to download from the new URL
+  final slugNfd = toNfd(slug);
+  final originalName = cityName.trim();
+  final originalNameNfd = toNfd(originalName);
+
+  final possibleUrls = <String>[
+    'https://ifis.se/mkprod/data/prayer_times/$year/${slug}_combined_$year.json',
+    'https://ifis.se/mkprod/data/prayer_times/$year/${slugNfd}_combined_$year.json',
+    'https://ifis.se/mkprod/data/prayer_times/$year/${originalName}_combined_$year.json',
+    'https://ifis.se/mkprod/data/prayer_times/$year/${originalNameNfd}_combined_$year.json',
+  ];
 
   String? downloadedContent;
   for (final url in possibleUrls) {

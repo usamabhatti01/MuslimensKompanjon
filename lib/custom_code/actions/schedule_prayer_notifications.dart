@@ -14,6 +14,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:flutter/services.dart';
 
 final FlutterLocalNotificationsPlugin fln = FlutterLocalNotificationsPlugin();
 // Localization mapping for supported languages ('sv' and 'en')
@@ -75,295 +76,336 @@ bool _getPrayerSetting(String prayer, String settingType) {
   }
 }
 
-Future schedulePrayerNotifications() async {
-  // ================= INIT =================
-  const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
-  const iosInit = DarwinInitializationSettings(
-    requestAlertPermission: true,
-    requestBadgePermission: true,
-    requestSoundPermission: true,
-    defaultPresentAlert: true,
-    defaultPresentBadge: true,
-    defaultPresentSound: true,
-  );
-  const settings = InitializationSettings(
-    android: androidInit,
-    iOS: iosInit,
-  );
-  await fln.initialize(settings);
-  // ================= PERMISSIONS =================
-  await fln
-      .resolvePlatformSpecificImplementation<
-          IOSFlutterLocalNotificationsPlugin>()
-      ?.requestPermissions(
-        alert: true,
-        badge: true,
-        sound: true,
+Future<String> schedulePrayerNotifications() async {
+  try {
+    // ================= INIT =================
+    const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const iosInit = DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+      defaultPresentAlert: true,
+      defaultPresentBadge: true,
+      defaultPresentSound: true,
+    );
+    const settings = InitializationSettings(
+      android: androidInit,
+      iOS: iosInit,
+    );
+    await fln.initialize(settings);
+    // ================= PERMISSIONS =================
+    await fln
+        .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
+    await fln
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.requestNotificationsPermission();
+
+    // ================= ANDROID CHANNEL =================
+    final selectedSound = FFAppState().user.adhanSound;
+    final androidPlugin = fln.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>();
+
+    await androidPlugin?.createNotificationChannel(
+      const AndroidNotificationChannel(
+        'prayer_channel_vibration',
+        'Prayer Vibration Notifications',
+        description: 'Prayer reminder notifications with vibration only',
+        importance: Importance.max,
+        playSound: false,
+        enableVibration: true,
+      ),
+    );
+    await androidPlugin?.createNotificationChannel(
+      const AndroidNotificationChannel(
+        'prayer_channel_sound',
+        'Prayer Sound Notifications',
+        description: 'Prayer reminder notifications with sound',
+        importance: Importance.max,
+        playSound: true,
+        enableVibration: true,
+      ),
+    );
+
+    if (selectedSound == AdhanSound.Standard.name) {
+      await androidPlugin?.createNotificationChannel(
+        const AndroidNotificationChannel(
+          'prayer_channel_standard_adhan',
+          'Prayer Standard Adhan Notifications',
+          description:
+              'Prayer reminder notifications with Standard Adhan sound',
+          importance: Importance.max,
+          playSound: true,
+          sound: RawResourceAndroidNotificationSound('standard_adhan'),
+          enableVibration: true,
+        ),
       );
-  await fln
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.requestNotificationsPermission();
-  // ================= ANDROID CHANNEL =================
-  final selectedSound = FFAppState().user.adhanSound;
-  final androidPlugin = fln.resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>();
-
-  await androidPlugin?.createNotificationChannel(
-    const AndroidNotificationChannel(
-      'prayer_channel_vibration',
-      'Prayer Vibration Notifications',
-      description: 'Prayer reminder notifications with vibration only',
-      importance: Importance.max,
-      playSound: false,
-      enableVibration: true,
-    ),
-  );
-  await androidPlugin?.createNotificationChannel(
-    const AndroidNotificationChannel(
-      'prayer_channel_sound',
-      'Prayer Sound Notifications',
-      description: 'Prayer reminder notifications with sound',
-      importance: Importance.max,
-      playSound: true,
-      enableVibration: true,
-    ),
-  );
-
-  if (selectedSound == AdhanSound.Standard.name) {
-    await androidPlugin?.createNotificationChannel(
-      const AndroidNotificationChannel(
-        'prayer_channel_standard_adhan',
-        'Prayer Standard Adhan Notifications',
-        description: 'Prayer reminder notifications with Standard Adhan sound',
-        importance: Importance.max,
-        playSound: true,
-        sound: RawResourceAndroidNotificationSound('standard_adhan'),
-        enableVibration: true,
-      ),
-    );
-  } else if (selectedSound == AdhanSound.ShortAdhan.name) {
-    await androidPlugin?.createNotificationChannel(
-      const AndroidNotificationChannel(
-        'prayer_channel_short_adhan',
-        'Prayer Short Adhan Notifications',
-        description: 'Prayer reminder notifications with Short Adhan sound',
-        importance: Importance.max,
-        playSound: true,
-        sound: RawResourceAndroidNotificationSound('short_adhan'),
-        enableVibration: true,
-      ),
-    );
-  } else if (selectedSound == AdhanSound.AdhanMakkah.name) {
-    await androidPlugin?.createNotificationChannel(
-      const AndroidNotificationChannel(
-        'prayer_channel_adhan_makkah',
-        'Prayer Makkah Adhan Notifications',
-        description: 'Prayer reminder notifications with Makkah Adhan sound',
-        importance: Importance.max,
-        playSound: true,
-        sound: RawResourceAndroidNotificationSound('adhan_makkah'),
-        enableVibration: true,
-      ),
-    );
-  } else if (selectedSound == AdhanSound.AdhanMadinah.name) {
-    await androidPlugin?.createNotificationChannel(
-      const AndroidNotificationChannel(
-        'prayer_channel_adhan_madinah',
-        'Prayer Madinah Adhan Notifications',
-        description: 'Prayer reminder notifications with Madinah Adhan sound',
-        importance: Importance.max,
-        playSound: true,
-        sound: RawResourceAndroidNotificationSound('adhan_madinah'),
-        enableVibration: true,
-      ),
-    );
-  }
-
-  if (kIsWeb) return;
-  // ================= TIMEZONE =================
-  tzdata.initializeTimeZones();
-  await fln.cancelAll();
-  // ================= LOAD DATA & SCHEDULE =================
-  final city = FFAppState().user.city.toLowerCase().trim();
-  final initialYear = DateTime.now().year;
-  final initialJsonString = await loadPrayerJson(city, initialYear);
-  final initialData = json.decode(initialJsonString);
-  final timeZoneName = initialData['city']['timezone'] ?? 'UTC';
-  final location = tz.getLocation(timeZoneName);
-  final now = tz.TZDateTime.now(location);
-
-  final Map<int, dynamic> yearDataCache = {
-    initialYear: initialData,
-  };
-
-  final List<String> order = [
-    "fajr",
-    "shuruq",
-    "dhuhr",
-    "asr",
-    "maghrib",
-    "isha"
-  ];
-
-  final Map<String, int> prayerIndices = {
-    'fajr': 0,
-    'shuruq': 1,
-    'dhuhr': 2,
-    'asr': 3,
-    'maghrib': 4,
-    'isha': 5,
-  };
-
-  print('User selected sound: $selectedSound');
-  final isVibration = selectedSound == 'Vibration';
-
-  print("Starting scheduling for 10 days starting from: $now");
-
-  for (int dayOffset = 0; dayOffset < 10; dayOffset++) {
-    final targetDate = now.add(Duration(days: dayOffset));
-    final targetYear = targetDate.year;
-
-    if (!yearDataCache.containsKey(targetYear)) {
-      try {
-        final jsonString = await loadPrayerJson(city, targetYear);
-        yearDataCache[targetYear] = json.decode(jsonString);
-      } catch (e) {
-        print("Error loading JSON for year $targetYear: $e");
-        continue;
-      }
+    } else if (selectedSound == AdhanSound.ShortAdhan.name) {
+      await androidPlugin?.createNotificationChannel(
+        const AndroidNotificationChannel(
+          'prayer_channel_short_adhan',
+          'Prayer Short Adhan Notifications',
+          description: 'Prayer reminder notifications with Short Adhan sound',
+          importance: Importance.max,
+          playSound: true,
+          sound: RawResourceAndroidNotificationSound('short_adhan'),
+          enableVibration: true,
+        ),
+      );
+    } else if (selectedSound == AdhanSound.AdhanMakkah.name) {
+      await androidPlugin?.createNotificationChannel(
+        const AndroidNotificationChannel(
+          'prayer_channel_adhan_makkah',
+          'Prayer Makkah Adhan Notifications',
+          description: 'Prayer reminder notifications with Makkah Adhan sound',
+          importance: Importance.max,
+          playSound: true,
+          sound: RawResourceAndroidNotificationSound('adhan_makkah'),
+          enableVibration: true,
+        ),
+      );
+    } else if (selectedSound == AdhanSound.AdhanMadinah.name) {
+      await androidPlugin?.createNotificationChannel(
+        const AndroidNotificationChannel(
+          'prayer_channel_adhan_madinah',
+          'Prayer Madinah Adhan Notifications',
+          description: 'Prayer reminder notifications with Madinah Adhan sound',
+          importance: Importance.max,
+          playSound: true,
+          sound: RawResourceAndroidNotificationSound('adhan_madinah'),
+          enableVibration: true,
+        ),
+      );
     }
 
-    final data = yearDataCache[targetYear];
-    final todayKey = _todayKey(targetDate);
-    print("Scheduling prayers for day offset $dayOffset, date: $todayKey");
-    final todayData = data['prayer_times']?[todayKey];
+    if (kIsWeb) return 'Web is not supported';
+    // ================= TIMEZONE =================
+    tzdata.initializeTimeZones();
+    await fln.cancelAll();
+    // ================= LOAD DATA & SCHEDULE =================
+    final city = FFAppState().user.city.toLowerCase().trim();
+    final initialYear = DateTime.now().year;
+    final initialJsonString = await loadPrayerJson(city, initialYear);
+    final initialData = json.decode(initialJsonString);
+    final timeZoneName = initialData['city']['timezone'] ?? 'UTC';
+    final location = tz.getLocation(timeZoneName);
+    final now = tz.TZDateTime.now(location);
 
-    if (todayData == null) {
-      print("No prayer data found for date: $todayKey");
-      continue;
-    }
+    final Map<int, dynamic> yearDataCache = {
+      initialYear: initialData,
+    };
 
-    final Map<String, String> times = {};
-    for (final p in order) {
-      if (todayData[p] != null) {
-        times[p] = todayData[p].toString();
-      }
-    }
+    final List<String> order = [
+      "fajr",
+      "shuruq",
+      "dhuhr",
+      "asr",
+      "maghrib",
+      "isha"
+    ];
 
-    for (final prayer in order) {
-      final noticeEnabled = _getPrayerSetting(prayer, 'notice');
-      final soundEnabled = _getPrayerSetting(prayer, 'adhan');
-      final playSoundActual = soundEnabled && !isVibration;
+    final Map<String, int> prayerIndices = {
+      'fajr': 0,
+      'shuruq': 1,
+      'dhuhr': 2,
+      'asr': 3,
+      'maghrib': 4,
+      'isha': 5,
+    };
 
-      // Skip only if both disabled
-      if (!noticeEnabled && !soundEnabled) {
-        continue;
-      }
+    final isVibration = selectedSound == 'Vibration';
 
-      final timeStr = times[prayer];
-      if (timeStr == null) continue;
+    for (int dayOffset = 0; dayOffset < 10; dayOffset++) {
+      final targetDate = now.add(Duration(days: dayOffset));
+      final targetYear = targetDate.year;
 
-      final prayerTime = _toTZ(timeStr, location, targetDate);
-      final offsetMinutes = FFAppState().user.prayerReminder;
-
-      final reminderTime =
-          prayerTime.subtract(Duration(minutes: offsetMinutes));
-
-      // Skip if this reminder time is already in the past
-      if (reminderTime.isBefore(now)) {
-        continue;
-      }
-
-      // Generate a unique, deterministic notification ID
-      final int id = dayOffset * 10 + prayerIndices[prayer]!;
-
-      final lang = FFAppState().user.languageCode.toLowerCase().trim();
-      final title = _translate('prayer_reminder', lang);
-      final capitalizedPrayer = _capitalize(_translate(prayer, lang));
-      final bodySuffix = _inMinutesSuffix(offsetMinutes, lang);
-      final body = "$capitalizedPrayer $bodySuffix";
-
-      String? androidSoundResource;
-      String? iosSoundFile;
-
-      if (playSoundActual) {
-        switch (selectedSound) {
-          case 'Standard':
-            androidSoundResource = 'standard_adhan';
-            iosSoundFile = 'standard_adhan.aiff';
-            break;
-          case 'ShortAdhan':
-            androidSoundResource = 'short_adhan';
-            iosSoundFile = 'short_adhan.aiff';
-            break;
-          case 'AdhanMakkah':
-            androidSoundResource = 'adhan_makkah';
-            iosSoundFile = 'adhan_makkah.aiff';
-            break;
-          case 'AdhanMadinah':
-            androidSoundResource = 'adhan_madinah';
-            iosSoundFile = 'adhan_madinah.aiff';
-            break;
-          default:
-            androidSoundResource = null;
-            iosSoundFile = null;
+      if (!yearDataCache.containsKey(targetYear)) {
+        try {
+          final jsonString = await loadPrayerJson(city, targetYear);
+          yearDataCache[targetYear] = json.decode(jsonString);
+        } catch (e) {
+          debugPrint("Error loading JSON for year $targetYear: $e");
+          continue;
         }
       }
 
-      final channelId = playSoundActual
-          ? (androidSoundResource != null
-              ? 'prayer_channel_$androidSoundResource'
-              : 'prayer_channel_sound')
-          : 'prayer_channel_vibration';
-      final channelName = playSoundActual
-          ? 'Prayer Sound Notifications'
-          : 'Prayer Vibration Notifications';
-      final channelDesc = playSoundActual
-          ? 'Prayer reminder notifications with sound'
-          : 'Prayer reminder notifications with vibration only';
+      final data = yearDataCache[targetYear];
+      final todayKey = _todayKey(targetDate);
+      final todayData = data['prayer_times']?[todayKey];
 
-      await fln.zonedSchedule(
-        id,
-        title,
-        body,
-        reminderTime,
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-            channelId,
-            channelName,
-            channelDescription: channelDesc,
-            importance: Importance.max,
-            priority: Priority.high,
-            icon: 'ic_notification',
-            playSound: playSoundActual,
-            enableVibration: true,
-            sound: playSoundActual && androidSoundResource != null
-                ? RawResourceAndroidNotificationSound(
-                    androidSoundResource,
-                  )
-                : null,
-          ),
-          iOS: DarwinNotificationDetails(
-            presentAlert: true,
-            presentBadge: true,
-            presentSound: playSoundActual,
-            sound: iosSoundFile,
-          ),
-        ),
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-        matchDateTimeComponents: null,
-      );
+      if (todayData == null) {
+        debugPrint("No prayer data found for date: $todayKey");
+        continue;
+      }
 
-      print(
-        "SCHEDULED: $prayer for date $todayKey at $reminderTime "
-        "(Sound: $playSoundActual, Notice: $noticeEnabled, ID: $id)",
-      );
+      final Map<String, String> times = {};
+      for (final p in order) {
+        if (todayData[p] != null) {
+          times[p] = todayData[p].toString();
+        }
+      }
+
+      for (final prayer in order) {
+        final noticeEnabled = _getPrayerSetting(prayer, 'notice');
+        final soundEnabled = _getPrayerSetting(prayer, 'adhan');
+        final playSoundActual = soundEnabled && !isVibration;
+
+        // Skip only if both disabled
+        if (!noticeEnabled && !soundEnabled) {
+          continue;
+        }
+
+        final timeStr = times[prayer];
+        if (timeStr == null) continue;
+
+        final prayerTime = _toTZ(timeStr, location, targetDate);
+        final offsetMinutes = FFAppState().user.prayerReminder;
+
+        final reminderTime =
+            prayerTime.subtract(Duration(minutes: offsetMinutes));
+
+        // Skip if this reminder time is already in the past
+        if (reminderTime.isBefore(now)) {
+          continue;
+        }
+
+        // Generate a unique, deterministic notification ID
+        final int id = dayOffset * 10 + prayerIndices[prayer]!;
+
+        final lang = FFAppState().user.languageCode.toLowerCase().trim();
+        final title = _translate('prayer_reminder', lang);
+        final capitalizedPrayer = _capitalize(_translate(prayer, lang));
+        final bodySuffix = _inMinutesSuffix(offsetMinutes, lang);
+        final body = "$capitalizedPrayer $bodySuffix";
+
+        String? androidSoundResource;
+        String? iosSoundFile;
+
+        if (playSoundActual) {
+          switch (selectedSound) {
+            case 'Standard':
+              androidSoundResource = 'standard_adhan';
+              iosSoundFile = 'standard_adhan.aiff';
+              break;
+            case 'ShortAdhan':
+              androidSoundResource = 'short_adhan';
+              iosSoundFile = 'short_adhan.aiff';
+              break;
+            case 'AdhanMakkah':
+              androidSoundResource = 'adhan_makkah';
+              iosSoundFile = 'adhan_makkah.aiff';
+              break;
+            case 'AdhanMadinah':
+              androidSoundResource = 'adhan_madinah';
+              iosSoundFile = 'adhan_madinah.aiff';
+              break;
+            default:
+              androidSoundResource = null;
+              iosSoundFile = null;
+          }
+        }
+
+        final channelId = playSoundActual
+            ? (androidSoundResource != null
+                ? 'prayer_channel_$androidSoundResource'
+                : 'prayer_channel_sound')
+            : 'prayer_channel_vibration';
+        final channelName = playSoundActual
+            ? 'Prayer Sound Notifications'
+            : 'Prayer Vibration Notifications';
+        final channelDesc = playSoundActual
+            ? 'Prayer reminder notifications with sound'
+            : 'Prayer reminder notifications with vibration only';
+
+        var scheduleMode = AndroidScheduleMode.exactAllowWhileIdle;
+        try {
+          await fln.zonedSchedule(
+            id,
+            title,
+            body,
+            reminderTime,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channelId,
+                channelName,
+                channelDescription: channelDesc,
+                importance: Importance.max,
+                priority: Priority.high,
+                // icon: 'ic_notification',
+                playSound: playSoundActual,
+                enableVibration: true,
+                sound: playSoundActual && androidSoundResource != null
+                    ? RawResourceAndroidNotificationSound(
+                        androidSoundResource,
+                      )
+                    : null,
+              ),
+              iOS: DarwinNotificationDetails(
+                presentAlert: true,
+                presentBadge: true,
+                presentSound: playSoundActual,
+                sound: iosSoundFile,
+              ),
+            ),
+            androidScheduleMode: scheduleMode,
+            uiLocalNotificationDateInterpretation:
+                UILocalNotificationDateInterpretation.absoluteTime,
+            matchDateTimeComponents: null,
+          );
+        } catch (e) {
+          if (e is PlatformException &&
+              e.code == 'exact_alarms_not_permitted') {
+            scheduleMode = AndroidScheduleMode.inexactAllowWhileIdle;
+            await fln.zonedSchedule(
+              id,
+              title,
+              body,
+              reminderTime,
+              NotificationDetails(
+                android: AndroidNotificationDetails(
+                  channelId,
+                  channelName,
+                  channelDescription: channelDesc,
+                  importance: Importance.max,
+                  priority: Priority.high,
+                  // icon: 'ic_notification',
+                  playSound: playSoundActual,
+                  enableVibration: true,
+                  sound: playSoundActual && androidSoundResource != null
+                      ? RawResourceAndroidNotificationSound(
+                          androidSoundResource,
+                        )
+                      : null,
+                ),
+                iOS: DarwinNotificationDetails(
+                  presentAlert: true,
+                  presentBadge: true,
+                  presentSound: playSoundActual,
+                  sound: iosSoundFile,
+                ),
+              ),
+              androidScheduleMode: scheduleMode,
+              uiLocalNotificationDateInterpretation:
+                  UILocalNotificationDateInterpretation.absoluteTime,
+              matchDateTimeComponents: null,
+            );
+          } else {
+            rethrow;
+          }
+        }
+      }
     }
+    return 'Success';
+  } catch (e) {
+    debugPrint("Error scheduling prayer notifications: $e");
+    return e.toString();
   }
-  print("Finished scheduling notifications for 10 days.");
 }
 
 // Helper to format minutes suffix for notification body

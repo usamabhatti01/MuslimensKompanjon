@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/pages/on_boarding/on_boarding_03/on_boarding03_widget.dart';
 import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
@@ -78,8 +79,9 @@ class _OnBoarding02WidgetState extends State<OnBoarding02Widget> {
                     Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text(
+                        AutoSizeText(
                           'Plats',
+                          minFontSize: FFAppConstants.heading.toDouble(),
                           style: FlutterFlowTheme.of(context)
                               .headlineLarge
                               .override(
@@ -100,12 +102,13 @@ class _OnBoarding02WidgetState extends State<OnBoarding02Widget> {
                                     .fontStyle,
                               ),
                         ),
-                        Text(
+                        AutoSizeText(
                           'För att kunna ange korrekta bönetider behöver appen veta din plats.',
                           textAlign: TextAlign.center,
+                          minFontSize: FFAppConstants.body.toDouble(),
                           style:
                               FlutterFlowTheme.of(context).bodyLarge.override(
-                                    font: GoogleFonts.inter(
+                                    font: GoogleFonts.manrope(
                                       fontWeight: FlutterFlowTheme.of(context)
                                           .bodyLarge
                                           .fontWeight,
@@ -180,8 +183,7 @@ class _OnBoarding02WidgetState extends State<OnBoarding02Widget> {
                         iconAlignment: IconAlignment.start,
                         iconPadding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        iconColor:
-                            FlutterFlowTheme.of(context).primaryBackground,
+                        iconColor: Colors.white,
                         color: FlutterFlowTheme.of(context).primary,
                         textStyle:
                             FlutterFlowTheme.of(context).titleMedium.override(
@@ -193,8 +195,7 @@ class _OnBoarding02WidgetState extends State<OnBoarding02Widget> {
                                         .titleMedium
                                         .fontStyle,
                                   ),
-                                  color: FlutterFlowTheme.of(context)
-                                      .primaryBackground,
+                                  color: Color(0xFFFFFDFD),
                                   letterSpacing: 0.0,
                                   fontWeight: FlutterFlowTheme.of(context)
                                       .titleMedium
@@ -204,6 +205,9 @@ class _OnBoarding02WidgetState extends State<OnBoarding02Widget> {
                                       .fontStyle,
                                 ),
                         elevation: 0.0,
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).alternate,
+                        ),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                     ),
@@ -239,26 +243,31 @@ class _OnBoarding02WidgetState extends State<OnBoarding02Widget> {
                         iconAlignment: IconAlignment.end,
                         iconPadding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        color: FlutterFlowTheme.of(context).containerBg,
-                        textStyle:
-                            FlutterFlowTheme.of(context).titleMedium.override(
-                                  font: GoogleFonts.plusJakartaSans(
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .titleMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .titleMedium
-                                        .fontStyle,
-                                  ),
-                                  letterSpacing: 0.0,
-                                  fontWeight: FlutterFlowTheme.of(context)
-                                      .titleMedium
-                                      .fontWeight,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .titleMedium
-                                      .fontStyle,
-                                ),
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        textStyle: FlutterFlowTheme.of(context)
+                            .titleMedium
+                            .override(
+                              font: GoogleFonts.plusJakartaSans(
+                                fontWeight: FlutterFlowTheme.of(context)
+                                    .titleMedium
+                                    .fontWeight,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .titleMedium
+                                    .fontStyle,
+                              ),
+                              color: FlutterFlowTheme.of(context).primaryText,
+                              letterSpacing: 0.0,
+                              fontWeight: FlutterFlowTheme.of(context)
+                                  .titleMedium
+                                  .fontWeight,
+                              fontStyle: FlutterFlowTheme.of(context)
+                                  .titleMedium
+                                  .fontStyle,
+                            ),
                         elevation: 0.0,
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).alternate,
+                        ),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                     ),

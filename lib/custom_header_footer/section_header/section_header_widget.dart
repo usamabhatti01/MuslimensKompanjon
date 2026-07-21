@@ -1,5 +1,6 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'section_header_model.dart';
@@ -48,11 +49,12 @@ class _SectionHeaderWidgetState extends State<SectionHeaderWidget> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
+        AutoSizeText(
           valueOrDefault<String>(
             widget.title,
             'Senaste Live',
           ),
+          minFontSize: FFAppConstants.heading.toDouble(),
           style: FlutterFlowTheme.of(context).titleMedium.override(
                 font: GoogleFonts.plusJakartaSans(
                   fontWeight: FontWeight.w600,

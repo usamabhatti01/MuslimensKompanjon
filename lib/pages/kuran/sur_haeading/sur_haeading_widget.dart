@@ -1,9 +1,8 @@
 import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_toggle_icon.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'sur_haeading_model.dart';
 export 'sur_haeading_model.dart';
 
@@ -55,35 +54,33 @@ class _SurHaeadingWidgetState extends State<SurHaeadingWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return Container(
-      height: 100.0,
+      width: 300.0,
       decoration: BoxDecoration(
-        color: FlutterFlowTheme.of(context).secondaryBackground,
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Padding(
-        padding: EdgeInsets.all(12.0),
+        padding: EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 0.0, 12.0),
         child: Row(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               width: 50.0,
               height: 50.0,
               decoration: BoxDecoration(
-                color: FlutterFlowTheme.of(context).tint,
+                color: FlutterFlowTheme.of(context).quranBg,
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: Align(
                 alignment: AlignmentDirectional(0.0, 0.0),
-                child: Text(
+                child: AutoSizeText(
                   valueOrDefault<String>(
                     widget.suratNumber?.toString(),
                     '1',
                   ),
+                  minFontSize: FFAppConstants.heading.toDouble(),
                   style: FlutterFlowTheme.of(context).titleLarge.override(
                         font: GoogleFonts.plusJakartaSans(
                           fontWeight: FlutterFlowTheme.of(context)
@@ -106,11 +103,12 @@ class _SurHaeadingWidgetState extends State<SurHaeadingWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                AutoSizeText(
                   valueOrDefault<String>(
                     widget.heading,
                     'Al-Fatiha',
                   ),
+                  minFontSize: FFAppConstants.heading.toDouble(),
                   style: FlutterFlowTheme.of(context).titleMedium.override(
                         font: GoogleFonts.plusJakartaSans(
                           fontWeight: FlutterFlowTheme.of(context)
@@ -127,13 +125,14 @@ class _SurHaeadingWidgetState extends State<SurHaeadingWidget> {
                             FlutterFlowTheme.of(context).titleMedium.fontStyle,
                       ),
                 ),
-                Text(
+                AutoSizeText(
                   valueOrDefault<String>(
                     widget.subHeading,
                     'Öppningen',
                   ),
+                  minFontSize: FFAppConstants.body.toDouble(),
                   style: FlutterFlowTheme.of(context).labelMedium.override(
-                        font: GoogleFonts.inter(
+                        font: GoogleFonts.manrope(
                           fontWeight: FontWeight.normal,
                           fontStyle: FlutterFlowTheme.of(context)
                               .labelMedium
@@ -148,13 +147,14 @@ class _SurHaeadingWidgetState extends State<SurHaeadingWidget> {
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Text(
+                    AutoSizeText(
                       valueOrDefault<String>(
                         widget.suratType,
                         'Medina',
                       ),
+                      minFontSize: FFAppConstants.body.toDouble(),
                       style: FlutterFlowTheme.of(context).labelMedium.override(
-                            font: GoogleFonts.inter(
+                            font: GoogleFonts.manrope(
                               fontWeight: FontWeight.normal,
                               fontStyle: FlutterFlowTheme.of(context)
                                   .labelMedium
@@ -175,10 +175,11 @@ class _SurHaeadingWidgetState extends State<SurHaeadingWidget> {
                         shape: BoxShape.circle,
                       ),
                     ),
-                    Text(
+                    AutoSizeText(
                       '${widget.totalVerses?.toString()} verser',
+                      minFontSize: FFAppConstants.body.toDouble(),
                       style: FlutterFlowTheme.of(context).labelMedium.override(
-                            font: GoogleFonts.inter(
+                            font: GoogleFonts.manrope(
                               fontWeight: FontWeight.normal,
                               fontStyle: FlutterFlowTheme.of(context)
                                   .labelMedium
@@ -195,11 +196,12 @@ class _SurHaeadingWidgetState extends State<SurHaeadingWidget> {
                 ),
               ].divide(SizedBox(height: 5.0)),
             ),
-            Text(
+            AutoSizeText(
               valueOrDefault<String>(
                 widget.suratName,
                 'الرَّحِيْم',
               ),
+              minFontSize: FFAppConstants.heading.toDouble(),
               style: FlutterFlowTheme.of(context).arabiTitle.override(
                     fontFamily: 'arabic',
                     color: FlutterFlowTheme.of(context).primaryText,
@@ -208,24 +210,7 @@ class _SurHaeadingWidgetState extends State<SurHaeadingWidget> {
                     fontWeight: FontWeight.bold,
                   ),
             ),
-            ToggleIcon(
-              onPressed: () async {
-                safeSetState(
-                    () => FFAppState().adhkarSound = !FFAppState().adhkarSound);
-              },
-              value: FFAppState().adhkarSound,
-              onIcon: Icon(
-                Icons.star_sharp,
-                color: FlutterFlowTheme.of(context).warning,
-                size: 24.0,
-              ),
-              offIcon: Icon(
-                Icons.star_border,
-                color: FlutterFlowTheme.of(context).secondaryText,
-                size: 24.0,
-              ),
-            ),
-          ].divide(SizedBox(width: 10.0)),
+          ],
         ),
       ),
     );

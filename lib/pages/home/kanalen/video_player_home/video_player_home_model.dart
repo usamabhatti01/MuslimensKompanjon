@@ -1,5 +1,6 @@
 import '/custom_header_footer/mk_home_page_header/mk_home_page_header_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/pages/home/kanalen/m_kkanalen_video_card/m_kkanalen_video_card_widget.dart';
 import '/pages/home/kanalen/video_action/video_action_widget.dart';
 import '/index.dart';
 import 'video_player_home_widget.dart' show VideoPlayerHomeWidget;
@@ -14,12 +15,15 @@ class VideoPlayerHomeModel extends FlutterFlowModel<VideoPlayerHomeWidget> {
   late VideoActionModel videoActionModel1;
   // Model for VideoAction.
   late VideoActionModel videoActionModel2;
+  // Models for VideoRow.
+  late FlutterFlowDynamicModels<MKkanalenVideoCardModel> videoRowModels;
 
   @override
   void initState(BuildContext context) {
     mkHomePageHeaderModel = createModel(context, () => MkHomePageHeaderModel());
     videoActionModel1 = createModel(context, () => VideoActionModel());
     videoActionModel2 = createModel(context, () => VideoActionModel());
+    videoRowModels = FlutterFlowDynamicModels(() => MKkanalenVideoCardModel());
   }
 
   @override
@@ -27,5 +31,6 @@ class VideoPlayerHomeModel extends FlutterFlowModel<VideoPlayerHomeWidget> {
     mkHomePageHeaderModel.dispose();
     videoActionModel1.dispose();
     videoActionModel2.dispose();
+    videoRowModels.dispose();
   }
 }

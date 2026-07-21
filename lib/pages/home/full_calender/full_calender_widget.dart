@@ -64,8 +64,11 @@ class _FullCalenderWidgetState extends State<FullCalenderWidget> {
         body: SafeArea(
           top: true,
           child: Padding(
-            padding: EdgeInsets.all(
-                FlutterFlowTheme.of(context).designToken.spacing.md),
+            padding: EdgeInsetsDirectional.fromSTEB(
+                FlutterFlowTheme.of(context).designToken.spacing.md,
+                FlutterFlowTheme.of(context).designToken.spacing.sm,
+                FlutterFlowTheme.of(context).designToken.spacing.md,
+                0.0),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,10 +100,8 @@ class _FullCalenderWidgetState extends State<FullCalenderWidget> {
                       ),
                     ),
                   ].divide(SizedBox(
-                      width: FlutterFlowTheme.of(context)
-                          .designToken
-                          .spacing
-                          .xxl)),
+                      width:
+                          FlutterFlowTheme.of(context).designToken.spacing.sm)),
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.max,
@@ -122,7 +123,7 @@ class _FullCalenderWidgetState extends State<FullCalenderWidget> {
                       height: 40.0,
                       textStyle:
                           FlutterFlowTheme.of(context).bodyMedium.override(
-                                font: GoogleFonts.inter(
+                                font: GoogleFonts.manrope(
                                   fontWeight: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .fontWeight,
@@ -130,6 +131,7 @@ class _FullCalenderWidgetState extends State<FullCalenderWidget> {
                                       .bodyMedium
                                       .fontStyle,
                                 ),
+                                color: FlutterFlowTheme.of(context).primaryText,
                                 letterSpacing: 0.0,
                                 fontWeight: FlutterFlowTheme.of(context)
                                     .bodyMedium
@@ -144,7 +146,8 @@ class _FullCalenderWidgetState extends State<FullCalenderWidget> {
                         color: FlutterFlowTheme.of(context).primaryText,
                         size: 18.0,
                       ),
-                      fillColor: FlutterFlowTheme.of(context).primaryBackground,
+                      fillColor:
+                          FlutterFlowTheme.of(context).secondaryBackground,
                       elevation: 2.0,
                       borderColor: FlutterFlowTheme.of(context).alternate,
                       borderWidth: 0.0,
@@ -172,7 +175,7 @@ class _FullCalenderWidgetState extends State<FullCalenderWidget> {
                       height: 40.0,
                       textStyle:
                           FlutterFlowTheme.of(context).bodyMedium.override(
-                                font: GoogleFonts.inter(
+                                font: GoogleFonts.manrope(
                                   fontWeight: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .fontWeight,
@@ -180,6 +183,7 @@ class _FullCalenderWidgetState extends State<FullCalenderWidget> {
                                       .bodyMedium
                                       .fontStyle,
                                 ),
+                                color: FlutterFlowTheme.of(context).primaryText,
                                 letterSpacing: 0.0,
                                 fontWeight: FlutterFlowTheme.of(context)
                                     .bodyMedium
@@ -194,7 +198,8 @@ class _FullCalenderWidgetState extends State<FullCalenderWidget> {
                         color: FlutterFlowTheme.of(context).primaryText,
                         size: 18.0,
                       ),
-                      fillColor: FlutterFlowTheme.of(context).primaryBackground,
+                      fillColor:
+                          FlutterFlowTheme.of(context).secondaryBackground,
                       elevation: 2.0,
                       borderColor: FlutterFlowTheme.of(context).alternate,
                       borderWidth: 0.0,

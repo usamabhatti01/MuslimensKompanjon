@@ -47,16 +47,6 @@ class FFAppState extends ChangeNotifier {
       }
     });
     await _safeInitAsync(() async {
-      if (await secureStorage.read(key: 'ff_AboutIslam') != null) {
-        try {
-          _AboutIslam =
-              jsonDecode(await secureStorage.getString('ff_AboutIslam') ?? '');
-        } catch (e) {
-          print("Can't decode persisted json. Error: $e.");
-        }
-      }
-    });
-    await _safeInitAsync(() async {
       _cityList = (await secureStorage.getStringList('ff_cityList'))
               ?.map((x) {
                 try {
@@ -142,6 +132,88 @@ class FFAppState extends ChangeNotifier {
               .toList() ??
           _eveningAdhkar;
     });
+    await _safeInitAsync(() async {
+      _surahsList = (await secureStorage.getStringList('ff_surahsList'))
+              ?.map((x) {
+                try {
+                  return SurahsStruct.fromSerializableMap(jsonDecode(x));
+                } catch (e) {
+                  print("Can't decode persisted data type. Error: $e.");
+                  return null;
+                }
+              })
+              .withoutNulls
+              .toList() ??
+          _surahsList;
+    });
+    await _safeInitAsync(() async {
+      _ayahsList = (await secureStorage.getStringList('ff_ayahsList'))
+              ?.map((x) {
+                try {
+                  return AyahsStruct.fromSerializableMap(jsonDecode(x));
+                } catch (e) {
+                  print("Can't decode persisted data type. Error: $e.");
+                  return null;
+                }
+              })
+              .withoutNulls
+              .toList() ??
+          _ayahsList;
+    });
+    await _safeInitAsync(() async {
+      _juzList = (await secureStorage.getStringList('ff_juzList'))
+              ?.map((x) {
+                try {
+                  return SurahsStruct.fromSerializableMap(jsonDecode(x));
+                } catch (e) {
+                  print("Can't decode persisted data type. Error: $e.");
+                  return null;
+                }
+              })
+              .withoutNulls
+              .toList() ??
+          _juzList;
+    });
+    await _safeInitAsync(() async {
+      if (await secureStorage.read(key: 'ff_qurantSetting') != null) {
+        try {
+          final serializedData =
+              await secureStorage.getString('ff_qurantSetting') ?? '{}';
+          _qurantSetting = QuranSettingStruct.fromSerializableMap(
+              jsonDecode(serializedData));
+        } catch (e) {
+          print("Can't decode persisted data type. Error: $e.");
+        }
+      }
+    });
+    await _safeInitAsync(() async {
+      _aboutIslam = (await secureStorage.getStringList('ff_aboutIslam'))
+              ?.map((x) {
+                try {
+                  return OnIslamStruct.fromSerializableMap(jsonDecode(x));
+                } catch (e) {
+                  print("Can't decode persisted data type. Error: $e.");
+                  return null;
+                }
+              })
+              .withoutNulls
+              .toList() ??
+          _aboutIslam;
+    });
+    await _safeInitAsync(() async {
+      _mosque = (await secureStorage.getStringList('ff_mosque'))
+              ?.map((x) {
+                try {
+                  return MosqueStruct.fromSerializableMap(jsonDecode(x));
+                } catch (e) {
+                  print("Can't decode persisted data type. Error: $e.");
+                  return null;
+                }
+              })
+              .withoutNulls
+              .toList() ??
+          _mosque;
+    });
   }
 
   void update(VoidCallback callback) {
@@ -223,18 +295,6 @@ class FFAppState extends ChangeNotifier {
 
   void updateHijriDataStruct(Function(HijriCalenderStruct) updateFn) {
     updateFn(_hijriData);
-  }
-
-  dynamic _AboutIslam = jsonDecode(
-      '{\"tabs\":[{\"id\":1,\"title\":\"Introduction\",\"subtitle\":\"Welcome to Guiding Reminders\",\"pageHeading\":\"Growing in Faith\",\"imagePath\":\"https://picsum.photos/seed/intro/600/400\",\"audioPath\":\"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3\",\"contentBody\":\"Islam is a beautiful journey of continuous growth.\",\"contentBody2\":\"These daily reminders are designed to help us connect with Allah.\",\"contentBody3\":\"Bismillah.\"},{\"id\":2,\"title\":\"Day 1\",\"subtitle\":\"Prayer is your foundation\",\"pageHeading\":\"The Pillar of Salah\",\"imagePath\":\"https://picsum.photos/seed/day1/600/400\",\"audioPath\":\"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3\",\"contentBody\":\"Salah is the first thing we will be asked about.\",\"contentBody2\":\"It is our direct connection to the Creator.\",\"contentBody3\":\"Make it your priority today.\"},{\"id\":3,\"title\":\"Day 2\",\"subtitle\":\"The beauty of good character\",\"pageHeading\":\"Perfecting Akhlaq\",\"imagePath\":\"\",\"audioPath\":\"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3\",\"contentBody\":\"The Prophet (PBUH) was sent to perfect good character.\",\"contentBody2\":\"Kindness, honesty, and respect are at the core of our faith.\",\"contentBody3\":\"\"},{\"id\":4,\"title\":\"Day 3\",\"subtitle\":\"Trusting Allah\'s plan\",\"pageHeading\":\"The Power of Sabr\",\"imagePath\":\"https://picsum.photos/seed/day3/600/400\",\"audioPath\":\"\",\"contentBody\":\"Patience is not just waiting; it is how we behave while waiting.\",\"contentBody2\":\"Trust that Allah\'s timing is always perfect.\",\"contentBody3\":\"\"},{\"id\":5,\"title\":\"Day 4\",\"subtitle\":\"Recognizing our blessings\",\"pageHeading\":\"Gratitude (Shukr)\",\"imagePath\":\"https://picsum.photos/seed/day4/600/400\",\"audioPath\":\"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3\",\"contentBody\":\"If you are grateful, Allah will give you more.\",\"contentBody2\":\"Take a moment today to thank Him.\",\"contentBody3\":\"\"}]}');
-  dynamic get AboutIslam => _AboutIslam;
-  set AboutIslam(dynamic value) {
-    _AboutIslam = value;
-    secureStorage.setString('ff_AboutIslam', jsonEncode(value));
-  }
-
-  void deleteAboutIslam() {
-    secureStorage.delete(key: 'ff_AboutIslam');
   }
 
   List<CityRecordStruct> _cityList = [];
@@ -545,6 +605,282 @@ class FFAppState extends ChangeNotifier {
 
   void insertAtIndexInTasbihList(int index, TasbihStruct value) {
     tasbihList.insert(index, value);
+  }
+
+  List<AdhkarStruct> _azkhar = [];
+  List<AdhkarStruct> get azkhar => _azkhar;
+  set azkhar(List<AdhkarStruct> value) {
+    _azkhar = value;
+  }
+
+  void addToAzkhar(AdhkarStruct value) {
+    azkhar.add(value);
+  }
+
+  void removeFromAzkhar(AdhkarStruct value) {
+    azkhar.remove(value);
+  }
+
+  void removeAtIndexFromAzkhar(int index) {
+    azkhar.removeAt(index);
+  }
+
+  void updateAzkharAtIndex(
+    int index,
+    AdhkarStruct Function(AdhkarStruct) updateFn,
+  ) {
+    azkhar[index] = updateFn(_azkhar[index]);
+  }
+
+  void insertAtIndexInAzkhar(int index, AdhkarStruct value) {
+    azkhar.insert(index, value);
+  }
+
+  List<SurahsStruct> _surahsList = [];
+  List<SurahsStruct> get surahsList => _surahsList;
+  set surahsList(List<SurahsStruct> value) {
+    _surahsList = value;
+    secureStorage.setStringList(
+        'ff_surahsList', value.map((x) => x.serialize()).toList());
+  }
+
+  void deleteSurahsList() {
+    secureStorage.delete(key: 'ff_surahsList');
+  }
+
+  void addToSurahsList(SurahsStruct value) {
+    surahsList.add(value);
+    secureStorage.setStringList(
+        'ff_surahsList', _surahsList.map((x) => x.serialize()).toList());
+  }
+
+  void removeFromSurahsList(SurahsStruct value) {
+    surahsList.remove(value);
+    secureStorage.setStringList(
+        'ff_surahsList', _surahsList.map((x) => x.serialize()).toList());
+  }
+
+  void removeAtIndexFromSurahsList(int index) {
+    surahsList.removeAt(index);
+    secureStorage.setStringList(
+        'ff_surahsList', _surahsList.map((x) => x.serialize()).toList());
+  }
+
+  void updateSurahsListAtIndex(
+    int index,
+    SurahsStruct Function(SurahsStruct) updateFn,
+  ) {
+    surahsList[index] = updateFn(_surahsList[index]);
+    secureStorage.setStringList(
+        'ff_surahsList', _surahsList.map((x) => x.serialize()).toList());
+  }
+
+  void insertAtIndexInSurahsList(int index, SurahsStruct value) {
+    surahsList.insert(index, value);
+    secureStorage.setStringList(
+        'ff_surahsList', _surahsList.map((x) => x.serialize()).toList());
+  }
+
+  List<AyahsStruct> _ayahsList = [];
+  List<AyahsStruct> get ayahsList => _ayahsList;
+  set ayahsList(List<AyahsStruct> value) {
+    _ayahsList = value;
+    secureStorage.setStringList(
+        'ff_ayahsList', value.map((x) => x.serialize()).toList());
+  }
+
+  void deleteAyahsList() {
+    secureStorage.delete(key: 'ff_ayahsList');
+  }
+
+  void addToAyahsList(AyahsStruct value) {
+    ayahsList.add(value);
+    secureStorage.setStringList(
+        'ff_ayahsList', _ayahsList.map((x) => x.serialize()).toList());
+  }
+
+  void removeFromAyahsList(AyahsStruct value) {
+    ayahsList.remove(value);
+    secureStorage.setStringList(
+        'ff_ayahsList', _ayahsList.map((x) => x.serialize()).toList());
+  }
+
+  void removeAtIndexFromAyahsList(int index) {
+    ayahsList.removeAt(index);
+    secureStorage.setStringList(
+        'ff_ayahsList', _ayahsList.map((x) => x.serialize()).toList());
+  }
+
+  void updateAyahsListAtIndex(
+    int index,
+    AyahsStruct Function(AyahsStruct) updateFn,
+  ) {
+    ayahsList[index] = updateFn(_ayahsList[index]);
+    secureStorage.setStringList(
+        'ff_ayahsList', _ayahsList.map((x) => x.serialize()).toList());
+  }
+
+  void insertAtIndexInAyahsList(int index, AyahsStruct value) {
+    ayahsList.insert(index, value);
+    secureStorage.setStringList(
+        'ff_ayahsList', _ayahsList.map((x) => x.serialize()).toList());
+  }
+
+  List<SurahsStruct> _juzList = [];
+  List<SurahsStruct> get juzList => _juzList;
+  set juzList(List<SurahsStruct> value) {
+    _juzList = value;
+    secureStorage.setStringList(
+        'ff_juzList', value.map((x) => x.serialize()).toList());
+  }
+
+  void deleteJuzList() {
+    secureStorage.delete(key: 'ff_juzList');
+  }
+
+  void addToJuzList(SurahsStruct value) {
+    juzList.add(value);
+    secureStorage.setStringList(
+        'ff_juzList', _juzList.map((x) => x.serialize()).toList());
+  }
+
+  void removeFromJuzList(SurahsStruct value) {
+    juzList.remove(value);
+    secureStorage.setStringList(
+        'ff_juzList', _juzList.map((x) => x.serialize()).toList());
+  }
+
+  void removeAtIndexFromJuzList(int index) {
+    juzList.removeAt(index);
+    secureStorage.setStringList(
+        'ff_juzList', _juzList.map((x) => x.serialize()).toList());
+  }
+
+  void updateJuzListAtIndex(
+    int index,
+    SurahsStruct Function(SurahsStruct) updateFn,
+  ) {
+    juzList[index] = updateFn(_juzList[index]);
+    secureStorage.setStringList(
+        'ff_juzList', _juzList.map((x) => x.serialize()).toList());
+  }
+
+  void insertAtIndexInJuzList(int index, SurahsStruct value) {
+    juzList.insert(index, value);
+    secureStorage.setStringList(
+        'ff_juzList', _juzList.map((x) => x.serialize()).toList());
+  }
+
+  QuranSettingStruct _qurantSetting = QuranSettingStruct();
+  QuranSettingStruct get qurantSetting => _qurantSetting;
+  set qurantSetting(QuranSettingStruct value) {
+    _qurantSetting = value;
+    secureStorage.setString('ff_qurantSetting', value.serialize());
+  }
+
+  void deleteQurantSetting() {
+    secureStorage.delete(key: 'ff_qurantSetting');
+  }
+
+  void updateQurantSettingStruct(Function(QuranSettingStruct) updateFn) {
+    updateFn(_qurantSetting);
+    secureStorage.setString('ff_qurantSetting', _qurantSetting.serialize());
+  }
+
+  List<OnIslamStruct> _aboutIslam = [];
+  List<OnIslamStruct> get aboutIslam => _aboutIslam;
+  set aboutIslam(List<OnIslamStruct> value) {
+    _aboutIslam = value;
+    secureStorage.setStringList(
+        'ff_aboutIslam', value.map((x) => x.serialize()).toList());
+  }
+
+  void deleteAboutIslam() {
+    secureStorage.delete(key: 'ff_aboutIslam');
+  }
+
+  void addToAboutIslam(OnIslamStruct value) {
+    aboutIslam.add(value);
+    secureStorage.setStringList(
+        'ff_aboutIslam', _aboutIslam.map((x) => x.serialize()).toList());
+  }
+
+  void removeFromAboutIslam(OnIslamStruct value) {
+    aboutIslam.remove(value);
+    secureStorage.setStringList(
+        'ff_aboutIslam', _aboutIslam.map((x) => x.serialize()).toList());
+  }
+
+  void removeAtIndexFromAboutIslam(int index) {
+    aboutIslam.removeAt(index);
+    secureStorage.setStringList(
+        'ff_aboutIslam', _aboutIslam.map((x) => x.serialize()).toList());
+  }
+
+  void updateAboutIslamAtIndex(
+    int index,
+    OnIslamStruct Function(OnIslamStruct) updateFn,
+  ) {
+    aboutIslam[index] = updateFn(_aboutIslam[index]);
+    secureStorage.setStringList(
+        'ff_aboutIslam', _aboutIslam.map((x) => x.serialize()).toList());
+  }
+
+  void insertAtIndexInAboutIslam(int index, OnIslamStruct value) {
+    aboutIslam.insert(index, value);
+    secureStorage.setStringList(
+        'ff_aboutIslam', _aboutIslam.map((x) => x.serialize()).toList());
+  }
+
+  List<MosqueStruct> _mosque = [];
+  List<MosqueStruct> get mosque => _mosque;
+  set mosque(List<MosqueStruct> value) {
+    _mosque = value;
+    secureStorage.setStringList(
+        'ff_mosque', value.map((x) => x.serialize()).toList());
+  }
+
+  void deleteMosque() {
+    secureStorage.delete(key: 'ff_mosque');
+  }
+
+  void addToMosque(MosqueStruct value) {
+    mosque.add(value);
+    secureStorage.setStringList(
+        'ff_mosque', _mosque.map((x) => x.serialize()).toList());
+  }
+
+  void removeFromMosque(MosqueStruct value) {
+    mosque.remove(value);
+    secureStorage.setStringList(
+        'ff_mosque', _mosque.map((x) => x.serialize()).toList());
+  }
+
+  void removeAtIndexFromMosque(int index) {
+    mosque.removeAt(index);
+    secureStorage.setStringList(
+        'ff_mosque', _mosque.map((x) => x.serialize()).toList());
+  }
+
+  void updateMosqueAtIndex(
+    int index,
+    MosqueStruct Function(MosqueStruct) updateFn,
+  ) {
+    mosque[index] = updateFn(_mosque[index]);
+    secureStorage.setStringList(
+        'ff_mosque', _mosque.map((x) => x.serialize()).toList());
+  }
+
+  void insertAtIndexInMosque(int index, MosqueStruct value) {
+    mosque.insert(index, value);
+    secureStorage.setStringList(
+        'ff_mosque', _mosque.map((x) => x.serialize()).toList());
+  }
+
+  bool _autoPlay = false;
+  bool get autoPlay => _autoPlay;
+  set autoPlay(bool value) {
+    _autoPlay = value;
   }
 }
 

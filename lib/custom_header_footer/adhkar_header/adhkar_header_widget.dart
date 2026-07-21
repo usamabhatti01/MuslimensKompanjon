@@ -105,13 +105,13 @@ class _AdhkarHeaderWidgetState extends State<AdhkarHeaderWidget> {
               },
               child: Icon(
                 Icons.notifications_none_sharp,
-                color: FlutterFlowTheme.of(context).black,
+                color: FlutterFlowTheme.of(context).primaryText,
                 size: 24.0,
               ),
             ),
             Icon(
-              FFIcons.kmenu,
-              color: FlutterFlowTheme.of(context).black,
+              Icons.more_vert,
+              color: FlutterFlowTheme.of(context).primaryText,
               size: 24.0,
             ),
           ].divide(SizedBox(width: 10.0)),

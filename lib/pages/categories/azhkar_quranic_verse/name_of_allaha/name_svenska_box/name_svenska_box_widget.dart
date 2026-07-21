@@ -51,7 +51,7 @@ class _NameSvenskaBoxWidgetState extends State<NameSvenskaBoxWidget> {
         borderRadius: BorderRadius.circular(
             FlutterFlowTheme.of(context).designToken.radius.md),
         border: Border.all(
-          color: FlutterFlowTheme.of(context).containerBg,
+          color: FlutterFlowTheme.of(context).alternate,
         ),
       ),
       child: Align(
@@ -67,7 +67,7 @@ class _NameSvenskaBoxWidgetState extends State<NameSvenskaBoxWidget> {
                 width: 80.0,
                 height: 80.0,
                 decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).tint,
+                  color: FlutterFlowTheme.of(context).allahNameBg,
                   shape: BoxShape.circle,
                 ),
                 child: Align(
@@ -82,7 +82,7 @@ class _NameSvenskaBoxWidgetState extends State<NameSvenskaBoxWidget> {
                       ),
                       textAlign: TextAlign.center,
                       maxLines: 2,
-                      minFontSize: 12.0,
+                      minFontSize: FFAppConstants.heading.toDouble(),
                       style: FlutterFlowTheme.of(context).svenskaTitle.override(
                             font: GoogleFonts.manrope(
                               fontWeight: FontWeight.bold,
@@ -90,7 +90,7 @@ class _NameSvenskaBoxWidgetState extends State<NameSvenskaBoxWidget> {
                                   .svenskaTitle
                                   .fontStyle,
                             ),
-                            color: FlutterFlowTheme.of(context).primary,
+                            color: FlutterFlowTheme.of(context).allahNameFont,
                             fontSize: 16.0,
                             letterSpacing: 0.0,
                             fontWeight: FontWeight.bold,

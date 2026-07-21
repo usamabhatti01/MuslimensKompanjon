@@ -13,7 +13,11 @@
 -dontwarn com.google.auto.value.**
 -keep class org.xmlpull.v1.** { *; }
 
+# Preserve generic signatures for Gson (fixes TypeToken IllegalStateException)
+-keepattributes Signature
+-keepattributes *Annotation*
 
-
-
-
+# Keep TypeToken and its subclasses
+-keep class com.google.gson.reflect.TypeToken
+-keep class * extends com.google.gson.reflect.TypeToken
+-keep public class * implements java.lang.reflect.Type

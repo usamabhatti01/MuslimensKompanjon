@@ -54,7 +54,7 @@ class _PageSubHeaderWithIconWidgetState
         children: [
           Expanded(
             child: Align(
-              alignment: AlignmentDirectional(0.0, 0.0),
+              alignment: AlignmentDirectional(-1.0, 0.0),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -94,7 +94,7 @@ class _PageSubHeaderWithIconWidgetState
             children: [
               Icon(
                 Icons.share_outlined,
-                color: FlutterFlowTheme.of(context).black,
+                color: FlutterFlowTheme.of(context).primaryText,
                 size: 24.0,
               ),
               InkWell(
@@ -121,7 +121,7 @@ class _PageSubHeaderWithIconWidgetState
                 },
                 child: Icon(
                   Icons.notifications_none_sharp,
-                  color: FlutterFlowTheme.of(context).black,
+                  color: FlutterFlowTheme.of(context).primaryText,
                   size: 24.0,
                 ),
               ),
@@ -134,8 +134,8 @@ class _PageSubHeaderWithIconWidgetState
                   context.pushNamed(SettingWidget.routeName);
                 },
                 child: Icon(
-                  FFIcons.kmenu,
-                  color: FlutterFlowTheme.of(context).black,
+                  Icons.more_vert,
+                  color: FlutterFlowTheme.of(context).primaryText,
                   size: 24.0,
                 ),
               ),

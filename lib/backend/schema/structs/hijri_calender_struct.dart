@@ -13,12 +13,14 @@ class HijriCalenderStruct extends BaseStruct {
     int? hijriDay,
     DateTime? gregorianDate,
     String? weekday,
+    String? event,
   })  : _hijriYear = hijriYear,
         _hijriMonthNo = hijriMonthNo,
         _hijriMonthName = hijriMonthName,
         _hijriDay = hijriDay,
         _gregorianDate = gregorianDate,
-        _weekday = weekday;
+        _weekday = weekday,
+        _event = event;
 
   // "HijriYear" field.
   int? _hijriYear;
@@ -69,6 +71,13 @@ class HijriCalenderStruct extends BaseStruct {
 
   bool hasWeekday() => _weekday != null;
 
+  // "Event" field.
+  String? _event;
+  String get event => _event ?? '';
+  set event(String? val) => _event = val;
+
+  bool hasEvent() => _event != null;
+
   static HijriCalenderStruct fromMap(Map<String, dynamic> data) =>
       HijriCalenderStruct(
         hijriYear: castToType<int>(data['HijriYear']),
@@ -77,6 +86,7 @@ class HijriCalenderStruct extends BaseStruct {
         hijriDay: castToType<int>(data['HijriDay']),
         gregorianDate: data['GregorianDate'] as DateTime?,
         weekday: data['Weekday'] as String?,
+        event: data['Event'] as String?,
       );
 
   static HijriCalenderStruct? maybeFromMap(dynamic data) => data is Map
@@ -90,6 +100,7 @@ class HijriCalenderStruct extends BaseStruct {
         'HijriDay': _hijriDay,
         'GregorianDate': _gregorianDate,
         'Weekday': _weekday,
+        'Event': _event,
       }.withoutNulls;
 
   @override
@@ -116,6 +127,10 @@ class HijriCalenderStruct extends BaseStruct {
         ),
         'Weekday': serializeParam(
           _weekday,
+          ParamType.String,
+        ),
+        'Event': serializeParam(
+          _event,
           ParamType.String,
         ),
       }.withoutNulls;
@@ -152,6 +167,11 @@ class HijriCalenderStruct extends BaseStruct {
           ParamType.String,
           false,
         ),
+        event: deserializeParam(
+          data['Event'],
+          ParamType.String,
+          false,
+        ),
       );
 
   @override
@@ -165,7 +185,8 @@ class HijriCalenderStruct extends BaseStruct {
         hijriMonthName == other.hijriMonthName &&
         hijriDay == other.hijriDay &&
         gregorianDate == other.gregorianDate &&
-        weekday == other.weekday;
+        weekday == other.weekday &&
+        event == other.event;
   }
 
   @override
@@ -175,7 +196,8 @@ class HijriCalenderStruct extends BaseStruct {
         hijriMonthName,
         hijriDay,
         gregorianDate,
-        weekday
+        weekday,
+        event
       ]);
 }
 
@@ -186,6 +208,7 @@ HijriCalenderStruct createHijriCalenderStruct({
   int? hijriDay,
   DateTime? gregorianDate,
   String? weekday,
+  String? event,
 }) =>
     HijriCalenderStruct(
       hijriYear: hijriYear,
@@ -194,4 +217,5 @@ HijriCalenderStruct createHijriCalenderStruct({
       hijriDay: hijriDay,
       gregorianDate: gregorianDate,
       weekday: weekday,
+      event: event,
     );

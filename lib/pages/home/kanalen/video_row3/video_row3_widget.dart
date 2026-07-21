@@ -1,6 +1,7 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'video_row3_model.dart';
@@ -85,14 +86,15 @@ class _VideoRow3WidgetState extends State<VideoRow3Widget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    AutoSizeText(
                       valueOrDefault<String>(
                         widget.title,
                         'Hur man förbättrar sin Salah steg för steg',
                       ),
                       maxLines: 2,
+                      minFontSize: FFAppConstants.heading.toDouble(),
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            font: GoogleFonts.inter(
+                            font: GoogleFonts.manrope(
                               fontWeight: FontWeight.w600,
                               fontStyle: FlutterFlowTheme.of(context)
                                   .bodyMedium
@@ -107,13 +109,14 @@ class _VideoRow3WidgetState extends State<VideoRow3Widget> {
                           ),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    Text(
+                    AutoSizeText(
                       valueOrDefault<String>(
                         widget.meta,
                         '98K visningar • 1 vecka sedan',
                       ),
+                      minFontSize: FFAppConstants.body.toDouble(),
                       style: FlutterFlowTheme.of(context).labelSmall.override(
-                            font: GoogleFonts.inter(
+                            font: GoogleFonts.manrope(
                               fontWeight: FontWeight.w500,
                               fontStyle: FlutterFlowTheme.of(context)
                                   .labelSmall

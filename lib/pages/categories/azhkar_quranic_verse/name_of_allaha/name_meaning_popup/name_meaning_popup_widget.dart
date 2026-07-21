@@ -1,5 +1,6 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'name_meaning_popup_model.dart';
 export 'name_meaning_popup_model.dart';
@@ -88,12 +89,13 @@ class _NameMeaningPopupWidgetState extends State<NameMeaningPopupWidget> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
+                      AutoSizeText(
                         valueOrDefault<String>(
                           widget.name,
                           'name',
                         ),
                         textAlign: TextAlign.center,
+                        minFontSize: FFAppConstants.heading.toDouble(),
                         style: FlutterFlowTheme.of(context).arabiTitle.override(
                               fontFamily: 'arabic',
                               color: FlutterFlowTheme.of(context).primary,
@@ -106,33 +108,37 @@ class _NameMeaningPopupWidgetState extends State<NameMeaningPopupWidget> {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(
+                          AutoSizeText(
                             valueOrDefault<String>(
                               widget.translation,
                               'translation',
                             ),
                             textAlign: TextAlign.center,
+                            minFontSize: FFAppConstants.body.toDouble(),
                             style: FlutterFlowTheme.of(context)
                                 .arabicBody
                                 .override(
                                   fontFamily: 'arabic',
-                                  color: FlutterFlowTheme.of(context).black,
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
                                   fontSize: 18.0,
                                   letterSpacing: 0.0,
                                   fontWeight: FontWeight.normal,
                                 ),
                           ),
-                          Text(
+                          AutoSizeText(
                             valueOrDefault<String>(
                               widget.explanation,
                               'explanation',
                             ),
                             textAlign: TextAlign.center,
+                            minFontSize: FFAppConstants.body.toDouble(),
                             style: FlutterFlowTheme.of(context)
                                 .arabicBody
                                 .override(
                                   fontFamily: 'arabic',
-                                  color: FlutterFlowTheme.of(context).black,
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
                                   fontSize: 20.0,
                                   letterSpacing: 0.0,
                                   fontWeight: FontWeight.normal,

@@ -156,4 +156,32 @@ Future<void> loadAzkharFromGit() async {
   } catch (e) {
     print("Error loading Tasbih: $e");
   }
+
+  // Load Adhkar from json path assets/jsons/adhkar.json
+  try {
+    print("Loading Adhkar from assets/jsons/adhkar.json...");
+    final adhkarJsonString =
+        await loadJsonFromAssetOrGitLocal('assets/jsons/adhkar.json');
+    final decodedAdhkar = json.decode(adhkarJsonString);
+
+    if (decodedAdhkar is List) {
+      final List<AdhkarStruct> parsedAdhkar = decodedAdhkar.map((item) {
+        final map = Map<String, dynamic>.from(item);
+        if (map.containsKey('count') && !map.containsKey('counter')) {
+          map['counter'] = map['count'];
+        }
+        return AdhkarStruct.fromMap(map);
+      }).toList();
+      FFAppState().update(() {
+        FFAppState().azkhar = parsedAdhkar;
+      });
+      print(
+          "Successfully loaded ${parsedAdhkar.length} items into App State azkhar.");
+    } else {
+      print(
+          "Warning: Adhkar JSON is not a List. Decoded type: ${decodedAdhkar.runtimeType}");
+    }
+  } catch (e) {
+    print("Error loading Adhkar: $e");
+  }
 }

@@ -1,5 +1,7 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/custom_code/widgets/index.dart' as custom_widgets;
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'adhkar_ar_component_model.dart';
@@ -10,10 +12,12 @@ class AdhkarArComponentWidget extends StatefulWidget {
     super.key,
     required this.value,
     required this.total,
+    required this.audio,
   });
 
   final String? value;
   final int? total;
+  final String? audio;
 
   @override
   State<AdhkarArComponentWidget> createState() =>
@@ -50,24 +54,64 @@ class _AdhkarArComponentWidgetState extends State<AdhkarArComponentWidget> {
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          valueOrDefault<String>(
-            widget.value,
-            'nill',
-          ),
-          textAlign: TextAlign.end,
-          style: FlutterFlowTheme.of(context).svenskaBody.override(
-                font: GoogleFonts.manrope(
-                  fontWeight: FontWeight.w500,
-                  fontStyle: FlutterFlowTheme.of(context).svenskaBody.fontStyle,
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            if (widget.audio != null && widget.audio != '')
+              Expanded(
+                child: Container(
+                  width: MediaQuery.sizeOf(context).width * 1.0,
+                  height: 150.0,
+                  child: custom_widgets.SimpleAudioPlayer(
+                    width: MediaQuery.sizeOf(context).width * 1.0,
+                    height: 150.0,
+                    audioUrl: widget.audio!,
+                    autoPlay: false,
+                  ),
                 ),
-                color: FlutterFlowTheme.of(context).black,
-                fontSize: 14.0,
-                letterSpacing: 0.0,
-                fontWeight: FontWeight.w500,
-                fontStyle: FlutterFlowTheme.of(context).svenskaBody.fontStyle,
-                lineHeight: 2.0,
               ),
+          ],
+        ),
+        Container(
+          decoration: BoxDecoration(
+            color: FlutterFlowTheme.of(context).secondaryBackground,
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: AutoSizeText(
+                    valueOrDefault<String>(
+                      widget.value,
+                      'nill',
+                    ),
+                    textAlign: TextAlign.end,
+                    minFontSize: FFAppConstants.body.toDouble(),
+                    style: FlutterFlowTheme.of(context).svenskaBody.override(
+                          font: GoogleFonts.manrope(
+                            fontWeight: FontWeight.w500,
+                            fontStyle: FlutterFlowTheme.of(context)
+                                .svenskaBody
+                                .fontStyle,
+                          ),
+                          color: FlutterFlowTheme.of(context).primaryText,
+                          fontSize: 14.0,
+                          letterSpacing: 0.0,
+                          fontWeight: FontWeight.w500,
+                          fontStyle: FlutterFlowTheme.of(context)
+                              .svenskaBody
+                              .fontStyle,
+                          lineHeight: 2.0,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
         Padding(
           padding: EdgeInsets.all(10.0),
@@ -95,7 +139,7 @@ class _AdhkarArComponentWidgetState extends State<AdhkarArComponentWidget> {
                         },
                         child: Icon(
                           Icons.restart_alt,
-                          color: FlutterFlowTheme.of(context).onInfo,
+                          color: FlutterFlowTheme.of(context).white,
                           size: 22.0,
                         ),
                       ),
@@ -120,12 +164,13 @@ class _AdhkarArComponentWidgetState extends State<AdhkarArComponentWidget> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
+                                  AutoSizeText(
                                     _model.counter.toString(),
+                                    minFontSize: FFAppConstants.body.toDouble(),
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
-                                          font: GoogleFonts.inter(
+                                          font: GoogleFonts.manrope(
                                             fontWeight: FontWeight.bold,
                                             fontStyle:
                                                 FlutterFlowTheme.of(context)
@@ -133,7 +178,7 @@ class _AdhkarArComponentWidgetState extends State<AdhkarArComponentWidget> {
                                                     .fontStyle,
                                           ),
                                           color: FlutterFlowTheme.of(context)
-                                              .onInfo,
+                                              .white,
                                           fontSize: 16.0,
                                           letterSpacing: 0.0,
                                           fontWeight: FontWeight.bold,
@@ -143,15 +188,16 @@ class _AdhkarArComponentWidgetState extends State<AdhkarArComponentWidget> {
                                                   .fontStyle,
                                         ),
                                   ),
-                                  Text(
+                                  AutoSizeText(
                                     valueOrDefault<String>(
                                       widget.total?.toString(),
                                       '0',
                                     ),
+                                    minFontSize: FFAppConstants.body.toDouble(),
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
-                                          font: GoogleFonts.inter(
+                                          font: GoogleFonts.manrope(
                                             fontWeight: FontWeight.bold,
                                             fontStyle:
                                                 FlutterFlowTheme.of(context)
@@ -159,7 +205,7 @@ class _AdhkarArComponentWidgetState extends State<AdhkarArComponentWidget> {
                                                     .fontStyle,
                                           ),
                                           color: FlutterFlowTheme.of(context)
-                                              .onInfo,
+                                              .white,
                                           fontSize: 16.0,
                                           letterSpacing: 0.0,
                                           fontWeight: FontWeight.bold,
@@ -195,7 +241,7 @@ class _AdhkarArComponentWidgetState extends State<AdhkarArComponentWidget> {
                         },
                         child: Icon(
                           Icons.restart_alt,
-                          color: FlutterFlowTheme.of(context).onInfo,
+                          color: FlutterFlowTheme.of(context).primaryText,
                           size: 22.0,
                         ),
                       ),
@@ -215,15 +261,15 @@ class _AdhkarArComponentWidgetState extends State<AdhkarArComponentWidget> {
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
-                                        font: GoogleFonts.inter(
+                                        font: GoogleFonts.manrope(
                                           fontWeight: FontWeight.bold,
                                           fontStyle:
                                               FlutterFlowTheme.of(context)
                                                   .bodyMedium
                                                   .fontStyle,
                                         ),
-                                        color:
-                                            FlutterFlowTheme.of(context).onInfo,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
                                         fontSize: 16.0,
                                         letterSpacing: 0.0,
                                         fontWeight: FontWeight.bold,
@@ -246,7 +292,7 @@ class _AdhkarArComponentWidgetState extends State<AdhkarArComponentWidget> {
             ),
           ),
         ),
-      ].divide(SizedBox(height: 0.0)),
+      ],
     );
   }
 }

@@ -1,5 +1,6 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'm_k_kanalen_short_card_model.dart';
@@ -74,18 +75,20 @@ class _MKKanalenShortCardWidgetState extends State<MKKanalenShortCardWidget> {
             Padding(
               padding: EdgeInsets.all(8.0),
               child: Container(
-                child: Text(
+                child: AutoSizeText(
                   valueOrDefault<String>(
                     widget.title,
                     'Påminnelse om sabr och tawakkul',
                   ),
                   maxLines: 2,
+                  minFontSize: FFAppConstants.body.toDouble(),
                   style: FlutterFlowTheme.of(context).bodySmall.override(
-                        font: GoogleFonts.inter(
+                        font: GoogleFonts.manrope(
                           fontWeight: FontWeight.w600,
                           fontStyle:
                               FlutterFlowTheme.of(context).bodySmall.fontStyle,
                         ),
+                        color: FlutterFlowTheme.of(context).primaryText,
                         fontSize: 10.0,
                         letterSpacing: 0.0,
                         fontWeight: FontWeight.w600,

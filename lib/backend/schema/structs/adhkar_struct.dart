@@ -13,12 +13,14 @@ class AdhkarStruct extends BaseStruct {
     String? arabic,
     String? swedish,
     int? counter,
+    String? audio,
   })  : _id = id,
         _titleAr = titleAr,
         _titleSv = titleSv,
         _arabic = arabic,
         _swedish = swedish,
-        _counter = counter;
+        _counter = counter,
+        _audio = audio;
 
   // "id" field.
   int? _id;
@@ -66,6 +68,13 @@ class AdhkarStruct extends BaseStruct {
 
   bool hasCounter() => _counter != null;
 
+  // "audio" field.
+  String? _audio;
+  String get audio => _audio ?? '';
+  set audio(String? val) => _audio = val;
+
+  bool hasAudio() => _audio != null;
+
   static AdhkarStruct fromMap(Map<String, dynamic> data) => AdhkarStruct(
         id: castToType<int>(data['id']),
         titleAr: data['titleAr'] as String?,
@@ -73,6 +82,7 @@ class AdhkarStruct extends BaseStruct {
         arabic: data['arabic'] as String?,
         swedish: data['swedish'] as String?,
         counter: castToType<int>(data['counter']),
+        audio: data['audio'] as String?,
       );
 
   static AdhkarStruct? maybeFromMap(dynamic data) =>
@@ -85,6 +95,7 @@ class AdhkarStruct extends BaseStruct {
         'arabic': _arabic,
         'swedish': _swedish,
         'counter': _counter,
+        'audio': _audio,
       }.withoutNulls;
 
   @override
@@ -112,6 +123,10 @@ class AdhkarStruct extends BaseStruct {
         'counter': serializeParam(
           _counter,
           ParamType.int,
+        ),
+        'audio': serializeParam(
+          _audio,
+          ParamType.String,
         ),
       }.withoutNulls;
 
@@ -147,6 +162,11 @@ class AdhkarStruct extends BaseStruct {
           ParamType.int,
           false,
         ),
+        audio: deserializeParam(
+          data['audio'],
+          ParamType.String,
+          false,
+        ),
       );
 
   @override
@@ -160,12 +180,13 @@ class AdhkarStruct extends BaseStruct {
         titleSv == other.titleSv &&
         arabic == other.arabic &&
         swedish == other.swedish &&
-        counter == other.counter;
+        counter == other.counter &&
+        audio == other.audio;
   }
 
   @override
   int get hashCode => const ListEquality()
-      .hash([id, titleAr, titleSv, arabic, swedish, counter]);
+      .hash([id, titleAr, titleSv, arabic, swedish, counter, audio]);
 }
 
 AdhkarStruct createAdhkarStruct({
@@ -175,6 +196,7 @@ AdhkarStruct createAdhkarStruct({
   String? arabic,
   String? swedish,
   int? counter,
+  String? audio,
 }) =>
     AdhkarStruct(
       id: id,
@@ -183,4 +205,5 @@ AdhkarStruct createAdhkarStruct({
       arabic: arabic,
       swedish: swedish,
       counter: counter,
+      audio: audio,
     );

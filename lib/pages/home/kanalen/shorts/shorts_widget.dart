@@ -59,232 +59,254 @@ class _ShortsWidgetState extends State<ShortsWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        body: Padding(
-          padding: EdgeInsets.all(
-              FlutterFlowTheme.of(context).designToken.spacing.md),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  InkWell(
-                    splashColor: Colors.transparent,
-                    focusColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onTap: () async {
-                      context.pushNamed(MKkanalenWidget.routeName);
-                    },
-                    child: Icon(
-                      Icons.chevron_left,
-                      color: FlutterFlowTheme.of(context).primaryText,
-                      size: 24.0,
-                    ),
-                  ),
-                  Expanded(
-                    child: wrapWithModel(
-                      model: _model.mkHomePageHeaderModel,
-                      updateCallback: () => safeSetState(() {}),
-                      child: MkHomePageHeaderWidget(
-                        pageName: 'Shorts',
+        body: SafeArea(
+          top: true,
+          child: Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(
+                FlutterFlowTheme.of(context).designToken.spacing.md,
+                0.0,
+                FlutterFlowTheme.of(context).designToken.spacing.md,
+                0.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        context.pushNamed(MKkanalenWidget.routeName);
+                      },
+                      child: Icon(
+                        Icons.chevron_left,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        size: FFAppConstants.iconSize.toDouble(),
                       ),
                     ),
-                  ),
-                ].divide(SizedBox(
-                    width:
-                        FlutterFlowTheme.of(context).designToken.spacing.lg)),
-              ),
-              Flexible(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Container(
-                      width: 200.0,
-                      child: TextFormField(
-                        controller: _model.textController,
-                        focusNode: _model.textFieldFocusNode,
-                        onChanged: (_) => EasyDebounce.debounce(
-                          '_model.textController',
-                          Duration(milliseconds: 2000),
-                          () async {
-                            _model.searchOutput = await actions.searchReels(
-                              FFAppState().reelsData.toList(),
-                              _model.textController.text,
-                            );
-                            _model.reelSearchValue = _model.searchOutput!
-                                .toList()
-                                .cast<YoutubeStruct>();
-                            safeSetState(() {});
-
-                            safeSetState(() {});
-                          },
+                    Expanded(
+                      child: wrapWithModel(
+                        model: _model.mkHomePageHeaderModel,
+                        updateCallback: () => safeSetState(() {}),
+                        child: MkHomePageHeaderWidget(
+                          pageName: 'Shorts',
                         ),
-                        autofocus: false,
-                        enabled: true,
-                        obscureText: false,
-                        decoration: InputDecoration(
-                          isDense: true,
-                          labelStyle:
-                              FlutterFlowTheme.of(context).labelMedium.override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontStyle,
-                                    ),
-                                    letterSpacing: 0.0,
+                      ),
+                    ),
+                  ].divide(SizedBox(
+                      width:
+                          FlutterFlowTheme.of(context).designToken.spacing.sm)),
+                ),
+                Flexible(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                        width: 200.0,
+                        child: TextFormField(
+                          controller: _model.textController,
+                          focusNode: _model.textFieldFocusNode,
+                          onChanged: (_) => EasyDebounce.debounce(
+                            '_model.textController',
+                            Duration(milliseconds: 2000),
+                            () async {
+                              _model.searchOutput = await actions.searchReels(
+                                FFAppState().reelsData.toList(),
+                                _model.textController.text,
+                              );
+                              _model.reelSearchValue = _model.searchOutput!
+                                  .toList()
+                                  .cast<YoutubeStruct>();
+                              safeSetState(() {});
+
+                              safeSetState(() {});
+                            },
+                          ),
+                          autofocus: false,
+                          enabled: true,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            labelStyle: FlutterFlowTheme.of(context)
+                                .labelMedium
+                                .override(
+                                  font: GoogleFonts.manrope(
                                     fontWeight: FontWeight.w500,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .labelMedium
                                         .fontStyle,
                                   ),
-                          hintText: 'Sök shorts...',
-                          hintStyle:
-                              FlutterFlowTheme.of(context).labelLarge.override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .labelLarge
-                                          .fontStyle,
-                                    ),
-                                    letterSpacing: 0.0,
+                                  letterSpacing: 0.0,
+                                  fontWeight: FontWeight.w500,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .labelMedium
+                                      .fontStyle,
+                                ),
+                            hintText: 'Sök shorts...',
+                            hintStyle: FlutterFlowTheme.of(context)
+                                .labelLarge
+                                .override(
+                                  font: GoogleFonts.manrope(
                                     fontWeight: FontWeight.w500,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .labelLarge
                                         .fontStyle,
                                   ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0x00000000),
-                              width: 1.0,
+                                  letterSpacing: 0.0,
+                                  fontWeight: FontWeight.w500,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .labelLarge
+                                      .fontStyle,
+                                ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
                             ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0x00000000),
-                              width: 1.0,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
                             ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context).error,
-                              width: 1.0,
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).error,
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
                             ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context).error,
-                              width: 1.0,
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).error,
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
                             ),
-                            borderRadius: BorderRadius.circular(8.0),
+                            filled: true,
+                            fillColor: FlutterFlowTheme.of(context)
+                                .secondaryBackground,
+                            suffixIcon: Icon(
+                              FontAwesomeIcons.search,
+                              color: FlutterFlowTheme.of(context).secondaryText,
+                              size: 12.0,
+                            ),
                           ),
-                          filled: true,
-                          fillColor:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                          suffixIcon: Icon(
-                            FontAwesomeIcons.search,
-                            color: FlutterFlowTheme.of(context).secondaryText,
-                            size: 12.0,
-                          ),
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    font: GoogleFonts.manrope(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                                    letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
+                                  ),
+                          cursorColor: FlutterFlowTheme.of(context).primaryText,
+                          enableInteractiveSelection: true,
+                          validator: _model.textControllerValidator
+                              .asValidator(context),
                         ),
-                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              font: GoogleFonts.inter(
-                                fontWeight: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .fontWeight,
-                                fontStyle: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .fontStyle,
-                              ),
-                              letterSpacing: 0.0,
-                              fontWeight: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .fontWeight,
-                              fontStyle: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .fontStyle,
-                            ),
-                        cursorColor: FlutterFlowTheme.of(context).primaryText,
-                        enableInteractiveSelection: true,
-                        validator:
-                            _model.textControllerValidator.asValidator(context),
                       ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              height: MediaQuery.sizeOf(context).height * 1.0,
-                              decoration: BoxDecoration(),
-                              child: Builder(
-                                builder: (context) {
-                                  final reels = (_model.textController.text == ''
-                                          ? FFAppState().reelsData
-                                          : _model.reelSearchValue)
-                                      .toList();
+                      Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                height: MediaQuery.sizeOf(context).height * 1.0,
+                                decoration: BoxDecoration(),
+                                child: Builder(
+                                  builder: (context) {
+                                    final reels =
+                                        _model.textController.text == ''
+                                            ? FFAppState().reelsData
+                                            : _model.reelSearchValue
+                                                .sortedList(
+                                                    keyOf: (e) => e.postDate!,
+                                                    desc: true)
+                                                .toList();
 
-                                  return MasonryGridView.builder(
-                                    gridDelegate:
-                                        SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                    ),
-                                    crossAxisSpacing: 10.0,
-                                    mainAxisSpacing: 10.0,
-                                    itemCount: reels.length,
-                                    padding: EdgeInsets.fromLTRB(
-                                      0,
-                                      10.0,
-                                      0,
-                                      0,
-                                    ),
-                                    itemBuilder: (context, reelsIndex) {
-                                      final reelsItem = reels[reelsIndex];
-                                      return InkWell(
-                                        splashColor: Colors.transparent,
-                                        focusColor: Colors.transparent,
-                                        hoverColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        onTap: () async {
-                                          context.pushNamed(
-                                            ReelsWidget.routeName,
-                                            queryParameters: {
-                                              'index': serializeParam(
-                                                reelsIndex,
-                                                ParamType.int,
+                                    return MasonryGridView.builder(
+                                      gridDelegate:
+                                          SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                      ),
+                                      crossAxisSpacing: 10.0,
+                                      mainAxisSpacing: 10.0,
+                                      itemCount: reels.length,
+                                      padding: EdgeInsets.fromLTRB(
+                                        0,
+                                        10.0,
+                                        0,
+                                        0,
+                                      ),
+                                      itemBuilder: (context, reelsIndex) {
+                                        final reelsItem = reels[reelsIndex];
+                                        return InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            context.pushNamed(
+                                              ReelsWidget.routeName,
+                                              queryParameters: {
+                                                'index': serializeParam(
+                                                  reelsIndex,
+                                                  ParamType.int,
+                                                ),
+                                              }.withoutNulls,
+                                            );
+                                          },
+                                          child: wrapWithModel(
+                                            model:
+                                                _model.shortCardModels.getModel(
+                                              reelsIndex.toString(),
+                                              reelsIndex,
+                                            ),
+                                            updateCallback: () =>
+                                                safeSetState(() {}),
+                                            child: ShortCard2Widget(
+                                              key: Key(
+                                                'Keyo1c_${reelsIndex.toString()}',
                                               ),
-                                            }.withoutNulls,
-                                          );
-                                        },
-                                        child: ShortCard2Widget(
-                                          key: Key(
-                                              'Keyo1c_${reelsIndex}_of_${reels.length}'),
-                                          imagePath: reelsItem.thumbnail,
-                                          title: reelsItem.title,
-                                          views: reelsItem.views,
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
+                                              imagePath: reelsItem.thumbnail,
+                                              title: reelsItem.title,
+                                              views: reelsItem.views,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ].divide(SizedBox(height: 24.0)),
+                    ].divide(SizedBox(height: 24.0)),
+                  ),
                 ),
-              ),
-            ].divide(SizedBox(height: 20.0)).addToStart(SizedBox(
-                height: FlutterFlowTheme.of(context).designToken.spacing.xxl)),
+              ].divide(SizedBox(height: 20.0)),
+            ),
           ),
         ),
       ),

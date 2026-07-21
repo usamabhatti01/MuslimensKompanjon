@@ -3,6 +3,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/pages/setting_page/tema_component/tema_component_widget.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -76,8 +77,9 @@ class _TemaWidgetState extends State<TemaWidget> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(
-                  child: Text(
+                  child: AutoSizeText(
                     'Tema',
+                    minFontSize: FFAppConstants.heading.toDouble(),
                     style: FlutterFlowTheme.of(context).titleLarge.override(
                           font: GoogleFonts.plusJakartaSans(
                             fontWeight: FlutterFlowTheme.of(context)
@@ -102,10 +104,11 @@ class _TemaWidgetState extends State<TemaWidget> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(
-                  child: Text(
+                  child: AutoSizeText(
                     'Anpassa appens utseende efter dina preferenser.',
+                    minFontSize: FFAppConstants.body.toDouble(),
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          font: GoogleFonts.inter(
+                          font: GoogleFonts.manrope(
                             fontWeight: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .fontWeight,
@@ -113,6 +116,7 @@ class _TemaWidgetState extends State<TemaWidget> {
                                 .bodyMedium
                                 .fontStyle,
                           ),
+                          color: FlutterFlowTheme.of(context).primaryText,
                           letterSpacing: 0.0,
                           fontWeight: FlutterFlowTheme.of(context)
                               .bodyMedium
@@ -243,10 +247,11 @@ class _TemaWidgetState extends State<TemaWidget> {
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                Text(
+                AutoSizeText(
                   'Du kan ändra dina bönetidsnotiser när som helst.',
+                  minFontSize: FFAppConstants.body.toDouble(),
                   style: FlutterFlowTheme.of(context).labelMedium.override(
-                        font: GoogleFonts.inter(
+                        font: GoogleFonts.manrope(
                           fontWeight: FlutterFlowTheme.of(context)
                               .labelMedium
                               .fontWeight,

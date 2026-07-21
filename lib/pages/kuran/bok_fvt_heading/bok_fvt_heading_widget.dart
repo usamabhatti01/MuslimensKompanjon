@@ -1,5 +1,6 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'bok_fvt_heading_model.dart';
@@ -70,7 +71,7 @@ class _BokFvtHeadingWidgetState extends State<BokFvtHeadingWidget> {
                   width: 50.0,
                   height: 50.0,
                   decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).tint,
+                    color: FlutterFlowTheme.of(context).quranBg,
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: Icon(
@@ -84,27 +85,29 @@ class _BokFvtHeadingWidgetState extends State<BokFvtHeadingWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    AutoSizeText(
                       valueOrDefault<String>(
                         widget.heading,
                         'Al-Fatiha',
                       ),
                       textAlign: TextAlign.end,
+                      minFontSize: FFAppConstants.heading.toDouble(),
                       style: FlutterFlowTheme.of(context).arabicBody.override(
                             fontFamily: 'arabic',
-                            color: FlutterFlowTheme.of(context).black,
+                            color: FlutterFlowTheme.of(context).primaryText,
                             fontSize: 14.0,
                             letterSpacing: 0.0,
                             fontWeight: FontWeight.normal,
                           ),
                     ),
-                    Text(
+                    AutoSizeText(
                       valueOrDefault<String>(
                         widget.subHeading,
                         'Öppningen',
                       ),
+                      minFontSize: FFAppConstants.body.toDouble(),
                       style: FlutterFlowTheme.of(context).labelMedium.override(
-                            font: GoogleFonts.inter(
+                            font: GoogleFonts.manrope(
                               fontWeight: FontWeight.normal,
                               fontStyle: FlutterFlowTheme.of(context)
                                   .labelMedium
@@ -120,11 +123,12 @@ class _BokFvtHeadingWidgetState extends State<BokFvtHeadingWidget> {
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text(
+                        AutoSizeText(
                           'verser ${widget.totalVerses?.toString()}',
+                          minFontSize: FFAppConstants.body.toDouble(),
                           style:
                               FlutterFlowTheme.of(context).labelMedium.override(
-                                    font: GoogleFonts.inter(
+                                    font: GoogleFonts.manrope(
                                       fontWeight: FontWeight.normal,
                                       fontStyle: FlutterFlowTheme.of(context)
                                           .labelMedium
@@ -143,11 +147,12 @@ class _BokFvtHeadingWidgetState extends State<BokFvtHeadingWidget> {
                 ),
               ].divide(SizedBox(width: 30.0)).addToStart(SizedBox(width: 10.0)),
             ),
-            Text(
+            AutoSizeText(
               valueOrDefault<String>(
                 widget.suratName,
                 'الرَّحِيْم',
               ),
+              minFontSize: FFAppConstants.heading.toDouble(),
               style: FlutterFlowTheme.of(context).arabiTitle.override(
                     fontFamily: 'arabic',
                     color: FlutterFlowTheme.of(context).primaryText,

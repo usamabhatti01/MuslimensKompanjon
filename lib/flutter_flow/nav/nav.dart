@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '/backend/schema/structs/index.dart';
 
+import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
 import '/index.dart';
@@ -35,12 +36,44 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
-      errorBuilder: (context, state) => SplashScreenWidget(),
+      errorBuilder: (context, state) => appStateNotifier.showSplashImage
+          ? Builder(
+              builder: (context) => isWeb
+                  ? Container()
+                  : Container(
+                      color: FlutterFlowTheme.of(context).primaryBackground,
+                      child: Center(
+                        child: Image.asset(
+                          'assets/images/My_workflow.png',
+                          width: 66.0,
+                          height: 66.0,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+            )
+          : SplashScreenWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
-          builder: (context, _) => SplashScreenWidget(),
+          builder: (context, _) => appStateNotifier.showSplashImage
+              ? Builder(
+                  builder: (context) => isWeb
+                      ? Container()
+                      : Container(
+                          color: FlutterFlowTheme.of(context).primaryBackground,
+                          child: Center(
+                            child: Image.asset(
+                              'assets/images/My_workflow.png',
+                              width: 66.0,
+                              height: 66.0,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                )
+              : SplashScreenWidget(),
         ),
         FFRoute(
           name: OnBoarding01Widget.routeName,
@@ -110,7 +143,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: AboutIslamDetailsPageWidget.routeName,
           path: AboutIslamDetailsPageWidget.routePath,
-          builder: (context, params) => AboutIslamDetailsPageWidget(),
+          builder: (context, params) => AboutIslamDetailsPageWidget(
+            index: params.getParam(
+              'index',
+              ParamType.int,
+            ),
+          ),
         ),
         FFRoute(
           name: SettingWidget.routeName,
@@ -247,11 +285,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => KalenderWidget(),
         ),
         FFRoute(
-          name: KuranCopyWidget.routeName,
-          path: KuranCopyWidget.routePath,
-          builder: (context, params) => KuranCopyWidget(),
-        ),
-        FFRoute(
           name: SplashScreenWidget.routeName,
           path: SplashScreenWidget.routePath,
           builder: (context, params) => SplashScreenWidget(),
@@ -260,6 +293,49 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: AkallanAndDuaWidget.routeName,
           path: AkallanAndDuaWidget.routePath,
           builder: (context, params) => AkallanAndDuaWidget(),
+        ),
+        FFRoute(
+          name: VideoPlayerWidget.routeName,
+          path: VideoPlayerWidget.routePath,
+          builder: (context, params) => VideoPlayerWidget(
+            index: params.getParam(
+              'index',
+              ParamType.int,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: NearbyMosqueLocatorWidget.routeName,
+          path: NearbyMosqueLocatorWidget.routePath,
+          builder: (context, params) => NearbyMosqueLocatorWidget(),
+        ),
+        FFRoute(
+          name: LocationSearchInterfaceWidget.routeName,
+          path: LocationSearchInterfaceWidget.routePath,
+          builder: (context, params) => LocationSearchInterfaceWidget(
+            latlng: params.getParam(
+              'latlng',
+              ParamType.LatLng,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: KuranPageWidget.routeName,
+          path: KuranPageWidget.routePath,
+          builder: (context, params) => KuranPageWidget(
+            id: params.getParam(
+              'id',
+              ParamType.int,
+            ),
+            type: params.getParam(
+              'type',
+              ParamType.String,
+            ),
+            ayat: params.getParam(
+              'ayat',
+              ParamType.int,
+            ),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
       observers: [routeObserver],

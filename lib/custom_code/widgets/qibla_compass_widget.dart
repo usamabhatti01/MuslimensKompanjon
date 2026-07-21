@@ -167,6 +167,22 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
     _startCompass();
   }
 
+  void _triggerVibration() {
+    try {
+      // iOS Taptic Engine feedback (Double tap pattern for strong physical feel on iPhone)
+      HapticFeedback.heavyImpact();
+      Future.delayed(const Duration(milliseconds: 120), () {
+        HapticFeedback.heavyImpact();
+      });
+      // System hardware vibration (Android & iOS AudioServices)
+      Vibration.vibrate(duration: 400);
+    } catch (_) {
+      try {
+        HapticFeedback.vibrate();
+      } catch (_) {}
+    }
+  }
+
   void _startCompass() {
     final stream = FlutterCompass.events;
     if (stream == null) return;
@@ -174,6 +190,19 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
       final heading = event.heading;
       if (heading == null) return;
       final normalized = (heading % 360 + 360) % 360;
+
+      if (_qiblaDirection != null) {
+        double diff = ((_qiblaDirection! - normalized) + 540) % 360 - 180;
+        final bool alignedNow = diff.abs() <= 5.0;
+        if (alignedNow && !_hasVibrated) {
+          _hasVibrated = true;
+          _triggerVibration();
+        } else if (!alignedNow) {
+          _hasVibrated = false;
+        }
+        _isAligned = alignedNow;
+      }
+
       _animation = Tween<double>(
         begin: _animation.value,
         end: normalized,
@@ -200,12 +229,16 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
   }
 
   Widget _buildAlertBanner() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFFEAF5EA),
-        border: Border.all(color: const Color(0xFFC8E6C9), width: 1.5),
+        color: isDark ? const Color(0x1A2ECC71) : const Color(0xFFEAF5EA),
+        border: Border.all(
+          color: isDark ? const Color(0x332ECC71) : const Color(0xFFC8E6C9),
+          width: 1.5,
+        ),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -214,14 +247,18 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: isDark ? const Color(0x1A2ECC71) : Colors.white,
               shape: BoxShape.circle,
-              border: Border.all(color: const Color(0xFFC8E6C9)),
+              border: Border.all(
+                color:
+                    isDark ? const Color(0x332ECC71) : const Color(0xFFC8E6C9),
+              ),
             ),
             child: Center(
               child: Icon(
                 _isAligned ? Icons.explore : Icons.gesture,
-                color: const Color(0xFF0B7A12),
+                color:
+                    isDark ? const Color(0xFF2ECC71) : const Color(0xFF0B7A12),
                 size: 20,
               ),
             ),
@@ -230,9 +267,9 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
           Expanded(
             child: Text(
               _isAligned ? _translate('facingKaaba') : _translate('calibrate'),
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 13,
-                color: Colors.black87,
+                color: isDark ? Colors.white : Colors.black87,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -243,9 +280,9 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
                 _showAlert = false;
               });
             },
-            child: const Icon(
+            child: Icon(
               Icons.close,
-              color: Colors.black54,
+              color: isDark ? Colors.white70 : Colors.black54,
               size: 18,
             ),
           ),
@@ -255,16 +292,17 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
   }
 
   Widget _buildPillButton() {
+    final theme = FlutterFlowTheme.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Opacity(
           opacity: _isAligned ? 1.0 : 0.0,
-          child: const Text(
+          child: Text(
             '((   ',
             style: TextStyle(
               fontSize: 20,
-              color: Colors.black38,
+              color: theme.secondaryText,
               fontWeight: FontWeight.w300,
             ),
           ),
@@ -272,9 +310,9 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           decoration: BoxDecoration(
-            color: const Color(0xFFF5F5F5),
+            color: theme.secondaryBackground,
             borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: const Color(0xFFE0E0E0), width: 1),
+            border: Border.all(color: theme.alternate, width: 1),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -294,10 +332,10 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
               const SizedBox(width: 8),
               Text(
                 _translate('qiblaDirection'),
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  color: Colors.black87,
+                  color: theme.primaryText,
                 ),
               ),
             ],
@@ -305,11 +343,11 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
         ),
         Opacity(
           opacity: _isAligned ? 1.0 : 0.0,
-          child: const Text(
+          child: Text(
             '   ))',
             style: TextStyle(
               fontSize: 20,
-              color: Colors.black38,
+              color: theme.secondaryText,
               fontWeight: FontWeight.w300,
             ),
           ),
@@ -320,27 +358,23 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
 
   @override
   Widget build(BuildContext context) {
-    final size = math.min(
-      widget.width ?? 350,
-      widget.height ?? 600,
-    );
+    final theme = FlutterFlowTheme.of(context);
     // alignment check
     if (_heading != null && _qiblaDirection != null) {
       double diff = ((_qiblaDirection! - _heading!) + 540) % 360 - 180;
-      _isAligned = diff.abs() <= 2;
-      // vibration feedback
-      if (_isAligned && !_hasVibrated) {
+      final bool currentlyAligned = diff.abs() <= 5.0;
+      if (currentlyAligned && !_hasVibrated) {
         _hasVibrated = true;
-        Vibration.vibrate(duration: 120);
-      }
-      if (!_isAligned) {
+        _triggerVibration();
+      } else if (!currentlyAligned) {
         _hasVibrated = false;
       }
+      _isAligned = currentlyAligned;
     }
     return Container(
       width: widget.width,
       height: widget.height,
-      color: Colors.white,
+      color: Colors.transparent,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -353,9 +387,9 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
                   child: Text(
                     _translate(_instruction),
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
-                      color: Colors.black54,
+                      color: theme.secondaryText,
                     ),
                   ),
                 )
@@ -366,22 +400,31 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
           // Middle section (Compass)
           Expanded(
             child: Center(
-              child: SizedBox(
-                width: size * 0.85,
-                height: size * 0.85,
-                child: AnimatedBuilder(
-                  animation: _controller,
-                  builder: (context, child) {
-                    return CustomPaint(
-                      painter: _CompassPainter(
-                        heading: _animation.value,
-                        qiblaDirection: _qiblaDirection ?? 0,
-                        kaabaImage: _kaabaImage,
-                        languageCode: _getLanguageCode(),
-                      ),
-                    );
-                  },
-                ),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final compassSize =
+                      math.min(constraints.maxWidth, constraints.maxHeight) *
+                          0.85;
+                  return SizedBox(
+                    width: compassSize,
+                    height: compassSize,
+                    child: AnimatedBuilder(
+                      animation: _controller,
+                      builder: (context, child) {
+                        return CustomPaint(
+                          painter: _CompassPainter(
+                            heading: _animation.value,
+                            qiblaDirection: _qiblaDirection ?? 0,
+                            kaabaImage: _kaabaImage,
+                            languageCode: _getLanguageCode(),
+                            compassColor: theme.primary,
+                            labelColor: theme.primaryText,
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -395,10 +438,10 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
                 // Angle Text
                 Text(
                   '${(_heading ?? 0).round()}°',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF0B7A12),
+                    color: theme.primary,
                   ),
                 ),
                 const SizedBox(height: 6),
@@ -406,9 +449,9 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
                 Text(
                   _translate('deviceAngleLabel'),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
-                    color: Colors.black54,
+                    color: theme.secondaryText,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -420,9 +463,9 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
                 Text(
                   _translate('vibrationLabel'),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
-                    color: Colors.black38,
+                    color: theme.secondaryText,
                   ),
                 ),
               ],
@@ -439,18 +482,22 @@ class _CompassPainter extends CustomPainter {
   final double qiblaDirection;
   final ui.Image? kaabaImage;
   final String languageCode;
+  final Color compassColor;
+  final Color labelColor;
   _CompassPainter({
     required this.heading,
     required this.qiblaDirection,
     required this.kaabaImage,
     required this.languageCode,
+    required this.compassColor,
+    required this.labelColor,
   });
-  static const green = Color(0xFF0B7A12);
   @override
   void paint(
     Canvas canvas,
     Size size,
   ) {
+    final green = compassColor;
     final cx = size.width / 2;
     final cy = size.height / 2;
     final radius = size.width / 2 - 20;
@@ -516,9 +563,9 @@ class _CompassPainter extends CustomPainter {
       final tp = TextPainter(
         text: TextSpan(
           text: item['text'] as String,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 18,
-            color: Colors.black87,
+            color: labelColor,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -671,6 +718,8 @@ class _CompassPainter extends CustomPainter {
     return oldDelegate.heading != heading ||
         oldDelegate.qiblaDirection != qiblaDirection ||
         oldDelegate.kaabaImage != kaabaImage ||
-        oldDelegate.languageCode != languageCode;
+        oldDelegate.languageCode != languageCode ||
+        oldDelegate.compassColor != compassColor ||
+        oldDelegate.labelColor != labelColor;
   }
 } //

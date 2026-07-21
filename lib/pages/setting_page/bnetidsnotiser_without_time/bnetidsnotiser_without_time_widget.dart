@@ -1,5 +1,6 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'bnetidsnotiser_without_time_model.dart';
@@ -101,11 +102,13 @@ class _BnetidsnotiserWithoutTimeWidgetState
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    AutoSizeText(
                                       valueOrDefault<String>(
                                         widget.label,
                                         'add label',
                                       ),
+                                      minFontSize:
+                                          FFAppConstants.heading.toDouble(),
                                       style: FlutterFlowTheme.of(context)
                                           .titleSmall
                                           .override(
@@ -135,7 +138,8 @@ class _BnetidsnotiserWithoutTimeWidgetState
                               ].divide(SizedBox(width: 10.0)),
                             ),
                             Row(
-                              mainAxisSize: MainAxisSize.max,
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 Transform.scale(
                                   scaleX: 0.6,
@@ -146,15 +150,14 @@ class _BnetidsnotiserWithoutTimeWidgetState
                                       safeSetState(
                                           () => _model.notisValue = newValue);
                                     },
-                                    activeColor:
-                                        FlutterFlowTheme.of(context).primary,
+                                    activeColor: FlutterFlowTheme.of(context)
+                                        .switchColor,
                                     activeTrackColor:
                                         FlutterFlowTheme.of(context).primary,
                                     inactiveTrackColor:
-                                        FlutterFlowTheme.of(context).alternate,
-                                    inactiveThumbColor:
                                         FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
+                                            .switchColor,
+                                    inactiveThumbColor: Colors.white,
                                   ),
                                 ),
                                 Transform.scale(
@@ -166,15 +169,14 @@ class _BnetidsnotiserWithoutTimeWidgetState
                                       safeSetState(
                                           () => _model.adhanValue = newValue);
                                     },
-                                    activeColor:
-                                        FlutterFlowTheme.of(context).primary,
+                                    activeColor: FlutterFlowTheme.of(context)
+                                        .switchColor,
                                     activeTrackColor:
                                         FlutterFlowTheme.of(context).primary,
                                     inactiveTrackColor:
-                                        FlutterFlowTheme.of(context).alternate,
-                                    inactiveThumbColor:
                                         FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
+                                            .switchColor,
+                                    inactiveThumbColor: Colors.white,
                                   ),
                                 ),
                               ],

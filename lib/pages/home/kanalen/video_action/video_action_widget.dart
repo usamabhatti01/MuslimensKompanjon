@@ -1,5 +1,6 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'video_action_model.dart';
@@ -49,7 +50,7 @@ class _VideoActionWidgetState extends State<VideoActionWidget> {
       width: 90.0,
       height: 35.0,
       decoration: BoxDecoration(
-        color: FlutterFlowTheme.of(context).surfaceVariant,
+        color: FlutterFlowTheme.of(context).switchColor,
         borderRadius: BorderRadius.circular(16.0),
         shape: BoxShape.rectangle,
       ),
@@ -59,17 +60,19 @@ class _VideoActionWidgetState extends State<VideoActionWidget> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           widget.icon!,
-          Text(
+          AutoSizeText(
             valueOrDefault<String>(
               widget.likes,
               'Gilla',
             ),
+            minFontSize: FFAppConstants.body.toDouble(),
             style: FlutterFlowTheme.of(context).bodySmall.override(
-                  font: GoogleFonts.inter(
+                  font: GoogleFonts.manrope(
                     fontWeight:
                         FlutterFlowTheme.of(context).bodySmall.fontWeight,
                     fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
                   ),
+                  color: FlutterFlowTheme.of(context).primaryText,
                   letterSpacing: 0.0,
                   fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
                   fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,

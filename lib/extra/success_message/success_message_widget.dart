@@ -114,7 +114,7 @@ class _SuccessMessageWidgetState extends State<SuccessMessageWidget> {
                   Text(
                     widget.body,
                     style: FlutterFlowTheme.of(context).labelMedium.override(
-                          font: GoogleFonts.inter(
+                          font: GoogleFonts.manrope(
                             fontWeight: FlutterFlowTheme.of(context)
                                 .labelMedium
                                 .fontWeight,

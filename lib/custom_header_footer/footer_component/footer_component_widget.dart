@@ -62,11 +62,12 @@ class _FooterComponentWidgetState extends State<FooterComponentWidget> {
                   '.',
                 ),
                 style: FlutterFlowTheme.of(context).bodySmall.override(
-                      font: GoogleFonts.inter(
+                      font: GoogleFonts.manrope(
                         fontWeight: FontWeight.w600,
                         fontStyle:
                             FlutterFlowTheme.of(context).bodySmall.fontStyle,
                       ),
+                      color: FlutterFlowTheme.of(context).primaryText,
                       fontSize: 10.0,
                       letterSpacing: 0.0,
                       fontWeight: FontWeight.w600,

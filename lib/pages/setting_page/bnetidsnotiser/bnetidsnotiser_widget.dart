@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/pages/setting_page/bnetidsnotiser_without_time/bnetidsnotiser_without_time_widget.dart';
 import '/custom_code/actions/index.dart' as actions;
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -68,8 +69,9 @@ class _BnetidsnotiserWidgetState extends State<BnetidsnotiserWidget> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Expanded(
-                    child: Text(
+                    child: AutoSizeText(
                       'Bönetidsnotiser',
+                      minFontSize: FFAppConstants.heading.toDouble(),
                       style: FlutterFlowTheme.of(context).titleLarge.override(
                             font: GoogleFonts.plusJakartaSans(
                               fontWeight: FlutterFlowTheme.of(context)
@@ -95,10 +97,11 @@ class _BnetidsnotiserWidgetState extends State<BnetidsnotiserWidget> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Expanded(
-                    child: Text(
+                    child: AutoSizeText(
                       'Anpassa hur du vill bli påmind inför varje bön.',
+                      minFontSize: FFAppConstants.body.toDouble(),
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            font: GoogleFonts.inter(
+                            font: GoogleFonts.manrope(
                               fontWeight: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .fontWeight,
@@ -106,6 +109,7 @@ class _BnetidsnotiserWidgetState extends State<BnetidsnotiserWidget> {
                                   .bodyMedium
                                   .fontStyle,
                             ),
+                            color: FlutterFlowTheme.of(context).primaryText,
                             letterSpacing: 0.0,
                             fontWeight: FlutterFlowTheme.of(context)
                                 .bodyMedium
@@ -140,13 +144,15 @@ class _BnetidsnotiserWidgetState extends State<BnetidsnotiserWidget> {
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
-                                        font: GoogleFonts.inter(
+                                        font: GoogleFonts.manrope(
                                           fontWeight: FontWeight.w600,
                                           fontStyle:
                                               FlutterFlowTheme.of(context)
                                                   .bodyMedium
                                                   .fontStyle,
                                         ),
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
                                         letterSpacing: 0.0,
                                         fontWeight: FontWeight.w600,
                                         fontStyle: FlutterFlowTheme.of(context)
@@ -159,13 +165,15 @@ class _BnetidsnotiserWidgetState extends State<BnetidsnotiserWidget> {
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
-                                        font: GoogleFonts.inter(
+                                        font: GoogleFonts.manrope(
                                           fontWeight: FontWeight.w600,
                                           fontStyle:
                                               FlutterFlowTheme.of(context)
                                                   .bodyMedium
                                                   .fontStyle,
                                         ),
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
                                         letterSpacing: 0.0,
                                         fontWeight: FontWeight.w600,
                                         fontStyle: FlutterFlowTheme.of(context)
@@ -375,10 +383,11 @@ class _BnetidsnotiserWidgetState extends State<BnetidsnotiserWidget> {
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text(
+                  AutoSizeText(
                     'Du kan ändra dina bönetidsnotiser när som helst.',
+                    minFontSize: FFAppConstants.body.toDouble(),
                     style: FlutterFlowTheme.of(context).labelMedium.override(
-                          font: GoogleFonts.inter(
+                          font: GoogleFonts.manrope(
                             fontWeight: FlutterFlowTheme.of(context)
                                 .labelMedium
                                 .fontWeight,

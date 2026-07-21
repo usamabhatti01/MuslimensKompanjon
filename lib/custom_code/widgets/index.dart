@@ -6,3 +6,6 @@ export '/custom_code/widgets/reels_video_player.dart' show ReelsVideoPlayer;
 export '/custom_code/widgets/custom_power_switch.dart' show CustomPowerSwitch;
 export '/custom_code/widgets/simple_audio_player.dart' show SimpleAudioPlayer;
 export '/custom_code/widgets/islamic_calender.dart' show IslamicCalender;
+export '/custom_code/widgets/quran_page_view.dart' show QuranPageView;
+export '/custom_code/widgets/google_map_widget.dart' show GoogleMapWidget;
+export '/custom_code/widgets/quran_search_widget.dart' show QuranSearchWidget;

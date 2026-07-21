@@ -34,11 +34,14 @@ class _SplashScreenWidgetState extends State<SplashScreenWidget> {
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       await actions.loadAzkharFromGit();
       await actions.youtubeChannelData();
+      await actions.loadMosquesData();
       await actions.fetchYoutubeVideos();
       _model.allResult = await actions.loadCitiesFromAsset(
         null,
       );
+      await actions.loadOnIslamData();
       await actions.loadTodayHijriData();
+      await actions.loadQuranJson();
       if (FFAppState().user.onBoarding) {
         await actions.schedulePrayerNotifications();
         if (FFAppState().user.mode == Mode.Light.name) {

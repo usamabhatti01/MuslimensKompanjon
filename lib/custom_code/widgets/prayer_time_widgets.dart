@@ -62,7 +62,8 @@ class PrayerTimeWidgets extends StatefulWidget {
   State<PrayerTimeWidgets> createState() => _PrayerTimeWidgetsState();
 }
 
-class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets> {
+class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
+    with WidgetsBindingObserver {
   Map<String, String> prayerTimes = {};
 
   String timezone = '';
@@ -86,9 +87,20 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets> {
     'Isha',
   ];
 
+  DateTime selectedDate = DateTime.now();
+  late ScrollController _scrollController;
+  late List<DateTime> days;
+  final double itemWidth = 90.0;
+  bool _scrolledToSelected = false;
+  dynamic decodedJson;
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+
+    _scrollController = ScrollController();
+    _generateMonthDays();
 
     tz.initializeTimeZones();
 
@@ -103,6 +115,8 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets> {
       if (mounted) {
         setState(() {
           prayerTimes.clear();
+          decodedJson = null;
+          _scrolledToSelected = false;
         });
       }
 
@@ -112,11 +126,29 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     ticker?.cancel();
 
     remaining.dispose();
+    _scrollController.dispose();
 
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      loadTodayHijriData();
+      setState(() {
+        final now = timezone.isNotEmpty ? nowInCity() : DateTime.now();
+        selectedDate = DateTime(now.year, now.month, now.day);
+        decodedJson = null;
+        _generateMonthDays();
+        _scrolledToSelected = false;
+      });
+      loadPrayerData();
+    }
   }
 
   // =========================
@@ -127,26 +159,26 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets> {
 
   Future<void> loadPrayerData() async {
     try {
-      final now = DateTime.now();
+      if (decodedJson == null) {
+        final now = DateTime.now();
+        final jsonString = await loadPrayerJson(
+          widget.cityName,
+          now.year,
+        );
+        decodedJson = json.decode(jsonString);
+      }
 
-      final todayKey = "${now.year.toString().padLeft(4, '0')}-"
-          "${now.month.toString().padLeft(2, '0')}-"
-          "${now.day.toString().padLeft(2, '0')}";
+      final key = "${selectedDate.year.toString().padLeft(4, '0')}-"
+          "${selectedDate.month.toString().padLeft(2, '0')}-"
+          "${selectedDate.day.toString().padLeft(2, '0')}";
 
-      final jsonString = await loadPrayerJson(
-        widget.cityName,
-        now.year,
-      );
-
-      final decoded = json.decode(jsonString);
-
-      final prayerData = decoded['prayer_times']?[todayKey];
+      final prayerData = decodedJson['prayer_times']?[key];
 
       if (prayerData == null) return;
 
       // ✅ TAKE TIMEZONE FROM JSON (FIXED)
 
-      final newTimezone = decoded['city']['timezone'];
+      final newTimezone = decodedJson['city']['timezone'];
 
       final newPrayerTimes = {
         'Fajr': _fmt(prayerData['fajr']),
@@ -160,6 +192,7 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets> {
       if (mounted) {
         setState(() {
           timezone = newTimezone;
+          _generateMonthDays();
           prayerTimes = newPrayerTimes;
           updatePrayerState();
         });
@@ -212,6 +245,15 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets> {
 
   void updatePrayerState() {
     if (prayerTimes.isEmpty || timezone.isEmpty) return;
+
+    if (!isToday(selectedDate)) {
+      ticker?.cancel();
+      currentPrayer = '';
+      nextPrayer = '';
+      nextPrayerTime = null;
+      remaining.value = Duration.zero;
+      return;
+    }
 
     final loc = tz.getLocation(timezone);
 
@@ -273,12 +315,30 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets> {
       if (nextPrayerTime == null || timezone.isEmpty) return;
 
       final loc = tz.getLocation(timezone);
-
       final now = tz.TZDateTime.now(loc);
+
+      // Check if the calendar day has changed in the city's timezone
+      if (now.day != selectedDate.day) {
+        loadTodayHijriData();
+        if (mounted) {
+          setState(() {
+            selectedDate = DateTime(now.year, now.month, now.day);
+            _generateMonthDays();
+            _scrolledToSelected = false;
+          });
+          loadPrayerData();
+        }
+        return;
+      }
 
       final diff = nextPrayerTime!.difference(now);
 
-      remaining.value = diff.isNegative ? Duration.zero : diff;
+      if (diff.isNegative) {
+        remaining.value = Duration.zero;
+        loadPrayerData();
+      } else {
+        remaining.value = diff;
+      }
     });
   }
 
@@ -301,9 +361,15 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets> {
 
     try {
       lang = FFLocalizations.of(context).languageCode;
-
-      if (lang.startsWith('sv')) lang = 'sv';
     } catch (_) {}
+    try {
+      final appStateLang = FFAppState().user.languageCode;
+      if (appStateLang.isNotEmpty) {
+        lang = appStateLang;
+      }
+    } catch (_) {}
+
+    if (lang.startsWith('sv')) lang = 'sv';
 
     final map =
         PrayerWidgetStrings.values[lang] ?? PrayerWidgetStrings.values['en']!;
@@ -318,26 +384,192 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets> {
   }
 
   Widget item(String title, String time) {
-    final active = currentPrayer == title;
+    final theme = FlutterFlowTheme.of(context);
+    final active = isToday(selectedDate) && (currentPrayer == title);
 
     return Expanded(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            _t(title),
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: active ? Colors.green : Colors.black,
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              _t(title),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12.5,
+                fontWeight: active ? FontWeight.w700 : FontWeight.w600,
+                color: active ? theme.primary : theme.primaryText,
+              ),
             ),
           ),
-          const SizedBox(height: 8),
-          Text(
-            time,
-            style: TextStyle(
-              color: active ? Colors.green : Colors.black,
+          const SizedBox(height: 4),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              time,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12.5,
+                fontWeight: active ? FontWeight.w700 : FontWeight.w500,
+                color: active ? theme.primary : theme.primaryText,
+              ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _generateMonthDays() {
+    final now = timezone.isNotEmpty ? nowInCity() : DateTime.now();
+    final firstDay = DateTime(now.year, now.month, 1);
+    final nextMonth = DateTime(now.year, now.month + 1, 1);
+    final totalDays = nextMonth.difference(firstDay).inDays;
+    days = List.generate(
+      totalDays,
+      (index) => DateTime(now.year, now.month, index + 1),
+    );
+  }
+
+  void _scrollToSelected(double viewportWidth) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_scrollController.hasClients) return;
+
+      final int selectedIndex = days.indexWhere((d) =>
+          d.day == selectedDate.day &&
+          d.month == selectedDate.month &&
+          d.year == selectedDate.year);
+
+      if (selectedIndex == -1) return;
+
+      final double totalItemWidth =
+          80.0 + 12.0; // width (80) + horizontal margins (6 * 2)
+      final double itemCenter =
+          (selectedIndex * totalItemWidth) + (totalItemWidth / 2);
+      final double targetOffset = itemCenter - (viewportWidth / 2);
+      final double maxScroll = (days.length * totalItemWidth) - viewportWidth;
+
+      _scrollController.animateTo(
+        targetOffset.clamp(0.0, maxScroll > 0 ? maxScroll : 0.0),
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  bool isToday(DateTime date) {
+    if (timezone.isEmpty) {
+      final now = DateTime.now();
+      return date.day == now.day &&
+          date.month == now.month &&
+          date.year == now.year;
+    }
+    final now = nowInCity();
+    return date.day == now.day &&
+        date.month == now.month &&
+        date.year == now.year;
+  }
+
+  String formatDate(BuildContext context, DateTime date) {
+    String lang = 'en';
+    try {
+      lang = FFLocalizations.of(context).languageCode;
+    } catch (_) {}
+    try {
+      final appStateLang = FFAppState().user.languageCode;
+      if (appStateLang.isNotEmpty) {
+        lang = appStateLang;
+      }
+    } catch (_) {}
+
+    if (isToday(date)) {
+      if (lang.startsWith('sv')) {
+        return 'Idag';
+      } else {
+        return 'Today';
+      }
+    }
+
+    if (lang.startsWith('sv')) {
+      lang = 'sv';
+    } else {
+      lang = 'en';
+    }
+    // Remove dots and convert to lowercase to match "ons 15 juli" and "mon 15 jul" formats
+    return DateFormat('EEE d MMM', lang)
+        .format(date)
+        .replaceAll('.', '')
+        .toLowerCase();
+  }
+
+  Widget buildDatePicker(BuildContext context) {
+    final theme = FlutterFlowTheme.of(context);
+    final primary = theme.primary;
+    return SizedBox(
+      height: 44,
+      width: double.infinity,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final double viewportWidth = constraints.maxWidth;
+          if (viewportWidth > 0 && !_scrolledToSelected) {
+            _scrolledToSelected = true;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _scrollToSelected(viewportWidth);
+            });
+          }
+
+          return ListView.builder(
+            controller: _scrollController,
+            scrollDirection: Axis.horizontal,
+            itemCount: days.length,
+            itemBuilder: (context, index) {
+              final date = days[index];
+              final isSelected = selectedDate.day == date.day &&
+                  selectedDate.month == date.month &&
+                  selectedDate.year == date.year;
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectedDate = date;
+                  });
+                  _scrollToSelected(viewportWidth);
+                  loadPrayerData();
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  width: 80.0,
+                  height: 32.0,
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: isSelected ? primary : Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Center(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                          formatDate(context, date),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: isSelected
+                                ? Colors.white
+                                : Colors.grey.shade600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
@@ -350,6 +582,7 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = FlutterFlowTheme.of(context);
     if (prayerTimes.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -358,31 +591,51 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets> {
       width: widget.width ?? double.infinity,
       height: widget.height,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Row(
-            children: [
-              item('Fajr', prayerTimes['Fajr']!),
-              item('Shuruq', prayerTimes['Shuruq']!),
-              item('Dhuhr', prayerTimes['Dhuhr']!),
-              item('Asr', prayerTimes['Asr']!),
-              item('Maghrib', prayerTimes['Maghrib']!),
-              item('Isha', prayerTimes['Isha']!),
-            ],
+          buildDatePicker(context),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                item('Fajr', prayerTimes['Fajr']!),
+                item('Shuruq', prayerTimes['Shuruq']!),
+                item('Dhuhr', prayerTimes['Dhuhr']!),
+                item('Asr', prayerTimes['Asr']!),
+                item('Maghrib', prayerTimes['Maghrib']!),
+                item('Isha', prayerTimes['Isha']!),
+              ],
+            ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
           ValueListenableBuilder<Duration>(
             valueListenable: remaining,
             builder: (context, value, _) {
-              return Text(
-                _t('timeLeft', args: {
-                  'nextPrayer': _t(nextPrayer),
-                  'time': formatDuration(value),
-                }),
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green,
+              final isCurrentDay = isToday(selectedDate);
+              final displayPrayer = isCurrentDay && nextPrayer.isNotEmpty
+                  ? nextPrayer
+                  : prayerOrder.first;
+              return Visibility(
+                visible: isCurrentDay,
+                maintainSize: true,
+                maintainAnimation: true,
+                maintainState: true,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    _t('timeLeft', args: {
+                      'nextPrayer': _t(displayPrayer),
+                      'time': formatDuration(value),
+                    }),
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: theme.primary,
+                    ),
+                  ),
                 ),
               );
             },

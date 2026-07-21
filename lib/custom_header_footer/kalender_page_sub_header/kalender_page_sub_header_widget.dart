@@ -94,12 +94,13 @@ class _KalenderPageSubHeaderWidgetState
                     Text(
                       'Gregorianska och Hijri',
                       style: FlutterFlowTheme.of(context).bodySmall.override(
-                            font: GoogleFonts.inter(
+                            font: GoogleFonts.manrope(
                               fontWeight: FontWeight.w300,
                               fontStyle: FlutterFlowTheme.of(context)
                                   .bodySmall
                                   .fontStyle,
                             ),
+                            color: FlutterFlowTheme.of(context).primaryText,
                             letterSpacing: 0.0,
                             fontWeight: FontWeight.w300,
                             fontStyle: FlutterFlowTheme.of(context)
@@ -118,7 +119,7 @@ class _KalenderPageSubHeaderWidgetState
           children: [
             Icon(
               Icons.share_outlined,
-              color: FlutterFlowTheme.of(context).black,
+              color: FlutterFlowTheme.of(context).primaryText,
               size: 24.0,
             ),
             InkWell(
@@ -145,7 +146,7 @@ class _KalenderPageSubHeaderWidgetState
               },
               child: Icon(
                 Icons.notifications_none_sharp,
-                color: FlutterFlowTheme.of(context).black,
+                color: FlutterFlowTheme.of(context).primaryText,
                 size: 24.0,
               ),
             ),
@@ -158,8 +159,8 @@ class _KalenderPageSubHeaderWidgetState
                 context.pushNamed(SettingWidget.routeName);
               },
               child: Icon(
-                FFIcons.kmenu,
-                color: FlutterFlowTheme.of(context).black,
+                Icons.more_vert,
+                color: FlutterFlowTheme.of(context).primaryText,
                 size: 24.0,
               ),
             ),

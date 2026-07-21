@@ -1,6 +1,7 @@
 import '/backend/schema/structs/index.dart';
 import '/custom_header_footer/mk_home_page_header/mk_home_page_header_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/pages/home/kanalen/video_item_card/video_item_card_widget.dart';
 import '/index.dart';
 import 'videor_widget.dart' show VideorWidget;
 import 'package:flutter/material.dart';
@@ -30,10 +31,13 @@ class VideorModel extends FlutterFlowModel<VideorWidget> {
   String? Function(BuildContext, String?)? textControllerValidator;
   // Stores action output result for [Custom Action - searchReels] action in TextField widget.
   List<YoutubeStruct>? searchOutput;
+  // Models for VideoItemCard.
+  late FlutterFlowDynamicModels<VideoItemCardModel> videoItemCardModels;
 
   @override
   void initState(BuildContext context) {
     mkHomePageHeaderModel = createModel(context, () => MkHomePageHeaderModel());
+    videoItemCardModels = FlutterFlowDynamicModels(() => VideoItemCardModel());
   }
 
   @override
@@ -41,5 +45,7 @@ class VideorModel extends FlutterFlowModel<VideorWidget> {
     mkHomePageHeaderModel.dispose();
     textFieldFocusNode?.dispose();
     textController?.dispose();
+
+    videoItemCardModels.dispose();
   }
 }

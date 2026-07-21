@@ -1,5 +1,6 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'kontaktaoss_component_model.dart';
@@ -97,11 +98,13 @@ class _KontaktaossComponentWidgetState
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    AutoSizeText(
                                       valueOrDefault<String>(
                                         widget.label,
                                         'add label',
                                       ),
+                                      minFontSize:
+                                          FFAppConstants.heading.toDouble(),
                                       style: FlutterFlowTheme.of(context)
                                           .titleSmall
                                           .override(
@@ -126,15 +129,17 @@ class _KontaktaossComponentWidgetState
                                                     .fontStyle,
                                           ),
                                     ),
-                                    Text(
+                                    AutoSizeText(
                                       valueOrDefault<String>(
                                         widget.subLabel,
                                         'Följer telefonens tema automatiskt',
                                       ),
+                                      minFontSize:
+                                          FFAppConstants.body.toDouble(),
                                       style: FlutterFlowTheme.of(context)
                                           .bodySmall
                                           .override(
-                                            font: GoogleFonts.inter(
+                                            font: GoogleFonts.manrope(
                                               fontWeight:
                                                   FlutterFlowTheme.of(context)
                                                       .bodySmall
@@ -144,6 +149,8 @@ class _KontaktaossComponentWidgetState
                                                       .bodySmall
                                                       .fontStyle,
                                             ),
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryText,
                                             letterSpacing: 0.0,
                                             fontWeight:
                                                 FlutterFlowTheme.of(context)

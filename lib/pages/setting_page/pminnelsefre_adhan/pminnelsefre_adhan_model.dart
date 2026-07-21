@@ -16,10 +16,6 @@ class PminnelsefreAdhanModel extends FlutterFlowModel<PminnelsefreAdhanWidget> {
   late PminnelsefreAdhanComponentModel pminnelsefreAdhanComponentModel2;
   // Model for PminnelsefreAdhanComponent component.
   late PminnelsefreAdhanComponentModel pminnelsefreAdhanComponentModel3;
-  // State field(s) for TextField widget.
-  FocusNode? textFieldFocusNode;
-  TextEditingController? textController;
-  String? Function(BuildContext, String?)? textControllerValidator;
 
   @override
   void initState(BuildContext context) {
@@ -36,7 +32,5 @@ class PminnelsefreAdhanModel extends FlutterFlowModel<PminnelsefreAdhanWidget> {
     pminnelsefreAdhanComponentModel1.dispose();
     pminnelsefreAdhanComponentModel2.dispose();
     pminnelsefreAdhanComponentModel3.dispose();
-    textFieldFocusNode?.dispose();
-    textController?.dispose();
   }
 }

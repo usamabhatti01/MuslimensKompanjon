@@ -1,5 +1,6 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'akallan_dua_box_sv_model.dart';
@@ -52,7 +53,7 @@ class _AkallanDuaBoxSvWidgetState extends State<AkallanDuaBoxSvWidget> {
         borderRadius: BorderRadius.circular(
             FlutterFlowTheme.of(context).designToken.radius.md),
         border: Border.all(
-          color: FlutterFlowTheme.of(context).containerBg,
+          color: FlutterFlowTheme.of(context).alternate,
         ),
       ),
       child: Padding(
@@ -65,9 +66,10 @@ class _AkallanDuaBoxSvWidgetState extends State<AkallanDuaBoxSvWidget> {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            AutoSizeText(
               widget.tasbihName!,
               textAlign: TextAlign.start,
+              minFontSize: FFAppConstants.heading.toDouble(),
               style: FlutterFlowTheme.of(context).svenskaTitle.override(
                     font: GoogleFonts.cairo(
                       fontWeight: FontWeight.bold,
@@ -82,16 +84,17 @@ class _AkallanDuaBoxSvWidgetState extends State<AkallanDuaBoxSvWidget> {
                         FlutterFlowTheme.of(context).svenskaTitle.fontStyle,
                   ),
             ),
-            Text(
+            AutoSizeText(
               widget.tasbih!,
               textAlign: TextAlign.start,
+              minFontSize: FFAppConstants.body.toDouble(),
               style: FlutterFlowTheme.of(context).svenskaBody.override(
                     font: GoogleFonts.manrope(
                       fontWeight: FontWeight.w500,
                       fontStyle:
                           FlutterFlowTheme.of(context).svenskaBody.fontStyle,
                     ),
-                    color: FlutterFlowTheme.of(context).black,
+                    color: FlutterFlowTheme.of(context).primaryText,
                     fontSize: 14.0,
                     letterSpacing: 0.0,
                     fontWeight: FontWeight.w500,

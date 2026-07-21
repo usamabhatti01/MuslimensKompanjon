@@ -39,8 +39,14 @@ export '/pages/categories/azhkar_quranic_verse/akallan_dua/akallan_dua/akallan_d
 export '/pages/categories/azhkar_quranic_verse/tasbih/tasbih/tasbih_widget.dart'
     show TasbihWidget;
 export '/pages/kalender/kalender/kalender_widget.dart' show KalenderWidget;
-export '/pages/kuran/kuran_copy/kuran_copy_widget.dart' show KuranCopyWidget;
 export '/pages/on_boarding/splash_screen/splash_screen_widget.dart'
     show SplashScreenWidget;
 export '/pages/categories/azhkar_quranic_verse/akallan_dua/akallan_and_dua/akallan_and_dua_widget.dart'
     show AkallanAndDuaWidget;
+export '/pages/about_islam/video_player/video_player_widget.dart'
+    show VideoPlayerWidget;
+export '/pages/mosque_finder_map/nearby_mosque_locator/nearby_mosque_locator_widget.dart'
+    show NearbyMosqueLocatorWidget;
+export '/pages/mosque_finder_map/location_search_interface/location_search_interface_widget.dart'
+    show LocationSearchInterfaceWidget;
+export '/pages/kuran/kuran_page/kuran_page_widget.dart' show KuranPageWidget;

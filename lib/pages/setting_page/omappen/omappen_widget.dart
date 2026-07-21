@@ -1,5 +1,6 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'omappen_model.dart';
@@ -58,8 +59,9 @@ class _OmappenWidgetState extends State<OmappenWidget> {
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                Text(
+                AutoSizeText(
                   'Om appen',
+                  minFontSize: FFAppConstants.heading.toDouble(),
                   style: FlutterFlowTheme.of(context).titleMedium.override(
                         font: GoogleFonts.plusJakartaSans(
                           fontWeight: FlutterFlowTheme.of(context)
@@ -87,8 +89,9 @@ class _OmappenWidgetState extends State<OmappenWidget> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Expanded(
-                        child: Text(
+                        child: AutoSizeText(
                           'Om Muslimens kompanjon',
+                          minFontSize: FFAppConstants.heading.toDouble(),
                           style:
                               FlutterFlowTheme.of(context).titleLarge.override(
                                     font: GoogleFonts.plusJakartaSans(
@@ -115,23 +118,26 @@ class _OmappenWidgetState extends State<OmappenWidget> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Expanded(
-                        child: Text(
+                        child: AutoSizeText(
                           'Muslimens kompanjon är en del av Islamiska Förbundet i Sveriges verksamhet.',
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w300,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w300,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                    lineHeight: 1.5,
-                                  ),
+                          minFontSize: FFAppConstants.body.toDouble(),
+                          style: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .override(
+                                font: GoogleFonts.manrope(
+                                  fontWeight: FontWeight.w300,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .fontStyle,
+                                ),
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                letterSpacing: 0.0,
+                                fontWeight: FontWeight.w300,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontStyle,
+                                lineHeight: 1.5,
+                              ),
                         ),
                       ),
                     ],
@@ -148,8 +154,9 @@ class _OmappenWidgetState extends State<OmappenWidget> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Expanded(
-                        child: Text(
+                        child: AutoSizeText(
                           'Om Appen',
+                          minFontSize: FFAppConstants.heading.toDouble(),
                           style:
                               FlutterFlowTheme.of(context).titleLarge.override(
                                     font: GoogleFonts.plusJakartaSans(
@@ -176,23 +183,26 @@ class _OmappenWidgetState extends State<OmappenWidget> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Expanded(
-                        child: Text(
+                        child: AutoSizeText(
                           'Muslimens kompanjon app är en plattform där du som muslim ska kunna få tillgång till olika verktyg som kan förenkla din vardag.\n\nBönen är en av Islams grunder och en länk mellan muslimer och Allah. Därför väljer vi att börja med att presentera våra bönetider till er på ett enkelt och smidigt sätt. Med vår app kan du hitta (Qibla) riktningen till Kabaa när och var du vill. Du kan även hitta moskéer nära dig. Snart kommer flera andra funktioner som ska underlätta din vardag som muslim i Sverige.',
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w300,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w300,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                    lineHeight: 1.5,
-                                  ),
+                          minFontSize: FFAppConstants.body.toDouble(),
+                          style: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .override(
+                                font: GoogleFonts.manrope(
+                                  fontWeight: FontWeight.w300,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .fontStyle,
+                                ),
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                letterSpacing: 0.0,
+                                fontWeight: FontWeight.w300,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontStyle,
+                                lineHeight: 1.5,
+                              ),
                         ),
                       ),
                     ],
@@ -209,8 +219,9 @@ class _OmappenWidgetState extends State<OmappenWidget> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Expanded(
-                        child: Text(
+                        child: AutoSizeText(
                           'Bönetiderskälla',
+                          minFontSize: FFAppConstants.heading.toDouble(),
                           style:
                               FlutterFlowTheme.of(context).titleLarge.override(
                                     font: GoogleFonts.plusJakartaSans(
@@ -237,23 +248,26 @@ class _OmappenWidgetState extends State<OmappenWidget> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Expanded(
-                        child: Text(
+                        child: AutoSizeText(
                           'På Islamiska Förbundets hemsida kan ...',
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w300,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w300,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                    lineHeight: 1.5,
-                                  ),
+                          minFontSize: FFAppConstants.body.toDouble(),
+                          style: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .override(
+                                font: GoogleFonts.manrope(
+                                  fontWeight: FontWeight.w300,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .fontStyle,
+                                ),
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                letterSpacing: 0.0,
+                                fontWeight: FontWeight.w300,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontStyle,
+                                lineHeight: 1.5,
+                              ),
                         ),
                       ),
                     ],

@@ -59,32 +59,14 @@ abstract class FlutterFlowTheme {
   late Color error;
   late Color info;
 
-  late Color black;
-  late Color containerBg;
-  late Color tint;
-  late Color onPrimary;
-  late Color primaryContainer;
-  late Color onPrimaryContainer;
-  late Color onSecondary;
-  late Color secondaryContainer;
-  late Color onSecondaryContainer;
-  late Color onAccent;
-  late Color accentContainer;
-  late Color onAccentContainer;
-  late Color onBackground;
-  late Color onSurface;
-  late Color surfaceVariant;
-  late Color onSurfaceVariant;
-  late Color onSuccess;
-  late Color onWarning;
-  late Color onError;
-  late Color onInfo;
-  late Color transparent;
-  late Color surface40;
-  late Color background40;
-  late Color onPrimary20;
-  late Color onPrimary30;
+  late Color quranBg;
   late Color footerInActive;
+  late Color allahNameBg;
+  late Color allahNameFont;
+  late Color onBoardingColor;
+  late Color switchColor;
+  late Color white;
+  late Color reelBg;
 
   FFDesignTokens get designToken => FFDesignTokens(this);
 
@@ -191,7 +173,7 @@ class LightModeTheme extends FlutterFlowTheme {
   late Color primary = const Color(0xFF007A00);
   late Color secondary = const Color(0xFF385749);
   late Color tertiary = const Color(0xFFFF2D55);
-  late Color alternate = const Color(0xFFEEEEEE);
+  late Color alternate = const Color(0xFFEBEBEB);
   late Color primaryText = const Color(0xFF1A1A1A);
   late Color secondaryText = const Color(0xFF666666);
   late Color primaryBackground = const Color(0xFFFFFFFF);
@@ -205,32 +187,14 @@ class LightModeTheme extends FlutterFlowTheme {
   late Color error = const Color(0xFFFF3B30);
   late Color info = const Color(0xFF007AFF);
 
-  late Color black = const Color(0xFF000000);
-  late Color containerBg = const Color(0xFFEBEBEB);
-  late Color tint = const Color(0xFFE8F4ED);
-  late Color onPrimary = const Color(0xFFFFFFFF);
-  late Color primaryContainer = const Color(0x1A007A00);
-  late Color onPrimaryContainer = const Color(0xFF1A1A1A);
-  late Color onSecondary = const Color(0xFFFFFFFF);
-  late Color secondaryContainer = const Color(0x1A385749);
-  late Color onSecondaryContainer = const Color(0xFF1A1A1A);
-  late Color onAccent = const Color(0xFFFFFFFF);
-  late Color accentContainer = const Color(0x1AFF2D55);
-  late Color onAccentContainer = const Color(0xFF1A1A1A);
-  late Color onBackground = const Color(0xFF1A1A1A);
-  late Color onSurface = const Color(0xFF1A1A1A);
-  late Color surfaceVariant = const Color(0xFFF2F2F2);
-  late Color onSurfaceVariant = const Color(0xFF666666);
-  late Color onSuccess = const Color(0xFFFFFFFF);
-  late Color onWarning = const Color(0xFFFFFFFF);
-  late Color onError = const Color(0xFFFFFFFF);
-  late Color onInfo = const Color(0xFFFFFFFF);
-  late Color transparent = const Color(0x00000000);
-  late Color surface40 = const Color(0x66FFFFFF);
-  late Color background40 = const Color(0x66FFFFFF);
-  late Color onPrimary20 = const Color(0x33FFFFFF);
-  late Color onPrimary30 = const Color(0x4DFFFFFF);
+  late Color quranBg = const Color(0xFFE8F4ED);
   late Color footerInActive = const Color(0xFF999999);
+  late Color allahNameBg = const Color(0xFFE8F4ED);
+  late Color allahNameFont = const Color(0xFF00A300);
+  late Color onBoardingColor = const Color(0xFF2C1A4A);
+  late Color switchColor = const Color(0xFFEBEBEB);
+  late Color white = const Color(0xFFFFFFFF);
+  late Color reelBg = const Color(0xCB1A1A1A);
 }
 
 abstract class Typography {
@@ -372,50 +336,50 @@ class ThemeTypography extends Typography {
         fontSize: 14.0,
         height: 1.4,
       );
-  String get labelLargeFamily => 'Inter';
+  String get labelLargeFamily => 'Manrope';
   bool get labelLargeIsCustom => false;
-  TextStyle get labelLarge => GoogleFonts.inter(
+  TextStyle get labelLarge => GoogleFonts.manrope(
         color: theme.secondaryText,
         fontWeight: FontWeight.w600,
         fontSize: 14.0,
         height: 1.3,
       );
-  String get labelMediumFamily => 'Inter';
+  String get labelMediumFamily => 'Manrope';
   bool get labelMediumIsCustom => false;
-  TextStyle get labelMedium => GoogleFonts.inter(
+  TextStyle get labelMedium => GoogleFonts.manrope(
         color: theme.secondaryText,
         fontWeight: FontWeight.w600,
         fontSize: 12.0,
         height: 1.3,
       );
-  String get labelSmallFamily => 'Inter';
+  String get labelSmallFamily => 'Manrope';
   bool get labelSmallIsCustom => false;
-  TextStyle get labelSmall => GoogleFonts.inter(
+  TextStyle get labelSmall => GoogleFonts.manrope(
         color: theme.secondaryText,
         fontWeight: FontWeight.w600,
         fontSize: 10.0,
         height: 1.2,
       );
-  String get bodyLargeFamily => 'Inter';
+  String get bodyLargeFamily => 'Manrope';
   bool get bodyLargeIsCustom => false;
-  TextStyle get bodyLarge => GoogleFonts.inter(
-        color: Color(0xFF2C1A4A),
+  TextStyle get bodyLarge => GoogleFonts.manrope(
+        color: theme.primaryText,
         fontWeight: FontWeight.normal,
         fontSize: 16.0,
         height: 1.5,
       );
-  String get bodyMediumFamily => 'Inter';
+  String get bodyMediumFamily => 'Manrope';
   bool get bodyMediumIsCustom => false;
-  TextStyle get bodyMedium => GoogleFonts.inter(
-        color: theme.black,
+  TextStyle get bodyMedium => GoogleFonts.manrope(
+        color: Colors.black,
         fontWeight: FontWeight.normal,
         fontSize: 14.0,
         height: 1.5,
       );
-  String get bodySmallFamily => 'Inter';
+  String get bodySmallFamily => 'Manrope';
   bool get bodySmallIsCustom => false;
-  TextStyle get bodySmall => GoogleFonts.inter(
-        color: theme.black,
+  TextStyle get bodySmall => GoogleFonts.manrope(
+        color: Colors.black,
         fontWeight: FontWeight.normal,
         fontSize: 12.0,
         height: 1.4,
@@ -430,14 +394,14 @@ class ThemeTypography extends Typography {
   String get arabicBodyFamily => 'arabic';
   TextStyle get arabicBody => TextStyle(
         fontFamily: 'arabic',
-        color: theme.black,
+        color: Colors.black,
         fontWeight: FontWeight.normal,
         fontSize: 14.0,
       );
   String get arabicBalckBoldFamily => 'arabic';
   TextStyle get arabicBalckBold => TextStyle(
         fontFamily: 'arabic',
-        color: theme.black,
+        color: Colors.black,
         fontWeight: FontWeight.w800,
         fontSize: 16.0,
       );
@@ -449,13 +413,13 @@ class ThemeTypography extends Typography {
       );
   String get svenskaBodyFamily => 'Manrope';
   TextStyle get svenskaBody => GoogleFonts.manrope(
-        color: theme.black,
+        color: Colors.black,
         fontWeight: FontWeight.w500,
         fontSize: 14.0,
       );
   String get ayatNumberFamily => 'Manrope';
   TextStyle get ayatNumber => GoogleFonts.manrope(
-        color: theme.black,
+        color: Colors.black,
         fontSize: 11.0,
       );
   String get durationFamily => 'Primary Family';
@@ -490,32 +454,14 @@ class DarkModeTheme extends FlutterFlowTheme {
   late Color error = const Color(0xFFFF453A);
   late Color info = const Color(0xFF0A84FF);
 
-  late Color black = const Color(0xFF87A39A);
-  late Color containerBg = const Color(0xFF4B327E);
-  late Color tint = const Color(0xFFCA0C86);
-  late Color onPrimary = const Color(0xFFFFFFFF);
-  late Color primaryContainer = const Color(0x2400A300);
-  late Color onPrimaryContainer = const Color(0xFFFFFFFF);
-  late Color onSecondary = const Color(0xFFFFFFFF);
-  late Color secondaryContainer = const Color(0x248F9A88);
-  late Color onSecondaryContainer = const Color(0xFFFFFFFF);
-  late Color onAccent = const Color(0xFFFFFFFF);
-  late Color accentContainer = const Color(0x24FF375F);
-  late Color onAccentContainer = const Color(0xFFFFFFFF);
-  late Color onBackground = const Color(0xFFFFFFFF);
-  late Color onSurface = const Color(0xFFFFFFFF);
-  late Color surfaceVariant = const Color(0xFF2C2C2C);
-  late Color onSurfaceVariant = const Color(0xFFAAAAAA);
-  late Color onSuccess = const Color(0xFFFFFFFF);
-  late Color onWarning = const Color(0xFF000000);
-  late Color onError = const Color(0xFFFFFFFF);
-  late Color onInfo = const Color(0xFFFFFFFF);
-  late Color transparent = const Color(0x00000000);
-  late Color surface40 = const Color(0x66242424);
-  late Color background40 = const Color(0x660F0F0F);
-  late Color onPrimary20 = const Color(0x33FFFFFF);
-  late Color onPrimary30 = const Color(0x4DFFFFFF);
-  late Color footerInActive = const Color(0xFF4F8FD2);
+  late Color quranBg = const Color(0xFF074504);
+  late Color footerInActive = const Color(0xFF999999);
+  late Color allahNameBg = const Color(0xFF00A300);
+  late Color allahNameFont = const Color(0xFFFFFFFF);
+  late Color onBoardingColor = const Color(0xFFFFFFFF);
+  late Color switchColor = const Color(0xFF59595B);
+  late Color white = const Color(0xFFFFFFFF);
+  late Color reelBg = const Color(0xCB1A1A1A);
 }
 
 class FFDesignTokens {
@@ -605,7 +551,7 @@ extension TextStyleHelper on TextStyle {
     List<Shadow>? shadows,
     String? package,
   }) {
-    if (useGoogleFonts && fontFamily != null) {
+    if (useGoogleFonts && fontFamily != null && fontFamily.isNotEmpty) {
       font = GoogleFonts.getFont(fontFamily,
           fontWeight: fontWeight ?? this.fontWeight,
           fontStyle: fontStyle ?? this.fontStyle);

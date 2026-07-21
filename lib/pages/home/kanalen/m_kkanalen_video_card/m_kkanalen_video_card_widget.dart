@@ -1,6 +1,7 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'm_kkanalen_video_card_model.dart';
@@ -111,11 +112,12 @@ class _MKkanalenVideoCardWidgetState extends State<MKkanalenVideoCardWidget> {
                             children: [
                               Align(
                                 alignment: AlignmentDirectional(0.0, 0.0),
-                                child: Text(
+                                child: AutoSizeText(
                                   valueOrDefault<String>(
                                     widget.videoDuration,
                                     '5.60',
                                   ),
+                                  minFontSize: FFAppConstants.body.toDouble(),
                                   style: FlutterFlowTheme.of(context)
                                       .duration
                                       .override(
@@ -179,19 +181,21 @@ class _MKkanalenVideoCardWidgetState extends State<MKkanalenVideoCardWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    AutoSizeText(
                       valueOrDefault<String>(
                         widget.title,
                         'Hur man förbättrar sin Salah steg för steg',
                       ),
                       maxLines: 2,
+                      minFontSize: FFAppConstants.heading.toDouble(),
                       style: FlutterFlowTheme.of(context).bodySmall.override(
-                            font: GoogleFonts.inter(
+                            font: GoogleFonts.manrope(
                               fontWeight: FontWeight.w600,
                               fontStyle: FlutterFlowTheme.of(context)
                                   .bodySmall
                                   .fontStyle,
                             ),
+                            color: FlutterFlowTheme.of(context).primaryText,
                             letterSpacing: 0.0,
                             fontWeight: FontWeight.w600,
                             fontStyle: FlutterFlowTheme.of(context)
@@ -204,12 +208,13 @@ class _MKkanalenVideoCardWidgetState extends State<MKkanalenVideoCardWidget> {
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text(
+                        AutoSizeText(
                           widget.views,
+                          minFontSize: FFAppConstants.body.toDouble(),
                           style: FlutterFlowTheme.of(context)
                               .labelSmall
                               .override(
-                                font: GoogleFonts.inter(
+                                font: GoogleFonts.manrope(
                                   fontWeight: FontWeight.normal,
                                   fontStyle: FlutterFlowTheme.of(context)
                                       .labelSmall
@@ -233,15 +238,16 @@ class _MKkanalenVideoCardWidgetState extends State<MKkanalenVideoCardWidget> {
                           ),
                         ),
                         Expanded(
-                          child: Text(
+                          child: AutoSizeText(
                             valueOrDefault<String>(
                               functions.daysAgo(widget.postedDuration!),
                               '1 month ago',
                             ),
+                            minFontSize: FFAppConstants.body.toDouble(),
                             style: FlutterFlowTheme.of(context)
                                 .labelSmall
                                 .override(
-                                  font: GoogleFonts.inter(
+                                  font: GoogleFonts.manrope(
                                     fontWeight: FontWeight.normal,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .labelSmall

@@ -13,23 +13,18 @@ Future constants() async {
   // Add your function code here!
 }
 
-class GitConstants {
-  static const String gitHubOwner = 'usamabhatti01';
-  static const String gitHubRepo = 'MuslimensKompanjon';
-  static const List<String> branches = ['flutterflow', 'main', 'master'];
-}
-
 class FileConstants {
   static const String citiesJsonPath = 'assets/jsons/cities.json';
-  static const String hijriCalendarPathPrefix = 'assets/jsons/hijri-calendar_';
-  static const String hijriCalendarPrefix = 'hijri-calendar_';
+  static const String mosquesJsonPath = 'assets/jsons/mosques.json';
+  static const String omIslamJsonPath = 'assets/jsons/om_islam.json';
+  static const String islamicDatesUrlPrefix =
+      'https://ifis.se/mkprod/data/Islamic_dates_';
+  static const String islamicHolidaysUrlPrefix =
+      'https://ifis.se/mkprod/data/Islamic-holiday_';
 }
 
 class YouTubeConstants {
   static const String apiKey = 'AIzaSyDSLhAQ_Z6c9bYF411yTGTiv17tCNSFmaA';
   static const String defaultUploadsPlaylistId = 'UUah5pM2VsxEMOd8ftyGQc2Q';
   static const String channelId = 'UCah5pM2VsxEMOd8ftyGQc2Q';
-  // static const String apiKey = '';
-  // static const String defaultUploadsPlaylistId = '';
-  // static const String channelId = '';
 }

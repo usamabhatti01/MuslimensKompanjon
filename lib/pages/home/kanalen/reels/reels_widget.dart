@@ -5,6 +5,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -62,7 +63,10 @@ class _ReelsWidgetState extends State<ReelsWidget> {
         backgroundColor: FlutterFlowTheme.of(context).primaryText,
         body: Builder(
           builder: (context) {
-            final videoList = FFAppState().reelsData.toList();
+            final videoList = FFAppState()
+                .reelsData
+                .sortedList(keyOf: (e) => e.postDate!, desc: true)
+                .toList();
 
             return Container(
               height: MediaQuery.sizeOf(context).height * 1.0,
@@ -116,12 +120,14 @@ class _ReelsWidgetState extends State<ReelsWidget> {
                                           child: FlutterFlowIconButton(
                                             borderRadius: 8.0,
                                             buttonSize: 40.0,
-                                            fillColor: Colors.transparent,
+                                            fillColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .reelBg,
                                             icon: Icon(
                                               Icons.close_rounded,
                                               color:
                                                   FlutterFlowTheme.of(context)
-                                                      .onPrimary,
+                                                      .white,
                                               size: 24.0,
                                             ),
                                             onPressed: () async {
@@ -134,74 +140,83 @@ class _ReelsWidgetState extends State<ReelsWidget> {
                                     ),
                                   ),
                                 ),
-                                Align(
-                                  alignment: AlignmentDirectional(1.0, 0.0),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 0.0, 25.0, 0.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.thumb_up_off_alt_outlined,
-                                            color: FlutterFlowTheme.of(context)
-                                                .alternate,
-                                            size: 24.0,
-                                          ),
-                                          Icon(
-                                            Icons.thumb_down_outlined,
-                                            color: FlutterFlowTheme.of(context)
-                                                .alternate,
-                                            size: 24.0,
-                                          ),
-                                          Icon(
-                                            Icons.message_outlined,
-                                            color: FlutterFlowTheme.of(context)
-                                                .alternate,
-                                            size: 24.0,
-                                          ),
-                                          Builder(
-                                            builder: (context) => InkWell(
-                                              splashColor: Colors.transparent,
-                                              focusColor: Colors.transparent,
-                                              hoverColor: Colors.transparent,
-                                              highlightColor:
-                                                  Colors.transparent,
-                                              onTap: () async {
-                                                await Share.share(
-                                                  functions.videoToString(
-                                                      videoListItem.video),
-                                                  sharePositionOrigin:
-                                                      getWidgetBoundingBox(
-                                                          context),
-                                                );
-                                              },
-                                              child: FaIcon(
-                                                FontAwesomeIcons.share,
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryBackground,
-                                                size: 24.0,
+                                if (responsiveVisibility(
+                                  context: context,
+                                  phone: false,
+                                  tablet: false,
+                                ))
+                                  Align(
+                                    alignment: AlignmentDirectional(1.0, 0.0),
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 0.0, 25.0, 0.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.thumb_up_off_alt_outlined,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .alternate,
+                                              size: 24.0,
+                                            ),
+                                            Icon(
+                                              Icons.thumb_down_outlined,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .alternate,
+                                              size: 24.0,
+                                            ),
+                                            Icon(
+                                              Icons.message_outlined,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .alternate,
+                                              size: 24.0,
+                                            ),
+                                            Builder(
+                                              builder: (context) => InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () async {
+                                                  await Share.share(
+                                                    functions.videoToString(
+                                                        videoListItem.video),
+                                                    sharePositionOrigin:
+                                                        getWidgetBoundingBox(
+                                                            context),
+                                                  );
+                                                },
+                                                child: FaIcon(
+                                                  FontAwesomeIcons.share,
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryBackground,
+                                                  size: 24.0,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ].divide(SizedBox(height: 60.0)),
+                                          ].divide(SizedBox(height: 60.0)),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
                                 Align(
                                   alignment: AlignmentDirectional(0.0, 1.0),
                                   child: Container(
                                     height: 170.0,
                                     decoration: BoxDecoration(
-                                      color: Color(0x13EEEEEE),
+                                      color:
+                                          FlutterFlowTheme.of(context).reelBg,
                                     ),
                                     alignment: AlignmentDirectional(0.0, 1.0),
                                     child: Align(
@@ -251,10 +266,13 @@ class _ReelsWidgetState extends State<ReelsWidget> {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(
+                                                    AutoSizeText(
                                                       FFAppState()
                                                           .channelData
                                                           .name,
+                                                      minFontSize:
+                                                          FFAppConstants.heading
+                                                              .toDouble(),
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -272,7 +290,7 @@ class _ReelsWidgetState extends State<ReelsWidget> {
                                                                 ),
                                                                 color: FlutterFlowTheme.of(
                                                                         context)
-                                                                    .onPrimary,
+                                                                    .white,
                                                                 letterSpacing:
                                                                     0.0,
                                                                 fontWeight:
@@ -285,18 +303,20 @@ class _ReelsWidgetState extends State<ReelsWidget> {
                                                                 lineHeight: 1.4,
                                                               ),
                                                     ),
-                                                    Text(
+                                                    AutoSizeText(
                                                       FFAppState()
                                                           .channelData
                                                           .followers,
+                                                      minFontSize:
+                                                          FFAppConstants.body
+                                                              .toDouble(),
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
                                                               .labelSmall
                                                               .override(
-                                                                font:
-                                                                    GoogleFonts
-                                                                        .inter(
+                                                                font: GoogleFonts
+                                                                    .manrope(
                                                                   fontWeight: FlutterFlowTheme.of(
                                                                           context)
                                                                       .labelSmall
@@ -308,7 +328,7 @@ class _ReelsWidgetState extends State<ReelsWidget> {
                                                                 ),
                                                                 color: FlutterFlowTheme.of(
                                                                         context)
-                                                                    .alternate,
+                                                                    .white,
                                                                 letterSpacing:
                                                                     0.0,
                                                                 fontWeight: FlutterFlowTheme.of(
@@ -382,14 +402,18 @@ class _ReelsWidgetState extends State<ReelsWidget> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text(
+                                                AutoSizeText(
                                                   videoListItem.topic,
                                                   maxLines: 2,
+                                                  minFontSize: FFAppConstants
+                                                      .body
+                                                      .toDouble(),
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyMedium
                                                       .override(
-                                                        font: GoogleFonts.inter(
+                                                        font:
+                                                            GoogleFonts.manrope(
                                                           fontWeight:
                                                               FlutterFlowTheme.of(
                                                                       context)
@@ -401,9 +425,10 @@ class _ReelsWidgetState extends State<ReelsWidget> {
                                                                   .bodyMedium
                                                                   .fontStyle,
                                                         ),
-                                                        color: FlutterFlowTheme
-                                                                .of(context)
-                                                            .primaryBackground,
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .white,
                                                         letterSpacing: 0.0,
                                                         fontWeight:
                                                             FlutterFlowTheme.of(
@@ -430,34 +455,35 @@ class _ReelsWidgetState extends State<ReelsWidget> {
                                                   children: [
                                                     Text(
                                                       '#Islam #Shorts #MKKanalen',
-                                                      style: FlutterFlowTheme
-                                                              .of(context)
-                                                          .labelSmall
-                                                          .override(
-                                                            font: GoogleFonts
-                                                                .inter(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w300,
-                                                              fontStyle:
-                                                                  FlutterFlowTheme.of(
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelSmall
+                                                              .override(
+                                                                font: GoogleFonts
+                                                                    .manrope(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w300,
+                                                                  fontStyle: FlutterFlowTheme.of(
                                                                           context)
                                                                       .labelSmall
                                                                       .fontStyle,
-                                                            ),
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .alternate,
-                                                            letterSpacing: 0.0,
-                                                            fontWeight:
-                                                                FontWeight.w300,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
+                                                                ),
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .secondaryText,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300,
+                                                                fontStyle: FlutterFlowTheme.of(
                                                                         context)
                                                                     .labelSmall
                                                                     .fontStyle,
-                                                            lineHeight: 1.3,
-                                                          ),
+                                                                lineHeight: 1.3,
+                                                              ),
                                                     ),
                                                     Text(
                                                       '•',
@@ -468,9 +494,8 @@ class _ReelsWidgetState extends State<ReelsWidget> {
                                                                   context)
                                                               .bodyMedium
                                                               .override(
-                                                                font:
-                                                                    GoogleFonts
-                                                                        .inter(
+                                                                font: GoogleFonts
+                                                                    .manrope(
                                                                   fontWeight: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyMedium
@@ -498,34 +523,35 @@ class _ReelsWidgetState extends State<ReelsWidget> {
                                                     ),
                                                     Text(
                                                       videoListItem.views,
-                                                      style: FlutterFlowTheme
-                                                              .of(context)
-                                                          .labelSmall
-                                                          .override(
-                                                            font: GoogleFonts
-                                                                .inter(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w300,
-                                                              fontStyle:
-                                                                  FlutterFlowTheme.of(
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelSmall
+                                                              .override(
+                                                                font: GoogleFonts
+                                                                    .manrope(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w300,
+                                                                  fontStyle: FlutterFlowTheme.of(
                                                                           context)
                                                                       .labelSmall
                                                                       .fontStyle,
-                                                            ),
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .primaryBackground,
-                                                            letterSpacing: 0.0,
-                                                            fontWeight:
-                                                                FontWeight.w300,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
+                                                                ),
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .secondaryText,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300,
+                                                                fontStyle: FlutterFlowTheme.of(
                                                                         context)
                                                                     .labelSmall
                                                                     .fontStyle,
-                                                            lineHeight: 1.3,
-                                                          ),
+                                                                lineHeight: 1.3,
+                                                              ),
                                                     ),
                                                   ].divide(
                                                       SizedBox(width: 8.0)),

@@ -78,7 +78,7 @@ class _MkHomePageHeaderWidgetState extends State<MkHomePageHeaderWidget> {
           children: [
             Icon(
               Icons.share_outlined,
-              color: FlutterFlowTheme.of(context).black,
+              color: FlutterFlowTheme.of(context).primaryText,
               size: 24.0,
             ),
             InkWell(
@@ -105,7 +105,7 @@ class _MkHomePageHeaderWidgetState extends State<MkHomePageHeaderWidget> {
               },
               child: Icon(
                 Icons.notifications_none_sharp,
-                color: FlutterFlowTheme.of(context).black,
+                color: FlutterFlowTheme.of(context).primaryText,
                 size: 24.0,
               ),
             ),
@@ -118,8 +118,8 @@ class _MkHomePageHeaderWidgetState extends State<MkHomePageHeaderWidget> {
                 context.pushNamed(SettingWidget.routeName);
               },
               child: Icon(
-                FFIcons.kmenu,
-                color: FlutterFlowTheme.of(context).black,
+                Icons.more_vert,
+                color: FlutterFlowTheme.of(context).primaryText,
                 size: 24.0,
               ),
             ),

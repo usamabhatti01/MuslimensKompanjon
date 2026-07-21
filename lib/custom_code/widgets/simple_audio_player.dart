@@ -19,6 +19,7 @@ class SimpleAudioPlayer extends StatefulWidget {
     this.width,
     this.height,
     required this.audioUrl,
+    this.autoPlay = false,
   });
 
   final double? width;
@@ -27,12 +28,16 @@ class SimpleAudioPlayer extends StatefulWidget {
 
   final String audioUrl;
 
+  final bool autoPlay;
+
   @override
   State<SimpleAudioPlayer> createState() => _SimpleAudioPlayerState();
 }
 
 class _SimpleAudioPlayerState extends State<SimpleAudioPlayer> {
-  late final ap.AudioPlayer _player;
+  static final ap.AudioPlayer _sharedPlayer = ap.AudioPlayer();
+  static _SimpleAudioPlayerState? _activePlayerState;
+
   bool _isInitialized = false;
 
   Duration _duration = Duration.zero;
@@ -52,62 +57,39 @@ class _SimpleAudioPlayerState extends State<SimpleAudioPlayer> {
   @override
   void initState() {
     super.initState();
+    _isInitialized = true;
 
-    _player = ap.AudioPlayer();
-
-    _init();
-
-    _syncWithAppState();
-  }
-
-  Future<void> _init() async {
-    try {
-      final String url = widget.audioUrl;
-      ap.Source source;
-      if (url.startsWith('http://') || url.startsWith('https://')) {
-        source = ap.UrlSource(url);
-      } else {
-        String assetPath = url;
-        if (assetPath.startsWith('assets/')) {
-          assetPath = assetPath.substring('assets/'.length);
-        }
-        if (!assetPath.startsWith('audios/')) {
-          assetPath = 'audios/$assetPath';
-        }
-        if (!assetPath.endsWith('.mp3')) {
-          assetPath = '$assetPath.mp3';
-        }
-        source = ap.AssetSource(assetPath);
-      }
-
-      await _player.setSource(source);
-      _isInitialized = true;
-
-      _durSub = _player.onDurationChanged.listen((duration) {
-        if (!mounted) return;
-
+    _durSub = _sharedPlayer.onDurationChanged.listen((duration) {
+      if (!mounted) return;
+      if (_activePlayerState == this) {
         setState(() {
           _duration = duration;
         });
-      });
+      }
+    });
 
-      _posSub = _player.onPositionChanged.listen((position) {
-        if (!mounted) return;
-
+    _posSub = _sharedPlayer.onPositionChanged.listen((position) {
+      if (!mounted) return;
+      if (_activePlayerState == this) {
         setState(() {
           _position = position;
         });
+      }
+    });
+
+    _stateSub = _sharedPlayer.onPlayerStateChanged.listen((state) {
+      if (!mounted) return;
+      setState(() {});
+    });
+
+    _syncWithAppState();
+
+    if (widget.autoPlay) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _togglePlay();
+        }
       });
-
-      _stateSub = _player.onPlayerStateChanged.listen((state) {
-        if (!mounted) return;
-
-        setState(() {});
-      });
-
-      _applyAppMuteState();
-    } catch (e) {
-      debugPrint('Audio init error: $e');
     }
   }
 
@@ -132,12 +114,10 @@ class _SimpleAudioPlayerState extends State<SimpleAudioPlayer> {
   Future<void> _setMute(bool mute) async {
     _isMuted = mute;
 
-    if (_isInitialized) {
-      try {
-        await _player.setVolume(mute ? 0.0 : 1.0);
-      } catch (e) {
-        debugPrint('Error setting volume: $e');
-      }
+    try {
+      await _sharedPlayer.setVolume(mute ? 0.0 : 1.0);
+    } catch (e) {
+      debugPrint('Error setting volume: $e');
     }
 
     if (mounted) {
@@ -150,20 +130,59 @@ class _SimpleAudioPlayerState extends State<SimpleAudioPlayer> {
   }
 
   Future<void> _togglePlay() async {
-    if (!_isInitialized) return;
-    try {
-      if (_player.state == ap.PlayerState.playing) {
-        await _player.pause();
-      } else {
-        await _player.resume();
+    if (widget.audioUrl.trim().isEmpty) return;
+
+    if (_activePlayerState == this) {
+      try {
+        if (_sharedPlayer.state == ap.PlayerState.playing) {
+          await _sharedPlayer.pause();
+        } else {
+          await _sharedPlayer.resume();
+        }
+      } catch (e) {
+        debugPrint('Error toggle play: $e');
       }
-    } catch (e) {
-      debugPrint('Error toggle play: $e');
+    } else {
+      try {
+        await _sharedPlayer.stop();
+      } catch (_) {}
+
+      final oldActive = _activePlayerState;
+      _activePlayerState = this;
+      oldActive?.setState(() {});
+
+      ap.Source source;
+      final String url = widget.audioUrl;
+      if (url.startsWith('http://') || url.startsWith('https://')) {
+        source = ap.UrlSource(url);
+      } else {
+        String assetPath = url;
+        if (assetPath.startsWith('assets/')) {
+          assetPath = assetPath.substring('assets/'.length);
+        }
+        if (!assetPath.startsWith('audios/')) {
+          assetPath = 'audios/$assetPath';
+        }
+        if (!assetPath.endsWith('.mp3')) {
+          assetPath = '$assetPath.mp3';
+        }
+        source = ap.AssetSource(assetPath);
+      }
+
+      _position = Duration.zero;
+      _duration = Duration.zero;
+
+      try {
+        await _sharedPlayer.play(source);
+      } catch (e) {
+        debugPrint('Error playing audio: $e');
+      }
     }
+    setState(() {});
   }
 
   void _seekRelative(int seconds) {
-    if (!_isInitialized) return;
+    if (_activePlayerState != this) return;
     Duration newPos = _position + Duration(seconds: seconds);
 
     if (newPos < Duration.zero) {
@@ -174,12 +193,12 @@ class _SimpleAudioPlayerState extends State<SimpleAudioPlayer> {
       newPos = _duration;
     }
 
-    _player.seek(newPos);
+    _sharedPlayer.seek(newPos);
   }
 
   void _seekTo(double value) {
-    if (!_isInitialized) return;
-    _player.seek(Duration(seconds: value.toInt()));
+    if (_activePlayerState != this) return;
+    _sharedPlayer.seek(Duration(seconds: value.toInt()));
   }
 
   @override
@@ -194,18 +213,38 @@ class _SimpleAudioPlayerState extends State<SimpleAudioPlayer> {
       FFAppState().removeListener(_appStateListener!);
     }
 
-    _player.dispose();
+    if (_activePlayerState == this) {
+      _sharedPlayer.stop();
+      _activePlayerState = null;
+    }
 
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final maxSeconds =
-        _duration.inSeconds > 0 ? _duration.inSeconds.toDouble() : 1.0;
+    final bool isActive = _activePlayerState == this;
 
-    final currentSeconds =
-        _position.inSeconds.toDouble().clamp(0.0, maxSeconds);
+    final bool isRouteCurrent = ModalRoute.of(context)?.isCurrent ?? true;
+    if (!isRouteCurrent && isActive) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_activePlayerState == this) {
+          _sharedPlayer.stop();
+          _activePlayerState = null;
+        }
+      });
+    }
+
+    final ap.PlayerState currentState =
+        isActive ? _sharedPlayer.state : ap.PlayerState.stopped;
+
+    final maxSeconds = (isActive && _duration.inSeconds > 0)
+        ? _duration.inSeconds.toDouble()
+        : 1.0;
+
+    final currentSeconds = (isActive)
+        ? _position.inSeconds.toDouble().clamp(0.0, maxSeconds)
+        : 0.0;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -214,19 +253,19 @@ class _SimpleAudioPlayerState extends State<SimpleAudioPlayer> {
           min: 0,
           max: maxSeconds,
           value: currentSeconds,
-          onChanged: _seekTo,
+          onChanged: isActive ? _seekTo : null,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             IconButton(
               icon: const Icon(Icons.replay_10),
-              onPressed: () => _seekRelative(-10),
+              onPressed: isActive ? () => _seekRelative(-10) : null,
             ),
             IconButton(
               iconSize: 40,
               icon: Icon(
-                (_isInitialized && _player.state == ap.PlayerState.playing)
+                (isActive && currentState == ap.PlayerState.playing)
                     ? Icons.pause
                     : Icons.play_arrow,
               ),
@@ -234,7 +273,7 @@ class _SimpleAudioPlayerState extends State<SimpleAudioPlayer> {
             ),
             IconButton(
               icon: const Icon(Icons.forward_10),
-              onPressed: () => _seekRelative(10),
+              onPressed: isActive ? () => _seekRelative(10) : null,
             ),
           ],
         ),

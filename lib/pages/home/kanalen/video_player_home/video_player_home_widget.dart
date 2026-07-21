@@ -6,6 +6,7 @@ import '/pages/home/kanalen/m_kkanalen_video_card/m_kkanalen_video_card_widget.d
 import '/pages/home/kanalen/video_action/video_action_widget.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -75,100 +76,120 @@ class _VideoPlayerHomeWidgetState extends State<VideoPlayerHomeWidget> {
         child: Scaffold(
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-          body: Padding(
-            padding: EdgeInsets.all(
-                FlutterFlowTheme.of(context).designToken.spacing.md),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    InkWell(
-                      splashColor: Colors.transparent,
-                      focusColor: Colors.transparent,
-                      hoverColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onTap: () async {
-                        context.pushNamed(VideorWidget.routeName);
-                      },
-                      child: Icon(
-                        Icons.chevron_left,
-                        color: FlutterFlowTheme.of(context).primaryText,
-                        size: 24.0,
-                      ),
-                    ),
-                    Expanded(
-                      child: wrapWithModel(
-                        model: _model.mkHomePageHeaderModel,
-                        updateCallback: () => safeSetState(() {}),
-                        child: MkHomePageHeaderWidget(
-                          pageName: 'Video',
+          body: SafeArea(
+            top: true,
+            child: Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(
+                  FlutterFlowTheme.of(context).designToken.spacing.md,
+                  0.0,
+                  FlutterFlowTheme.of(context).designToken.spacing.md,
+                  0.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      InkWell(
+                        splashColor: Colors.transparent,
+                        focusColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onTap: () async {
+                          context.pushNamed(VideorWidget.routeName);
+                        },
+                        child: Icon(
+                          Icons.chevron_left,
+                          color: FlutterFlowTheme.of(context).primaryText,
+                          size: FFAppConstants.iconSize.toDouble(),
                         ),
                       ),
-                    ),
-                  ].divide(SizedBox(
-                      width: FlutterFlowTheme.of(context)
-                          .designToken
-                          .spacing
-                          .xxl)),
-                ),
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(),
-                    child: SingleChildScrollView(
-                      primary: false,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          FlutterFlowYoutubePlayer(
-                            url: widget.videoLink!,
-                            autoPlay: false,
-                            looping: true,
-                            mute: false,
-                            showControls: true,
-                            showFullScreen: true,
-                            strictRelatedVideos: true,
+                      Expanded(
+                        child: wrapWithModel(
+                          model: _model.mkHomePageHeaderModel,
+                          updateCallback: () => safeSetState(() {}),
+                          child: MkHomePageHeaderWidget(
+                            pageName: 'Video',
                           ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
-                              borderRadius: BorderRadius.circular(16.0),
-                              shape: BoxShape.rectangle,
-                              border: Border.all(
-                                color: FlutterFlowTheme.of(context).alternate,
-                                width: 1.0,
-                              ),
+                        ),
+                      ),
+                    ].divide(SizedBox(
+                        width: FlutterFlowTheme.of(context)
+                            .designToken
+                            .spacing
+                            .sm)),
+                  ),
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(),
+                      child: SingleChildScrollView(
+                        primary: false,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            FlutterFlowYoutubePlayer(
+                              url: widget.videoLink!,
+                              autoPlay: false,
+                              looping: true,
+                              mute: false,
+                              showControls: true,
+                              showFullScreen: true,
+                              strictRelatedVideos: true,
                             ),
-                            child: Padding(
-                              padding: EdgeInsets.all(24.0),
-                              child: Container(
-                                decoration: BoxDecoration(),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          valueOrDefault<String>(
-                                            widget.title,
-                                            'Hur man förbättrar sin Salah steg för steg',
-                                          ),
-                                          style: FlutterFlowTheme.of(context)
-                                              .titleMedium
-                                              .override(
-                                                font:
-                                                    GoogleFonts.plusJakartaSans(
+                            Container(
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                                borderRadius: BorderRadius.circular(16.0),
+                                shape: BoxShape.rectangle,
+                                border: Border.all(
+                                  color: FlutterFlowTheme.of(context).alternate,
+                                  width: 1.0,
+                                ),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.all(24.0),
+                                child: Container(
+                                  decoration: BoxDecoration(),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          AutoSizeText(
+                                            valueOrDefault<String>(
+                                              widget.title,
+                                              'Hur man förbättrar sin Salah steg för steg',
+                                            ),
+                                            minFontSize: FFAppConstants.heading
+                                                .toDouble(),
+                                            style: FlutterFlowTheme.of(context)
+                                                .titleMedium
+                                                .override(
+                                                  font: GoogleFonts
+                                                      .plusJakartaSans(
+                                                    fontWeight:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .titleMedium
+                                                            .fontWeight,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .titleMedium
+                                                            .fontStyle,
+                                                  ),
+                                                  letterSpacing: 0.0,
                                                   fontWeight:
                                                       FlutterFlowTheme.of(
                                                               context)
@@ -179,240 +200,227 @@ class _VideoPlayerHomeWidgetState extends State<VideoPlayerHomeWidget> {
                                                               context)
                                                           .titleMedium
                                                           .fontStyle,
+                                                  lineHeight: 1.3,
                                                 ),
-                                                letterSpacing: 0.0,
-                                                fontWeight:
-                                                    FlutterFlowTheme.of(context)
-                                                        .titleMedium
-                                                        .fontWeight,
+                                          ),
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              AutoSizeText(
+                                                widget.views!,
+                                                minFontSize: FFAppConstants.body
+                                                    .toDouble(),
+                                                style: FlutterFlowTheme.of(
+                                                        context)
+                                                    .labelSmall
+                                                    .override(
+                                                      font: GoogleFonts.manrope(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .labelSmall
+                                                                .fontStyle,
+                                                      ),
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .secondaryText,
+                                                      letterSpacing: 0.0,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      fontStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelSmall
+                                                              .fontStyle,
+                                                      lineHeight: 1.2,
+                                                    ),
+                                              ),
+                                              Container(
+                                                width: 2.0,
+                                                height: 2.0,
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondaryText,
+                                                ),
+                                              ),
+                                              AutoSizeText(
+                                                valueOrDefault<String>(
+                                                  functions.daysAgo(
+                                                      widget.postedDuration!),
+                                                  '1 vecka sedan',
+                                                ),
+                                                minFontSize: FFAppConstants.body
+                                                    .toDouble(),
+                                                style: FlutterFlowTheme.of(
+                                                        context)
+                                                    .labelSmall
+                                                    .override(
+                                                      font: GoogleFonts.manrope(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .labelSmall
+                                                                .fontStyle,
+                                                      ),
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .secondaryText,
+                                                      letterSpacing: 0.0,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      fontStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelSmall
+                                                              .fontStyle,
+                                                      lineHeight: 1.2,
+                                                    ),
+                                              ),
+                                            ].divide(SizedBox(width: 5.0)),
+                                          ),
+                                        ].divide(SizedBox(height: 4.0)),
+                                      ),
+                                      AutoSizeText(
+                                        valueOrDefault<String>(
+                                          widget.videoDetail,
+                                          'I denna föreläsning går vi igenom praktiska steg för att förbättra koncentrationen i bönen, förstå betydelsen av Salah och stärka relationen till Allah i vardagen.',
+                                        ),
+                                        maxLines: 3,
+                                        minFontSize:
+                                            FFAppConstants.body.toDouble(),
+                                        style: FlutterFlowTheme.of(context)
+                                            .labelMedium
+                                            .override(
+                                              font: GoogleFonts.manrope(
+                                                fontWeight: FontWeight.normal,
                                                 fontStyle:
                                                     FlutterFlowTheme.of(context)
-                                                        .titleMedium
+                                                        .labelMedium
                                                         .fontStyle,
-                                                lineHeight: 1.3,
                                               ),
-                                        ),
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Text(
-                                              widget.views!,
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .labelSmall
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .labelSmall
-                                                                  .fontStyle,
-                                                        ),
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .secondaryText,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .labelSmall
-                                                                .fontStyle,
-                                                        lineHeight: 1.2,
-                                                      ),
-                                            ),
-                                            Container(
-                                              width: 2.0,
-                                              height: 2.0,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryText,
-                                              ),
-                                            ),
-                                            Text(
-                                              valueOrDefault<String>(
-                                                functions.daysAgo(
-                                                    widget.postedDuration!),
-                                                '1 vecka sedan',
-                                              ),
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .labelSmall
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .labelSmall
-                                                                  .fontStyle,
-                                                        ),
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .secondaryText,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .labelSmall
-                                                                .fontStyle,
-                                                        lineHeight: 1.2,
-                                                      ),
-                                            ),
-                                          ].divide(SizedBox(width: 5.0)),
-                                        ),
-                                      ].divide(SizedBox(height: 4.0)),
-                                    ),
-                                    Text(
-                                      valueOrDefault<String>(
-                                        widget.videoDetail,
-                                        'I denna föreläsning går vi igenom praktiska steg för att förbättra koncentrationen i bönen, förstå betydelsen av Salah och stärka relationen till Allah i vardagen.',
-                                      ),
-                                      maxLines: 3,
-                                      style: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .override(
-                                            font: GoogleFonts.inter(
+                                              letterSpacing: 0.0,
                                               fontWeight: FontWeight.normal,
                                               fontStyle:
                                                   FlutterFlowTheme.of(context)
                                                       .labelMedium
                                                       .fontStyle,
+                                              lineHeight: 1.5,
                                             ),
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.normal,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .labelMedium
-                                                    .fontStyle,
-                                            lineHeight: 1.5,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          wrapWithModel(
+                                            model: _model.videoActionModel1,
+                                            updateCallback: () =>
+                                                safeSetState(() {}),
+                                            child: VideoActionWidget(
+                                              icon: Icon(
+                                                Icons.thumb_up_off_alt_rounded,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                                size: 18.0,
+                                              ),
+                                              likes: widget.likes,
+                                            ),
                                           ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        wrapWithModel(
-                                          model: _model.videoActionModel1,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
-                                          child: VideoActionWidget(
-                                            icon: Icon(
-                                              Icons.thumb_up_off_alt_rounded,
+                                          Builder(
+                                            builder: (context) => InkWell(
+                                              splashColor: Colors.transparent,
+                                              focusColor: Colors.transparent,
+                                              hoverColor: Colors.transparent,
+                                              highlightColor:
+                                                  Colors.transparent,
+                                              onTap: () async {
+                                                await Share.share(
+                                                  functions.videoToString(
+                                                      widget.videoLink!),
+                                                  sharePositionOrigin:
+                                                      getWidgetBoundingBox(
+                                                          context),
+                                                );
+                                              },
+                                              child: wrapWithModel(
+                                                model: _model.videoActionModel2,
+                                                updateCallback: () =>
+                                                    safeSetState(() {}),
+                                                child: VideoActionWidget(
+                                                  icon: Icon(
+                                                    Icons.reply_rounded,
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
+                                                    size: 18.0,
+                                                  ),
+                                                  likes: 'Dela',
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 90.0,
+                                            height: 35.0,
+                                            decoration: BoxDecoration(
                                               color:
                                                   FlutterFlowTheme.of(context)
-                                                      .primaryText,
-                                              size: 18.0,
+                                                      .switchColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(16.0),
+                                              shape: BoxShape.rectangle,
                                             ),
-                                            likes: widget.likes,
-                                          ),
-                                        ),
-                                        Builder(
-                                          builder: (context) => InkWell(
-                                            splashColor: Colors.transparent,
-                                            focusColor: Colors.transparent,
-                                            hoverColor: Colors.transparent,
-                                            highlightColor: Colors.transparent,
-                                            onTap: () async {
-                                              await Share.share(
-                                                functions.videoToString(
-                                                    widget.videoLink!),
-                                                sharePositionOrigin:
-                                                    getWidgetBoundingBox(
-                                                        context),
-                                              );
-                                            },
-                                            child: wrapWithModel(
-                                              model: _model.videoActionModel2,
-                                              updateCallback: () =>
-                                                  safeSetState(() {}),
-                                              child: VideoActionWidget(
-                                                icon: Icon(
-                                                  Icons.reply_rounded,
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryText,
-                                                  size: 18.0,
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Builder(
+                                                  builder: (context) {
+                                                    if (widget.isFav ??
+                                                        false) {
+                                                      return Icon(
+                                                        Icons.bookmark_sharp,
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                        size: 18.0,
+                                                      );
+                                                    } else {
+                                                      return Icon(
+                                                        Icons
+                                                            .bookmark_border_sharp,
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                        size: 18.0,
+                                                      );
+                                                    }
+                                                  },
                                                 ),
-                                                likes: 'Dela',
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          width: 90.0,
-                                          height: 35.0,
-                                          decoration: BoxDecoration(
-                                            color: FlutterFlowTheme.of(context)
-                                                .surfaceVariant,
-                                            borderRadius:
-                                                BorderRadius.circular(16.0),
-                                            shape: BoxShape.rectangle,
-                                          ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Builder(
-                                                builder: (context) {
-                                                  if (widget.isFav ?? false) {
-                                                    return Icon(
-                                                      Icons.bookmark_sharp,
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primaryText,
-                                                      size: 18.0,
-                                                    );
-                                                  } else {
-                                                    return Icon(
-                                                      Icons
-                                                          .bookmark_border_sharp,
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primaryText,
-                                                      size: 18.0,
-                                                    );
-                                                  }
-                                                },
-                                              ),
-                                              Text(
-                                                'Spara',
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodySmall
-                                                        .override(
-                                                          font:
-                                                              GoogleFonts.inter(
-                                                            fontWeight:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodySmall
-                                                                    .fontWeight,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodySmall
-                                                                    .fontStyle,
-                                                          ),
-                                                          letterSpacing: 0.0,
+                                                Text(
+                                                  'Spara',
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodySmall
+                                                      .override(
+                                                        font:
+                                                            GoogleFonts.manrope(
                                                           fontWeight:
                                                               FlutterFlowTheme.of(
                                                                       context)
@@ -423,127 +431,157 @@ class _VideoPlayerHomeWidgetState extends State<VideoPlayerHomeWidget> {
                                                                       context)
                                                                   .bodySmall
                                                                   .fontStyle,
-                                                          lineHeight: 1.3,
                                                         ),
-                                              ),
-                                            ].divide(SizedBox(width: 8.0)),
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                        letterSpacing: 0.0,
+                                                        fontWeight:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodySmall
+                                                                .fontWeight,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodySmall
+                                                                .fontStyle,
+                                                        lineHeight: 1.3,
+                                                      ),
+                                                ),
+                                              ].divide(SizedBox(width: 8.0)),
+                                            ),
                                           ),
-                                        ),
-                                      ].divide(SizedBox(width: 10.0)),
-                                    ),
-                                  ].divide(SizedBox(height: 16.0)),
+                                        ].divide(SizedBox(width: 10.0)),
+                                      ),
+                                    ].divide(SizedBox(height: 16.0)),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Text(
-                                'Relaterade videor',
-                                style: FlutterFlowTheme.of(context)
-                                    .titleSmall
-                                    .override(
-                                      font: GoogleFonts.plusJakartaSans(
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                AutoSizeText(
+                                  'Relaterade videor',
+                                  minFontSize: FFAppConstants.body.toDouble(),
+                                  style: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        font: GoogleFonts.plusJakartaSans(
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .titleSmall
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .titleSmall
+                                                  .fontStyle,
+                                        ),
+                                        letterSpacing: 0.0,
                                         fontWeight: FlutterFlowTheme.of(context)
                                             .titleSmall
                                             .fontWeight,
                                         fontStyle: FlutterFlowTheme.of(context)
                                             .titleSmall
                                             .fontStyle,
+                                        lineHeight: 1.4,
                                       ),
-                                      letterSpacing: 0.0,
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .fontStyle,
-                                      lineHeight: 1.4,
-                                    ),
-                              ),
-                            ],
-                          ),
-                          Builder(
-                            builder: (context) {
-                              final videos = FFAppState()
-                                  .youtubeData
-                                  .where((e) => widget.videoLink != e.video)
-                                  .toList();
+                                ),
+                              ],
+                            ),
+                            Builder(
+                              builder: (context) {
+                                final videos = FFAppState()
+                                    .youtubeData
+                                    .where((e) => widget.videoLink != e.video)
+                                    .toList()
+                                    .sortedList(
+                                        keyOf: (e) => e.postDate!, desc: true)
+                                    .toList();
 
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children:
-                                    List.generate(videos.length, (videosIndex) {
-                                  final videosItem = videos[videosIndex];
-                                  return InkWell(
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () async {
-                                      context.pushNamed(
-                                        VideoPlayerHomeWidget.routeName,
-                                        queryParameters: {
-                                          'videoLink': serializeParam(
-                                            videosItem.video,
-                                            ParamType.String,
+                                return Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: List.generate(videos.length,
+                                      (videosIndex) {
+                                    final videosItem = videos[videosIndex];
+                                    return InkWell(
+                                      splashColor: Colors.transparent,
+                                      focusColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onTap: () async {
+                                        context.pushNamed(
+                                          VideoPlayerHomeWidget.routeName,
+                                          queryParameters: {
+                                            'videoLink': serializeParam(
+                                              videosItem.video,
+                                              ParamType.String,
+                                            ),
+                                            'title': serializeParam(
+                                              videosItem.title,
+                                              ParamType.String,
+                                            ),
+                                            'views': serializeParam(
+                                              videosItem.views,
+                                              ParamType.String,
+                                            ),
+                                            'postedDuration': serializeParam(
+                                              videosItem.postDate,
+                                              ParamType.DateTime,
+                                            ),
+                                            'videoDetail': serializeParam(
+                                              videosItem.topic,
+                                              ParamType.String,
+                                            ),
+                                            'likes': serializeParam(
+                                              widget.likes,
+                                              ParamType.String,
+                                            ),
+                                            'isFav': serializeParam(
+                                              videosItem.isFav,
+                                              ParamType.bool,
+                                            ),
+                                            'index': serializeParam(
+                                              widget.index,
+                                              ParamType.int,
+                                            ),
+                                          }.withoutNulls,
+                                        );
+                                      },
+                                      child: wrapWithModel(
+                                        model: _model.videoRowModels.getModel(
+                                          videosIndex.toString(),
+                                          videosIndex,
+                                        ),
+                                        updateCallback: () =>
+                                            safeSetState(() {}),
+                                        child: MKkanalenVideoCardWidget(
+                                          key: Key(
+                                            'Keyazy_${videosIndex.toString()}',
                                           ),
-                                          'title': serializeParam(
-                                            videosItem.title,
-                                            ParamType.String,
-                                          ),
-                                          'views': serializeParam(
-                                            videosItem.views,
-                                            ParamType.String,
-                                          ),
-                                          'postedDuration': serializeParam(
-                                            videosItem.postDate,
-                                            ParamType.DateTime,
-                                          ),
-                                          'videoDetail': serializeParam(
-                                            videosItem.topic,
-                                            ParamType.String,
-                                          ),
-                                          'likes': serializeParam(
-                                            widget.likes,
-                                            ParamType.String,
-                                          ),
-                                          'isFav': serializeParam(
-                                            videosItem.isFav,
-                                            ParamType.bool,
-                                          ),
-                                          'index': serializeParam(
-                                            widget.index,
-                                            ParamType.int,
-                                          ),
-                                        }.withoutNulls,
-                                      );
-                                    },
-                                    child: MKkanalenVideoCardWidget(
-                                      key: Key(
-                                          'Keyazy_${videosIndex}_of_${videos.length}'),
-                                      views: videosItem.views,
-                                      title: videosItem.title,
-                                      postedDuration: videosItem.postDate!,
-                                      image: videosItem.thumbnail,
-                                      videoDuration: videosItem.duration,
-                                    ),
-                                  );
-                                }).divide(SizedBox(height: 16.0)),
-                              );
-                            },
-                          ),
-                        ].divide(SizedBox(height: 20.0)),
+                                          views: videosItem.views,
+                                          title: videosItem.title,
+                                          postedDuration: videosItem.postDate!,
+                                          image: videosItem.thumbnail,
+                                          videoDuration: videosItem.duration,
+                                        ),
+                                      ),
+                                    );
+                                  }).divide(SizedBox(height: 16.0)),
+                                );
+                              },
+                            ),
+                          ].divide(SizedBox(height: 20.0)),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ].divide(SizedBox(height: 20.0)).addToStart(SizedBox(
-                  height:
-                      FlutterFlowTheme.of(context).designToken.spacing.xxl)),
+                ].divide(SizedBox(height: 20.0)),
+              ),
             ),
           ),
         ),

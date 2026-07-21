@@ -1,5 +1,6 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'short_card2_model.dart';
@@ -88,12 +89,13 @@ class _ShortCard2WidgetState extends State<ShortCard2Widget> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            AutoSizeText(
                               valueOrDefault<String>(
                                 widget.title,
                                 'Påminnelse om sabr och tawakkul',
                               ),
                               maxLines: 2,
+                              minFontSize: FFAppConstants.heading.toDouble(),
                               style: FlutterFlowTheme.of(context)
                                   .titleSmall
                                   .override(
@@ -118,15 +120,16 @@ class _ShortCard2WidgetState extends State<ShortCard2Widget> {
                                   ),
                               overflow: TextOverflow.ellipsis,
                             ),
-                            Text(
+                            AutoSizeText(
                               valueOrDefault<String>(
                                 widget.views,
                                 '12K visningar',
                               ),
+                              minFontSize: FFAppConstants.body.toDouble(),
                               style: FlutterFlowTheme.of(context)
                                   .bodySmall
                                   .override(
-                                    font: GoogleFonts.inter(
+                                    font: GoogleFonts.manrope(
                                       fontWeight: FlutterFlowTheme.of(context)
                                           .bodySmall
                                           .fontWeight,
@@ -169,7 +172,7 @@ class _ShortCard2WidgetState extends State<ShortCard2Widget> {
                       child: Text(
                         'Short',
                         style: FlutterFlowTheme.of(context).bodySmall.override(
-                              font: GoogleFonts.inter(
+                              font: GoogleFonts.manrope(
                                 fontWeight: FlutterFlowTheme.of(context)
                                     .bodySmall
                                     .fontWeight,
