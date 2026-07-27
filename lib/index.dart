@@ -22,15 +22,14 @@ export '/pages/setting_page/setting/setting_widget.dart' show SettingWidget;
 export '/pages/home/full_calender/full_calender_widget.dart'
     show FullCalenderWidget;
 export '/pages/kuran/kuran_home/kuran_home_widget.dart' show KuranHomeWidget;
-export '/pages/home/kanalen/m_kkanalen/m_kkanalen_widget.dart'
-    show MKkanalenWidget;
-export '/pages/home/kanalen/live_video/live_video_widget.dart'
-    show LiveVideoWidget;
-export '/pages/home/kanalen/videor/videor_widget.dart' show VideorWidget;
-export '/pages/home/kanalen/shorts/shorts_widget.dart' show ShortsWidget;
-export '/pages/home/kanalen/video_player_home/video_player_home_widget.dart'
-    show VideoPlayerHomeWidget;
-export '/pages/home/kanalen/reels/reels_widget.dart' show ReelsWidget;
+export '/pages/kanalen/m_kkanalen/m_kkanalen_widget.dart' show MKkanalenWidget;
+export '/pages/kanalen/live_video/live_video_widget.dart' show LiveVideoWidget;
+export '/pages/kanalen/video_search/video_search_widget.dart'
+    show VideoSearchWidget;
+export '/pages/kanalen/reels_home/reels_home_widget.dart' show ReelsHomeWidget;
+export '/pages/kanalen/video_home/video_home_widget.dart' show VideoHomeWidget;
+export '/pages/kanalen/reels_player/reels_player_widget.dart'
+    show ReelsPlayerWidget;
 export '/test/test_widget.dart' show TestWidget;
 export '/pages/categories/azhkar_quranic_verse/name_of_allaha/allah_names/allah_names_widget.dart'
     show AllahNamesWidget;

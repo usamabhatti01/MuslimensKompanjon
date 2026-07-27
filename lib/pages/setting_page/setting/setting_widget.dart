@@ -108,12 +108,26 @@ class _SettingWidgetState extends State<SettingWidget> {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                wrapWithModel(
-                  model: _model.pageSubHeaderWithIconModel,
-                  updateCallback: () => safeSetState(() {}),
-                  child: PageSubHeaderWithIconWidget(
-                    pageName: 'Inställningar',
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Icon(
+                      Icons.arrow_back,
+                      color: Color(0x001A1A1A),
+                      size: FFAppConstants.iconSize.toDouble(),
+                    ),
+                    Expanded(
+                      child: wrapWithModel(
+                        model: _model.pageSubHeaderWithIconModel,
+                        updateCallback: () => safeSetState(() {}),
+                        child: PageSubHeaderWithIconWidget(
+                          pageName: 'Inställningar',
+                        ),
+                      ),
+                    ),
+                  ].divide(SizedBox(
+                      width:
+                          FlutterFlowTheme.of(context).designToken.spacing.sm)),
                 ),
                 Expanded(
                   child: SingleChildScrollView(
@@ -747,7 +761,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                   model: _model.pageFooterModel,
                   updateCallback: () => safeSetState(() {}),
                   child: PageFooterWidget(
-                    activeTab: 5,
+                    selectedIndex: 4,
                   ),
                 ),
               ].divide(SizedBox(height: 20.0)),

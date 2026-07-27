@@ -267,7 +267,7 @@ class _AkallanAndDuaWidgetState extends State<AkallanAndDuaWidget> {
                   model: _model.pageFooterModel,
                   updateCallback: () => safeSetState(() {}),
                   child: PageFooterWidget(
-                    activeTab: 3,
+                    selectedIndex: 3,
                   ),
                 ),
               ].divide(SizedBox(height: 20.0)),

@@ -79,77 +79,138 @@ Future fetchYoutubeVideos() async {
   }
 
   try {
-    print("Fetching latest uploads playlist items...");
-    final playlistUrl = 'https://www.googleapis.com/youtube/v3/playlistItems'
-        '?part=snippet'
-        '&playlistId=$defaultUploadsPlaylistId'
-        '&maxResults=50'
-        '&key=$apiKey';
-
-    final playlistResponse = await http.get(Uri.parse(playlistUrl));
-    if (playlistResponse.statusCode != 200) {
-      print(
-          "Failed to load uploads playlist items. Code: ${playlistResponse.statusCode}");
-      return;
-    }
-
-    final playlistData = json.decode(playlistResponse.body);
-    final fetchedItems = playlistData['items'] as List<dynamic>?;
-    if (fetchedItems == null || fetchedItems.isEmpty) {
-      print("No items found in uploads playlist.");
-      return;
-    }
-
     final List<String> videoIds = [];
     final Map<String, Map<String, String>> videoInfoMap = {};
+    String? nextPageToken;
 
-    for (final item in fetchedItems) {
-      final snippet = item['snippet'];
-      final videoId = snippet['resourceId']?['videoId'] as String?;
-      final title = snippet['title'] as String? ?? '';
-      final description = snippet['description'] as String? ?? '';
-      final thumbnails = snippet['thumbnails'];
-      final thumbnail = thumbnails?['maxres']?['url'] as String? ??
-          thumbnails?['high']?['url'] as String? ??
-          thumbnails?['medium']?['url'] as String? ??
-          thumbnails?['default']?['url'] as String? ??
-          '';
+    // 1. Construct Shorts Playlist ID (UC -> UUSH) and fetch all Shorts video IDs
+    final Set<String> shortVideoIds = {};
+    final shortsPlaylistId = channelId.startsWith('UC')
+        ? 'UUSH' + channelId.substring(2)
+        : channelId;
+    String? shortsPageToken;
 
-      if (videoId != null && videoId.isNotEmpty) {
-        videoIds.add(videoId);
-        videoInfoMap[videoId] = {
-          'title': title,
-          'description': description,
-          'thumbnail': thumbnail,
-          'publishedAt': snippet['publishedAt'] as String? ?? '',
-        };
+    print("Fetching Shorts playlist items...");
+    do {
+      String playlistUrl = 'https://www.googleapis.com/youtube/v3/playlistItems'
+          '?part=snippet'
+          '&playlistId=$shortsPlaylistId'
+          '&maxResults=50'
+          '&key=$apiKey';
+      if (shortsPageToken != null) {
+        playlistUrl += '&pageToken=$shortsPageToken';
       }
-    }
+
+      final playlistResponse = await http.get(Uri.parse(playlistUrl));
+      if (playlistResponse.statusCode != 200) {
+        print(
+            "Failed to load Shorts playlist. Code: ${playlistResponse.statusCode}");
+        break;
+      }
+
+      final playlistData = json.decode(playlistResponse.body);
+      final fetchedItems = playlistData['items'] as List<dynamic>?;
+      if (fetchedItems == null || fetchedItems.isEmpty) {
+        break;
+      }
+
+      for (final item in fetchedItems) {
+        final snippet = item['snippet'];
+        final videoId = snippet['resourceId']?['videoId'] as String?;
+        if (videoId != null && videoId.isNotEmpty) {
+          shortVideoIds.add(videoId);
+        }
+      }
+
+      shortsPageToken = playlistData['nextPageToken'] as String?;
+    } while (shortsPageToken != null);
+
+    print("Total Shorts identified: ${shortVideoIds.length}");
+
+    // 2. Fetch uploads playlist items
+    print("Fetching uploads playlist items...");
+    do {
+      String playlistUrl = 'https://www.googleapis.com/youtube/v3/playlistItems'
+          '?part=snippet'
+          '&playlistId=$defaultUploadsPlaylistId'
+          '&maxResults=50'
+          '&key=$apiKey';
+      if (nextPageToken != null) {
+        playlistUrl += '&pageToken=$nextPageToken';
+      }
+
+      final playlistResponse = await http.get(Uri.parse(playlistUrl));
+      if (playlistResponse.statusCode != 200) {
+        print(
+            "Failed to load uploads playlist items. Code: ${playlistResponse.statusCode}");
+        break;
+      }
+
+      final playlistData = json.decode(playlistResponse.body);
+      final fetchedItems = playlistData['items'] as List<dynamic>?;
+      if (fetchedItems == null || fetchedItems.isEmpty) {
+        break;
+      }
+
+      for (final item in fetchedItems) {
+        final snippet = item['snippet'];
+        final videoId = snippet['resourceId']?['videoId'] as String?;
+        final title = snippet['title'] as String? ?? '';
+        final description = snippet['description'] as String? ?? '';
+        final thumbnails = snippet['thumbnails'];
+        final thumbnail = thumbnails?['maxres']?['url'] as String? ??
+            thumbnails?['high']?['url'] as String? ??
+            thumbnails?['medium']?['url'] as String? ??
+            thumbnails?['default']?['url'] as String? ??
+            '';
+
+        if (videoId != null && videoId.isNotEmpty) {
+          videoIds.add(videoId);
+          videoInfoMap[videoId] = {
+            'title': title,
+            'description': description,
+            'thumbnail': thumbnail,
+            'publishedAt': snippet['publishedAt'] as String? ?? '',
+          };
+        }
+      }
+
+      nextPageToken = playlistData['nextPageToken'] as String?;
+    } while (nextPageToken != null);
+
+    print("Total uploads fetched: ${videoIds.length}");
 
     if (videoIds.isEmpty) return;
 
-    // 3. Fetch details for these videos (in a single request)
-    final idsParameter = videoIds.join(',');
-    final videosUrl = 'https://www.googleapis.com/youtube/v3/videos'
-        '?part=contentDetails,statistics'
-        '&id=$idsParameter'
-        '&key=$apiKey';
+    final List<dynamic> allVideoItems = [];
+    // 3. Fetch video details in chunks of 50
+    for (int i = 0; i < videoIds.length; i += 50) {
+      final chunk = videoIds.sublist(
+          i, i + 50 > videoIds.length ? videoIds.length : i + 50);
+      final idsParameter = chunk.join(',');
+      final videosUrl = 'https://www.googleapis.com/youtube/v3/videos'
+          '?part=contentDetails,statistics'
+          '&id=$idsParameter'
+          '&key=$apiKey';
 
-    final videosResponse = await http.get(Uri.parse(videosUrl));
-    if (videosResponse.statusCode != 200) {
-      print(
-          "Failed to fetch video details. Code: ${videosResponse.statusCode}");
-      return;
+      final videosResponse = await http.get(Uri.parse(videosUrl));
+      if (videosResponse.statusCode != 200) {
+        print(
+            "Failed to fetch video details chunk. Code: ${videosResponse.statusCode}");
+        continue;
+      }
+
+      final videosData = json.decode(videosResponse.body);
+      final videoItems = videosData['items'] as List<dynamic>?;
+      if (videoItems != null) {
+        allVideoItems.addAll(videoItems);
+      }
     }
-
-    final videosData = json.decode(videosResponse.body);
-    final videoItems = videosData['items'] as List<dynamic>?;
-    if (videoItems == null || videoItems.isEmpty) return;
 
     final List<YoutubeStruct> youtubeList = [];
     final List<YoutubeStruct> reelsList = [];
 
-    for (final videoItem in videoItems) {
+    for (final videoItem in allVideoItems) {
       final id = videoItem['id'] as String?;
       final contentDetails = videoItem['contentDetails'];
       final durationStr = contentDetails?['duration'] as String? ?? '';
@@ -180,8 +241,8 @@ Future fetchYoutubeVideos() async {
             : null,
       );
 
-      // Split into Reels (Shorts) if duration is <= 60 seconds
-      if (totalSeconds > 0 && totalSeconds <= 60) {
+      // Classify as Reel if it belongs to the channel's Shorts playlist (shortVideoIds)
+      if (shortVideoIds.contains(id)) {
         reelsList.add(youtubeItem);
       } else {
         youtubeList.add(youtubeItem);
@@ -200,3 +261,4 @@ Future fetchYoutubeVideos() async {
     print("Error in fetchYoutubeVideos: $e");
   }
 }
+//

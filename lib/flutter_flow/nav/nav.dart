@@ -52,7 +52,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                       ),
                     ),
             )
-          : SplashScreenWidget(),
+          : TestWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
@@ -73,7 +73,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                           ),
                         ),
                 )
-              : SplashScreenWidget(),
+              : TestWidget(),
         ),
         FFRoute(
           name: OnBoarding01Widget.routeName,
@@ -181,19 +181,19 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => LiveVideoWidget(),
         ),
         FFRoute(
-          name: VideorWidget.routeName,
-          path: VideorWidget.routePath,
-          builder: (context, params) => VideorWidget(),
+          name: VideoSearchWidget.routeName,
+          path: VideoSearchWidget.routePath,
+          builder: (context, params) => VideoSearchWidget(),
         ),
         FFRoute(
-          name: ShortsWidget.routeName,
-          path: ShortsWidget.routePath,
-          builder: (context, params) => ShortsWidget(),
+          name: ReelsHomeWidget.routeName,
+          path: ReelsHomeWidget.routePath,
+          builder: (context, params) => ReelsHomeWidget(),
         ),
         FFRoute(
-          name: VideoPlayerHomeWidget.routeName,
-          path: VideoPlayerHomeWidget.routePath,
-          builder: (context, params) => VideoPlayerHomeWidget(
+          name: VideoHomeWidget.routeName,
+          path: VideoHomeWidget.routePath,
+          builder: (context, params) => VideoHomeWidget(
             videoLink: params.getParam(
               'videoLink',
               ParamType.String,
@@ -229,9 +229,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
-          name: ReelsWidget.routeName,
-          path: ReelsWidget.routePath,
-          builder: (context, params) => ReelsWidget(
+          name: ReelsPlayerWidget.routeName,
+          path: ReelsPlayerWidget.routePath,
+          builder: (context, params) => ReelsPlayerWidget(
             index: params.getParam(
               'index',
               ParamType.int,

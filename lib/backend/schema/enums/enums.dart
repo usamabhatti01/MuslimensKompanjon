@@ -18,16 +18,18 @@ enum Mode {
 enum AdhanSound {
   Vibration,
   Standard,
-  ShortAdhan,
-  AdhanMakkah,
-  AdhanMadinah,
+  Adhan1,
+  Adhan2,
+  Adhan3,
+  Adhan4,
 }
 
 enum SoundName {
-  adhan_madinah,
-  adhan_makkah,
-  short_adhan,
-  standard_adhan,
+  Adhan_1,
+  Adhan_2,
+  Adhan_3,
+  Adhan_4,
+  Standard,
 }
 
 enum AllahNames {
@@ -43,6 +45,12 @@ enum Direction {
 enum Quran {
   juz,
   sura,
+}
+
+enum ShortFilter {
+  Latest,
+  Popular,
+  Old,
 }
 
 extension FFEnumExtensions<T extends Enum> on T {
@@ -70,6 +78,8 @@ T? deserializeEnum<T>(String? value) {
       return Direction.values.deserialize(value) as T?;
     case (Quran):
       return Quran.values.deserialize(value) as T?;
+    case (ShortFilter):
+      return ShortFilter.values.deserialize(value) as T?;
     default:
       return null;
   }

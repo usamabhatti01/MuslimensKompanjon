@@ -111,7 +111,7 @@ class _TashbihCounterWidgetState extends State<TashbihCounterWidget> {
                         updateCallback: () => safeSetState(() {}),
                         child: AdhkarHeaderWidget(
                           pageName: 'Tasbih',
-                          volume: true,
+                          volume: false,
                         ),
                       ),
                     ),

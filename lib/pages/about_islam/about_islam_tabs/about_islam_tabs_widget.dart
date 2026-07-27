@@ -107,24 +107,28 @@ class _AboutIslamTabsWidgetState extends State<AboutIslamTabsWidget> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (widget.alreadyready ?? true)
-                  Container(
-                    width: 100.0,
-                    height: 35.0,
-                    decoration: BoxDecoration(),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        FaIcon(
-                          FontAwesomeIcons.check,
-                          color: FlutterFlowTheme.of(context).primary,
-                          size: 18.0,
-                        ),
-                        AutoSizeText(
-                          'Avklarad',
-                          minFontSize: FFAppConstants.body.toDouble(),
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
+                Builder(
+                  builder: (context) {
+                    if (widget.alreadyready ?? false) {
+                      return Container(
+                        width: 100.0,
+                        height: 35.0,
+                        decoration: BoxDecoration(),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            FaIcon(
+                              FontAwesomeIcons.check,
+                              color: FlutterFlowTheme.of(context).primary,
+                              size: 18.0,
+                            ),
+                            AutoSizeText(
+                              'Avklarad',
+                              minFontSize: FFAppConstants.body.toDouble(),
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
                                     font: GoogleFonts.manrope(
                                       fontWeight: FlutterFlowTheme.of(context)
                                           .bodyMedium
@@ -142,10 +146,18 @@ class _AboutIslamTabsWidgetState extends State<AboutIslamTabsWidget> {
                                         .bodyMedium
                                         .fontStyle,
                                   ),
+                            ),
+                          ].divide(SizedBox(width: 5.0)),
                         ),
-                      ].divide(SizedBox(width: 5.0)),
-                    ),
-                  ),
+                      );
+                    } else {
+                      return Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [],
+                      );
+                    }
+                  },
+                ),
                 Container(
                   decoration: BoxDecoration(),
                   child: Row(

@@ -95,7 +95,7 @@ class OnIslamStruct extends BaseStruct {
 
   // "alreadyRead" field.
   bool? _alreadyRead;
-  bool get alreadyRead => _alreadyRead ?? true;
+  bool get alreadyRead => _alreadyRead ?? false;
   set alreadyRead(bool? val) => _alreadyRead = val;
 
   bool hasAlreadyRead() => _alreadyRead != null;

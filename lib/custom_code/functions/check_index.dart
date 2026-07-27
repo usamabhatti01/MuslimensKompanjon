@@ -20,8 +20,10 @@ int checkIndex(
   print(var1);
 
   if (math == "sub") {
+    print("sub");
     return var1 > 0 ? var1 - 1 : 0;
   } else {
+    print("add");
     return var1 < length - 1 ? var1 + 1 : length - 1;
   }
 }

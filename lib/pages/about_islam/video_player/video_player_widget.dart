@@ -2,6 +2,7 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/pages/about_islam/video_player_component/video_player_component_widget.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
@@ -11,6 +12,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:webviewx_plus/webviewx_plus.dart';
 import 'video_player_model.dart';
 export 'video_player_model.dart';
 
@@ -114,111 +116,187 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                                       child: Padding(
                                         padding: EdgeInsets.all(20.0),
                                         child: Container(
-                                          child: FlutterFlowIconButton(
-                                            borderRadius: 8.0,
-                                            buttonSize: 40.0,
-                                            fillColor:
-                                                FlutterFlowTheme.of(context)
-                                                    .reelBg,
-                                            icon: Icon(
-                                              Icons.close_rounded,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              FlutterFlowIconButton(
+                                                borderRadius: 8.0,
+                                                buttonSize: 40.0,
+                                                fillColor:
+                                                    FlutterFlowTheme.of(context)
+                                                        .reelBg,
+                                                icon: Icon(
+                                                  Icons.close_rounded,
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
                                                       .white,
-                                              size: 24.0,
-                                            ),
-                                            onPressed: () async {
-                                              context.pushNamed(
-                                                AboutIslamDetailsPageWidget
-                                                    .routeName,
-                                                queryParameters: {
-                                                  'index': serializeParam(
-                                                    videoListIndex,
-                                                    ParamType.int,
-                                                  ),
-                                                }.withoutNulls,
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                if (responsiveVisibility(
-                                  context: context,
-                                  phone: false,
-                                  tablet: false,
-                                ))
-                                  Align(
-                                    alignment: AlignmentDirectional(1.0, 0.0),
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 0.0, 25.0, 0.0),
-                                      child: Container(
-                                        decoration: BoxDecoration(),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Icon(
-                                              Icons.thumb_up_off_alt_outlined,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .alternate,
-                                              size: 24.0,
-                                            ),
-                                            Icon(
-                                              Icons.thumb_down_outlined,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .alternate,
-                                              size: 24.0,
-                                            ),
-                                            Icon(
-                                              Icons.message_outlined,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .alternate,
-                                              size: 24.0,
-                                            ),
-                                            Builder(
-                                              builder: (context) => InkWell(
+                                                  size: 24.0,
+                                                ),
+                                                onPressed: () async {
+                                                  context.pushNamed(
+                                                    AboutIslamDetailsPageWidget
+                                                        .routeName,
+                                                    queryParameters: {
+                                                      'index': serializeParam(
+                                                        videoListIndex,
+                                                        ParamType.int,
+                                                      ),
+                                                    }.withoutNulls,
+                                                  );
+                                                },
+                                              ),
+                                              InkWell(
                                                 splashColor: Colors.transparent,
                                                 focusColor: Colors.transparent,
                                                 hoverColor: Colors.transparent,
                                                 highlightColor:
                                                     Colors.transparent,
                                                 onTap: () async {
-                                                  await Share.share(
-                                                    functions.videoToString(
-                                                        videoListItem.videoUrl),
-                                                    sharePositionOrigin:
-                                                        getWidgetBoundingBox(
-                                                            context),
-                                                  );
+                                                  await showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    isDismissible: false,
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return WebViewAware(
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            FocusScope.of(
+                                                                    context)
+                                                                .unfocus();
+                                                            FocusManager
+                                                                .instance
+                                                                .primaryFocus
+                                                                ?.unfocus();
+                                                          },
+                                                          child: Padding(
+                                                            padding: MediaQuery
+                                                                .viewInsetsOf(
+                                                                    context),
+                                                            child: Container(
+                                                              height: MediaQuery
+                                                                          .sizeOf(
+                                                                              context)
+                                                                      .height *
+                                                                  0.3,
+                                                              child:
+                                                                  VideoPlayerComponentWidget(
+                                                                title:
+                                                                    videoListItem
+                                                                        .title,
+                                                                part:
+                                                                    videoListItem
+                                                                        .part,
+                                                                totalPart:
+                                                                    videoListItem
+                                                                        .totalParts,
+                                                                index:
+                                                                    videoListIndex,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ).then((value) =>
+                                                      safeSetState(() {}));
                                                 },
-                                                child: FaIcon(
-                                                  FontAwesomeIcons.share,
+                                                child: Icon(
+                                                  Icons.settings,
                                                   color: FlutterFlowTheme.of(
                                                           context)
-                                                      .primaryBackground,
+                                                      .white,
                                                   size: 24.0,
                                                 ),
                                               ),
-                                            ),
-                                          ].divide(SizedBox(height: 60.0)),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
+                                ),
+                                Align(
+                                  alignment: AlignmentDirectional(1.0, 0.0),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 25.0, 0.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          InkWell(
+                                            splashColor: Colors.transparent,
+                                            focusColor: Colors.transparent,
+                                            hoverColor: Colors.transparent,
+                                            highlightColor: Colors.transparent,
+                                            onTap: () async {
+                                              await launchURL(
+                                                  functions.videoToString(
+                                                      videoListItem.videoUrl));
+                                            },
+                                            child: Icon(
+                                              Icons.thumb_up_off_alt_outlined,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .alternate,
+                                              size: 24.0,
+                                            ),
+                                          ),
+                                          Icon(
+                                            Icons.thumb_down_outlined,
+                                            color: FlutterFlowTheme.of(context)
+                                                .alternate,
+                                            size: 24.0,
+                                          ),
+                                          Icon(
+                                            Icons.message_outlined,
+                                            color: FlutterFlowTheme.of(context)
+                                                .alternate,
+                                            size: 24.0,
+                                          ),
+                                          Builder(
+                                            builder: (context) => InkWell(
+                                              splashColor: Colors.transparent,
+                                              focusColor: Colors.transparent,
+                                              hoverColor: Colors.transparent,
+                                              highlightColor:
+                                                  Colors.transparent,
+                                              onTap: () async {
+                                                await Share.share(
+                                                  functions.videoToString(
+                                                      videoListItem.videoUrl),
+                                                  sharePositionOrigin:
+                                                      getWidgetBoundingBox(
+                                                          context),
+                                                );
+                                              },
+                                              child: FaIcon(
+                                                FontAwesomeIcons.share,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryBackground,
+                                                size: 24.0,
+                                              ),
+                                            ),
+                                          ),
+                                        ].divide(SizedBox(height: 60.0)),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                                 Align(
                                   alignment: AlignmentDirectional(0.0, 1.0),
                                   child: Container(
-                                    height: 170.0,
+                                    height: 150.0,
                                     decoration: BoxDecoration(
                                       color:
                                           FlutterFlowTheme.of(context).reelBg,

@@ -65,8 +65,8 @@ class _QiblaFinderWidgetState extends State<QiblaFinderWidget> {
                   children: [
                     Icon(
                       Icons.arrow_back,
-                      color: FlutterFlowTheme.of(context).primaryText,
-                      size: 0.0,
+                      color: Color(0x001A1A1A),
+                      size: FFAppConstants.iconSize.toDouble(),
                     ),
                     Expanded(
                       child: wrapWithModel(
@@ -82,37 +82,42 @@ class _QiblaFinderWidgetState extends State<QiblaFinderWidget> {
                           FlutterFlowTheme.of(context).designToken.spacing.sm)),
                 ),
                 Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(),
-                          child: Container(
-                            width: MediaQuery.sizeOf(context).width * 1.0,
-                            height: MediaQuery.sizeOf(context).height * 0.6,
-                            child: custom_widgets.QiblaCompassWidget(
-                              width: MediaQuery.sizeOf(context).width * 1.0,
-                              height: MediaQuery.sizeOf(context).height * 0.6,
+                  child: Align(
+                    alignment: AlignmentDirectional(0.0, 0.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Align(
+                            alignment: AlignmentDirectional(0.0, -1.0),
+                            child: Container(
+                              decoration: BoxDecoration(),
+                              child: Container(
+                                width: MediaQuery.sizeOf(context).width * 1.0,
+                                height:
+                                    MediaQuery.sizeOf(context).height * 0.75,
+                                child: custom_widgets.QiblaCompassWidget(
+                                  width: MediaQuery.sizeOf(context).width * 1.0,
+                                  height:
+                                      MediaQuery.sizeOf(context).height * 0.75,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                Align(
-                  alignment: AlignmentDirectional(0.0, 1.0),
-                  child: wrapWithModel(
-                    model: _model.pageFooterModel,
-                    updateCallback: () => safeSetState(() {}),
-                    child: PageFooterWidget(
-                      activeTab: 4,
+                      ],
                     ),
                   ),
                 ),
-              ].divide(SizedBox(height: 20.0)),
+                wrapWithModel(
+                  model: _model.pageFooterModel,
+                  updateCallback: () => safeSetState(() {}),
+                  child: PageFooterWidget(
+                    selectedIndex: 3,
+                  ),
+                ),
+              ],
             ),
           ),
         ),

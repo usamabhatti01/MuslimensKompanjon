@@ -5,6 +5,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -121,6 +122,7 @@ class _AboutIslamDetailsPageWidgetState
                       children: [
                         Row(
                           mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               valueOrDefault<String>(
@@ -148,6 +150,76 @@ class _AboutIslamDetailsPageWidgetState
                                         .fontStyle,
                                   ),
                             ),
+                            Container(
+                              width: 100.0,
+                              height: 35.0,
+                              decoration: BoxDecoration(
+                                color: valueOrDefault<Color>(
+                                  _model.aboutIslam!.alreadyRead
+                                      ? FlutterFlowTheme.of(context).primary
+                                      : FlutterFlowTheme.of(context).tertiary,
+                                  FlutterFlowTheme.of(context).tertiary,
+                                ),
+                                borderRadius: BorderRadius.circular(12.0),
+                                border: Border.all(
+                                  color: FlutterFlowTheme.of(context).alternate,
+                                ),
+                              ),
+                              child: InkWell(
+                                splashColor: Colors.transparent,
+                                focusColor: Colors.transparent,
+                                hoverColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                onTap: () async {
+                                  FFAppState().updateAboutIslamAtIndex(
+                                    _model.pageIndex,
+                                    (e) => e..alreadyRead = !e.alreadyRead,
+                                  );
+                                  safeSetState(() {});
+                                },
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    FaIcon(
+                                      FontAwesomeIcons.check,
+                                      color: FlutterFlowTheme.of(context).white,
+                                      size: 18.0,
+                                    ),
+                                    AutoSizeText(
+                                      'Avklarad',
+                                      minFontSize:
+                                          FFAppConstants.body.toDouble(),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            font: GoogleFonts.manrope(
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontStyle,
+                                            ),
+                                            color: FlutterFlowTheme.of(context)
+                                                .white,
+                                            letterSpacing: 0.0,
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                          ),
+                                    ),
+                                  ].divide(SizedBox(width: 5.0)),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                         Row(
@@ -158,27 +230,6 @@ class _AboutIslamDetailsPageWidgetState
                                 _model.aboutIslam?.title,
                                 'Vad är islam? En början från noll',
                               ),
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    font: GoogleFonts.manrope(
-                                      fontWeight: FontWeight.w600,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                    fontSize: 16.0,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w600,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
-                            ),
-                            Text(
-                              _model.pageIndex.toString(),
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
@@ -422,46 +473,57 @@ class _AboutIslamDetailsPageWidgetState
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          FFButtonWidget(
-                            onPressed: () async {
-                              context.pushNamed(
-                                AboutIslamDetailsPageWidget.routeName,
-                                queryParameters: {
-                                  'index': serializeParam(
-                                    functions.checkIndex(_model.pageIndex,
-                                        'sub', _model.aboutIslam!.totalParts),
-                                    ParamType.int,
-                                  ),
-                                }.withoutNulls,
-                                extra: <String, dynamic>{
-                                  '__transition_info__': TransitionInfo(
-                                    hasTransition: true,
-                                    transitionType:
-                                        PageTransitionType.leftToRight,
-                                  ),
-                                },
-                              );
-                            },
-                            text: 'Föregående',
-                            icon: Icon(
-                              Icons.arrow_back,
-                              size: 16.0,
-                            ),
-                            options: FFButtonOptions(
-                              width: 150.0,
-                              height: 40.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  16.0, 0.0, 16.0, 0.0),
-                              iconAlignment: IconAlignment.start,
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              iconColor:
-                                  FlutterFlowTheme.of(context).primaryText,
-                              color: FlutterFlowTheme.of(context).quranBg,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .titleMedium
-                                  .override(
-                                    font: GoogleFonts.plusJakartaSans(
+                          if (_model.pageIndex > 0)
+                            FFButtonWidget(
+                              onPressed: () async {
+                                context.pushNamed(
+                                  AboutIslamDetailsPageWidget.routeName,
+                                  queryParameters: {
+                                    'index': serializeParam(
+                                      functions.checkIndex(_model.pageIndex,
+                                          'sub', _model.aboutIslam!.totalParts),
+                                      ParamType.int,
+                                    ),
+                                  }.withoutNulls,
+                                  extra: <String, dynamic>{
+                                    '__transition_info__': TransitionInfo(
+                                      hasTransition: true,
+                                      transitionType:
+                                          PageTransitionType.leftToRight,
+                                    ),
+                                  },
+                                );
+                              },
+                              text: 'Föregående',
+                              icon: Icon(
+                                Icons.arrow_back,
+                                size: 16.0,
+                              ),
+                              options: FFButtonOptions(
+                                width: 150.0,
+                                height: 40.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    16.0, 0.0, 16.0, 0.0),
+                                iconAlignment: IconAlignment.start,
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                iconColor:
+                                    FlutterFlowTheme.of(context).primaryText,
+                                color: FlutterFlowTheme.of(context).quranBg,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .titleMedium
+                                    .override(
+                                      font: GoogleFonts.plusJakartaSans(
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .titleMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .titleMedium
+                                            .fontStyle,
+                                      ),
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                      letterSpacing: 0.0,
                                       fontWeight: FlutterFlowTheme.of(context)
                                           .titleMedium
                                           .fontWeight,
@@ -469,62 +531,63 @@ class _AboutIslamDetailsPageWidgetState
                                           .titleMedium
                                           .fontStyle,
                                     ),
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .titleMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .titleMedium
-                                        .fontStyle,
-                                  ),
-                              elevation: 0.0,
-                              borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).alternate,
+                                elevation: 0.0,
+                                borderSide: BorderSide(
+                                  color: FlutterFlowTheme.of(context).alternate,
+                                ),
+                                borderRadius: BorderRadius.circular(12.0),
                               ),
-                              borderRadius: BorderRadius.circular(12.0),
                             ),
-                          ),
-                          FFButtonWidget(
-                            onPressed: () async {
-                              context.pushNamed(
-                                AboutIslamDetailsPageWidget.routeName,
-                                queryParameters: {
-                                  'index': serializeParam(
-                                    functions.checkIndex(_model.pageIndex,
-                                        'add', _model.aboutIslam!.totalParts),
-                                    ParamType.int,
-                                  ),
-                                }.withoutNulls,
-                                extra: <String, dynamic>{
-                                  '__transition_info__': TransitionInfo(
-                                    hasTransition: true,
-                                    transitionType:
-                                        PageTransitionType.rightToLeft,
-                                  ),
-                                },
-                              );
-                            },
-                            text: 'Nästa',
-                            icon: Icon(
-                              Icons.east_rounded,
-                              size: 18.0,
-                            ),
-                            options: FFButtonOptions(
-                              width: 150.0,
-                              height: 40.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  16.0, 0.0, 16.0, 0.0),
-                              iconAlignment: IconAlignment.end,
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              iconColor: Colors.white,
-                              color: FlutterFlowTheme.of(context).primary,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .titleMedium
-                                  .override(
-                                    font: GoogleFonts.plusJakartaSans(
+                          if (_model.pageIndex <
+                              (_model.aboutIslam!.totalParts - 1))
+                            FFButtonWidget(
+                              onPressed: () async {
+                                context.pushNamed(
+                                  AboutIslamDetailsPageWidget.routeName,
+                                  queryParameters: {
+                                    'index': serializeParam(
+                                      functions.checkIndex(_model.pageIndex,
+                                          'add', _model.aboutIslam!.totalParts),
+                                      ParamType.int,
+                                    ),
+                                  }.withoutNulls,
+                                  extra: <String, dynamic>{
+                                    '__transition_info__': TransitionInfo(
+                                      hasTransition: true,
+                                      transitionType:
+                                          PageTransitionType.rightToLeft,
+                                    ),
+                                  },
+                                );
+                              },
+                              text: 'Nästa',
+                              icon: Icon(
+                                Icons.east_rounded,
+                                size: 18.0,
+                              ),
+                              options: FFButtonOptions(
+                                width: 150.0,
+                                height: 40.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    16.0, 0.0, 16.0, 0.0),
+                                iconAlignment: IconAlignment.end,
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                iconColor: Colors.white,
+                                color: FlutterFlowTheme.of(context).primary,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .titleMedium
+                                    .override(
+                                      font: GoogleFonts.plusJakartaSans(
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .titleMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .titleMedium
+                                            .fontStyle,
+                                      ),
+                                      color: Colors.white,
+                                      letterSpacing: 0.0,
                                       fontWeight: FlutterFlowTheme.of(context)
                                           .titleMedium
                                           .fontWeight,
@@ -532,22 +595,13 @@ class _AboutIslamDetailsPageWidgetState
                                           .titleMedium
                                           .fontStyle,
                                     ),
-                                    color: Colors.white,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .titleMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .titleMedium
-                                        .fontStyle,
-                                  ),
-                              elevation: 0.0,
-                              borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).alternate,
+                                elevation: 0.0,
+                                borderSide: BorderSide(
+                                  color: FlutterFlowTheme.of(context).alternate,
+                                ),
+                                borderRadius: BorderRadius.circular(12.0),
                               ),
-                              borderRadius: BorderRadius.circular(12.0),
                             ),
-                          ),
                         ],
                       ),
                     ].divide(SizedBox(height: 20.0)),

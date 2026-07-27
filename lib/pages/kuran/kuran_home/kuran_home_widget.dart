@@ -1,5 +1,6 @@
 import '/backend/schema/enums/enums.dart';
 import '/custom_header_footer/koran_page_sub_header/koran_page_sub_header_widget.dart';
+import '/custom_header_footer/page_footer/page_footer_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/pages/kuran/juz_heading/juz_heading_widget.dart';
@@ -87,7 +88,7 @@ class _KuranHomeWidgetState extends State<KuranHomeWidget>
                       },
                       child: Icon(
                         Icons.chevron_left,
-                        color: FlutterFlowTheme.of(context).primaryText,
+                        color: Color(0x001A1A1A),
                         size: FFAppConstants.iconSize.toDouble(),
                       ),
                     ),
@@ -1233,6 +1234,13 @@ class _KuranHomeWidgetState extends State<KuranHomeWidget>
                         ),
                       ),
                     ].divide(SizedBox(height: 10.0)),
+                  ),
+                ),
+                wrapWithModel(
+                  model: _model.pageFooterModel,
+                  updateCallback: () => safeSetState(() {}),
+                  child: PageFooterWidget(
+                    selectedIndex: 1,
                   ),
                 ),
               ].divide(SizedBox(height: 20.0)),

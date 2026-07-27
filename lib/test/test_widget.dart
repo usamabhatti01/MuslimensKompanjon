@@ -1,8 +1,8 @@
+import '/flutter_flow/flutter_flow_audio_player.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/upload_data.dart';
-import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'test_model.dart';
@@ -57,7 +57,8 @@ class _TestWidgetState extends State<TestWidget> {
               FFButtonWidget(
                 onPressed: () async {
                   final selectedFiles = await selectFiles(
-                    multiFile: false,
+                    allowedExtensions: ['mp3'],
+                    multiFile: true,
                   );
                   if (selectedFiles != null) {
                     safeSetState(
@@ -65,6 +66,11 @@ class _TestWidgetState extends State<TestWidget> {
                     var selectedUploadedFiles = <FFUploadedFile>[];
 
                     try {
+                      showUploadMessage(
+                        context,
+                        'Uploading file...',
+                        showLoading: true,
+                      );
                       selectedUploadedFiles = selectedFiles
                           .map((m) => FFUploadedFile(
                                 name: m.storagePath.split('/').last,
@@ -73,15 +79,24 @@ class _TestWidgetState extends State<TestWidget> {
                               ))
                           .toList();
                     } finally {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
                       _model.isDataUploading_uploadDataQ04 = false;
                     }
                     if (selectedUploadedFiles.length == selectedFiles.length) {
                       safeSetState(() {
-                        _model.uploadedLocalFile_uploadDataQ04 =
-                            selectedUploadedFiles.first;
+                        _model.uploadedLocalFiles_uploadDataQ04 =
+                            selectedUploadedFiles;
                       });
+                      showUploadMessage(
+                        context,
+                        'Success!',
+                      );
                     } else {
                       safeSetState(() {});
+                      showUploadMessage(
+                        context,
+                        'Failed to upload file',
+                      );
                       return;
                     }
                   }
@@ -113,19 +128,50 @@ class _TestWidgetState extends State<TestWidget> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              InkWell(
-                splashColor: Colors.transparent,
-                focusColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onTap: () async {
-                  context.pushNamed(SettingWidget.routeName);
-                },
-                child: Icon(
-                  Icons.arrow_back,
-                  color: FlutterFlowTheme.of(context).primaryText,
-                  size: 24.0,
+              FlutterFlowAudioPlayer(
+                audio: Audio(
+                  'assets/audios/Adhan_4.MP3',
+                  metas: Metas(
+                    id: 'Adhan_4.MP3-16a16bc7',
+                    title: 'Title',
+                  ),
                 ),
+                titleTextStyle: FlutterFlowTheme.of(context)
+                    .titleLarge
+                    .override(
+                      font: GoogleFonts.plusJakartaSans(
+                        fontWeight:
+                            FlutterFlowTheme.of(context).titleLarge.fontWeight,
+                        fontStyle:
+                            FlutterFlowTheme.of(context).titleLarge.fontStyle,
+                      ),
+                      letterSpacing: 0.0,
+                      fontWeight:
+                          FlutterFlowTheme.of(context).titleLarge.fontWeight,
+                      fontStyle:
+                          FlutterFlowTheme.of(context).titleLarge.fontStyle,
+                    ),
+                playbackDurationTextStyle: FlutterFlowTheme.of(context)
+                    .labelMedium
+                    .override(
+                      font: GoogleFonts.manrope(
+                        fontWeight:
+                            FlutterFlowTheme.of(context).labelMedium.fontWeight,
+                        fontStyle:
+                            FlutterFlowTheme.of(context).labelMedium.fontStyle,
+                      ),
+                      letterSpacing: 0.0,
+                      fontWeight:
+                          FlutterFlowTheme.of(context).labelMedium.fontWeight,
+                      fontStyle:
+                          FlutterFlowTheme.of(context).labelMedium.fontStyle,
+                    ),
+                fillColor: FlutterFlowTheme.of(context).secondaryBackground,
+                playbackButtonColor: FlutterFlowTheme.of(context).primary,
+                activeTrackColor: FlutterFlowTheme.of(context).primary,
+                inactiveTrackColor: FlutterFlowTheme.of(context).alternate,
+                elevation: 0.0,
+                playInBackground: PlayInBackground.disabledRestoreOnForeground,
               ),
             ],
           ),

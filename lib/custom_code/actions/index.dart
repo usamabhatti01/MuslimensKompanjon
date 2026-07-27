@@ -20,3 +20,4 @@ export '/custom_code/actions/about_islam_single_value.dart'
 export '/custom_code/actions/load_on_islam_data.dart' show loadOnIslamData;
 export '/custom_code/actions/load_mosques_data.dart' show loadMosquesData;
 export '/custom_code/actions/search_city_by_name.dart' show searchCityByName;
+export '/custom_code/actions/is_image_valid.dart' show isImageValid;

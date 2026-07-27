@@ -62,20 +62,24 @@ Future<String> testNotifications() async {
     if (playSoundActual) {
       switch (selectedSound) {
         case 'Standard':
-          androidSoundResource = 'standard_adhan';
-          iosSoundFile = 'standard_adhan.aiff';
+          androidSoundResource = null;
+          iosSoundFile = null;
           break;
-        case 'ShortAdhan':
-          androidSoundResource = 'short_adhan';
+        case 'Adhan1':
+          androidSoundResource = 'adhan_1';
           iosSoundFile = 'short_adhan.aiff';
           break;
-        case 'AdhanMakkah':
-          androidSoundResource = 'adhan_makkah';
+        case 'Adhan2':
+          androidSoundResource = 'adhan_2';
           iosSoundFile = 'adhan_makkah.aiff';
           break;
-        case 'AdhanMadinah':
-          androidSoundResource = 'adhan_madinah';
+        case 'Adhan3':
+          androidSoundResource = 'adhan_3';
           iosSoundFile = 'adhan_madinah.aiff';
+          break;
+        case 'Adhan4':
+          androidSoundResource = 'adhan_4';
+          iosSoundFile = 'standard_adhan.aiff';
           break;
         default:
           androidSoundResource = null;

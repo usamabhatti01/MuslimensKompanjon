@@ -1,4 +1,5 @@
 import '/custom_header_footer/koran_page_sub_header/koran_page_sub_header_widget.dart';
+import '/custom_header_footer/page_footer/page_footer_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'kuran_home_widget.dart' show KuranHomeWidget;
@@ -16,15 +17,20 @@ class KuranHomeModel extends FlutterFlowModel<KuranHomeWidget> {
   int get tabBarPreviousIndex =>
       tabBarController != null ? tabBarController!.previousIndex : 0;
 
+  // Model for PageFooter component.
+  late PageFooterModel pageFooterModel;
+
   @override
   void initState(BuildContext context) {
     koranPageSubHeaderModel =
         createModel(context, () => KoranPageSubHeaderModel());
+    pageFooterModel = createModel(context, () => PageFooterModel());
   }
 
   @override
   void dispose() {
     koranPageSubHeaderModel.dispose();
     tabBarController?.dispose();
+    pageFooterModel.dispose();
   }
 }

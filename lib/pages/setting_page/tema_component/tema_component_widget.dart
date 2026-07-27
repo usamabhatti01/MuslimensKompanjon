@@ -11,15 +11,13 @@ class TemaComponentWidget extends StatefulWidget {
   const TemaComponentWidget({
     super.key,
     required this.label,
-    required this.icon,
-    required this.subLabel,
+    this.subLabel,
     required this.checkValue,
     required this.onCheck,
     required this.azanName,
   });
 
   final String? label;
-  final Widget? icon;
   final String? subLabel;
   final bool? checkValue;
   final Future Function()? onCheck;
@@ -83,8 +81,6 @@ class _TemaComponentWidgetState extends State<TemaComponentWidget> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Container(
-                                  width: 44.0,
-                                  height: 44.0,
                                   decoration: BoxDecoration(
                                     color: FlutterFlowTheme.of(context)
                                         .secondaryBackground,
@@ -94,9 +90,14 @@ class _TemaComponentWidgetState extends State<TemaComponentWidget> {
                                             .radius
                                             .sm),
                                   ),
-                                  child: Align(
-                                    alignment: AlignmentDirectional(0.0, 0.0),
-                                    child: widget.icon!,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Image.asset(
+                                      'assets/images/iconMosque.png',
+                                      width: 30.0,
+                                      height: 30.0,
+                                      fit: BoxFit.fill,
+                                    ),
                                   ),
                                 ),
                                 Column(
@@ -137,7 +138,7 @@ class _TemaComponentWidgetState extends State<TemaComponentWidget> {
                                     AutoSizeText(
                                       valueOrDefault<String>(
                                         widget.subLabel,
-                                        'Följer telefonens tema automatiskt',
+                                        '.',
                                       ),
                                       minFontSize:
                                           FFAppConstants.body.toDouble(),

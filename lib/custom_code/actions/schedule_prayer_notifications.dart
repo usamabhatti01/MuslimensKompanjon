@@ -133,52 +133,51 @@ Future<String> schedulePrayerNotifications() async {
       ),
     );
 
-    if (selectedSound == AdhanSound.Standard.name) {
+    if (selectedSound == AdhanSound.Adhan1.name) {
       await androidPlugin?.createNotificationChannel(
         const AndroidNotificationChannel(
-          'prayer_channel_standard_adhan',
-          'Prayer Standard Adhan Notifications',
-          description:
-              'Prayer reminder notifications with Standard Adhan sound',
+          'prayer_channel_adhan_1',
+          'Prayer Adhan 1 Notifications',
+          description: 'Prayer reminder notifications with Adhan 1 sound',
           importance: Importance.max,
           playSound: true,
-          sound: RawResourceAndroidNotificationSound('standard_adhan'),
+          sound: RawResourceAndroidNotificationSound('adhan_1'),
           enableVibration: true,
         ),
       );
-    } else if (selectedSound == AdhanSound.ShortAdhan.name) {
+    } else if (selectedSound == AdhanSound.Adhan2.name) {
       await androidPlugin?.createNotificationChannel(
         const AndroidNotificationChannel(
-          'prayer_channel_short_adhan',
-          'Prayer Short Adhan Notifications',
-          description: 'Prayer reminder notifications with Short Adhan sound',
+          'prayer_channel_adhan_2',
+          'Prayer Adhan 2 Notifications',
+          description: 'Prayer reminder notifications with Adhan 2 sound',
           importance: Importance.max,
           playSound: true,
-          sound: RawResourceAndroidNotificationSound('short_adhan'),
+          sound: RawResourceAndroidNotificationSound('adhan_2'),
           enableVibration: true,
         ),
       );
-    } else if (selectedSound == AdhanSound.AdhanMakkah.name) {
+    } else if (selectedSound == AdhanSound.Adhan3.name) {
       await androidPlugin?.createNotificationChannel(
         const AndroidNotificationChannel(
-          'prayer_channel_adhan_makkah',
-          'Prayer Makkah Adhan Notifications',
-          description: 'Prayer reminder notifications with Makkah Adhan sound',
+          'prayer_channel_adhan_3',
+          'Prayer Adhan 3 Notifications',
+          description: 'Prayer reminder notifications with Adhan 3 sound',
           importance: Importance.max,
           playSound: true,
-          sound: RawResourceAndroidNotificationSound('adhan_makkah'),
+          sound: RawResourceAndroidNotificationSound('adhan_3'),
           enableVibration: true,
         ),
       );
-    } else if (selectedSound == AdhanSound.AdhanMadinah.name) {
+    } else if (selectedSound == AdhanSound.Adhan4.name) {
       await androidPlugin?.createNotificationChannel(
         const AndroidNotificationChannel(
-          'prayer_channel_adhan_madinah',
-          'Prayer Madinah Adhan Notifications',
-          description: 'Prayer reminder notifications with Madinah Adhan sound',
+          'prayer_channel_adhan_4',
+          'Prayer Adhan 4 Notifications',
+          description: 'Prayer reminder notifications with Adhan 4 sound',
           importance: Importance.max,
           playSound: true,
-          sound: RawResourceAndroidNotificationSound('adhan_madinah'),
+          sound: RawResourceAndroidNotificationSound('adhan_4'),
           enableVibration: true,
         ),
       );
@@ -290,20 +289,24 @@ Future<String> schedulePrayerNotifications() async {
         if (playSoundActual) {
           switch (selectedSound) {
             case 'Standard':
-              androidSoundResource = 'standard_adhan';
-              iosSoundFile = 'standard_adhan.aiff';
+              androidSoundResource = null;
+              iosSoundFile = null;
               break;
-            case 'ShortAdhan':
-              androidSoundResource = 'short_adhan';
+            case 'Adhan1':
+              androidSoundResource = 'adhan_1';
               iosSoundFile = 'short_adhan.aiff';
               break;
-            case 'AdhanMakkah':
-              androidSoundResource = 'adhan_makkah';
+            case 'Adhan2':
+              androidSoundResource = 'adhan_2';
               iosSoundFile = 'adhan_makkah.aiff';
               break;
-            case 'AdhanMadinah':
-              androidSoundResource = 'adhan_madinah';
+            case 'Adhan3':
+              androidSoundResource = 'adhan_3';
               iosSoundFile = 'adhan_madinah.aiff';
+              break;
+            case 'Adhan4':
+              androidSoundResource = 'adhan_4';
+              iosSoundFile = 'standard_adhan.aiff';
               break;
             default:
               androidSoundResource = null;

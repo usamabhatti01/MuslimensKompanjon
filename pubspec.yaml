@@ -28,6 +28,14 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   adhan: ^2.0.0+1
+  assets_audio_player: 
+    git:
+      url: https://github.com/FlutterFlow/Flutter-AssetsAudioPlayer.git
+      ref: 243f9533279b73fa9dae345cc96e5d7d84cac0ac
+  assets_audio_player_web: 
+    git:
+      url: https://github.com/FlutterFlow/Flutter-AssetsAudioPlayerWeb.git
+      ref: cae7ceb6af99f4da1ec27136d312d0ef045c83d9
   audioplayers: ^5.2.1
   auto_size_text: 3.0.0
   cached_network_image: 3.4.1
@@ -45,6 +53,7 @@ dependencies:
       path: packages/dropdown_button2
   easy_debounce: 2.0.1
   equatable: 2.0.7
+  expandable: 5.0.1
   file_picker: 10.1.9
   flutter_advanced_switch: ^3.1.0
   flutter_animate: 4.5.0
@@ -59,7 +68,6 @@ dependencies:
   flutter_secure_storage_platform_interface: 2.0.1
   flutter_secure_storage_web: 2.0.0
   flutter_secure_storage_windows: 4.0.0
-  flutter_staggered_grid_view: 0.7.0
   font_awesome_flutter: 10.7.0
   from_css_color: 2.0.0
   geolocator: ^14.0.1
@@ -88,6 +96,7 @@ dependencies:
   path_provider_linux: 2.2.1
   path_provider_platform_interface: 2.1.2
   path_provider_windows: 2.3.0
+  percent_indicator: 4.2.2
   permission_handler: ^12.0.0+1
   plugin_platform_interface: 2.1.8
   pointer_interceptor: 0.10.1+2
@@ -95,6 +104,7 @@ dependencies:
   pointer_interceptor_platform_interface: 0.10.0+1
   pointer_interceptor_web: 0.10.2+1
   provider: 6.1.5
+  rxdart: 0.27.7
   share_plus: 10.0.2
   share_plus_platform_interface: 5.0.0
   shared_preferences: 2.5.3

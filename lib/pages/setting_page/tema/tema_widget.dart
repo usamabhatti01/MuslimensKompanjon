@@ -6,7 +6,6 @@ import '/pages/setting_page/tema_component/tema_component_widget.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'tema_model.dart';
@@ -147,10 +146,6 @@ class _TemaWidgetState extends State<TemaWidget> {
                         updateCallback: () => safeSetState(() {}),
                         child: TemaComponentWidget(
                           label: 'Systemets förval',
-                          icon: FaIcon(
-                            FontAwesomeIcons.sun,
-                            size: 18.0,
-                          ),
                           subLabel: 'Följer telefonens tema automatiskt',
                           checkValue: _model.selectedCard == Mode.System.name,
                           azanName: FFAppConstants.NullValue,
@@ -165,10 +160,6 @@ class _TemaWidgetState extends State<TemaWidget> {
                         updateCallback: () => safeSetState(() {}),
                         child: TemaComponentWidget(
                           label: 'Ljus',
-                          icon: Icon(
-                            Icons.wb_sunny_outlined,
-                            size: 18.0,
-                          ),
                           subLabel: 'Ljust och rent utseende',
                           checkValue: _model.selectedCard == Mode.Light.name,
                           azanName: FFAppConstants.NullValue,
@@ -183,10 +174,6 @@ class _TemaWidgetState extends State<TemaWidget> {
                         updateCallback: () => safeSetState(() {}),
                         child: TemaComponentWidget(
                           label: 'Mörkt',
-                          icon: FaIcon(
-                            FontAwesomeIcons.moon,
-                            size: 18.0,
-                          ),
                           subLabel: 'Bekvämt för mörka miljöer',
                           checkValue: _model.selectedCard == Mode.Dark.name,
                           azanName: FFAppConstants.NullValue,

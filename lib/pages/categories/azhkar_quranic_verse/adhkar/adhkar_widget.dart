@@ -77,8 +77,8 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
                       },
                       child: Icon(
                         Icons.chevron_left,
-                        color: FlutterFlowTheme.of(context).primaryText,
-                        size: 0.0,
+                        color: Color(0x001A1A1A),
+                        size: FFAppConstants.iconSize.toDouble(),
                       ),
                     ),
                     Expanded(
@@ -597,7 +597,7 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
                   model: _model.pageFooterModel,
                   updateCallback: () => safeSetState(() {}),
                   child: PageFooterWidget(
-                    activeTab: 3,
+                    selectedIndex: 2,
                   ),
                 ),
               ].divide(SizedBox(height: 20.0)),

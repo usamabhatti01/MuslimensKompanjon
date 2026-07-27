@@ -20,6 +20,10 @@ class AdhanljudModel extends FlutterFlowModel<AdhanljudWidget> {
   late TemaComponentModel temaComponentModel4;
   // Model for TemaComponent component.
   late TemaComponentModel temaComponentModel5;
+  // Model for TemaComponent component.
+  late TemaComponentModel temaComponentModel6;
+  // Stores action output result for [Custom Action - testNotifications] action in Button widget.
+  String? result;
 
   @override
   void initState(BuildContext context) {
@@ -28,6 +32,7 @@ class AdhanljudModel extends FlutterFlowModel<AdhanljudWidget> {
     temaComponentModel3 = createModel(context, () => TemaComponentModel());
     temaComponentModel4 = createModel(context, () => TemaComponentModel());
     temaComponentModel5 = createModel(context, () => TemaComponentModel());
+    temaComponentModel6 = createModel(context, () => TemaComponentModel());
   }
 
   @override
@@ -37,5 +42,6 @@ class AdhanljudModel extends FlutterFlowModel<AdhanljudWidget> {
     temaComponentModel3.dispose();
     temaComponentModel4.dispose();
     temaComponentModel5.dispose();
+    temaComponentModel6.dispose();
   }
 }

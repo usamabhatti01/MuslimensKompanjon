@@ -7,7 +7,6 @@ import '/custom_code/actions/index.dart' as actions;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'adhanljud_model.dart';
@@ -148,10 +147,6 @@ class _AdhanljudWidgetState extends State<AdhanljudWidget> {
                           updateCallback: () => safeSetState(() {}),
                           child: TemaComponentWidget(
                             label: 'Endast vibration',
-                            icon: Icon(
-                              Icons.vibration,
-                              size: 18.0,
-                            ),
                             subLabel: 'Ingen ljudsignal, endast vibration',
                             checkValue: _model.selectedCard ==
                                 AdhanSound.Vibration.name,
@@ -167,14 +162,10 @@ class _AdhanljudWidgetState extends State<AdhanljudWidget> {
                           updateCallback: () => safeSetState(() {}),
                           child: TemaComponentWidget(
                             label: 'Standard (Systemljud)',
-                            icon: FaIcon(
-                              FontAwesomeIcons.volumeUp,
-                              size: 18.0,
-                            ),
                             subLabel: 'Kort standardnotis från telefonen',
                             checkValue:
                                 _model.selectedCard == AdhanSound.Standard.name,
-                            azanName: SoundName.standard_adhan.name,
+                            azanName: SoundName.Standard.name,
                             onCheck: () async {
                               _model.selectedCard = AdhanSound.Standard.name;
                               safeSetState(() {});
@@ -185,17 +176,13 @@ class _AdhanljudWidgetState extends State<AdhanljudWidget> {
                           model: _model.temaComponentModel3,
                           updateCallback: () => safeSetState(() {}),
                           child: TemaComponentWidget(
-                            label: 'Kort Adhan',
-                            icon: FaIcon(
-                              FontAwesomeIcons.music,
-                              size: 18.0,
-                            ),
-                            subLabel: 'Kortare version av Adhan',
-                            checkValue: _model.selectedCard ==
-                                AdhanSound.ShortAdhan.name,
-                            azanName: SoundName.short_adhan.name,
+                            label: 'Adhan 1',
+                            subLabel: '',
+                            checkValue:
+                                _model.selectedCard == AdhanSound.Adhan1.name,
+                            azanName: SoundName.Adhan_1.name,
                             onCheck: () async {
-                              _model.selectedCard = AdhanSound.ShortAdhan.name;
+                              _model.selectedCard = AdhanSound.Adhan1.name;
                               safeSetState(() {});
                             },
                           ),
@@ -204,17 +191,13 @@ class _AdhanljudWidgetState extends State<AdhanljudWidget> {
                           model: _model.temaComponentModel4,
                           updateCallback: () => safeSetState(() {}),
                           child: TemaComponentWidget(
-                            label: 'Adhan 1 (Makkah)',
-                            icon: FaIcon(
-                              FontAwesomeIcons.kaaba,
-                              size: 18.0,
-                            ),
-                            subLabel: 'Traditionellt Adhan från Makkah',
-                            checkValue: _model.selectedCard ==
-                                AdhanSound.AdhanMakkah.name,
-                            azanName: SoundName.adhan_makkah.name,
+                            label: 'Adhan 2',
+                            subLabel: '',
+                            checkValue:
+                                _model.selectedCard == AdhanSound.Adhan1.name,
+                            azanName: SoundName.Adhan_2.name,
                             onCheck: () async {
-                              _model.selectedCard = AdhanSound.AdhanMakkah.name;
+                              _model.selectedCard = AdhanSound.Adhan1.name;
                               safeSetState(() {});
                             },
                           ),
@@ -223,18 +206,28 @@ class _AdhanljudWidgetState extends State<AdhanljudWidget> {
                           model: _model.temaComponentModel5,
                           updateCallback: () => safeSetState(() {}),
                           child: TemaComponentWidget(
-                            label: 'Adhan 2 (Madinah)',
-                            icon: FaIcon(
-                              FontAwesomeIcons.mosque,
-                              size: 18.0,
-                            ),
-                            subLabel: 'Vackert Adhan från Madinah',
-                            checkValue: _model.selectedCard ==
-                                AdhanSound.AdhanMadinah.name,
-                            azanName: SoundName.adhan_madinah.name,
+                            label: 'Adhan 3',
+                            subLabel: '',
+                            checkValue:
+                                _model.selectedCard == AdhanSound.Adhan2.name,
+                            azanName: SoundName.Adhan_3.name,
                             onCheck: () async {
-                              _model.selectedCard =
-                                  AdhanSound.AdhanMadinah.name;
+                              _model.selectedCard = AdhanSound.Adhan2.name;
+                              safeSetState(() {});
+                            },
+                          ),
+                        ),
+                        wrapWithModel(
+                          model: _model.temaComponentModel6,
+                          updateCallback: () => safeSetState(() {}),
+                          child: TemaComponentWidget(
+                            label: 'Adhan 4',
+                            subLabel: '',
+                            checkValue:
+                                _model.selectedCard == AdhanSound.Adhan3.name,
+                            azanName: SoundName.Adhan_4.name,
+                            onCheck: () async {
+                              _model.selectedCard = AdhanSound.Adhan3.name;
                               safeSetState(() {});
                             },
                           ),
@@ -252,10 +245,13 @@ class _AdhanljudWidgetState extends State<AdhanljudWidget> {
                 );
                 safeSetState(() {});
                 await actions.schedulePrayerNotifications();
+                _model.result = await actions.testNotifications();
                 await actions.audioPlay(
                   FFAppConstants.NullValue,
                 );
                 Navigator.pop(context);
+
+                safeSetState(() {});
               },
               text: 'Spara',
               options: FFButtonOptions(
@@ -285,11 +281,20 @@ class _AdhanljudWidgetState extends State<AdhanljudWidget> {
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                AutoSizeText(
-                  'Du kan ändra dina bönetidsnotiser när som helst.',
-                  minFontSize: FFAppConstants.body.toDouble(),
-                  style: FlutterFlowTheme.of(context).labelMedium.override(
-                        font: GoogleFonts.manrope(
+                Expanded(
+                  child: AutoSizeText(
+                    'Du kan ändra dina bönetidsnotiser när som helst.',
+                    minFontSize: FFAppConstants.body.toDouble(),
+                    style: FlutterFlowTheme.of(context).labelMedium.override(
+                          font: GoogleFonts.manrope(
+                            fontWeight: FlutterFlowTheme.of(context)
+                                .labelMedium
+                                .fontWeight,
+                            fontStyle: FlutterFlowTheme.of(context)
+                                .labelMedium
+                                .fontStyle,
+                          ),
+                          letterSpacing: 0.0,
                           fontWeight: FlutterFlowTheme.of(context)
                               .labelMedium
                               .fontWeight,
@@ -297,12 +302,7 @@ class _AdhanljudWidgetState extends State<AdhanljudWidget> {
                               .labelMedium
                               .fontStyle,
                         ),
-                        letterSpacing: 0.0,
-                        fontWeight:
-                            FlutterFlowTheme.of(context).labelMedium.fontWeight,
-                        fontStyle:
-                            FlutterFlowTheme.of(context).labelMedium.fontStyle,
-                      ),
+                  ),
                 ),
               ],
             ),

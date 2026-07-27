@@ -10,10 +10,10 @@ export 'page_footer_model.dart';
 class PageFooterWidget extends StatefulWidget {
   const PageFooterWidget({
     super.key,
-    required this.activeTab,
+    required this.selectedIndex,
   });
 
-  final int? activeTab;
+  final int? selectedIndex;
 
   @override
   State<PageFooterWidget> createState() => _PageFooterWidgetState();
@@ -48,7 +48,7 @@ class _PageFooterWidgetState extends State<PageFooterWidget> {
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         InkWell(
           splashColor: Colors.transparent,
@@ -76,7 +76,7 @@ class _PageFooterWidgetState extends State<PageFooterWidget> {
               icon: FaIcon(
                 FontAwesomeIcons.home,
                 color: valueOrDefault<Color>(
-                  widget.activeTab == 1
+                  widget.selectedIndex == 0
                       ? FlutterFlowTheme.of(context).primary
                       : FlutterFlowTheme.of(context).footerInActive,
                   FlutterFlowTheme.of(context).footerInActive,
@@ -113,7 +113,7 @@ class _PageFooterWidgetState extends State<PageFooterWidget> {
               icon: FaIcon(
                 FontAwesomeIcons.bookOpen,
                 color: valueOrDefault<Color>(
-                  widget.activeTab == 2
+                  widget.selectedIndex == 1
                       ? FlutterFlowTheme.of(context).primary
                       : FlutterFlowTheme.of(context).footerInActive,
                   FlutterFlowTheme.of(context).footerInActive,
@@ -150,7 +150,7 @@ class _PageFooterWidgetState extends State<PageFooterWidget> {
               icon: FaIcon(
                 FontAwesomeIcons.moon,
                 color: valueOrDefault<Color>(
-                  widget.activeTab == 3
+                  widget.selectedIndex == 2
                       ? FlutterFlowTheme.of(context).primary
                       : FlutterFlowTheme.of(context).footerInActive,
                   FlutterFlowTheme.of(context).footerInActive,
@@ -187,7 +187,7 @@ class _PageFooterWidgetState extends State<PageFooterWidget> {
               icon: FaIcon(
                 FontAwesomeIcons.compass,
                 color: valueOrDefault<Color>(
-                  widget.activeTab == 4
+                  widget.selectedIndex == 3
                       ? FlutterFlowTheme.of(context).primary
                       : FlutterFlowTheme.of(context).footerInActive,
                   FlutterFlowTheme.of(context).footerInActive,
@@ -224,7 +224,7 @@ class _PageFooterWidgetState extends State<PageFooterWidget> {
               icon: Icon(
                 Icons.menu,
                 color: valueOrDefault<Color>(
-                  widget.activeTab == 5
+                  widget.selectedIndex == 4
                       ? FlutterFlowTheme.of(context).primary
                       : FlutterFlowTheme.of(context).footerInActive,
                   FlutterFlowTheme.of(context).footerInActive,
