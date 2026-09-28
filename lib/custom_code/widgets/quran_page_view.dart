@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'dart:async';
+import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
@@ -517,6 +518,120 @@ class _QuranPageViewState extends State<QuranPageView> {
     }
   }
 
+  Widget _buildArabicRichText({
+    required String text,
+    required double fontSize,
+    required Color textColor,
+    double height = 2.0,
+    FontWeight fontWeight = FontWeight.bold,
+    TextAlign textAlign = TextAlign.right,
+  }) {
+    final trimmed = text.trim();
+    final ayahRegex = RegExp(r'۝([0-9\u0660-\u0669]+)');
+    final matches = ayahRegex.allMatches(trimmed);
+
+    if (matches.isEmpty) {
+      return Text(
+        trimmed,
+        textAlign: textAlign,
+        textDirection: ui.TextDirection.rtl,
+        style: GoogleFonts.scheherazadeNew(
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          height: height,
+          color: textColor,
+        ),
+      );
+    }
+
+    final List<InlineSpan> spans = [];
+    int lastEnd = 0;
+
+    for (final match in matches) {
+      if (match.start > lastEnd) {
+        spans.add(
+          TextSpan(
+            text: trimmed.substring(lastEnd, match.start),
+            style: GoogleFonts.scheherazadeNew(
+              fontSize: fontSize,
+              fontWeight: fontWeight,
+              height: height,
+              color: textColor,
+            ),
+          ),
+        );
+      }
+
+      final digits = match.group(1)!;
+      final digitFontSize = digits.length >= 3
+          ? fontSize * 0.28
+          : (digits.length == 2 ? fontSize * 0.34 : fontSize * 0.40);
+
+      spans.add(
+        WidgetSpan(
+          alignment: PlaceholderAlignment.middle,
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 2.0),
+            width: fontSize * 1.15,
+            height: fontSize * 1.15,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Text(
+                  '۝',
+                  textDirection: ui.TextDirection.rtl,
+                  style: GoogleFonts.scheherazadeNew(
+                    fontSize: fontSize * 1.05,
+                    height: 1.0,
+                    color: textColor,
+                  ),
+                ),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 1.0),
+                    child: Text(
+                      digits,
+                      textDirection: ui.TextDirection.rtl,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.scheherazadeNew(
+                        fontSize: digitFontSize,
+                        fontWeight: FontWeight.bold,
+                        height: 1.0,
+                        color: textColor,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      lastEnd = match.end;
+    }
+
+    if (lastEnd < trimmed.length) {
+      spans.add(
+        TextSpan(
+          text: trimmed.substring(lastEnd),
+          style: GoogleFonts.scheherazadeNew(
+            fontSize: fontSize,
+            fontWeight: fontWeight,
+            height: height,
+            color: textColor,
+          ),
+        ),
+      );
+    }
+
+    return Text.rich(
+      TextSpan(children: spans),
+      textAlign: textAlign,
+      textDirection: ui.TextDirection.rtl,
+    );
+  }
+
   void _checkAndScrollToTarget() {
     if (!_scrollController.hasClients) {
       return;
@@ -748,16 +863,12 @@ class _QuranPageViewState extends State<QuranPageView> {
                                 Expanded(
                                   child: Visibility(
                                     visible: arActive,
-                                    child: Text(
-                                      ayah.arabic,
-                                      textAlign: TextAlign.end,
-                                      style: GoogleFonts.scheherazadeNew(
-                                        fontSize: arFont,
-                                        height: 2.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                      ),
+                                    child: _buildArabicRichText(
+                                      text: ayah.arabic,
+                                      fontSize: arFont,
+                                      textColor: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                      textAlign: TextAlign.right,
                                     ),
                                   ),
                                 ),
@@ -774,8 +885,7 @@ class _QuranPageViewState extends State<QuranPageView> {
                                       fontFamily:
                                           GoogleFonts.manrope().fontFamily,
                                       fontSize: enFont,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
+                                      color: const Color(0xFF727272),
                                     ),
                               ),
                             ],

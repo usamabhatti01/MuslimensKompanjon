@@ -103,36 +103,30 @@ class _FullCalenderWidgetState extends State<FullCalenderWidget> {
                       width:
                           FlutterFlowTheme.of(context).designToken.spacing.sm)),
                 ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    FlutterFlowDropDown<String>(
-                      controller: _model.cityNameValueController ??=
-                          FormFieldController<String>(
-                        _model.cityNameValue ??= FFAppState().user.city,
-                      ),
-                      options:
-                          FFAppState().cityList.map((e) => e.name).toList(),
-                      onChanged: (val) async {
-                        safeSetState(() => _model.cityNameValue = val);
-                        _model.city = _model.cityNameValue;
-                        safeSetState(() {});
-                      },
-                      width: 200.0,
-                      height: 40.0,
-                      textStyle:
-                          FlutterFlowTheme.of(context).bodyMedium.override(
-                                font: GoogleFonts.manrope(
-                                  fontWeight: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .fontWeight,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .fontStyle,
-                                ),
-                                color: FlutterFlowTheme.of(context).primaryText,
-                                letterSpacing: 0.0,
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      FlutterFlowDropDown<String>(
+                        controller: _model.cityNameValueController ??=
+                            FormFieldController<String>(
+                          _model.cityNameValue ??= FFAppState().user.city,
+                        ),
+                        options:
+                            FFAppState().cityList.map((e) => e.name).toList(),
+                        onChanged: (val) async {
+                          safeSetState(() => _model.cityNameValue = val);
+                          _model.city = _model.cityNameValue;
+                          safeSetState(() {});
+                        },
+                        width: 200.0,
+                        height: 40.0,
+                        textStyle: FlutterFlowTheme.of(context)
+                            .bodyMedium
+                            .override(
+                              font: GoogleFonts.manrope(
                                 fontWeight: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .fontWeight,
@@ -140,51 +134,52 @@ class _FullCalenderWidgetState extends State<FullCalenderWidget> {
                                     .bodyMedium
                                     .fontStyle,
                               ),
-                      hintText: 'Select...',
-                      icon: Icon(
-                        Icons.keyboard_arrow_down_rounded,
-                        color: FlutterFlowTheme.of(context).primaryText,
-                        size: 18.0,
+                              color: FlutterFlowTheme.of(context).primaryText,
+                              letterSpacing: 0.0,
+                              fontWeight: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontWeight,
+                              fontStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontStyle,
+                            ),
+                        hintText: 'Select...',
+                        icon: Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          color: FlutterFlowTheme.of(context).primaryText,
+                          size: 18.0,
+                        ),
+                        fillColor:
+                            FlutterFlowTheme.of(context).secondaryBackground,
+                        elevation: 2.0,
+                        borderColor: FlutterFlowTheme.of(context).alternate,
+                        borderWidth: 0.0,
+                        borderRadius: 8.0,
+                        margin: EdgeInsetsDirectional.fromSTEB(
+                            12.0, 0.0, 12.0, 0.0),
+                        hidesUnderline: true,
+                        isOverButton: false,
+                        isSearchable: false,
+                        isMultiSelect: false,
                       ),
-                      fillColor:
-                          FlutterFlowTheme.of(context).secondaryBackground,
-                      elevation: 2.0,
-                      borderColor: FlutterFlowTheme.of(context).alternate,
-                      borderWidth: 0.0,
-                      borderRadius: 8.0,
-                      margin:
-                          EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
-                      hidesUnderline: true,
-                      isOverButton: false,
-                      isSearchable: false,
-                      isMultiSelect: false,
-                    ),
-                    FlutterFlowDropDown<int>(
-                      controller: _model.yearValueController ??=
-                          FormFieldController<int>(
-                        _model.yearValue ??= 2026,
-                      ),
-                      options: List<int>.from([2026, 2027]),
-                      optionLabels: ['2026', '2027'],
-                      onChanged: (val) async {
-                        safeSetState(() => _model.yearValue = val);
-                        _model.year = _model.yearValue!;
-                        safeSetState(() {});
-                      },
-                      width: 100.0,
-                      height: 40.0,
-                      textStyle:
-                          FlutterFlowTheme.of(context).bodyMedium.override(
-                                font: GoogleFonts.manrope(
-                                  fontWeight: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .fontWeight,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .fontStyle,
-                                ),
-                                color: FlutterFlowTheme.of(context).primaryText,
-                                letterSpacing: 0.0,
+                      FlutterFlowDropDown<int>(
+                        controller: _model.yearValueController ??=
+                            FormFieldController<int>(
+                          _model.yearValue ??= 2026,
+                        ),
+                        options: List<int>.from([2026, 2027]),
+                        optionLabels: ['2026', '2027'],
+                        onChanged: (val) async {
+                          safeSetState(() => _model.yearValue = val);
+                          _model.year = _model.yearValue!;
+                          safeSetState(() {});
+                        },
+                        width: 100.0,
+                        height: 40.0,
+                        textStyle: FlutterFlowTheme.of(context)
+                            .bodyMedium
+                            .override(
+                              font: GoogleFonts.manrope(
                                 fontWeight: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .fontWeight,
@@ -192,46 +187,60 @@ class _FullCalenderWidgetState extends State<FullCalenderWidget> {
                                     .bodyMedium
                                     .fontStyle,
                               ),
-                      hintText: 'Select Year',
-                      icon: Icon(
-                        Icons.keyboard_arrow_down_rounded,
-                        color: FlutterFlowTheme.of(context).primaryText,
-                        size: 18.0,
+                              color: FlutterFlowTheme.of(context).primaryText,
+                              letterSpacing: 0.0,
+                              fontWeight: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontWeight,
+                              fontStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontStyle,
+                            ),
+                        hintText: 'Select Year',
+                        icon: Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          color: FlutterFlowTheme.of(context).primaryText,
+                          size: 18.0,
+                        ),
+                        fillColor:
+                            FlutterFlowTheme.of(context).secondaryBackground,
+                        elevation: 2.0,
+                        borderColor: FlutterFlowTheme.of(context).alternate,
+                        borderWidth: 0.0,
+                        borderRadius: 8.0,
+                        margin: EdgeInsetsDirectional.fromSTEB(
+                            12.0, 0.0, 12.0, 0.0),
+                        hidesUnderline: true,
+                        isOverButton: false,
+                        isSearchable: false,
+                        isMultiSelect: false,
                       ),
-                      fillColor:
-                          FlutterFlowTheme.of(context).secondaryBackground,
-                      elevation: 2.0,
-                      borderColor: FlutterFlowTheme.of(context).alternate,
-                      borderWidth: 0.0,
-                      borderRadius: 8.0,
-                      margin:
-                          EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
-                      hidesUnderline: true,
-                      isOverButton: false,
-                      isSearchable: false,
-                      isMultiSelect: false,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 Expanded(
-                  child: Container(
-                    width: MediaQuery.sizeOf(context).width * 1.0,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                    ),
+                  child: Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
                     child: Container(
                       width: MediaQuery.sizeOf(context).width * 1.0,
-                      height: MediaQuery.sizeOf(context).height * 1.0,
-                      child: custom_widgets.PrayerMonthTable(
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                      ),
+                      child: Container(
                         width: MediaQuery.sizeOf(context).width * 1.0,
                         height: MediaQuery.sizeOf(context).height * 1.0,
-                        cityName: _model.city!,
-                        year: _model.year,
+                        child: custom_widgets.PrayerMonthTable(
+                          width: MediaQuery.sizeOf(context).width * 1.0,
+                          height: MediaQuery.sizeOf(context).height * 1.0,
+                          cityName: _model.city!,
+                          year: _model.year,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ].divide(SizedBox(height: 20.0)),
+              ],
             ),
           ),
         ),

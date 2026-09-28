@@ -406,22 +406,30 @@ class _QuranSearchWidgetState extends State<QuranSearchWidget>
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          // Drag handle
-          Center(
-            child: Container(
-              margin: const EdgeInsets.only(top: 12.0, bottom: 4.0),
-              width: 40.0,
-              height: 4.0,
-              decoration: BoxDecoration(
-                color: theme.alternate,
-                borderRadius: BorderRadius.circular(2.0),
+          // Drag handle (50px by 5px, visible in dark/light mode, tap to close)
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => Navigator.of(context).pop(),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
+              child: Center(
+                child: Container(
+                  width: 50.0,
+                  height: 5.0,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? const Color(0xFF555555)
+                        : const Color(0xFFD1D5DB),
+                    borderRadius: BorderRadius.circular(2.5),
+                  ),
+                ),
               ),
             ),
           ),
 
           // Header
           Padding(
-            padding: const EdgeInsets.fromLTRB(20.0, 8.0, 16.0, 4.0),
+            padding: const EdgeInsets.fromLTRB(20.0, 4.0, 20.0, 4.0),
             child: Row(
               children: [
                 Expanded(
@@ -446,10 +454,6 @@ class _QuranSearchWidgetState extends State<QuranSearchWidget>
                     ],
                   ),
                 ),
-                IconButton(
-                  icon: Icon(Icons.close_rounded, color: theme.secondaryText),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
               ],
             ),
           ),
@@ -466,7 +470,10 @@ class _QuranSearchWidgetState extends State<QuranSearchWidget>
               child: TextField(
                 controller: _searchController,
                 focusNode: _searchFocusNode,
-                style: theme.bodyMedium,
+                style: theme.bodyMedium.copyWith(
+                  color: theme.primaryText,
+                ),
+                cursorColor: theme.primary,
                 textInputAction: TextInputAction.search,
                 onSubmitted: (value) {
                   final q = value.trim();
@@ -1137,8 +1144,10 @@ class _QuranSearchWidgetState extends State<QuranSearchWidget>
                   children: [
                     Text(
                       surah.englishName,
-                      style: theme.bodyMedium
-                          .copyWith(fontWeight: FontWeight.bold),
+                      style: theme.bodyMedium.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: theme.primaryText,
+                      ),
                     ),
                     Text(
                       '${surah.englishTranslation} • ${surah.totalVerses} verses',

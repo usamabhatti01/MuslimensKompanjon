@@ -15,6 +15,7 @@ class TemaComponentWidget extends StatefulWidget {
     required this.checkValue,
     required this.onCheck,
     required this.azanName,
+    this.icon,
   });
 
   final String? label;
@@ -22,6 +23,7 @@ class TemaComponentWidget extends StatefulWidget {
   final bool? checkValue;
   final Future Function()? onCheck;
   final String? azanName;
+  final Widget? icon;
 
   @override
   State<TemaComponentWidget> createState() => _TemaComponentWidgetState();
@@ -71,161 +73,183 @@ class _TemaComponentWidgetState extends State<TemaComponentWidget> {
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
+                      Container(
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: InkWell(
+                            splashColor: Colors.transparent,
+                            focusColor: Colors.transparent,
+                            hoverColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onTap: () async {
+                              await actions.audioPlay(
+                                widget.azanName!,
+                              );
+                              await widget.onCheck?.call();
+                            },
+                            child: Row(
                               mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
-                                    borderRadius: BorderRadius.circular(
-                                        FlutterFlowTheme.of(context)
-                                            .designToken
-                                            .radius
-                                            .sm),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    child: Image.asset(
-                                      'assets/images/iconMosque.png',
-                                      width: 30.0,
-                                      height: 30.0,
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                ),
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
                                   children: [
-                                    AutoSizeText(
-                                      valueOrDefault<String>(
-                                        widget.label,
-                                        'add label',
-                                      ),
-                                      minFontSize:
-                                          FFAppConstants.heading.toDouble(),
-                                      style: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .override(
-                                            font: GoogleFonts.plusJakartaSans(
-                                              fontWeight:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleSmall
-                                                      .fontWeight,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleSmall
-                                                      .fontStyle,
-                                            ),
-                                            letterSpacing: 0.0,
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .titleSmall
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .titleSmall
-                                                    .fontStyle,
-                                          ),
-                                    ),
-                                    AutoSizeText(
-                                      valueOrDefault<String>(
-                                        widget.subLabel,
-                                        '.',
-                                      ),
-                                      minFontSize:
-                                          FFAppConstants.body.toDouble(),
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodySmall
-                                          .override(
-                                            font: GoogleFonts.manrope(
-                                              fontWeight:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodySmall
-                                                      .fontWeight,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodySmall
-                                                      .fontStyle,
-                                            ),
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            letterSpacing: 0.0,
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodySmall
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodySmall
-                                                    .fontStyle,
-                                          ),
-                                    ),
-                                  ].divide(SizedBox(height: 5.0)),
-                                ),
-                              ].divide(SizedBox(width: 10.0)),
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                InkWell(
-                                  splashColor: Colors.transparent,
-                                  focusColor: Colors.transparent,
-                                  hoverColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  onTap: () async {
-                                    await actions.audioPlay(
-                                      widget.azanName!,
-                                    );
-                                    await widget.onCheck?.call();
-                                  },
-                                  child: Container(
-                                    width: 20.0,
-                                    height: 20.0,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        width: 2.0,
-                                      ),
-                                    ),
-                                    child: Visibility(
-                                      visible: widget.checkValue ?? true,
-                                      child: Padding(
-                                        padding: EdgeInsets.all(3.0),
+                                    if (widget.icon != null)
+                                      Align(
+                                        alignment:
+                                            AlignmentDirectional(0.0, 0.0),
                                         child: Container(
-                                          width:
-                                              MediaQuery.sizeOf(context).width *
-                                                  0.1,
-                                          height:
-                                              MediaQuery.sizeOf(context).width *
-                                                  0.1,
+                                          width: 50.0,
+                                          height: 50.0,
                                           decoration: BoxDecoration(
                                             color: FlutterFlowTheme.of(context)
-                                                .primary,
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
+                                                .primaryBackground,
+                                            borderRadius: BorderRadius.circular(
+                                                FlutterFlowTheme.of(context)
+                                                    .designToken
+                                                    .radius
+                                                    .sm),
+                                          ),
+                                          child: Align(
+                                            alignment:
+                                                AlignmentDirectional(0.0, 0.0),
+                                            child: widget.icon!,
+                                          ),
+                                        ),
+                                      ),
+                                    Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        AutoSizeText(
+                                          valueOrDefault<String>(
+                                            widget.label,
+                                            'add label',
+                                          ),
+                                          minFontSize:
+                                              FFAppConstants.heading.toDouble(),
+                                          style: FlutterFlowTheme.of(context)
+                                              .titleSmall
+                                              .override(
+                                                font:
+                                                    GoogleFonts.plusJakartaSans(
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .titleSmall
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .titleSmall
+                                                          .fontStyle,
+                                                ),
+                                                letterSpacing: 0.0,
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleSmall
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleSmall
+                                                        .fontStyle,
+                                              ),
+                                        ),
+                                        if (widget.subLabel != null &&
+                                            widget.subLabel != '')
+                                          AutoSizeText(
+                                            valueOrDefault<String>(
+                                              widget.subLabel,
+                                              '.',
+                                            ),
+                                            minFontSize:
+                                                FFAppConstants.body.toDouble(),
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodySmall
+                                                .override(
+                                                  font: GoogleFonts.manrope(
+                                                    fontWeight:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodySmall
+                                                            .fontWeight,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodySmall
+                                                            .fontStyle,
+                                                  ),
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                  letterSpacing: 0.0,
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodySmall
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodySmall
+                                                          .fontStyle,
+                                                ),
+                                          ),
+                                      ].divide(SizedBox(height: 5.0)),
+                                    ),
+                                  ].divide(SizedBox(width: 10.0)),
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Container(
+                                      width: 20.0,
+                                      height: 20.0,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryText,
+                                          width: 2.0,
+                                        ),
+                                      ),
+                                      child: Visibility(
+                                        visible: widget.checkValue ?? true,
+                                        child: Padding(
+                                          padding: EdgeInsets.all(3.0),
+                                          child: Container(
+                                            width: MediaQuery.sizeOf(context)
+                                                    .width *
+                                                0.1,
+                                            height: MediaQuery.sizeOf(context)
+                                                    .width *
+                                                0.1,
+                                            decoration: BoxDecoration(
                                               color:
                                                   FlutterFlowTheme.of(context)
-                                                      .secondaryText,
+                                                      .primary,
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     ],

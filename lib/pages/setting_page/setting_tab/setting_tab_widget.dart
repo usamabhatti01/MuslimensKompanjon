@@ -72,7 +72,10 @@ class _SettingTabWidgetState extends State<SettingTabWidget> {
                         borderRadius: BorderRadius.circular(
                             FlutterFlowTheme.of(context).designToken.radius.sm),
                       ),
-                      child: widget.icon!,
+                      child: Align(
+                        alignment: AlignmentDirectional(0.0, 0.0),
+                        child: widget.icon!,
+                      ),
                     ),
                     Column(
                       mainAxisSize: MainAxisSize.min,
@@ -104,16 +107,27 @@ class _SettingTabWidgetState extends State<SettingTabWidget> {
                                         .fontStyle,
                                   ),
                         ),
-                        AutoSizeText(
-                          valueOrDefault<String>(
-                            widget.sunLabel,
-                            'add sublabel',
-                          ),
-                          minFontSize: FFAppConstants.body.toDouble(),
-                          style: FlutterFlowTheme.of(context)
-                              .bodySmall
-                              .override(
-                                font: GoogleFonts.manrope(
+                        if (widget.sunLabel != null && widget.sunLabel != '')
+                          AutoSizeText(
+                            valueOrDefault<String>(
+                              widget.sunLabel,
+                              'add sublabel',
+                            ),
+                            minFontSize: FFAppConstants.body.toDouble(),
+                            style: FlutterFlowTheme.of(context)
+                                .bodySmall
+                                .override(
+                                  font: GoogleFonts.manrope(
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodySmall
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodySmall
+                                        .fontStyle,
+                                  ),
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                  letterSpacing: 0.0,
                                   fontWeight: FlutterFlowTheme.of(context)
                                       .bodySmall
                                       .fontWeight,
@@ -121,16 +135,7 @@ class _SettingTabWidgetState extends State<SettingTabWidget> {
                                       .bodySmall
                                       .fontStyle,
                                 ),
-                                color: FlutterFlowTheme.of(context).primaryText,
-                                letterSpacing: 0.0,
-                                fontWeight: FlutterFlowTheme.of(context)
-                                    .bodySmall
-                                    .fontWeight,
-                                fontStyle: FlutterFlowTheme.of(context)
-                                    .bodySmall
-                                    .fontStyle,
-                              ),
-                        ),
+                          ),
                       ],
                     ),
                   ].divide(SizedBox(width: 10.0)),

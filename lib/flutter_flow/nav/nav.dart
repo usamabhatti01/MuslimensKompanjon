@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 
 import '/backend/schema/structs/index.dart';
 
-import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
 import '/index.dart';
@@ -36,44 +35,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
-      errorBuilder: (context, state) => appStateNotifier.showSplashImage
-          ? Builder(
-              builder: (context) => isWeb
-                  ? Container()
-                  : Container(
-                      color: FlutterFlowTheme.of(context).primaryBackground,
-                      child: Center(
-                        child: Image.asset(
-                          'assets/images/My_workflow.png',
-                          width: 66.0,
-                          height: 66.0,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-            )
-          : TestWidget(),
+      errorBuilder: (context, state) => SplashScreenWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
-          builder: (context, _) => appStateNotifier.showSplashImage
-              ? Builder(
-                  builder: (context) => isWeb
-                      ? Container()
-                      : Container(
-                          color: FlutterFlowTheme.of(context).primaryBackground,
-                          child: Center(
-                            child: Image.asset(
-                              'assets/images/My_workflow.png',
-                              width: 66.0,
-                              height: 66.0,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                )
-              : TestWidget(),
+          builder: (context, _) => SplashScreenWidget(),
         ),
         FFRoute(
           name: OnBoarding01Widget.routeName,
@@ -171,9 +138,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => KuranHomeWidget(),
         ),
         FFRoute(
-          name: MKkanalenWidget.routeName,
-          path: MKkanalenWidget.routePath,
-          builder: (context, params) => MKkanalenWidget(),
+          name: MKkanalenCopyyWidget.routeName,
+          path: MKkanalenCopyyWidget.routePath,
+          builder: (context, params) => MKkanalenCopyyWidget(),
         ),
         FFRoute(
           name: LiveVideoWidget.routeName,
@@ -336,9 +303,40 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ParamType.int,
             ),
           ),
+        ),
+        FFRoute(
+          name: WebViewWidget.routeName,
+          path: WebViewWidget.routePath,
+          builder: (context, params) => WebViewWidget(
+            link: params.getParam(
+              'link',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: MKkanalenWidget.routeName,
+          path: MKkanalenWidget.routePath,
+          builder: (context, params) => MKkanalenWidget(),
+        ),
+        FFRoute(
+          name: NarHjartatDetailWidget.routeName,
+          path: NarHjartatDetailWidget.routePath,
+          builder: (context, params) => NarHjartatDetailWidget(
+            adkar: params.getParam(
+              'adkar',
+              ParamType.String,
+            ),
+            adhkar: params.getParam<AdhkarStruct>(
+              'adhkar',
+              ParamType.DataStruct,
+              isList: true,
+              structBuilder: AdhkarStruct.fromSerializableMap,
+            ),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
-      observers: [routeObserver],
+      observers: ffNavigatorObservers,
     );
 
 extension NavParamExtensions on Map<String, String?> {

@@ -3,6 +3,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/pages/setting_page/bnetidsnotiser_without_time/bnetidsnotiser_without_time_widget.dart';
+import '/pages/setting_page/bottom_sheet_icon/bottom_sheet_icon_widget.dart';
 import '/custom_code/actions/index.dart' as actions;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -47,157 +48,238 @@ class _BnetidsnotiserWidgetState extends State<BnetidsnotiserWidget> {
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
-    return Container(
-      width: MediaQuery.sizeOf(context).width * 1.0,
-      height: MediaQuery.sizeOf(context).height * 1.0,
-      decoration: BoxDecoration(
-        color: FlutterFlowTheme.of(context).primaryBackground,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(16.0),
-          topRight: Radius.circular(16.0),
+    return SafeArea(
+      child: Container(
+        width: MediaQuery.sizeOf(context).width * 1.0,
+        height: MediaQuery.sizeOf(context).height * 0.7,
+        decoration: BoxDecoration(
+          color: FlutterFlowTheme.of(context).primaryBackground,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16.0),
+            topRight: Radius.circular(16.0),
+          ),
         ),
-      ),
-      child: Padding(
-        padding:
-            EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.md),
-        child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(
+              FlutterFlowTheme.of(context).designToken.spacing.md),
           child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: AutoSizeText(
-                      'Bönetidsnotiser',
-                      minFontSize: FFAppConstants.heading.toDouble(),
-                      style: FlutterFlowTheme.of(context).titleLarge.override(
-                            font: GoogleFonts.plusJakartaSans(
-                              fontWeight: FlutterFlowTheme.of(context)
-                                  .titleLarge
-                                  .fontWeight,
-                              fontStyle: FlutterFlowTheme.of(context)
-                                  .titleLarge
-                                  .fontStyle,
-                            ),
-                            letterSpacing: 0.0,
-                            fontWeight: FlutterFlowTheme.of(context)
-                                .titleLarge
-                                .fontWeight,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .titleLarge
-                                .fontStyle,
-                          ),
-                    ),
-                  ),
-                ],
+              wrapWithModel(
+                model: _model.bottomSheetIconModel,
+                updateCallback: () => safeSetState(() {}),
+                child: BottomSheetIconWidget(),
               ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: AutoSizeText(
-                      'Anpassa hur du vill bli påmind inför varje bön.',
-                      minFontSize: FFAppConstants.body.toDouble(),
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            font: GoogleFonts.manrope(
-                              fontWeight: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .fontWeight,
-                              fontStyle: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .fontStyle,
-                            ),
-                            color: FlutterFlowTheme.of(context).primaryText,
-                            letterSpacing: 0.0,
-                            fontWeight: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontWeight,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontStyle,
-                          ),
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(
-                        FlutterFlowTheme.of(context).designToken.spacing.sm),
-                    child: Container(
-                      decoration: BoxDecoration(),
-                      child: Column(
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          Padding(
-                            padding: EdgeInsets.all(16.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'Notis',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        font: GoogleFonts.manrope(
-                                          fontWeight: FontWeight.w600,
-                                          fontStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyMedium
-                                                  .fontStyle,
-                                        ),
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                        letterSpacing: 0.0,
-                                        fontWeight: FontWeight.w600,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .fontStyle,
-                                      ),
-                                ),
-                                Text(
-                                  'Adhan',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        font: GoogleFonts.manrope(
-                                          fontWeight: FontWeight.w600,
-                                          fontStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyMedium
-                                                  .fontStyle,
-                                        ),
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                        letterSpacing: 0.0,
-                                        fontWeight: FontWeight.w600,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .fontStyle,
-                                      ),
-                                ),
-                              ]
-                                  .divide(SizedBox(width: 15.0))
-                                  .addToEnd(SizedBox(width: 10.0)),
+                          Expanded(
+                            child: AutoSizeText(
+                              'Bönetidsnotiser',
+                              minFontSize: FFAppConstants.heading.toDouble(),
+                              style: FlutterFlowTheme.of(context)
+                                  .titleLarge
+                                  .override(
+                                    font: GoogleFonts.plusJakartaSans(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .titleLarge
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .titleLarge
+                                          .fontStyle,
+                                    ),
+                                    letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .titleLarge
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .titleLarge
+                                        .fontStyle,
+                                  ),
                             ),
                           ),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12.0),
-                              border: Border.all(
-                                color: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
-                                width: 1.5,
-                              ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Expanded(
+                            child: AutoSizeText(
+                              'Anpassa hur du vill bli påmind inför varje bön',
+                              minFontSize: FFAppConstants.body.toDouble(),
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    font: GoogleFonts.manrope(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
+                                  ),
                             ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(),
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 0.0, 15.0, 0.0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Text(
+                                            'Notis',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  font: GoogleFonts.manrope(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                  letterSpacing: 0.0,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                          ),
+                                          Text(
+                                            '(Före bön)',
+                                            style: FlutterFlowTheme.of(context)
+                                                .titleSmall
+                                                .override(
+                                                  font: GoogleFonts
+                                                      .plusJakartaSans(
+                                                    fontWeight:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .titleSmall
+                                                            .fontWeight,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .titleSmall
+                                                            .fontStyle,
+                                                  ),
+                                                  fontSize: 12.0,
+                                                  letterSpacing: 0.0,
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .titleSmall
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .titleSmall
+                                                          .fontStyle,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Text(
+                                          'Adhan',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                font: GoogleFonts.manrope(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                                letterSpacing: 0.0,
+                                                fontWeight: FontWeight.w600,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
+                                        ),
+                                        Text(
+                                          '(Exakt tid)',
+                                          style: FlutterFlowTheme.of(context)
+                                              .titleSmall
+                                              .override(
+                                                font:
+                                                    GoogleFonts.plusJakartaSans(
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .titleSmall
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .titleSmall
+                                                          .fontStyle,
+                                                ),
+                                                fontSize: 12.0,
+                                                letterSpacing: 0.0,
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleSmall
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleSmall
+                                                        .fontStyle,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                  ]
+                                      .divide(SizedBox(width: 5.0))
+                                      .addToEnd(SizedBox(width: 10.0)),
+                                ),
                                 wrapWithModel(
                                   model: _model.fajrModel,
                                   updateCallback: () => safeSetState(() {}),
@@ -318,95 +400,76 @@ class _BnetidsnotiserWidgetState extends State<BnetidsnotiserWidget> {
                           ),
                         ],
                       ),
-                    ),
+                      FFButtonWidget(
+                        onPressed: () async {
+                          FFAppState().updateUserStruct(
+                            (e) => e
+                              ..notifications = NotificationsStruct(
+                                fazr: NotificationTpyeStruct(
+                                  notice: _model.fajrModel.notisValue,
+                                  adhan: _model.fajrModel.adhanValue,
+                                ),
+                                dohr: NotificationTpyeStruct(
+                                  notice: _model.dhohrModel.notisValue,
+                                  adhan: _model.dhohrModel.adhanValue,
+                                ),
+                                asr: NotificationTpyeStruct(
+                                  notice: _model.asrModel.notisValue,
+                                  adhan: _model.asrModel.adhanValue,
+                                ),
+                                maghrib: NotificationTpyeStruct(
+                                  notice: _model.maghribModel.notisValue,
+                                  adhan: _model.maghribModel.adhanValue,
+                                ),
+                                isha: NotificationTpyeStruct(
+                                  notice: _model.ishaModel.notisValue,
+                                  adhan: _model.ishaModel.adhanValue,
+                                ),
+                              ),
+                          );
+                          safeSetState(() {});
+                          await actions.schedulePrayerNotifications();
+                          Navigator.pop(context);
+                        },
+                        text: 'Spara',
+                        options: FFButtonOptions(
+                          width: MediaQuery.sizeOf(context).width * 0.9,
+                          height: 40.0,
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              16.0, 0.0, 16.0, 0.0),
+                          iconPadding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 0.0),
+                          color: FlutterFlowTheme.of(context).primary,
+                          textStyle:
+                              FlutterFlowTheme.of(context).titleSmall.override(
+                                    font: GoogleFonts.plusJakartaSans(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontStyle,
+                                    ),
+                                    color: Colors.white,
+                                    letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .fontStyle,
+                                  ),
+                          elevation: 0.0,
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                    ]
+                        .divide(SizedBox(height: 20.0))
+                        .addToEnd(SizedBox(height: 20.0)),
                   ),
-                ],
-              ),
-              FFButtonWidget(
-                onPressed: () async {
-                  FFAppState().updateUserStruct(
-                    (e) => e
-                      ..notifications = NotificationsStruct(
-                        fazr: NotificationTpyeStruct(
-                          notice: _model.fajrModel.notisValue,
-                          adhan: _model.fajrModel.adhanValue,
-                        ),
-                        dohr: NotificationTpyeStruct(
-                          notice: _model.dhohrModel.notisValue,
-                          adhan: _model.dhohrModel.adhanValue,
-                        ),
-                        asr: NotificationTpyeStruct(
-                          notice: _model.asrModel.notisValue,
-                          adhan: _model.asrModel.adhanValue,
-                        ),
-                        maghrib: NotificationTpyeStruct(
-                          notice: _model.maghribModel.notisValue,
-                          adhan: _model.maghribModel.adhanValue,
-                        ),
-                        isha: NotificationTpyeStruct(
-                          notice: _model.ishaModel.notisValue,
-                          adhan: _model.ishaModel.adhanValue,
-                        ),
-                      ),
-                  );
-                  safeSetState(() {});
-                  await actions.schedulePrayerNotifications();
-                  Navigator.pop(context);
-                },
-                text: 'Spara',
-                options: FFButtonOptions(
-                  width: MediaQuery.sizeOf(context).width * 0.9,
-                  height: 40.0,
-                  padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
-                  iconPadding:
-                      EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                  color: FlutterFlowTheme.of(context).primary,
-                  textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                        font: GoogleFonts.plusJakartaSans(
-                          fontWeight: FlutterFlowTheme.of(context)
-                              .titleSmall
-                              .fontWeight,
-                          fontStyle:
-                              FlutterFlowTheme.of(context).titleSmall.fontStyle,
-                        ),
-                        color: Colors.white,
-                        letterSpacing: 0.0,
-                        fontWeight:
-                            FlutterFlowTheme.of(context).titleSmall.fontWeight,
-                        fontStyle:
-                            FlutterFlowTheme.of(context).titleSmall.fontStyle,
-                      ),
-                  elevation: 0.0,
-                  borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  AutoSizeText(
-                    'Du kan ändra dina bönetidsnotiser när som helst.',
-                    minFontSize: FFAppConstants.body.toDouble(),
-                    style: FlutterFlowTheme.of(context).labelMedium.override(
-                          font: GoogleFonts.manrope(
-                            fontWeight: FlutterFlowTheme.of(context)
-                                .labelMedium
-                                .fontWeight,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .labelMedium
-                                .fontStyle,
-                          ),
-                          letterSpacing: 0.0,
-                          fontWeight: FlutterFlowTheme.of(context)
-                              .labelMedium
-                              .fontWeight,
-                          fontStyle: FlutterFlowTheme.of(context)
-                              .labelMedium
-                              .fontStyle,
-                        ),
-                  ),
-                ],
-              ),
-            ].divide(SizedBox(height: 20.0)).around(SizedBox(height: 20.0)),
+            ],
           ),
         ),
       ),

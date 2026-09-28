@@ -1,8 +1,8 @@
-import '/custom_header_footer/page_footer/page_footer_widget.dart';
 import '/custom_header_footer/page_sub_header_with_icon/page_sub_header_with_icon_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/pages/setting_page/setting_tab/setting_tab_widget.dart';
 import '/pages/setting_page/setting_tab_with_switch/setting_tab_with_switch_widget.dart';
+import '/index.dart';
 import 'setting_widget.dart' show SettingWidget;
 import 'package:flutter/material.dart';
 
@@ -29,8 +29,8 @@ class SettingModel extends FlutterFlowModel<SettingWidget> {
   late SettingTabModel settingTabModel3;
   // Model for SettingTab component.
   late SettingTabModel settingTabModel4;
-  // Model for PageFooter component.
-  late PageFooterModel pageFooterModel;
+  // Model for SettingTab component.
+  late SettingTabModel settingTabModel5;
 
   @override
   void initState(BuildContext context) {
@@ -50,7 +50,7 @@ class SettingModel extends FlutterFlowModel<SettingWidget> {
     settingTabModel2 = createModel(context, () => SettingTabModel());
     settingTabModel3 = createModel(context, () => SettingTabModel());
     settingTabModel4 = createModel(context, () => SettingTabModel());
-    pageFooterModel = createModel(context, () => PageFooterModel());
+    settingTabModel5 = createModel(context, () => SettingTabModel());
   }
 
   @override
@@ -65,6 +65,6 @@ class SettingModel extends FlutterFlowModel<SettingWidget> {
     settingTabModel2.dispose();
     settingTabModel3.dispose();
     settingTabModel4.dispose();
-    pageFooterModel.dispose();
+    settingTabModel5.dispose();
   }
 }

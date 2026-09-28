@@ -78,10 +78,25 @@ Future fetchYoutubeVideos() async {
     }
   }
 
+  String formatComments(String? commentCountStr) {
+    if (commentCountStr == null || commentCountStr.isEmpty) return '0';
+    final count = int.tryParse(commentCountStr);
+    if (count == null) return commentCountStr;
+
+    if (count >= 1000000) {
+      final value = count / 1000000;
+      return '${value.toStringAsFixed(value.truncateToDouble() == value ? 0 : 1)}M';
+    } else if (count >= 1000) {
+      final value = count / 1000;
+      return '${value.toStringAsFixed(value.truncateToDouble() == value ? 0 : 1)}K';
+    } else {
+      return '$count';
+    }
+  }
+
   try {
     final List<String> videoIds = [];
     final Map<String, Map<String, String>> videoInfoMap = {};
-    String? nextPageToken;
 
     // 1. Construct Shorts Playlist ID (UC -> UUSH) and fetch all Shorts video IDs
     final Set<String> shortVideoIds = {};
@@ -127,63 +142,53 @@ Future fetchYoutubeVideos() async {
 
     print("Total Shorts identified: ${shortVideoIds.length}");
 
-    // 2. Fetch uploads playlist items
+    // 2. Fetch uploads playlist items (fetch recent items to get the latest videos)
     print("Fetching uploads playlist items...");
-    do {
-      String playlistUrl = 'https://www.googleapis.com/youtube/v3/playlistItems'
-          '?part=snippet'
-          '&playlistId=$defaultUploadsPlaylistId'
-          '&maxResults=50'
-          '&key=$apiKey';
-      if (nextPageToken != null) {
-        playlistUrl += '&pageToken=$nextPageToken';
-      }
+    String playlistUrl = 'https://www.googleapis.com/youtube/v3/playlistItems'
+        '?part=snippet'
+        '&playlistId=$defaultUploadsPlaylistId'
+        '&maxResults=25'
+        '&key=$apiKey';
 
-      final playlistResponse = await http.get(Uri.parse(playlistUrl));
-      if (playlistResponse.statusCode != 200) {
-        print(
-            "Failed to load uploads playlist items. Code: ${playlistResponse.statusCode}");
-        break;
-      }
-
+    final playlistResponse = await http.get(Uri.parse(playlistUrl));
+    if (playlistResponse.statusCode == 200) {
       final playlistData = json.decode(playlistResponse.body);
       final fetchedItems = playlistData['items'] as List<dynamic>?;
-      if (fetchedItems == null || fetchedItems.isEmpty) {
-        break;
-      }
+      if (fetchedItems != null) {
+        for (final item in fetchedItems) {
+          final snippet = item['snippet'];
+          final videoId = snippet['resourceId']?['videoId'] as String?;
+          final title = snippet['title'] as String? ?? '';
+          final description = snippet['description'] as String? ?? '';
+          final thumbnails = snippet['thumbnails'];
+          final thumbnail = thumbnails?['maxres']?['url'] as String? ??
+              thumbnails?['high']?['url'] as String? ??
+              thumbnails?['medium']?['url'] as String? ??
+              thumbnails?['default']?['url'] as String? ??
+              '';
 
-      for (final item in fetchedItems) {
-        final snippet = item['snippet'];
-        final videoId = snippet['resourceId']?['videoId'] as String?;
-        final title = snippet['title'] as String? ?? '';
-        final description = snippet['description'] as String? ?? '';
-        final thumbnails = snippet['thumbnails'];
-        final thumbnail = thumbnails?['maxres']?['url'] as String? ??
-            thumbnails?['high']?['url'] as String? ??
-            thumbnails?['medium']?['url'] as String? ??
-            thumbnails?['default']?['url'] as String? ??
-            '';
-
-        if (videoId != null && videoId.isNotEmpty) {
-          videoIds.add(videoId);
-          videoInfoMap[videoId] = {
-            'title': title,
-            'description': description,
-            'thumbnail': thumbnail,
-            'publishedAt': snippet['publishedAt'] as String? ?? '',
-          };
+          if (videoId != null && videoId.isNotEmpty) {
+            videoIds.add(videoId);
+            videoInfoMap[videoId] = {
+              'title': title,
+              'description': description,
+              'thumbnail': thumbnail,
+              'publishedAt': snippet['publishedAt'] as String? ?? '',
+            };
+          }
         }
       }
-
-      nextPageToken = playlistData['nextPageToken'] as String?;
-    } while (nextPageToken != null);
+    } else {
+      print(
+          "Failed to load uploads playlist items. Code: ${playlistResponse.statusCode}");
+    }
 
     print("Total uploads fetched: ${videoIds.length}");
 
     if (videoIds.isEmpty) return;
 
     final List<dynamic> allVideoItems = [];
-    // 3. Fetch video details in chunks of 50
+    // 3. Fetch video details for the retrieved videos
     for (int i = 0; i < videoIds.length; i += 50) {
       final chunk = videoIds.sublist(
           i, i + 50 > videoIds.length ? videoIds.length : i + 50);
@@ -218,6 +223,7 @@ Future fetchYoutubeVideos() async {
       final statistics = videoItem['statistics'];
       final viewCountStr = statistics?['viewCount'] as String?;
       final likeCountStr = statistics?['likeCount'] as String?;
+      final commentCountStr = statistics?['commentCount'] as String?;
 
       if (id == null || !videoInfoMap.containsKey(id)) continue;
 
@@ -234,6 +240,7 @@ Future fetchYoutubeVideos() async {
         topic: description,
         views: formatViews(viewCountStr),
         likes: formatLikes(likeCountStr),
+        comment: formatComments(commentCountStr),
         duration: formatDuration(totalSeconds),
         thumbnail: thumbnail,
         postDate: publishedAtStr.isNotEmpty
@@ -249,16 +256,22 @@ Future fetchYoutubeVideos() async {
       }
     }
 
-    // 4. Update App State
+    // 4. Limit YouTube videos to only the latest 5
+    final List<YoutubeStruct> latestFiveYoutubeVideos =
+        youtubeList.take(5).toList();
+
+    // 5. Update App State
     FFAppState().update(() {
-      FFAppState().youtubeData = youtubeList;
+      FFAppState().youtubeData = latestFiveYoutubeVideos;
       FFAppState().reelsData = reelsList;
     });
 
     print(
-        "Success: Fetched ${youtubeList.length} videos and ${reelsList.length} Reels from uploads playlist.");
+        "Success: Updated state with ${latestFiveYoutubeVideos.length} latest YouTube videos and ${reelsList.length} Reels.");
   } catch (e) {
     print("Error in fetchYoutubeVideos: $e");
   }
 }
+//
+
 //

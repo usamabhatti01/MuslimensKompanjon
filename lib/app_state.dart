@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '/backend/schema/structs/index.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:csv/csv.dart';
-import 'package:synchronized/synchronized.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 
 class FFAppState extends ChangeNotifier {
@@ -19,9 +17,10 @@ class FFAppState extends ChangeNotifier {
   }
 
   Future initializePersistedState() async {
-    secureStorage = FlutterSecureStorage();
-    await _safeInitAsync(() async {
-      _youtubeData = (await secureStorage.getStringList('ff_youtubeData'))
+    prefs = await SharedPreferences.getInstance();
+    _safeInit(() {
+      _youtubeData = prefs
+              .getStringList('ff_youtubeData')
               ?.map((x) {
                 try {
                   return YoutubeStruct.fromSerializableMap(jsonDecode(x));
@@ -34,11 +33,10 @@ class FFAppState extends ChangeNotifier {
               .toList() ??
           _youtubeData;
     });
-    await _safeInitAsync(() async {
-      if (await secureStorage.read(key: 'ff_user') != null) {
+    _safeInit(() {
+      if (prefs.containsKey('ff_user')) {
         try {
-          final serializedData =
-              await secureStorage.getString('ff_user') ?? '{}';
+          final serializedData = prefs.getString('ff_user') ?? '{}';
           _user =
               UserDataStruct.fromSerializableMap(jsonDecode(serializedData));
         } catch (e) {
@@ -46,8 +44,9 @@ class FFAppState extends ChangeNotifier {
         }
       }
     });
-    await _safeInitAsync(() async {
-      _cityList = (await secureStorage.getStringList('ff_cityList'))
+    _safeInit(() {
+      _cityList = prefs
+              .getStringList('ff_cityList')
               ?.map((x) {
                 try {
                   return CityRecordStruct.fromSerializableMap(jsonDecode(x));
@@ -60,12 +59,9 @@ class FFAppState extends ChangeNotifier {
               .toList() ??
           _cityList;
     });
-    await _safeInitAsync(() async {
-      _adhkarSound =
-          await secureStorage.getBool('ff_adhkarSound') ?? _adhkarSound;
-    });
-    await _safeInitAsync(() async {
-      _reelsData = (await secureStorage.getStringList('ff_reelsData'))
+    _safeInit(() {
+      _reelsData = prefs
+              .getStringList('ff_reelsData')
               ?.map((x) {
                 try {
                   return YoutubeStruct.fromSerializableMap(jsonDecode(x));
@@ -78,11 +74,10 @@ class FFAppState extends ChangeNotifier {
               .toList() ??
           _reelsData;
     });
-    await _safeInitAsync(() async {
-      if (await secureStorage.read(key: 'ff_channelData') != null) {
+    _safeInit(() {
+      if (prefs.containsKey('ff_channelData')) {
         try {
-          final serializedData =
-              await secureStorage.getString('ff_channelData') ?? '{}';
+          final serializedData = prefs.getString('ff_channelData') ?? '{}';
           _channelData =
               ChannelStruct.fromSerializableMap(jsonDecode(serializedData));
         } catch (e) {
@@ -90,8 +85,9 @@ class FFAppState extends ChangeNotifier {
         }
       }
     });
-    await _safeInitAsync(() async {
-      _AllahNames = (await secureStorage.getStringList('ff_AllahNames'))
+    _safeInit(() {
+      _AllahNames = prefs
+              .getStringList('ff_AllahNames')
               ?.map((x) {
                 try {
                   return AllahNameStruct.fromSerializableMap(jsonDecode(x));
@@ -104,36 +100,9 @@ class FFAppState extends ChangeNotifier {
               .toList() ??
           _AllahNames;
     });
-    await _safeInitAsync(() async {
-      _morningAdhkar = (await secureStorage.getStringList('ff_morningAdhkar'))
-              ?.map((x) {
-                try {
-                  return AdhkarStruct.fromSerializableMap(jsonDecode(x));
-                } catch (e) {
-                  print("Can't decode persisted data type. Error: $e.");
-                  return null;
-                }
-              })
-              .withoutNulls
-              .toList() ??
-          _morningAdhkar;
-    });
-    await _safeInitAsync(() async {
-      _eveningAdhkar = (await secureStorage.getStringList('ff_eveningAdhkar'))
-              ?.map((x) {
-                try {
-                  return AdhkarStruct.fromSerializableMap(jsonDecode(x));
-                } catch (e) {
-                  print("Can't decode persisted data type. Error: $e.");
-                  return null;
-                }
-              })
-              .withoutNulls
-              .toList() ??
-          _eveningAdhkar;
-    });
-    await _safeInitAsync(() async {
-      _surahsList = (await secureStorage.getStringList('ff_surahsList'))
+    _safeInit(() {
+      _surahsList = prefs
+              .getStringList('ff_surahsList')
               ?.map((x) {
                 try {
                   return SurahsStruct.fromSerializableMap(jsonDecode(x));
@@ -146,8 +115,9 @@ class FFAppState extends ChangeNotifier {
               .toList() ??
           _surahsList;
     });
-    await _safeInitAsync(() async {
-      _ayahsList = (await secureStorage.getStringList('ff_ayahsList'))
+    _safeInit(() {
+      _ayahsList = prefs
+              .getStringList('ff_ayahsList')
               ?.map((x) {
                 try {
                   return AyahsStruct.fromSerializableMap(jsonDecode(x));
@@ -160,8 +130,9 @@ class FFAppState extends ChangeNotifier {
               .toList() ??
           _ayahsList;
     });
-    await _safeInitAsync(() async {
-      _juzList = (await secureStorage.getStringList('ff_juzList'))
+    _safeInit(() {
+      _juzList = prefs
+              .getStringList('ff_juzList')
               ?.map((x) {
                 try {
                   return SurahsStruct.fromSerializableMap(jsonDecode(x));
@@ -174,20 +145,20 @@ class FFAppState extends ChangeNotifier {
               .toList() ??
           _juzList;
     });
-    await _safeInitAsync(() async {
-      if (await secureStorage.read(key: 'ff_qurantSetting') != null) {
+    _safeInit(() {
+      if (prefs.containsKey('ff_qurantSetting')) {
         try {
-          final serializedData =
-              await secureStorage.getString('ff_qurantSetting') ?? '{}';
-          _qurantSetting = QuranSettingStruct.fromSerializableMap(
-              jsonDecode(serializedData));
+          final serializedData = prefs.getString('ff_qurantSetting') ?? '{}';
+          _qurantSetting =
+              FontSettingStruct.fromSerializableMap(jsonDecode(serializedData));
         } catch (e) {
           print("Can't decode persisted data type. Error: $e.");
         }
       }
     });
-    await _safeInitAsync(() async {
-      _aboutIslam = (await secureStorage.getStringList('ff_aboutIslam'))
+    _safeInit(() {
+      _aboutIslam = prefs
+              .getStringList('ff_aboutIslam')
               ?.map((x) {
                 try {
                   return OnIslamStruct.fromSerializableMap(jsonDecode(x));
@@ -200,8 +171,9 @@ class FFAppState extends ChangeNotifier {
               .toList() ??
           _aboutIslam;
     });
-    await _safeInitAsync(() async {
-      _mosque = (await secureStorage.getStringList('ff_mosque'))
+    _safeInit(() {
+      _mosque = prefs
+              .getStringList('ff_mosque')
               ?.map((x) {
                 try {
                   return MosqueStruct.fromSerializableMap(jsonDecode(x));
@@ -214,6 +186,94 @@ class FFAppState extends ChangeNotifier {
               .toList() ??
           _mosque;
     });
+    _safeInit(() {
+      _youtubePost = prefs
+              .getStringList('ff_youtubePost')
+              ?.map((x) {
+                try {
+                  return PostStruct.fromSerializableMap(jsonDecode(x));
+                } catch (e) {
+                  print("Can't decode persisted data type. Error: $e.");
+                  return null;
+                }
+              })
+              .withoutNulls
+              .toList() ??
+          _youtubePost;
+    });
+    _safeInit(() {
+      if (prefs.containsKey('ff_adhkarSetting')) {
+        try {
+          final serializedData = prefs.getString('ff_adhkarSetting') ?? '{}';
+          _adhkarSetting =
+              FontSettingStruct.fromSerializableMap(jsonDecode(serializedData));
+        } catch (e) {
+          print("Can't decode persisted data type. Error: $e.");
+        }
+      }
+    });
+    _safeInit(() {
+      _adhkar = prefs
+              .getStringList('ff_adhkar')
+              ?.map((x) {
+                try {
+                  return AdhkarStruct.fromSerializableMap(jsonDecode(x));
+                } catch (e) {
+                  print("Can't decode persisted data type. Error: $e.");
+                  return null;
+                }
+              })
+              .withoutNulls
+              .toList() ??
+          _adhkar;
+    });
+    _safeInit(() {
+      _userFvtCities = prefs
+              .getStringList('ff_userFvtCities')
+              ?.map((x) {
+                try {
+                  return HistoryStruct.fromSerializableMap(jsonDecode(x));
+                } catch (e) {
+                  print("Can't decode persisted data type. Error: $e.");
+                  return null;
+                }
+              })
+              .withoutNulls
+              .toList() ??
+          _userFvtCities;
+    });
+    _safeInit(() {
+      if (prefs.containsKey('ff_tasbihSetting')) {
+        try {
+          final serializedData = prefs.getString('ff_tasbihSetting') ?? '{}';
+          _tasbihSetting =
+              FontSettingStruct.fromSerializableMap(jsonDecode(serializedData));
+        } catch (e) {
+          print("Can't decode persisted data type. Error: $e.");
+        }
+      }
+    });
+    _safeInit(() {
+      if (prefs.containsKey('ff_DuasSetting')) {
+        try {
+          final serializedData = prefs.getString('ff_DuasSetting') ?? '{}';
+          _DuasSetting =
+              FontSettingStruct.fromSerializableMap(jsonDecode(serializedData));
+        } catch (e) {
+          print("Can't decode persisted data type. Error: $e.");
+        }
+      }
+    });
+    _safeInit(() {
+      _haptic = prefs.getBool('ff_haptic') ?? _haptic;
+    });
+    _safeInit(() {
+      _availablePrayerYears = prefs
+              .getStringList('ff_availablePrayerYears')
+              ?.map(int.parse)
+              .toList() ??
+          _availablePrayerYears;
+    });
   }
 
   void update(VoidCallback callback) {
@@ -221,7 +281,7 @@ class FFAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  late FlutterSecureStorage secureStorage;
+  late SharedPreferences prefs;
 
   List<YoutubeStruct> _youtubeData = [
     YoutubeStruct.fromSerializableMap(jsonDecode(
@@ -230,29 +290,25 @@ class FFAppState extends ChangeNotifier {
   List<YoutubeStruct> get youtubeData => _youtubeData;
   set youtubeData(List<YoutubeStruct> value) {
     _youtubeData = value;
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_youtubeData', value.map((x) => x.serialize()).toList());
-  }
-
-  void deleteYoutubeData() {
-    secureStorage.delete(key: 'ff_youtubeData');
   }
 
   void addToYoutubeData(YoutubeStruct value) {
     youtubeData.add(value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_youtubeData', _youtubeData.map((x) => x.serialize()).toList());
   }
 
   void removeFromYoutubeData(YoutubeStruct value) {
     youtubeData.remove(value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_youtubeData', _youtubeData.map((x) => x.serialize()).toList());
   }
 
   void removeAtIndexFromYoutubeData(int index) {
     youtubeData.removeAt(index);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_youtubeData', _youtubeData.map((x) => x.serialize()).toList());
   }
 
@@ -261,13 +317,13 @@ class FFAppState extends ChangeNotifier {
     YoutubeStruct Function(YoutubeStruct) updateFn,
   ) {
     youtubeData[index] = updateFn(_youtubeData[index]);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_youtubeData', _youtubeData.map((x) => x.serialize()).toList());
   }
 
   void insertAtIndexInYoutubeData(int index, YoutubeStruct value) {
     youtubeData.insert(index, value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_youtubeData', _youtubeData.map((x) => x.serialize()).toList());
   }
 
@@ -275,16 +331,12 @@ class FFAppState extends ChangeNotifier {
   UserDataStruct get user => _user;
   set user(UserDataStruct value) {
     _user = value;
-    secureStorage.setString('ff_user', value.serialize());
-  }
-
-  void deleteUser() {
-    secureStorage.delete(key: 'ff_user');
+    prefs.setString('ff_user', value.serialize());
   }
 
   void updateUserStruct(Function(UserDataStruct) updateFn) {
     updateFn(_user);
-    secureStorage.setString('ff_user', _user.serialize());
+    prefs.setString('ff_user', _user.serialize());
   }
 
   HijriCalenderStruct _hijriData = HijriCalenderStruct();
@@ -301,29 +353,25 @@ class FFAppState extends ChangeNotifier {
   List<CityRecordStruct> get cityList => _cityList;
   set cityList(List<CityRecordStruct> value) {
     _cityList = value;
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_cityList', value.map((x) => x.serialize()).toList());
-  }
-
-  void deleteCityList() {
-    secureStorage.delete(key: 'ff_cityList');
   }
 
   void addToCityList(CityRecordStruct value) {
     cityList.add(value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_cityList', _cityList.map((x) => x.serialize()).toList());
   }
 
   void removeFromCityList(CityRecordStruct value) {
     cityList.remove(value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_cityList', _cityList.map((x) => x.serialize()).toList());
   }
 
   void removeAtIndexFromCityList(int index) {
     cityList.removeAt(index);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_cityList', _cityList.map((x) => x.serialize()).toList());
   }
 
@@ -332,54 +380,39 @@ class FFAppState extends ChangeNotifier {
     CityRecordStruct Function(CityRecordStruct) updateFn,
   ) {
     cityList[index] = updateFn(_cityList[index]);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_cityList', _cityList.map((x) => x.serialize()).toList());
   }
 
   void insertAtIndexInCityList(int index, CityRecordStruct value) {
     cityList.insert(index, value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_cityList', _cityList.map((x) => x.serialize()).toList());
-  }
-
-  bool _adhkarSound = false;
-  bool get adhkarSound => _adhkarSound;
-  set adhkarSound(bool value) {
-    _adhkarSound = value;
-    secureStorage.setBool('ff_adhkarSound', value);
-  }
-
-  void deleteAdhkarSound() {
-    secureStorage.delete(key: 'ff_adhkarSound');
   }
 
   List<YoutubeStruct> _reelsData = [];
   List<YoutubeStruct> get reelsData => _reelsData;
   set reelsData(List<YoutubeStruct> value) {
     _reelsData = value;
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_reelsData', value.map((x) => x.serialize()).toList());
-  }
-
-  void deleteReelsData() {
-    secureStorage.delete(key: 'ff_reelsData');
   }
 
   void addToReelsData(YoutubeStruct value) {
     reelsData.add(value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_reelsData', _reelsData.map((x) => x.serialize()).toList());
   }
 
   void removeFromReelsData(YoutubeStruct value) {
     reelsData.remove(value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_reelsData', _reelsData.map((x) => x.serialize()).toList());
   }
 
   void removeAtIndexFromReelsData(int index) {
     reelsData.removeAt(index);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_reelsData', _reelsData.map((x) => x.serialize()).toList());
   }
 
@@ -388,13 +421,13 @@ class FFAppState extends ChangeNotifier {
     YoutubeStruct Function(YoutubeStruct) updateFn,
   ) {
     reelsData[index] = updateFn(_reelsData[index]);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_reelsData', _reelsData.map((x) => x.serialize()).toList());
   }
 
   void insertAtIndexInReelsData(int index, YoutubeStruct value) {
     reelsData.insert(index, value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_reelsData', _reelsData.map((x) => x.serialize()).toList());
   }
 
@@ -402,45 +435,37 @@ class FFAppState extends ChangeNotifier {
   ChannelStruct get channelData => _channelData;
   set channelData(ChannelStruct value) {
     _channelData = value;
-    secureStorage.setString('ff_channelData', value.serialize());
-  }
-
-  void deleteChannelData() {
-    secureStorage.delete(key: 'ff_channelData');
+    prefs.setString('ff_channelData', value.serialize());
   }
 
   void updateChannelDataStruct(Function(ChannelStruct) updateFn) {
     updateFn(_channelData);
-    secureStorage.setString('ff_channelData', _channelData.serialize());
+    prefs.setString('ff_channelData', _channelData.serialize());
   }
 
   List<AllahNameStruct> _AllahNames = [];
   List<AllahNameStruct> get AllahNames => _AllahNames;
   set AllahNames(List<AllahNameStruct> value) {
     _AllahNames = value;
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_AllahNames', value.map((x) => x.serialize()).toList());
-  }
-
-  void deleteAllahNames() {
-    secureStorage.delete(key: 'ff_AllahNames');
   }
 
   void addToAllahNames(AllahNameStruct value) {
     AllahNames.add(value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_AllahNames', _AllahNames.map((x) => x.serialize()).toList());
   }
 
   void removeFromAllahNames(AllahNameStruct value) {
     AllahNames.remove(value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_AllahNames', _AllahNames.map((x) => x.serialize()).toList());
   }
 
   void removeAtIndexFromAllahNames(int index) {
     AllahNames.removeAt(index);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_AllahNames', _AllahNames.map((x) => x.serialize()).toList());
   }
 
@@ -449,13 +474,13 @@ class FFAppState extends ChangeNotifier {
     AllahNameStruct Function(AllahNameStruct) updateFn,
   ) {
     AllahNames[index] = updateFn(_AllahNames[index]);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_AllahNames', _AllahNames.map((x) => x.serialize()).toList());
   }
 
   void insertAtIndexInAllahNames(int index, AllahNameStruct value) {
     AllahNames.insert(index, value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_AllahNames', _AllahNames.map((x) => x.serialize()).toList());
   }
 
@@ -488,96 +513,6 @@ class FFAppState extends ChangeNotifier {
     duaList.insert(index, value);
   }
 
-  List<AdhkarStruct> _morningAdhkar = [];
-  List<AdhkarStruct> get morningAdhkar => _morningAdhkar;
-  set morningAdhkar(List<AdhkarStruct> value) {
-    _morningAdhkar = value;
-    secureStorage.setStringList(
-        'ff_morningAdhkar', value.map((x) => x.serialize()).toList());
-  }
-
-  void deleteMorningAdhkar() {
-    secureStorage.delete(key: 'ff_morningAdhkar');
-  }
-
-  void addToMorningAdhkar(AdhkarStruct value) {
-    morningAdhkar.add(value);
-    secureStorage.setStringList(
-        'ff_morningAdhkar', _morningAdhkar.map((x) => x.serialize()).toList());
-  }
-
-  void removeFromMorningAdhkar(AdhkarStruct value) {
-    morningAdhkar.remove(value);
-    secureStorage.setStringList(
-        'ff_morningAdhkar', _morningAdhkar.map((x) => x.serialize()).toList());
-  }
-
-  void removeAtIndexFromMorningAdhkar(int index) {
-    morningAdhkar.removeAt(index);
-    secureStorage.setStringList(
-        'ff_morningAdhkar', _morningAdhkar.map((x) => x.serialize()).toList());
-  }
-
-  void updateMorningAdhkarAtIndex(
-    int index,
-    AdhkarStruct Function(AdhkarStruct) updateFn,
-  ) {
-    morningAdhkar[index] = updateFn(_morningAdhkar[index]);
-    secureStorage.setStringList(
-        'ff_morningAdhkar', _morningAdhkar.map((x) => x.serialize()).toList());
-  }
-
-  void insertAtIndexInMorningAdhkar(int index, AdhkarStruct value) {
-    morningAdhkar.insert(index, value);
-    secureStorage.setStringList(
-        'ff_morningAdhkar', _morningAdhkar.map((x) => x.serialize()).toList());
-  }
-
-  List<AdhkarStruct> _eveningAdhkar = [];
-  List<AdhkarStruct> get eveningAdhkar => _eveningAdhkar;
-  set eveningAdhkar(List<AdhkarStruct> value) {
-    _eveningAdhkar = value;
-    secureStorage.setStringList(
-        'ff_eveningAdhkar', value.map((x) => x.serialize()).toList());
-  }
-
-  void deleteEveningAdhkar() {
-    secureStorage.delete(key: 'ff_eveningAdhkar');
-  }
-
-  void addToEveningAdhkar(AdhkarStruct value) {
-    eveningAdhkar.add(value);
-    secureStorage.setStringList(
-        'ff_eveningAdhkar', _eveningAdhkar.map((x) => x.serialize()).toList());
-  }
-
-  void removeFromEveningAdhkar(AdhkarStruct value) {
-    eveningAdhkar.remove(value);
-    secureStorage.setStringList(
-        'ff_eveningAdhkar', _eveningAdhkar.map((x) => x.serialize()).toList());
-  }
-
-  void removeAtIndexFromEveningAdhkar(int index) {
-    eveningAdhkar.removeAt(index);
-    secureStorage.setStringList(
-        'ff_eveningAdhkar', _eveningAdhkar.map((x) => x.serialize()).toList());
-  }
-
-  void updateEveningAdhkarAtIndex(
-    int index,
-    AdhkarStruct Function(AdhkarStruct) updateFn,
-  ) {
-    eveningAdhkar[index] = updateFn(_eveningAdhkar[index]);
-    secureStorage.setStringList(
-        'ff_eveningAdhkar', _eveningAdhkar.map((x) => x.serialize()).toList());
-  }
-
-  void insertAtIndexInEveningAdhkar(int index, AdhkarStruct value) {
-    eveningAdhkar.insert(index, value);
-    secureStorage.setStringList(
-        'ff_eveningAdhkar', _eveningAdhkar.map((x) => x.serialize()).toList());
-  }
-
   List<TasbihStruct> _tasbihList = [];
   List<TasbihStruct> get tasbihList => _tasbihList;
   set tasbihList(List<TasbihStruct> value) {
@@ -607,62 +542,29 @@ class FFAppState extends ChangeNotifier {
     tasbihList.insert(index, value);
   }
 
-  List<AdhkarStruct> _azkhar = [];
-  List<AdhkarStruct> get azkhar => _azkhar;
-  set azkhar(List<AdhkarStruct> value) {
-    _azkhar = value;
-  }
-
-  void addToAzkhar(AdhkarStruct value) {
-    azkhar.add(value);
-  }
-
-  void removeFromAzkhar(AdhkarStruct value) {
-    azkhar.remove(value);
-  }
-
-  void removeAtIndexFromAzkhar(int index) {
-    azkhar.removeAt(index);
-  }
-
-  void updateAzkharAtIndex(
-    int index,
-    AdhkarStruct Function(AdhkarStruct) updateFn,
-  ) {
-    azkhar[index] = updateFn(_azkhar[index]);
-  }
-
-  void insertAtIndexInAzkhar(int index, AdhkarStruct value) {
-    azkhar.insert(index, value);
-  }
-
   List<SurahsStruct> _surahsList = [];
   List<SurahsStruct> get surahsList => _surahsList;
   set surahsList(List<SurahsStruct> value) {
     _surahsList = value;
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_surahsList', value.map((x) => x.serialize()).toList());
-  }
-
-  void deleteSurahsList() {
-    secureStorage.delete(key: 'ff_surahsList');
   }
 
   void addToSurahsList(SurahsStruct value) {
     surahsList.add(value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_surahsList', _surahsList.map((x) => x.serialize()).toList());
   }
 
   void removeFromSurahsList(SurahsStruct value) {
     surahsList.remove(value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_surahsList', _surahsList.map((x) => x.serialize()).toList());
   }
 
   void removeAtIndexFromSurahsList(int index) {
     surahsList.removeAt(index);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_surahsList', _surahsList.map((x) => x.serialize()).toList());
   }
 
@@ -671,13 +573,13 @@ class FFAppState extends ChangeNotifier {
     SurahsStruct Function(SurahsStruct) updateFn,
   ) {
     surahsList[index] = updateFn(_surahsList[index]);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_surahsList', _surahsList.map((x) => x.serialize()).toList());
   }
 
   void insertAtIndexInSurahsList(int index, SurahsStruct value) {
     surahsList.insert(index, value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_surahsList', _surahsList.map((x) => x.serialize()).toList());
   }
 
@@ -685,29 +587,25 @@ class FFAppState extends ChangeNotifier {
   List<AyahsStruct> get ayahsList => _ayahsList;
   set ayahsList(List<AyahsStruct> value) {
     _ayahsList = value;
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_ayahsList', value.map((x) => x.serialize()).toList());
-  }
-
-  void deleteAyahsList() {
-    secureStorage.delete(key: 'ff_ayahsList');
   }
 
   void addToAyahsList(AyahsStruct value) {
     ayahsList.add(value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_ayahsList', _ayahsList.map((x) => x.serialize()).toList());
   }
 
   void removeFromAyahsList(AyahsStruct value) {
     ayahsList.remove(value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_ayahsList', _ayahsList.map((x) => x.serialize()).toList());
   }
 
   void removeAtIndexFromAyahsList(int index) {
     ayahsList.removeAt(index);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_ayahsList', _ayahsList.map((x) => x.serialize()).toList());
   }
 
@@ -716,13 +614,13 @@ class FFAppState extends ChangeNotifier {
     AyahsStruct Function(AyahsStruct) updateFn,
   ) {
     ayahsList[index] = updateFn(_ayahsList[index]);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_ayahsList', _ayahsList.map((x) => x.serialize()).toList());
   }
 
   void insertAtIndexInAyahsList(int index, AyahsStruct value) {
     ayahsList.insert(index, value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_ayahsList', _ayahsList.map((x) => x.serialize()).toList());
   }
 
@@ -730,29 +628,24 @@ class FFAppState extends ChangeNotifier {
   List<SurahsStruct> get juzList => _juzList;
   set juzList(List<SurahsStruct> value) {
     _juzList = value;
-    secureStorage.setStringList(
-        'ff_juzList', value.map((x) => x.serialize()).toList());
-  }
-
-  void deleteJuzList() {
-    secureStorage.delete(key: 'ff_juzList');
+    prefs.setStringList('ff_juzList', value.map((x) => x.serialize()).toList());
   }
 
   void addToJuzList(SurahsStruct value) {
     juzList.add(value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_juzList', _juzList.map((x) => x.serialize()).toList());
   }
 
   void removeFromJuzList(SurahsStruct value) {
     juzList.remove(value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_juzList', _juzList.map((x) => x.serialize()).toList());
   }
 
   void removeAtIndexFromJuzList(int index) {
     juzList.removeAt(index);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_juzList', _juzList.map((x) => x.serialize()).toList());
   }
 
@@ -761,59 +654,51 @@ class FFAppState extends ChangeNotifier {
     SurahsStruct Function(SurahsStruct) updateFn,
   ) {
     juzList[index] = updateFn(_juzList[index]);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_juzList', _juzList.map((x) => x.serialize()).toList());
   }
 
   void insertAtIndexInJuzList(int index, SurahsStruct value) {
     juzList.insert(index, value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_juzList', _juzList.map((x) => x.serialize()).toList());
   }
 
-  QuranSettingStruct _qurantSetting = QuranSettingStruct();
-  QuranSettingStruct get qurantSetting => _qurantSetting;
-  set qurantSetting(QuranSettingStruct value) {
+  FontSettingStruct _qurantSetting = FontSettingStruct();
+  FontSettingStruct get qurantSetting => _qurantSetting;
+  set qurantSetting(FontSettingStruct value) {
     _qurantSetting = value;
-    secureStorage.setString('ff_qurantSetting', value.serialize());
+    prefs.setString('ff_qurantSetting', value.serialize());
   }
 
-  void deleteQurantSetting() {
-    secureStorage.delete(key: 'ff_qurantSetting');
-  }
-
-  void updateQurantSettingStruct(Function(QuranSettingStruct) updateFn) {
+  void updateQurantSettingStruct(Function(FontSettingStruct) updateFn) {
     updateFn(_qurantSetting);
-    secureStorage.setString('ff_qurantSetting', _qurantSetting.serialize());
+    prefs.setString('ff_qurantSetting', _qurantSetting.serialize());
   }
 
   List<OnIslamStruct> _aboutIslam = [];
   List<OnIslamStruct> get aboutIslam => _aboutIslam;
   set aboutIslam(List<OnIslamStruct> value) {
     _aboutIslam = value;
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_aboutIslam', value.map((x) => x.serialize()).toList());
-  }
-
-  void deleteAboutIslam() {
-    secureStorage.delete(key: 'ff_aboutIslam');
   }
 
   void addToAboutIslam(OnIslamStruct value) {
     aboutIslam.add(value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_aboutIslam', _aboutIslam.map((x) => x.serialize()).toList());
   }
 
   void removeFromAboutIslam(OnIslamStruct value) {
     aboutIslam.remove(value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_aboutIslam', _aboutIslam.map((x) => x.serialize()).toList());
   }
 
   void removeAtIndexFromAboutIslam(int index) {
     aboutIslam.removeAt(index);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_aboutIslam', _aboutIslam.map((x) => x.serialize()).toList());
   }
 
@@ -822,13 +707,13 @@ class FFAppState extends ChangeNotifier {
     OnIslamStruct Function(OnIslamStruct) updateFn,
   ) {
     aboutIslam[index] = updateFn(_aboutIslam[index]);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_aboutIslam', _aboutIslam.map((x) => x.serialize()).toList());
   }
 
   void insertAtIndexInAboutIslam(int index, OnIslamStruct value) {
     aboutIslam.insert(index, value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_aboutIslam', _aboutIslam.map((x) => x.serialize()).toList());
   }
 
@@ -836,29 +721,24 @@ class FFAppState extends ChangeNotifier {
   List<MosqueStruct> get mosque => _mosque;
   set mosque(List<MosqueStruct> value) {
     _mosque = value;
-    secureStorage.setStringList(
-        'ff_mosque', value.map((x) => x.serialize()).toList());
-  }
-
-  void deleteMosque() {
-    secureStorage.delete(key: 'ff_mosque');
+    prefs.setStringList('ff_mosque', value.map((x) => x.serialize()).toList());
   }
 
   void addToMosque(MosqueStruct value) {
     mosque.add(value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_mosque', _mosque.map((x) => x.serialize()).toList());
   }
 
   void removeFromMosque(MosqueStruct value) {
     mosque.remove(value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_mosque', _mosque.map((x) => x.serialize()).toList());
   }
 
   void removeAtIndexFromMosque(int index) {
     mosque.removeAt(index);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_mosque', _mosque.map((x) => x.serialize()).toList());
   }
 
@@ -867,20 +747,255 @@ class FFAppState extends ChangeNotifier {
     MosqueStruct Function(MosqueStruct) updateFn,
   ) {
     mosque[index] = updateFn(_mosque[index]);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_mosque', _mosque.map((x) => x.serialize()).toList());
   }
 
   void insertAtIndexInMosque(int index, MosqueStruct value) {
     mosque.insert(index, value);
-    secureStorage.setStringList(
+    prefs.setStringList(
         'ff_mosque', _mosque.map((x) => x.serialize()).toList());
   }
 
-  bool _autoPlay = false;
-  bool get autoPlay => _autoPlay;
-  set autoPlay(bool value) {
-    _autoPlay = value;
+  bool _searchBar = false;
+  bool get searchBar => _searchBar;
+  set searchBar(bool value) {
+    _searchBar = value;
+  }
+
+  List<PostStruct> _youtubePost = [];
+  List<PostStruct> get youtubePost => _youtubePost;
+  set youtubePost(List<PostStruct> value) {
+    _youtubePost = value;
+    prefs.setStringList(
+        'ff_youtubePost', value.map((x) => x.serialize()).toList());
+  }
+
+  void addToYoutubePost(PostStruct value) {
+    youtubePost.add(value);
+    prefs.setStringList(
+        'ff_youtubePost', _youtubePost.map((x) => x.serialize()).toList());
+  }
+
+  void removeFromYoutubePost(PostStruct value) {
+    youtubePost.remove(value);
+    prefs.setStringList(
+        'ff_youtubePost', _youtubePost.map((x) => x.serialize()).toList());
+  }
+
+  void removeAtIndexFromYoutubePost(int index) {
+    youtubePost.removeAt(index);
+    prefs.setStringList(
+        'ff_youtubePost', _youtubePost.map((x) => x.serialize()).toList());
+  }
+
+  void updateYoutubePostAtIndex(
+    int index,
+    PostStruct Function(PostStruct) updateFn,
+  ) {
+    youtubePost[index] = updateFn(_youtubePost[index]);
+    prefs.setStringList(
+        'ff_youtubePost', _youtubePost.map((x) => x.serialize()).toList());
+  }
+
+  void insertAtIndexInYoutubePost(int index, PostStruct value) {
+    youtubePost.insert(index, value);
+    prefs.setStringList(
+        'ff_youtubePost', _youtubePost.map((x) => x.serialize()).toList());
+  }
+
+  FontSettingStruct _adhkarSetting = FontSettingStruct();
+  FontSettingStruct get adhkarSetting => _adhkarSetting;
+  set adhkarSetting(FontSettingStruct value) {
+    _adhkarSetting = value;
+    prefs.setString('ff_adhkarSetting', value.serialize());
+  }
+
+  void updateAdhkarSettingStruct(Function(FontSettingStruct) updateFn) {
+    updateFn(_adhkarSetting);
+    prefs.setString('ff_adhkarSetting', _adhkarSetting.serialize());
+  }
+
+  List<AdhkarStruct> _adhkar = [];
+  List<AdhkarStruct> get adhkar => _adhkar;
+  set adhkar(List<AdhkarStruct> value) {
+    _adhkar = value;
+    prefs.setStringList('ff_adhkar', value.map((x) => x.serialize()).toList());
+  }
+
+  void addToAdhkar(AdhkarStruct value) {
+    adhkar.add(value);
+    prefs.setStringList(
+        'ff_adhkar', _adhkar.map((x) => x.serialize()).toList());
+  }
+
+  void removeFromAdhkar(AdhkarStruct value) {
+    adhkar.remove(value);
+    prefs.setStringList(
+        'ff_adhkar', _adhkar.map((x) => x.serialize()).toList());
+  }
+
+  void removeAtIndexFromAdhkar(int index) {
+    adhkar.removeAt(index);
+    prefs.setStringList(
+        'ff_adhkar', _adhkar.map((x) => x.serialize()).toList());
+  }
+
+  void updateAdhkarAtIndex(
+    int index,
+    AdhkarStruct Function(AdhkarStruct) updateFn,
+  ) {
+    adhkar[index] = updateFn(_adhkar[index]);
+    prefs.setStringList(
+        'ff_adhkar', _adhkar.map((x) => x.serialize()).toList());
+  }
+
+  void insertAtIndexInAdhkar(int index, AdhkarStruct value) {
+    adhkar.insert(index, value);
+    prefs.setStringList(
+        'ff_adhkar', _adhkar.map((x) => x.serialize()).toList());
+  }
+
+  List<HistoryStruct> _userFvtCities = [];
+  List<HistoryStruct> get userFvtCities => _userFvtCities;
+  set userFvtCities(List<HistoryStruct> value) {
+    _userFvtCities = value;
+    prefs.setStringList(
+        'ff_userFvtCities', value.map((x) => x.serialize()).toList());
+  }
+
+  void addToUserFvtCities(HistoryStruct value) {
+    userFvtCities.add(value);
+    prefs.setStringList(
+        'ff_userFvtCities', _userFvtCities.map((x) => x.serialize()).toList());
+  }
+
+  void removeFromUserFvtCities(HistoryStruct value) {
+    userFvtCities.remove(value);
+    prefs.setStringList(
+        'ff_userFvtCities', _userFvtCities.map((x) => x.serialize()).toList());
+  }
+
+  void removeAtIndexFromUserFvtCities(int index) {
+    userFvtCities.removeAt(index);
+    prefs.setStringList(
+        'ff_userFvtCities', _userFvtCities.map((x) => x.serialize()).toList());
+  }
+
+  void updateUserFvtCitiesAtIndex(
+    int index,
+    HistoryStruct Function(HistoryStruct) updateFn,
+  ) {
+    userFvtCities[index] = updateFn(_userFvtCities[index]);
+    prefs.setStringList(
+        'ff_userFvtCities', _userFvtCities.map((x) => x.serialize()).toList());
+  }
+
+  void insertAtIndexInUserFvtCities(int index, HistoryStruct value) {
+    userFvtCities.insert(index, value);
+    prefs.setStringList(
+        'ff_userFvtCities', _userFvtCities.map((x) => x.serialize()).toList());
+  }
+
+  FontSettingStruct _tasbihSetting = FontSettingStruct();
+  FontSettingStruct get tasbihSetting => _tasbihSetting;
+  set tasbihSetting(FontSettingStruct value) {
+    _tasbihSetting = value;
+    prefs.setString('ff_tasbihSetting', value.serialize());
+  }
+
+  void updateTasbihSettingStruct(Function(FontSettingStruct) updateFn) {
+    updateFn(_tasbihSetting);
+    prefs.setString('ff_tasbihSetting', _tasbihSetting.serialize());
+  }
+
+  FontSettingStruct _DuasSetting = FontSettingStruct();
+  FontSettingStruct get DuasSetting => _DuasSetting;
+  set DuasSetting(FontSettingStruct value) {
+    _DuasSetting = value;
+    prefs.setString('ff_DuasSetting', value.serialize());
+  }
+
+  void updateDuasSettingStruct(Function(FontSettingStruct) updateFn) {
+    updateFn(_DuasSetting);
+    prefs.setString('ff_DuasSetting', _DuasSetting.serialize());
+  }
+
+  bool _haptic = false;
+  bool get haptic => _haptic;
+  set haptic(bool value) {
+    _haptic = value;
+    prefs.setBool('ff_haptic', value);
+  }
+
+  List<HabitItemStruct> _habitTracker = [];
+  List<HabitItemStruct> get habitTracker => _habitTracker;
+  set habitTracker(List<HabitItemStruct> value) {
+    _habitTracker = value;
+  }
+
+  void addToHabitTracker(HabitItemStruct value) {
+    habitTracker.add(value);
+  }
+
+  void removeFromHabitTracker(HabitItemStruct value) {
+    habitTracker.remove(value);
+  }
+
+  void removeAtIndexFromHabitTracker(int index) {
+    habitTracker.removeAt(index);
+  }
+
+  void updateHabitTrackerAtIndex(
+    int index,
+    HabitItemStruct Function(HabitItemStruct) updateFn,
+  ) {
+    habitTracker[index] = updateFn(_habitTracker[index]);
+  }
+
+  void insertAtIndexInHabitTracker(int index, HabitItemStruct value) {
+    habitTracker.insert(index, value);
+  }
+
+  List<int> _availablePrayerYears = [];
+  List<int> get availablePrayerYears => _availablePrayerYears;
+  set availablePrayerYears(List<int> value) {
+    _availablePrayerYears = value;
+    prefs.setStringList(
+        'ff_availablePrayerYears', value.map((x) => x.toString()).toList());
+  }
+
+  void addToAvailablePrayerYears(int value) {
+    availablePrayerYears.add(value);
+    prefs.setStringList('ff_availablePrayerYears',
+        _availablePrayerYears.map((x) => x.toString()).toList());
+  }
+
+  void removeFromAvailablePrayerYears(int value) {
+    availablePrayerYears.remove(value);
+    prefs.setStringList('ff_availablePrayerYears',
+        _availablePrayerYears.map((x) => x.toString()).toList());
+  }
+
+  void removeAtIndexFromAvailablePrayerYears(int index) {
+    availablePrayerYears.removeAt(index);
+    prefs.setStringList('ff_availablePrayerYears',
+        _availablePrayerYears.map((x) => x.toString()).toList());
+  }
+
+  void updateAvailablePrayerYearsAtIndex(
+    int index,
+    int Function(int) updateFn,
+  ) {
+    availablePrayerYears[index] = updateFn(_availablePrayerYears[index]);
+    prefs.setStringList('ff_availablePrayerYears',
+        _availablePrayerYears.map((x) => x.toString()).toList());
+  }
+
+  void insertAtIndexInAvailablePrayerYears(int index, int value) {
+    availablePrayerYears.insert(index, value);
+    prefs.setStringList('ff_availablePrayerYears',
+        _availablePrayerYears.map((x) => x.toString()).toList());
   }
 }
 
@@ -894,47 +1009,4 @@ Future _safeInitAsync(Function() initializeField) async {
   try {
     await initializeField();
   } catch (_) {}
-}
-
-extension FlutterSecureStorageExtensions on FlutterSecureStorage {
-  static final _lock = Lock();
-
-  Future<void> writeSync({required String key, String? value}) async =>
-      await _lock.synchronized(() async {
-        await write(key: key, value: value);
-      });
-
-  void remove(String key) => delete(key: key);
-
-  Future<String?> getString(String key) async => await read(key: key);
-  Future<void> setString(String key, String value) async =>
-      await writeSync(key: key, value: value);
-
-  Future<bool?> getBool(String key) async => (await read(key: key)) == 'true';
-  Future<void> setBool(String key, bool value) async =>
-      await writeSync(key: key, value: value.toString());
-
-  Future<int?> getInt(String key) async =>
-      int.tryParse(await read(key: key) ?? '');
-  Future<void> setInt(String key, int value) async =>
-      await writeSync(key: key, value: value.toString());
-
-  Future<double?> getDouble(String key) async =>
-      double.tryParse(await read(key: key) ?? '');
-  Future<void> setDouble(String key, double value) async =>
-      await writeSync(key: key, value: value.toString());
-
-  Future<List<String>?> getStringList(String key) async =>
-      await read(key: key).then((result) {
-        if (result == null || result.isEmpty) {
-          return null;
-        }
-        return CsvToListConverter()
-            .convert(result)
-            .first
-            .map((e) => e.toString())
-            .toList();
-      });
-  Future<void> setStringList(String key, List<String> value) async =>
-      await writeSync(key: key, value: ListToCsvConverter().convert([value]));
 }

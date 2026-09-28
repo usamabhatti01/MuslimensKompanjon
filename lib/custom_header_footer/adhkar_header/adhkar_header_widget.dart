@@ -1,9 +1,11 @@
+import '/backend/schema/structs/index.dart';
+import '/extra/lsinstllningar/lsinstllningar_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/custom_code/widgets/index.dart' as custom_widgets;
-import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:webviewx_plus/webviewx_plus.dart';
 import 'adhkar_header_model.dart';
 export 'adhkar_header_model.dart';
 
@@ -11,11 +13,19 @@ class AdhkarHeaderWidget extends StatefulWidget {
   const AdhkarHeaderWidget({
     super.key,
     required this.pageName,
-    required this.volume,
+    required this.heptic,
+    this.textSize,
+    this.audio,
+    this.initialValue,
+    this.fontType,
   });
 
   final String? pageName;
-  final bool? volume;
+  final bool? heptic;
+  final bool? textSize;
+  final bool? audio;
+  final FontSettingStruct? initialValue;
+  final String? fontType;
 
   @override
   State<AdhkarHeaderWidget> createState() => _AdhkarHeaderWidgetState();
@@ -47,6 +57,8 @@ class _AdhkarHeaderWidgetState extends State<AdhkarHeaderWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -78,43 +90,76 @@ class _AdhkarHeaderWidgetState extends State<AdhkarHeaderWidget> {
         Row(
           mainAxisSize: MainAxisSize.max,
           children: [
-            if (widget.volume ?? true)
-              Container(
-                width: 75.0,
-                height: 30.0,
-                child: custom_widgets.CustomPowerSwitch(
-                  width: 75.0,
-                  height: 30.0,
+            if (widget.audio ?? true)
+              InkWell(
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap: () async {
+                  FFAppState().updateAdhkarSettingStruct(
+                    (e) => e..audioDisplay = !e.audioDisplay,
+                  );
+                  FFAppState().update(() {});
+                },
+                child: Icon(
+                  Icons.volume_up,
+                  color: FFAppState().adhkarSetting.audioDisplay
+                      ? FlutterFlowTheme.of(context).primary
+                      : FlutterFlowTheme.of(context).primaryText,
+                  size: 24.0,
                 ),
               ),
-            InkWell(
-              splashColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              onTap: () async {
-                context.pushNamed(
-                  SettingWidget.routeName,
-                  extra: <String, dynamic>{
-                    '__transition_info__': TransitionInfo(
-                      hasTransition: true,
-                      transitionType: PageTransitionType.bottomToTop,
-                    ),
-                  },
-                );
-              },
-              child: Icon(
-                Icons.notifications_none_sharp,
-                color: FlutterFlowTheme.of(context).primaryText,
-                size: 24.0,
+            if (widget.heptic ?? true)
+              InkWell(
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap: () async {
+                  FFAppState().haptic = !(FFAppState().haptic ?? true);
+                  safeSetState(() {});
+                },
+                child: Icon(
+                  Icons.vibration_rounded,
+                  color: FFAppState().haptic
+                      ? FlutterFlowTheme.of(context).primary
+                      : FlutterFlowTheme.of(context).primaryText,
+                  size: 24.0,
+                ),
               ),
-            ),
-            Icon(
-              Icons.more_vert,
-              color: FlutterFlowTheme.of(context).primaryText,
-              size: 24.0,
-            ),
-          ].divide(SizedBox(width: 10.0)),
+            if (widget.textSize ?? true)
+              InkWell(
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap: () async {
+                  await showModalBottomSheet(
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    useSafeArea: true,
+                    context: context,
+                    builder: (context) {
+                      return WebViewAware(
+                        child: Padding(
+                          padding: MediaQuery.viewInsetsOf(context),
+                          child: LsinstllningarWidget(
+                            initialValue: widget.initialValue!,
+                            value: widget.fontType!,
+                          ),
+                        ),
+                      );
+                    },
+                  ).then((value) => safeSetState(() {}));
+                },
+                child: Icon(
+                  Icons.settings_outlined,
+                  color: FlutterFlowTheme.of(context).primaryText,
+                  size: 24.0,
+                ),
+              ),
+          ].divide(SizedBox(width: 15.0)),
         ),
       ],
     );

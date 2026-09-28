@@ -11,10 +11,12 @@ class ChannelStruct extends BaseStruct {
     String? description,
     String? image,
     String? followers,
+    int? totalVideos,
   })  : _name = name,
         _description = description,
         _image = image,
-        _followers = followers;
+        _followers = followers,
+        _totalVideos = totalVideos;
 
   // "name" field.
   String? _name;
@@ -44,11 +46,21 @@ class ChannelStruct extends BaseStruct {
 
   bool hasFollowers() => _followers != null;
 
+  // "totalVideos" field.
+  int? _totalVideos;
+  int get totalVideos => _totalVideos ?? 0;
+  set totalVideos(int? val) => _totalVideos = val;
+
+  void incrementTotalVideos(int amount) => totalVideos = totalVideos + amount;
+
+  bool hasTotalVideos() => _totalVideos != null;
+
   static ChannelStruct fromMap(Map<String, dynamic> data) => ChannelStruct(
         name: data['name'] as String?,
         description: data['description'] as String?,
         image: data['image'] as String?,
         followers: data['followers'] as String?,
+        totalVideos: castToType<int>(data['totalVideos']),
       );
 
   static ChannelStruct? maybeFromMap(dynamic data) =>
@@ -59,6 +71,7 @@ class ChannelStruct extends BaseStruct {
         'description': _description,
         'image': _image,
         'followers': _followers,
+        'totalVideos': _totalVideos,
       }.withoutNulls;
 
   @override
@@ -78,6 +91,10 @@ class ChannelStruct extends BaseStruct {
         'followers': serializeParam(
           _followers,
           ParamType.String,
+        ),
+        'totalVideos': serializeParam(
+          _totalVideos,
+          ParamType.int,
         ),
       }.withoutNulls;
 
@@ -103,6 +120,11 @@ class ChannelStruct extends BaseStruct {
           ParamType.String,
           false,
         ),
+        totalVideos: deserializeParam(
+          data['totalVideos'],
+          ParamType.int,
+          false,
+        ),
       );
 
   @override
@@ -114,12 +136,13 @@ class ChannelStruct extends BaseStruct {
         name == other.name &&
         description == other.description &&
         image == other.image &&
-        followers == other.followers;
+        followers == other.followers &&
+        totalVideos == other.totalVideos;
   }
 
   @override
-  int get hashCode =>
-      const ListEquality().hash([name, description, image, followers]);
+  int get hashCode => const ListEquality()
+      .hash([name, description, image, followers, totalVideos]);
 }
 
 ChannelStruct createChannelStruct({
@@ -127,10 +150,12 @@ ChannelStruct createChannelStruct({
   String? description,
   String? image,
   String? followers,
+  int? totalVideos,
 }) =>
     ChannelStruct(
       name: name,
       description: description,
       image: image,
       followers: followers,
+      totalVideos: totalVideos,
     );

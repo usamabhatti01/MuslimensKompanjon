@@ -8,19 +8,21 @@ import '/flutter_flow/flutter_flow_util.dart';
 class AdhkarStruct extends BaseStruct {
   AdhkarStruct({
     int? id,
-    String? titleAr,
-    String? titleSv,
+    String? translitterering,
     String? arabic,
     String? swedish,
     int? counter,
     String? audio,
+    bool? morning,
+    bool? evening,
   })  : _id = id,
-        _titleAr = titleAr,
-        _titleSv = titleSv,
+        _translitterering = translitterering,
         _arabic = arabic,
         _swedish = swedish,
         _counter = counter,
-        _audio = audio;
+        _audio = audio,
+        _morning = morning,
+        _evening = evening;
 
   // "id" field.
   int? _id;
@@ -31,19 +33,12 @@ class AdhkarStruct extends BaseStruct {
 
   bool hasId() => _id != null;
 
-  // "titleAr" field.
-  String? _titleAr;
-  String get titleAr => _titleAr ?? '';
-  set titleAr(String? val) => _titleAr = val;
+  // "translitterering" field.
+  String? _translitterering;
+  String get translitterering => _translitterering ?? '';
+  set translitterering(String? val) => _translitterering = val;
 
-  bool hasTitleAr() => _titleAr != null;
-
-  // "titleSv" field.
-  String? _titleSv;
-  String get titleSv => _titleSv ?? '';
-  set titleSv(String? val) => _titleSv = val;
-
-  bool hasTitleSv() => _titleSv != null;
+  bool hasTranslitterering() => _translitterering != null;
 
   // "arabic" field.
   String? _arabic;
@@ -75,14 +70,29 @@ class AdhkarStruct extends BaseStruct {
 
   bool hasAudio() => _audio != null;
 
+  // "morning" field.
+  bool? _morning;
+  bool get morning => _morning ?? false;
+  set morning(bool? val) => _morning = val;
+
+  bool hasMorning() => _morning != null;
+
+  // "evening" field.
+  bool? _evening;
+  bool get evening => _evening ?? false;
+  set evening(bool? val) => _evening = val;
+
+  bool hasEvening() => _evening != null;
+
   static AdhkarStruct fromMap(Map<String, dynamic> data) => AdhkarStruct(
         id: castToType<int>(data['id']),
-        titleAr: data['titleAr'] as String?,
-        titleSv: data['titleSv'] as String?,
+        translitterering: data['translitterering'] as String?,
         arabic: data['arabic'] as String?,
         swedish: data['swedish'] as String?,
         counter: castToType<int>(data['counter']),
         audio: data['audio'] as String?,
+        morning: data['morning'] as bool?,
+        evening: data['evening'] as bool?,
       );
 
   static AdhkarStruct? maybeFromMap(dynamic data) =>
@@ -90,12 +100,13 @@ class AdhkarStruct extends BaseStruct {
 
   Map<String, dynamic> toMap() => {
         'id': _id,
-        'titleAr': _titleAr,
-        'titleSv': _titleSv,
+        'translitterering': _translitterering,
         'arabic': _arabic,
         'swedish': _swedish,
         'counter': _counter,
         'audio': _audio,
+        'morning': _morning,
+        'evening': _evening,
       }.withoutNulls;
 
   @override
@@ -104,12 +115,8 @@ class AdhkarStruct extends BaseStruct {
           _id,
           ParamType.int,
         ),
-        'titleAr': serializeParam(
-          _titleAr,
-          ParamType.String,
-        ),
-        'titleSv': serializeParam(
-          _titleSv,
+        'translitterering': serializeParam(
+          _translitterering,
           ParamType.String,
         ),
         'arabic': serializeParam(
@@ -128,6 +135,14 @@ class AdhkarStruct extends BaseStruct {
           _audio,
           ParamType.String,
         ),
+        'morning': serializeParam(
+          _morning,
+          ParamType.bool,
+        ),
+        'evening': serializeParam(
+          _evening,
+          ParamType.bool,
+        ),
       }.withoutNulls;
 
   static AdhkarStruct fromSerializableMap(Map<String, dynamic> data) =>
@@ -137,13 +152,8 @@ class AdhkarStruct extends BaseStruct {
           ParamType.int,
           false,
         ),
-        titleAr: deserializeParam(
-          data['titleAr'],
-          ParamType.String,
-          false,
-        ),
-        titleSv: deserializeParam(
-          data['titleSv'],
+        translitterering: deserializeParam(
+          data['translitterering'],
           ParamType.String,
           false,
         ),
@@ -167,6 +177,16 @@ class AdhkarStruct extends BaseStruct {
           ParamType.String,
           false,
         ),
+        morning: deserializeParam(
+          data['morning'],
+          ParamType.bool,
+          false,
+        ),
+        evening: deserializeParam(
+          data['evening'],
+          ParamType.bool,
+          false,
+        ),
       );
 
   @override
@@ -176,34 +196,45 @@ class AdhkarStruct extends BaseStruct {
   bool operator ==(Object other) {
     return other is AdhkarStruct &&
         id == other.id &&
-        titleAr == other.titleAr &&
-        titleSv == other.titleSv &&
+        translitterering == other.translitterering &&
         arabic == other.arabic &&
         swedish == other.swedish &&
         counter == other.counter &&
-        audio == other.audio;
+        audio == other.audio &&
+        morning == other.morning &&
+        evening == other.evening;
   }
 
   @override
-  int get hashCode => const ListEquality()
-      .hash([id, titleAr, titleSv, arabic, swedish, counter, audio]);
+  int get hashCode => const ListEquality().hash([
+        id,
+        translitterering,
+        arabic,
+        swedish,
+        counter,
+        audio,
+        morning,
+        evening
+      ]);
 }
 
 AdhkarStruct createAdhkarStruct({
   int? id,
-  String? titleAr,
-  String? titleSv,
+  String? translitterering,
   String? arabic,
   String? swedish,
   int? counter,
   String? audio,
+  bool? morning,
+  bool? evening,
 }) =>
     AdhkarStruct(
       id: id,
-      titleAr: titleAr,
-      titleSv: titleSv,
+      translitterering: translitterering,
       arabic: arabic,
       swedish: swedish,
       counter: counter,
       audio: audio,
+      morning: morning,
+      evening: evening,
     );

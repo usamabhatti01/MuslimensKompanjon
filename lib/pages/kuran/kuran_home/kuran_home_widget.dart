@@ -1,10 +1,11 @@
 import '/backend/schema/enums/enums.dart';
 import '/custom_header_footer/koran_page_sub_header/koran_page_sub_header_widget.dart';
-import '/custom_header_footer/page_footer/page_footer_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/pages/kuran/ayat_heading/ayat_heading_widget.dart';
 import '/pages/kuran/juz_heading/juz_heading_widget.dart';
 import '/pages/kuran/sur_haeading/sur_haeading_widget.dart';
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -69,7 +70,7 @@ class _KuranHomeWidgetState extends State<KuranHomeWidget>
           child: Padding(
             padding: EdgeInsetsDirectional.fromSTEB(
                 FlutterFlowTheme.of(context).designToken.spacing.md,
-                0.0,
+                FlutterFlowTheme.of(context).designToken.spacing.sm,
                 FlutterFlowTheme.of(context).designToken.spacing.md,
                 0.0),
             child: Column(
@@ -88,7 +89,7 @@ class _KuranHomeWidgetState extends State<KuranHomeWidget>
                       },
                       child: Icon(
                         Icons.chevron_left,
-                        color: Color(0x001A1A1A),
+                        color: FlutterFlowTheme.of(context).primaryText,
                         size: FFAppConstants.iconSize.toDouble(),
                       ),
                     ),
@@ -619,8 +620,7 @@ class _KuranHomeWidgetState extends State<KuranHomeWidget>
                                           })
                                               .divide(SizedBox(height: 10.0))
                                               .addToStart(
-                                                  SizedBox(height: 20.0))
-                                              .addToEnd(SizedBox(height: 20.0)),
+                                                  SizedBox(height: 20.0)),
                                         ),
                                       );
                                     },
@@ -633,8 +633,8 @@ class _KuranHomeWidgetState extends State<KuranHomeWidget>
                                       return SingleChildScrollView(
                                         child: Column(
                                           mainAxisSize: MainAxisSize.max,
-                                          children: List
-                                                  .generate(juzList.length,
+                                          children:
+                                              List.generate(juzList.length,
                                                       (juzListIndex) {
                                             final juzListItem =
                                                 juzList[juzListIndex];
@@ -790,10 +790,10 @@ class _KuranHomeWidgetState extends State<KuranHomeWidget>
                                               ),
                                             );
                                           })
-                                              .divide(SizedBox(height: 10.0))
-                                              .addToStart(
-                                                  SizedBox(height: 20.0))
-                                              .addToEnd(SizedBox(height: 20.0)),
+                                                  .divide(
+                                                      SizedBox(height: 10.0))
+                                                  .addToStart(
+                                                      SizedBox(height: 20.0)),
                                         ),
                                       );
                                     },
@@ -895,71 +895,74 @@ class _KuranHomeWidgetState extends State<KuranHomeWidget>
                                                             mainAxisSize:
                                                                 MainAxisSize
                                                                     .max,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
                                                             children: [
-                                                              Expanded(
-                                                                child: Align(
-                                                                  alignment:
-                                                                      AlignmentDirectional(
-                                                                          0.0,
-                                                                          0.0),
-                                                                  child:
-                                                                      InkWell(
-                                                                    splashColor:
-                                                                        Colors
-                                                                            .transparent,
-                                                                    focusColor:
-                                                                        Colors
-                                                                            .transparent,
-                                                                    hoverColor:
-                                                                        Colors
-                                                                            .transparent,
-                                                                    highlightColor:
-                                                                        Colors
-                                                                            .transparent,
-                                                                    onTap:
-                                                                        () async {
-                                                                      context
-                                                                          .pushNamed(
-                                                                        KuranPageWidget
-                                                                            .routeName,
-                                                                        queryParameters:
-                                                                            {
-                                                                          'id':
-                                                                              serializeParam(
-                                                                            surahCompleteItem.number,
-                                                                            ParamType.int,
-                                                                          ),
-                                                                          'type':
-                                                                              serializeParam(
-                                                                            Quran.sura.name,
-                                                                            ParamType.String,
-                                                                          ),
-                                                                        }.withoutNulls,
-                                                                      );
-                                                                    },
-                                                                    child:
-                                                                        SurHaeadingWidget(
-                                                                      key: Key(
-                                                                          'Keyh41_${surahCompleteIndex}_of_${surahComplete.length}'),
-                                                                      heading:
-                                                                          surahCompleteItem
-                                                                              .englishName,
-                                                                      subHeading:
-                                                                          surahCompleteItem
-                                                                              .swedishName,
-                                                                      suratType:
-                                                                          surahCompleteItem
-                                                                              .revelationType,
-                                                                      totalVerses:
-                                                                          surahCompleteItem
-                                                                              .totalVerses,
-                                                                      suratNumber:
+                                                              Align(
+                                                                alignment:
+                                                                    AlignmentDirectional(
+                                                                        0.0,
+                                                                        0.0),
+                                                                child: InkWell(
+                                                                  splashColor:
+                                                                      Colors
+                                                                          .transparent,
+                                                                  focusColor: Colors
+                                                                      .transparent,
+                                                                  hoverColor: Colors
+                                                                      .transparent,
+                                                                  highlightColor:
+                                                                      Colors
+                                                                          .transparent,
+                                                                  onTap:
+                                                                      () async {
+                                                                    context
+                                                                        .pushNamed(
+                                                                      KuranPageWidget
+                                                                          .routeName,
+                                                                      queryParameters:
+                                                                          {
+                                                                        'id':
+                                                                            serializeParam(
                                                                           surahCompleteItem
                                                                               .number,
-                                                                      suratName:
-                                                                          surahCompleteItem
+                                                                          ParamType
+                                                                              .int,
+                                                                        ),
+                                                                        'type':
+                                                                            serializeParam(
+                                                                          Quran
+                                                                              .sura
                                                                               .name,
-                                                                    ),
+                                                                          ParamType
+                                                                              .String,
+                                                                        ),
+                                                                      }.withoutNulls,
+                                                                    );
+                                                                  },
+                                                                  child:
+                                                                      SurHaeadingWidget(
+                                                                    key: Key(
+                                                                        'Keyh41_${surahCompleteIndex}_of_${surahComplete.length}'),
+                                                                    heading:
+                                                                        surahCompleteItem
+                                                                            .englishName,
+                                                                    subHeading:
+                                                                        surahCompleteItem
+                                                                            .swedishName,
+                                                                    suratType:
+                                                                        surahCompleteItem
+                                                                            .revelationType,
+                                                                    totalVerses:
+                                                                        surahCompleteItem
+                                                                            .totalVerses,
+                                                                    suratNumber:
+                                                                        surahCompleteItem
+                                                                            .number,
+                                                                    suratName:
+                                                                        surahCompleteItem
+                                                                            .name,
                                                                   ),
                                                                 ),
                                                               ),
@@ -1107,70 +1110,70 @@ class _KuranHomeWidgetState extends State<KuranHomeWidget>
                                                                     .max,
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
-                                                                    .start,
+                                                                    .spaceBetween,
                                                             children: [
-                                                              Expanded(
-                                                                child: Align(
-                                                                  alignment:
-                                                                      AlignmentDirectional(
-                                                                          0.0,
-                                                                          -1.0),
-                                                                  child:
-                                                                      InkWell(
-                                                                    splashColor:
-                                                                        Colors
-                                                                            .transparent,
-                                                                    focusColor:
-                                                                        Colors
-                                                                            .transparent,
-                                                                    hoverColor:
-                                                                        Colors
-                                                                            .transparent,
-                                                                    highlightColor:
-                                                                        Colors
-                                                                            .transparent,
-                                                                    onTap:
-                                                                        () async {
-                                                                      context
-                                                                          .pushNamed(
-                                                                        KuranPageWidget
-                                                                            .routeName,
-                                                                        queryParameters:
-                                                                            {
-                                                                          'id':
-                                                                              serializeParam(
-                                                                            juzListItem.number,
-                                                                            ParamType.int,
-                                                                          ),
-                                                                          'type':
-                                                                              serializeParam(
-                                                                            Quran.juz.name,
-                                                                            ParamType.String,
-                                                                          ),
-                                                                        }.withoutNulls,
-                                                                      );
-                                                                    },
-                                                                    child:
-                                                                        JuzHeadingWidget(
-                                                                      key: Key(
-                                                                          'Key6pe_${juzListIndex}_of_${juzList.length}'),
-                                                                      heading:
-                                                                          'بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ',
-                                                                      subHeading:
-                                                                          juzListItem
-                                                                              .swedishName,
-                                                                      totalVerses:
-                                                                          juzListItem
-                                                                              .totalVerses,
-                                                                      suratNumber:
+                                                              Align(
+                                                                alignment:
+                                                                    AlignmentDirectional(
+                                                                        0.0,
+                                                                        0.0),
+                                                                child: InkWell(
+                                                                  splashColor:
+                                                                      Colors
+                                                                          .transparent,
+                                                                  focusColor: Colors
+                                                                      .transparent,
+                                                                  hoverColor: Colors
+                                                                      .transparent,
+                                                                  highlightColor:
+                                                                      Colors
+                                                                          .transparent,
+                                                                  onTap:
+                                                                      () async {
+                                                                    context
+                                                                        .pushNamed(
+                                                                      KuranPageWidget
+                                                                          .routeName,
+                                                                      queryParameters:
+                                                                          {
+                                                                        'id':
+                                                                            serializeParam(
                                                                           juzListItem
                                                                               .number,
-                                                                      suratName:
-                                                                          juzListItem
+                                                                          ParamType
+                                                                              .int,
+                                                                        ),
+                                                                        'type':
+                                                                            serializeParam(
+                                                                          Quran
+                                                                              .juz
                                                                               .name,
-                                                                      fav: juzListItem
-                                                                          .fav,
-                                                                    ),
+                                                                          ParamType
+                                                                              .String,
+                                                                        ),
+                                                                      }.withoutNulls,
+                                                                    );
+                                                                  },
+                                                                  child:
+                                                                      JuzHeadingWidget(
+                                                                    key: Key(
+                                                                        'Key6pe_${juzListIndex}_of_${juzList.length}'),
+                                                                    heading:
+                                                                        'بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ',
+                                                                    subHeading:
+                                                                        juzListItem
+                                                                            .swedishName,
+                                                                    totalVerses:
+                                                                        juzListItem
+                                                                            .totalVerses,
+                                                                    suratNumber:
+                                                                        juzListItem
+                                                                            .number,
+                                                                    suratName:
+                                                                        juzListItem
+                                                                            .name,
+                                                                    fav: juzListItem
+                                                                        .fav,
                                                                   ),
                                                                 ),
                                                               ),
@@ -1221,6 +1224,183 @@ class _KuranHomeWidgetState extends State<KuranHomeWidget>
                                             ].divide(SizedBox(height: 10.0)),
                                           ),
                                         ),
+                                        Container(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  1.0,
+                                          decoration: BoxDecoration(),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  AutoSizeText(
+                                                    'Ayat',
+                                                    minFontSize: FFAppConstants
+                                                        .heading
+                                                        .toDouble(),
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .titleMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .plusJakartaSans(
+                                                            fontWeight:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .titleMedium
+                                                                    .fontWeight,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .titleMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .titleMedium
+                                                                  .fontWeight,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .titleMedium
+                                                                  .fontStyle,
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Builder(
+                                                builder: (context) {
+                                                  final ayatList = FFAppState()
+                                                      .ayahsList
+                                                      .where((e) => e.fav)
+                                                      .toList();
+
+                                                  return Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: List.generate(
+                                                        ayatList.length,
+                                                        (ayatListIndex) {
+                                                      final ayatListItem =
+                                                          ayatList[
+                                                              ayatListIndex];
+                                                      return Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .secondaryBackground,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      8.0),
+                                                          border: Border.all(
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .alternate,
+                                                          ),
+                                                        ),
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      0.0,
+                                                                      0.0,
+                                                                      10.0,
+                                                                      0.0),
+                                                          child: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Expanded(
+                                                                child: InkWell(
+                                                                  splashColor:
+                                                                      Colors
+                                                                          .transparent,
+                                                                  focusColor: Colors
+                                                                      .transparent,
+                                                                  hoverColor: Colors
+                                                                      .transparent,
+                                                                  highlightColor:
+                                                                      Colors
+                                                                          .transparent,
+                                                                  onTap:
+                                                                      () async {
+                                                                    context
+                                                                        .pushNamed(
+                                                                      KuranPageWidget
+                                                                          .routeName,
+                                                                      queryParameters:
+                                                                          {
+                                                                        'id':
+                                                                            serializeParam(
+                                                                          ayatListItem
+                                                                              .surah,
+                                                                          ParamType
+                                                                              .int,
+                                                                        ),
+                                                                        'type':
+                                                                            serializeParam(
+                                                                          Quran
+                                                                              .sura
+                                                                              .name,
+                                                                          ParamType
+                                                                              .String,
+                                                                        ),
+                                                                        'ayat':
+                                                                            serializeParam(
+                                                                          ayatListItem
+                                                                              .ayah,
+                                                                          ParamType
+                                                                              .int,
+                                                                        ),
+                                                                      }.withoutNulls,
+                                                                    );
+                                                                  },
+                                                                  child:
+                                                                      AyatHeadingWidget(
+                                                                    key: Key(
+                                                                        'Keyb5t_${ayatListIndex}_of_${ayatList.length}'),
+                                                                    arabic: ayatListItem
+                                                                        .arabic,
+                                                                    english:
+                                                                        ayatListItem
+                                                                            .english,
+                                                                    sw: ayatListItem
+                                                                        .swedish,
+                                                                    suratNumber:
+                                                                        ayatListItem
+                                                                            .surah,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Icon(
+                                                                Icons
+                                                                    .star_sharp,
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .warning,
+                                                                size: 24.0,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }),
+                                                  );
+                                                },
+                                              ),
+                                            ].divide(SizedBox(height: 10.0)),
+                                          ),
+                                        ),
                                       ]
                                           .divide(SizedBox(height: 20.0))
                                           .addToStart(SizedBox(height: 20.0))
@@ -1233,17 +1413,21 @@ class _KuranHomeWidgetState extends State<KuranHomeWidget>
                           ],
                         ),
                       ),
-                    ].divide(SizedBox(height: 10.0)),
+                    ]
+                        .divide(SizedBox(height: 10.0))
+                        .addToStart(SizedBox(height: 10.0)),
                   ),
                 ),
-                wrapWithModel(
-                  model: _model.pageFooterModel,
-                  updateCallback: () => safeSetState(() {}),
-                  child: PageFooterWidget(
+                Container(
+                  width: MediaQuery.sizeOf(context).width * 1.0,
+                  height: FFAppConstants.footerHeight.toDouble(),
+                  child: custom_widgets.CustomPageFooter(
+                    width: MediaQuery.sizeOf(context).width * 1.0,
+                    height: FFAppConstants.footerHeight.toDouble(),
                     selectedIndex: 1,
                   ),
                 ),
-              ].divide(SizedBox(height: 20.0)),
+              ],
             ),
           ),
         ),

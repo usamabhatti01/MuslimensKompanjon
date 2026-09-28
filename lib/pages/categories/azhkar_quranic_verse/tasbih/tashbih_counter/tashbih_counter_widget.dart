@@ -1,11 +1,14 @@
+import '/backend/schema/enums/enums.dart';
 import '/custom_header_footer/adhkar_header/adhkar_header_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'tashbih_counter_model.dart';
@@ -40,9 +43,11 @@ class _TashbihCounterWidgetState extends State<TashbihCounterWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.pageIndex = widget.index;
-      _model.counter =
-          FFAppState().tasbihList.elementAtOrNull(_model.pageIndex!)!.counter;
+      _model.pageIndex = widget.index!;
+      _model.counter = FFAppState()
+          .tasbihList
+          .elementAtOrNull(_model.pageIndex)!
+          .targetCount;
       safeSetState(() {});
     });
 
@@ -73,7 +78,7 @@ class _TashbihCounterWidgetState extends State<TashbihCounterWidget> {
           child: Padding(
             padding: EdgeInsetsDirectional.fromSTEB(
                 FlutterFlowTheme.of(context).designToken.spacing.md,
-                0.0,
+                FlutterFlowTheme.of(context).designToken.spacing.sm,
                 FlutterFlowTheme.of(context).designToken.spacing.md,
                 0.0),
             child: Column(
@@ -111,7 +116,11 @@ class _TashbihCounterWidgetState extends State<TashbihCounterWidget> {
                         updateCallback: () => safeSetState(() {}),
                         child: AdhkarHeaderWidget(
                           pageName: 'Tasbih',
-                          volume: false,
+                          heptic: true,
+                          textSize: true,
+                          audio: false,
+                          fontType: Font.tasbih.name,
+                          initialValue: FFAppState().tasbihSetting,
                         ),
                       ),
                     ),
@@ -122,11 +131,10 @@ class _TashbihCounterWidgetState extends State<TashbihCounterWidget> {
                 Expanded(
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
                         width: MediaQuery.sizeOf(context).width * 1.0,
-                        height: 450.0,
                         decoration: BoxDecoration(
                           color:
                               FlutterFlowTheme.of(context).secondaryBackground,
@@ -146,34 +154,72 @@ class _TashbihCounterWidgetState extends State<TashbihCounterWidget> {
                               .md),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              AutoSizeText(
-                                valueOrDefault<String>(
-                                  widget.language == 'ar'
-                                      ? FFAppState()
-                                          .tasbihList
-                                          .elementAtOrNull(_model.pageIndex!)
-                                          ?.arabic
-                                      : FFAppState()
-                                          .tasbihList
-                                          .elementAtOrNull(_model.pageIndex!)
-                                          ?.transliteration,
-                                  'null',
+                              if (FFAppState().tasbihSetting.arActive)
+                                AutoSizeText(
+                                  valueOrDefault<String>(
+                                    FFAppState()
+                                        .tasbihList
+                                        .elementAtOrNull(_model.pageIndex)
+                                        ?.arabic,
+                                    'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ',
+                                  ),
+                                  textAlign: TextAlign.end,
+                                  minFontSize:
+                                      FFAppConstants.heading.toDouble(),
+                                  style: FlutterFlowTheme.of(context)
+                                      .arabiTitle
+                                      .override(
+                                        font: GoogleFonts.scheherazadeNew(
+                                          fontWeight: FontWeight.w500,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .arabiTitle
+                                                  .fontStyle,
+                                        ),
+                                        color: FlutterFlowTheme.of(context)
+                                            .primary,
+                                        fontSize: 22.0,
+                                        letterSpacing: 0.0,
+                                        fontWeight: FontWeight.w500,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .arabiTitle
+                                            .fontStyle,
+                                      ),
                                 ),
-                                textAlign: TextAlign.center,
-                                minFontSize: FFAppConstants.heading.toDouble(),
-                                style: FlutterFlowTheme.of(context)
-                                    .arabiTitle
-                                    .override(
-                                      fontFamily: 'arabic',
-                                      color:
-                                          FlutterFlowTheme.of(context).primary,
-                                      fontSize: 22.0,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
+                              if (FFAppState().tasbihSetting.enActive)
+                                AutoSizeText(
+                                  valueOrDefault<String>(
+                                    FFAppState()
+                                        .tasbihList
+                                        .elementAtOrNull(_model.pageIndex)
+                                        ?.transliteration,
+                                    '0',
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  minFontSize:
+                                      FFAppConstants.heading.toDouble(),
+                                  style: FlutterFlowTheme.of(context)
+                                      .labelLarge
+                                      .override(
+                                        font: GoogleFonts.manrope(
+                                          fontWeight: FontWeight.normal,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelLarge
+                                                  .fontStyle,
+                                        ),
+                                        fontSize:
+                                            FFAppState().tasbihSetting.enFont,
+                                        letterSpacing: 0.0,
+                                        fontWeight: FontWeight.normal,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .labelLarge
+                                            .fontStyle,
+                                        lineHeight: 1.5,
+                                      ),
+                                ),
                               InkWell(
                                 splashColor: Colors.transparent,
                                 focusColor: Colors.transparent,
@@ -182,21 +228,23 @@ class _TashbihCounterWidgetState extends State<TashbihCounterWidget> {
                                 onTap: () async {
                                   _model.counter = _model.counter + -1;
                                   safeSetState(() {});
+                                  await actions.triggerHapticFeedback();
+                                  HapticFeedback.heavyImpact();
                                   if (_model.counter < 0) {
-                                    if (_model.pageIndex! <
+                                    if (_model.pageIndex <
                                         (FFAppState().tasbihList.length - 1)) {
-                                      _model.pageIndex = _model.pageIndex! + 1;
+                                      _model.pageIndex = _model.pageIndex + 1;
                                       _model.counter = FFAppState()
                                           .tasbihList
-                                          .elementAtOrNull(_model.pageIndex!)!
-                                          .counter;
+                                          .elementAtOrNull(_model.pageIndex)!
+                                          .targetCount;
                                       safeSetState(() {});
                                     } else {
                                       _model.pageIndex = 0;
                                       _model.counter = FFAppState()
                                           .tasbihList
-                                          .elementAtOrNull(_model.pageIndex!)!
-                                          .counter;
+                                          .elementAtOrNull(_model.pageIndex)!
+                                          .targetCount;
                                       safeSetState(() {});
                                     }
                                   }
@@ -255,53 +303,47 @@ class _TashbihCounterWidgetState extends State<TashbihCounterWidget> {
                                         ),
                                       ),
                                     ),
-                                    AutoSizeText(
-                                      valueOrDefault<String>(
-                                        widget.language == 'ar'
-                                            ? FFAppState()
-                                                .tasbihList
-                                                .elementAtOrNull(
-                                                    _model.pageIndex!)
-                                                ?.arabicMeaning
-                                            : FFAppState()
-                                                .tasbihList
-                                                .elementAtOrNull(
-                                                    _model.pageIndex!)
-                                                ?.swedishMeaning,
-                                        'null',
-                                      ),
-                                      minFontSize:
-                                          FFAppConstants.body.toDouble(),
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.manrope(
-                                              fontWeight:
+                                    if (FFAppState().tasbihSetting.swActive)
+                                      AutoSizeText(
+                                        valueOrDefault<String>(
+                                          FFAppState()
+                                              .tasbihList
+                                              .elementAtOrNull(_model.pageIndex)
+                                              ?.swedish,
+                                          '0',
+                                        ),
+                                        textAlign: TextAlign.center,
+                                        minFontSize:
+                                            FFAppConstants.body.toDouble(),
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              font: GoogleFonts.manrope(
+                                                fontWeight: FontWeight.normal,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
+                                              color:
                                                   FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontWeight,
+                                                      .primaryText,
+                                              fontSize: FFAppState()
+                                                  .tasbihSetting
+                                                  .swFont,
+                                              letterSpacing: 0.0,
+                                              fontWeight: FontWeight.normal,
                                               fontStyle:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
                                                       .fontStyle,
+                                              lineHeight: 1.5,
                                             ),
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            letterSpacing: 0.0,
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                          ),
-                                    ),
+                                      ),
                                   ].divide(SizedBox(height: 20.0)),
                                 ),
                               ),
-                            ].divide(SizedBox(height: 20.0)),
+                            ].divide(SizedBox(height: 10.0)),
                           ),
                         ),
                       ),
@@ -332,10 +374,11 @@ class _TashbihCounterWidgetState extends State<TashbihCounterWidget> {
                                   hoverColor: Colors.transparent,
                                   highlightColor: Colors.transparent,
                                   onTap: () async {
+                                    await actions.triggerHapticFeedback();
                                     _model.counter = FFAppState()
                                         .tasbihList
                                         .elementAtOrNull(widget.index!)!
-                                        .counter;
+                                        .targetCount;
                                     safeSetState(() {});
                                   },
                                   child: Container(
@@ -390,8 +433,8 @@ class _TashbihCounterWidgetState extends State<TashbihCounterWidget> {
                                   hoverColor: Colors.transparent,
                                   highlightColor: Colors.transparent,
                                   onTap: () async {
-                                    _model.pageIndex = _model.pageIndex! +
-                                        (_model.pageIndex! <
+                                    _model.pageIndex = _model.pageIndex +
+                                        (_model.pageIndex <
                                                 (FFAppState()
                                                         .tasbihList
                                                         .length -
@@ -403,8 +446,8 @@ class _TashbihCounterWidgetState extends State<TashbihCounterWidget> {
                                     safeSetState(() {});
                                     _model.counter = FFAppState()
                                         .tasbihList
-                                        .elementAtOrNull(_model.pageIndex!)!
-                                        .counter;
+                                        .elementAtOrNull(_model.pageIndex)!
+                                        .targetCount;
                                     safeSetState(() {});
                                   },
                                   child: Container(

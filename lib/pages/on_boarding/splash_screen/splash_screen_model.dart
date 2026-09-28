@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class SplashScreenModel extends FlutterFlowModel<SplashScreenWidget> {
   ///  State fields for stateful widgets in this page.
 
-  // Stores action output result for [Custom Action - loadCitiesFromAsset] action in SplashScreen widget.
+  // Stores action output result for [Custom Action - loadCities] action in SplashScreen widget.
   List<CityRecordStruct>? allResult;
 
   @override

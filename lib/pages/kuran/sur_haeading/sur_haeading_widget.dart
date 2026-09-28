@@ -60,7 +60,7 @@ class _SurHaeadingWidgetState extends State<SurHaeadingWidget> {
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 0.0, 12.0),
+        padding: EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 12.0, 12.0),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -105,6 +105,20 @@ class _SurHaeadingWidgetState extends State<SurHaeadingWidget> {
               children: [
                 AutoSizeText(
                   valueOrDefault<String>(
+                    widget.suratName,
+                    'الرَّحِيْم',
+                  ),
+                  minFontSize: FFAppConstants.heading.toDouble(),
+                  style: FlutterFlowTheme.of(context).arabiTitle.override(
+                        fontFamily: 'arabic',
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        fontSize: 22.0,
+                        letterSpacing: 0.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                AutoSizeText(
+                  valueOrDefault<String>(
                     widget.heading,
                     'Al-Fatiha',
                   ),
@@ -125,28 +139,29 @@ class _SurHaeadingWidgetState extends State<SurHaeadingWidget> {
                             FlutterFlowTheme.of(context).titleMedium.fontStyle,
                       ),
                 ),
-                AutoSizeText(
-                  valueOrDefault<String>(
-                    widget.subHeading,
-                    'Öppningen',
-                  ),
-                  minFontSize: FFAppConstants.body.toDouble(),
-                  style: FlutterFlowTheme.of(context).labelMedium.override(
-                        font: GoogleFonts.manrope(
-                          fontWeight: FontWeight.normal,
-                          fontStyle: FlutterFlowTheme.of(context)
-                              .labelMedium
-                              .fontStyle,
-                        ),
-                        letterSpacing: 0.0,
-                        fontWeight: FontWeight.normal,
-                        fontStyle:
-                            FlutterFlowTheme.of(context).labelMedium.fontStyle,
-                      ),
-                ),
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
+                    AutoSizeText(
+                      valueOrDefault<String>(
+                        widget.subHeading,
+                        'Öppningen',
+                      ),
+                      minFontSize: FFAppConstants.body.toDouble(),
+                      style: FlutterFlowTheme.of(context).labelMedium.override(
+                            font: GoogleFonts.manrope(
+                              fontWeight: FontWeight.normal,
+                              fontStyle: FlutterFlowTheme.of(context)
+                                  .labelMedium
+                                  .fontStyle,
+                            ),
+                            letterSpacing: 0.0,
+                            fontWeight: FontWeight.normal,
+                            fontStyle: FlutterFlowTheme.of(context)
+                                .labelMedium
+                                .fontStyle,
+                          ),
+                    ),
                     AutoSizeText(
                       valueOrDefault<String>(
                         widget.suratType,
@@ -195,20 +210,6 @@ class _SurHaeadingWidgetState extends State<SurHaeadingWidget> {
                   ].divide(SizedBox(width: 5.0)),
                 ),
               ].divide(SizedBox(height: 5.0)),
-            ),
-            AutoSizeText(
-              valueOrDefault<String>(
-                widget.suratName,
-                'الرَّحِيْم',
-              ),
-              minFontSize: FFAppConstants.heading.toDouble(),
-              style: FlutterFlowTheme.of(context).arabiTitle.override(
-                    fontFamily: 'arabic',
-                    color: FlutterFlowTheme.of(context).primaryText,
-                    fontSize: 22.0,
-                    letterSpacing: 0.0,
-                    fontWeight: FontWeight.bold,
-                  ),
             ),
           ],
         ),

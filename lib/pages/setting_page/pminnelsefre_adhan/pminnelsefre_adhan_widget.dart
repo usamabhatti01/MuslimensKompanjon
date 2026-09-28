@@ -1,6 +1,7 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/pages/setting_page/bottom_sheet_icon/bottom_sheet_icon_widget.dart';
 import '/pages/setting_page/pminnelsefre_adhan_component/pminnelsefre_adhan_component_widget.dart';
 import '/custom_code/actions/index.dart' as actions;
 import 'package:auto_size_text/auto_size_text.dart';
@@ -53,32 +54,45 @@ class _PminnelsefreAdhanWidgetState extends State<PminnelsefreAdhanWidget> {
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
-    return Container(
-      width: MediaQuery.sizeOf(context).width * 1.0,
-      height: MediaQuery.sizeOf(context).height * 1.0,
-      decoration: BoxDecoration(
-        color: FlutterFlowTheme.of(context).primaryBackground,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(16.0),
-          topRight: Radius.circular(16.0),
+    return SafeArea(
+      child: Container(
+        width: MediaQuery.sizeOf(context).width * 1.0,
+        decoration: BoxDecoration(
+          color: FlutterFlowTheme.of(context).primaryBackground,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16.0),
+            topRight: Radius.circular(16.0),
+          ),
         ),
-      ),
-      child: Padding(
-        padding:
-            EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.md),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Expanded(
-                  child: AutoSizeText(
-                    'Påminnelse före Adhan',
-                    minFontSize: FFAppConstants.heading.toDouble(),
-                    style: FlutterFlowTheme.of(context).titleLarge.override(
-                          font: GoogleFonts.plusJakartaSans(
+        child: Padding(
+          padding: EdgeInsets.all(
+              FlutterFlowTheme.of(context).designToken.spacing.md),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              wrapWithModel(
+                model: _model.bottomSheetIconModel,
+                updateCallback: () => safeSetState(() {}),
+                child: BottomSheetIconWidget(),
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(
+                    child: AutoSizeText(
+                      'Tid för notis',
+                      minFontSize: FFAppConstants.heading.toDouble(),
+                      style: FlutterFlowTheme.of(context).titleLarge.override(
+                            font: GoogleFonts.plusJakartaSans(
+                              fontWeight: FlutterFlowTheme.of(context)
+                                  .titleLarge
+                                  .fontWeight,
+                              fontStyle: FlutterFlowTheme.of(context)
+                                  .titleLarge
+                                  .fontStyle,
+                            ),
+                            letterSpacing: 0.0,
                             fontWeight: FlutterFlowTheme.of(context)
                                 .titleLarge
                                 .fontWeight,
@@ -86,164 +100,134 @@ class _PminnelsefreAdhanWidgetState extends State<PminnelsefreAdhanWidget> {
                                 .titleLarge
                                 .fontStyle,
                           ),
-                          letterSpacing: 0.0,
-                          fontWeight: FlutterFlowTheme.of(context)
-                              .titleLarge
-                              .fontWeight,
-                          fontStyle:
-                              FlutterFlowTheme.of(context).titleLarge.fontStyle,
-                        ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Expanded(
-                  child: AutoSizeText(
-                    'Få en notis 5, 10 eller 15 minuter innan Adhan så att du kan förbereda dig för bönen i tid.',
-                    minFontSize: FFAppConstants.body.toDouble(),
-                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          font: GoogleFonts.manrope(
-                            fontWeight: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontWeight,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontStyle,
-                          ),
-                          color: FlutterFlowTheme.of(context).primaryText,
-                          letterSpacing: 0.0,
-                          fontWeight: FlutterFlowTheme.of(context)
-                              .bodyMedium
-                              .fontWeight,
-                          fontStyle:
-                              FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                        ),
-                  ),
-                ),
-              ],
-            ),
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12.0),
-                    border: Border.all(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      width: 1.5,
                     ),
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      wrapWithModel(
-                        model: _model.pminnelsefreAdhanComponentModel1,
-                        updateCallback: () => safeSetState(() {}),
-                        child: PminnelsefreAdhanComponentWidget(
-                          label: '5 minuter innan',
-                          subLabel: 'Snabb påminnelse före Adhan',
-                          number: 5,
-                          checkValue: _model.selectedCard == 5,
-                          onCheck: () async {
-                            _model.selectedCard = 5;
-                            safeSetState(() {});
-                          },
-                        ),
-                      ),
-                      wrapWithModel(
-                        model: _model.pminnelsefreAdhanComponentModel2,
-                        updateCallback: () => safeSetState(() {}),
-                        child: PminnelsefreAdhanComponentWidget(
-                          label: '10 minuter innan',
-                          subLabel: 'Rekommenderad påminnelse',
-                          number: 10,
-                          checkValue: _model.selectedCard == 10,
-                          onCheck: () async {
-                            _model.selectedCard = 10;
-                            safeSetState(() {});
-                          },
-                        ),
-                      ),
-                      wrapWithModel(
-                        model: _model.pminnelsefreAdhanComponentModel3,
-                        updateCallback: () => safeSetState(() {}),
-                        child: PminnelsefreAdhanComponentWidget(
-                          label: '15 minuter innan',
-                          subLabel: 'Extra tid för förberedelse',
-                          number: 15,
-                          checkValue: _model.selectedCard == 15,
-                          onCheck: () async {
-                            _model.selectedCard = 15;
-                            safeSetState(() {});
-                          },
-                        ),
-                      ),
-                    ],
+                ],
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(
+                    child: AutoSizeText(
+                      'Hur lång tid innan bönetiden vill du bli påmind?',
+                      minFontSize: FFAppConstants.body.toDouble(),
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            font: GoogleFonts.manrope(
+                              fontWeight: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontWeight,
+                              fontStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontStyle,
+                            ),
+                            color: FlutterFlowTheme.of(context).primaryText,
+                            letterSpacing: 0.0,
+                            fontWeight: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .fontWeight,
+                            fontStyle: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .fontStyle,
+                          ),
+                    ),
                   ),
-                ),
-              ],
-            ),
-            FFButtonWidget(
-              onPressed: () async {
-                FFAppState().updateUserStruct(
-                  (e) => e..prayerReminder = _model.selectedCard,
-                );
-                safeSetState(() {});
-                await actions.schedulePrayerNotifications();
-                Navigator.pop(context);
-              },
-              text: 'Spara',
-              options: FFButtonOptions(
-                width: MediaQuery.sizeOf(context).width * 0.9,
-                height: 40.0,
-                padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
-                iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                color: FlutterFlowTheme.of(context).primary,
-                textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                      font: GoogleFonts.plusJakartaSans(
+                ],
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        wrapWithModel(
+                          model: _model.pminnelsefreAdhanComponentModel1,
+                          updateCallback: () => safeSetState(() {}),
+                          child: PminnelsefreAdhanComponentWidget(
+                            label: '5 minuter innan',
+                            subLabel: '',
+                            number: 5,
+                            checkValue: _model.selectedCard == 5,
+                            onCheck: () async {
+                              _model.selectedCard = 5;
+                              safeSetState(() {});
+                            },
+                          ),
+                        ),
+                        wrapWithModel(
+                          model: _model.pminnelsefreAdhanComponentModel2,
+                          updateCallback: () => safeSetState(() {}),
+                          child: PminnelsefreAdhanComponentWidget(
+                            label: '10 minuter innan',
+                            subLabel: '',
+                            number: 10,
+                            checkValue: _model.selectedCard == 10,
+                            onCheck: () async {
+                              _model.selectedCard = 10;
+                              safeSetState(() {});
+                            },
+                          ),
+                        ),
+                        wrapWithModel(
+                          model: _model.pminnelsefreAdhanComponentModel3,
+                          updateCallback: () => safeSetState(() {}),
+                          child: PminnelsefreAdhanComponentWidget(
+                            label: '15 minuter innan',
+                            subLabel: '',
+                            number: 15,
+                            checkValue: _model.selectedCard == 15,
+                            onCheck: () async {
+                              _model.selectedCard = 15;
+                              safeSetState(() {});
+                            },
+                          ),
+                        ),
+                      ].divide(SizedBox(height: 10.0)),
+                    ),
+                  ),
+                ],
+              ),
+              FFButtonWidget(
+                onPressed: () async {
+                  FFAppState().updateUserStruct(
+                    (e) => e..prayerReminder = _model.selectedCard,
+                  );
+                  safeSetState(() {});
+                  await actions.schedulePrayerNotifications();
+                  Navigator.pop(context);
+                },
+                text: 'Spara',
+                options: FFButtonOptions(
+                  width: MediaQuery.sizeOf(context).width * 0.9,
+                  height: 40.0,
+                  padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                  iconPadding:
+                      EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                  color: FlutterFlowTheme.of(context).primary,
+                  textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                        font: GoogleFonts.plusJakartaSans(
+                          fontWeight: FlutterFlowTheme.of(context)
+                              .titleSmall
+                              .fontWeight,
+                          fontStyle:
+                              FlutterFlowTheme.of(context).titleSmall.fontStyle,
+                        ),
+                        color: Colors.white,
+                        letterSpacing: 0.0,
                         fontWeight:
                             FlutterFlowTheme.of(context).titleSmall.fontWeight,
                         fontStyle:
                             FlutterFlowTheme.of(context).titleSmall.fontStyle,
                       ),
-                      color: Colors.white,
-                      letterSpacing: 0.0,
-                      fontWeight:
-                          FlutterFlowTheme.of(context).titleSmall.fontWeight,
-                      fontStyle:
-                          FlutterFlowTheme.of(context).titleSmall.fontStyle,
-                    ),
-                elevation: 0.0,
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Text(
-                  'Du kan ändra dina bönetidsnotiser när som helst.',
-                  style: FlutterFlowTheme.of(context).labelMedium.override(
-                        font: GoogleFonts.manrope(
-                          fontWeight: FlutterFlowTheme.of(context)
-                              .labelMedium
-                              .fontWeight,
-                          fontStyle: FlutterFlowTheme.of(context)
-                              .labelMedium
-                              .fontStyle,
-                        ),
-                        letterSpacing: 0.0,
-                        fontWeight:
-                            FlutterFlowTheme.of(context).labelMedium.fontWeight,
-                        fontStyle:
-                            FlutterFlowTheme.of(context).labelMedium.fontStyle,
-                      ),
+                  elevation: 0.0,
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-              ],
-            ),
-          ].divide(SizedBox(height: 20.0)).around(SizedBox(height: 20.0)),
+              ),
+            ].divide(SizedBox(height: 20.0)).addToEnd(SizedBox(height: 20.0)),
+          ),
         ),
       ),
     );

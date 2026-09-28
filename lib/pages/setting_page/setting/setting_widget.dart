@@ -1,22 +1,25 @@
-import '/custom_header_footer/page_footer/page_footer_widget.dart';
 import '/custom_header_footer/page_sub_header_with_icon/page_sub_header_with_icon_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/pages/setting_page/adhanljud/adhanljud_widget.dart';
-import '/pages/setting_page/betygsttappen/betygsttappen_widget.dart';
 import '/pages/setting_page/bnetidsnotiser/bnetidsnotiser_widget.dart';
-import '/pages/setting_page/kontaktaoss/kontaktaoss_widget.dart';
+import '/pages/setting_page/fljoss_dialogue_box/fljoss_dialogue_box_widget.dart';
 import '/pages/setting_page/omappen/omappen_widget.dart';
 import '/pages/setting_page/plats/plats_widget.dart';
 import '/pages/setting_page/pminnelsefre_adhan/pminnelsefre_adhan_widget.dart';
 import '/pages/setting_page/setting_tab/setting_tab_widget.dart';
 import '/pages/setting_page/setting_tab_with_switch/setting_tab_with_switch_widget.dart';
 import '/pages/setting_page/tema/tema_widget.dart';
+import '/custom_code/actions/index.dart' as actions;
+import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/index.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 import 'setting_model.dart';
 export 'setting_model.dart';
@@ -52,7 +55,7 @@ class _SettingWidgetState extends State<SettingWidget> {
         await showModalBottomSheet(
           isScrollControlled: true,
           backgroundColor: Colors.transparent,
-          enableDrag: false,
+          useSafeArea: true,
           context: context,
           builder: (context) {
             return WebViewAware(
@@ -63,10 +66,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                 },
                 child: Padding(
                   padding: MediaQuery.viewInsetsOf(context),
-                  child: Container(
-                    height: MediaQuery.sizeOf(context).height * 0.8,
-                    child: BnetidsnotiserWidget(),
-                  ),
+                  child: BnetidsnotiserWidget(),
                 ),
               ),
             );
@@ -102,7 +102,7 @@ class _SettingWidgetState extends State<SettingWidget> {
           child: Padding(
             padding: EdgeInsetsDirectional.fromSTEB(
                 FlutterFlowTheme.of(context).designToken.spacing.md,
-                0.0,
+                FlutterFlowTheme.of(context).designToken.spacing.sm,
                 FlutterFlowTheme.of(context).designToken.spacing.md,
                 0.0),
             child: Column(
@@ -111,10 +111,19 @@ class _SettingWidgetState extends State<SettingWidget> {
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Icon(
-                      Icons.arrow_back,
-                      color: Color(0x001A1A1A),
-                      size: FFAppConstants.iconSize.toDouble(),
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        context.pushNamed(HomeWidget.routeName);
+                      },
+                      child: Icon(
+                        Icons.chevron_left,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        size: FFAppConstants.iconSize.toDouble(),
+                      ),
                     ),
                     Expanded(
                       child: wrapWithModel(
@@ -197,12 +206,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                           child: Padding(
                                             padding: MediaQuery.viewInsetsOf(
                                                 context),
-                                            child: Container(
-                                              height: MediaQuery.sizeOf(context)
-                                                      .height *
-                                                  0.7,
-                                              child: TemaWidget(),
-                                            ),
+                                            child: TemaWidget(),
                                           ),
                                         ),
                                       );
@@ -214,7 +218,10 @@ class _SettingWidgetState extends State<SettingWidget> {
                                   updateCallback: () => safeSetState(() {}),
                                   child: SettingTabWithSwitchWidget(
                                     label: 'Tema',
-                                    sunLabel: 'Ljus',
+                                    sunLabel: Theme.of(context).brightness ==
+                                            Brightness.light
+                                        ? 'Ljus'
+                                        : 'Mörk',
                                     icon: Icon(
                                       Icons.wb_sunny_outlined,
                                       color: FlutterFlowTheme.of(context)
@@ -239,6 +246,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                   await showModalBottomSheet(
                                     isScrollControlled: true,
                                     backgroundColor: Colors.transparent,
+                                    useSafeArea: true,
                                     context: context,
                                     builder: (context) {
                                       return WebViewAware(
@@ -251,12 +259,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                           child: Padding(
                                             padding: MediaQuery.viewInsetsOf(
                                                 context),
-                                            child: Container(
-                                              height: MediaQuery.sizeOf(context)
-                                                      .height *
-                                                  0.9,
-                                              child: PlatsWidget(),
-                                            ),
+                                            child: PlatsWidget(),
                                           ),
                                         ),
                                       );
@@ -286,7 +289,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                         Align(
                           alignment: AlignmentDirectional(-1.0, 0.0),
                           child: AutoSizeText(
-                            'Notiser',
+                            'Notiser och Adhan',
                             minFontSize: FFAppConstants.heading.toDouble(),
                             style: FlutterFlowTheme.of(context)
                                 .titleSmall
@@ -346,12 +349,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                           child: Padding(
                                             padding: MediaQuery.viewInsetsOf(
                                                 context),
-                                            child: Container(
-                                              height: MediaQuery.sizeOf(context)
-                                                      .height *
-                                                  0.9,
-                                              child: BnetidsnotiserWidget(),
-                                            ),
+                                            child: BnetidsnotiserWidget(),
                                           ),
                                         ),
                                       );
@@ -364,7 +362,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                   child: SettingTabWithSwitchWidget(
                                     label: 'Bönetidsnotiser',
                                     sunLabel:
-                                        'Slå på/av notiser för specifika böner',
+                                        'Slå på/av Adhan och notiser per bön',
                                     icon: Icon(
                                       Icons.message_outlined,
                                       color: FlutterFlowTheme.of(context)
@@ -389,7 +387,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                   await showModalBottomSheet(
                                     isScrollControlled: true,
                                     backgroundColor: Colors.transparent,
-                                    enableDrag: false,
+                                    useSafeArea: true,
                                     context: context,
                                     builder: (context) {
                                       return WebViewAware(
@@ -402,12 +400,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                           child: Padding(
                                             padding: MediaQuery.viewInsetsOf(
                                                 context),
-                                            child: Container(
-                                              height: MediaQuery.sizeOf(context)
-                                                      .height *
-                                                  0.9,
-                                              child: AdhanljudWidget(),
-                                            ),
+                                            child: AdhanljudWidget(),
                                           ),
                                         ),
                                       );
@@ -418,8 +411,9 @@ class _SettingWidgetState extends State<SettingWidget> {
                                   model: _model.settingTabWithSwitchModel4,
                                   updateCallback: () => safeSetState(() {}),
                                   child: SettingTabWithSwitchWidget(
-                                    label: 'Adhan',
-                                    sunLabel: 'Välj ljud för böneutropet',
+                                    label: 'Adhan & Notisljud',
+                                    sunLabel:
+                                        'Välj ljud för böneutrop och vibration',
                                     icon: Icon(
                                       Icons.vibration_sharp,
                                       color: FlutterFlowTheme.of(context)
@@ -444,7 +438,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                   await showModalBottomSheet(
                                     isScrollControlled: true,
                                     backgroundColor: Colors.transparent,
-                                    enableDrag: false,
+                                    useSafeArea: true,
                                     context: context,
                                     builder: (context) {
                                       return WebViewAware(
@@ -457,12 +451,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                           child: Padding(
                                             padding: MediaQuery.viewInsetsOf(
                                                 context),
-                                            child: Container(
-                                              height: MediaQuery.sizeOf(context)
-                                                      .height *
-                                                  0.8,
-                                              child: PminnelsefreAdhanWidget(),
-                                            ),
+                                            child: PminnelsefreAdhanWidget(),
                                           ),
                                         ),
                                       );
@@ -473,11 +462,11 @@ class _SettingWidgetState extends State<SettingWidget> {
                                   model: _model.settingTabWithSwitchModel5,
                                   updateCallback: () => safeSetState(() {}),
                                   child: SettingTabWithSwitchWidget(
-                                    label: 'Påminnelse före Adhan',
+                                    label: 'Tid för notis',
                                     sunLabel:
-                                        'Få en notis 5, 10 eller 15 minuter innan',
-                                    icon: Icon(
-                                      FFIcons.kbell,
+                                        'Välj 5, 10 eller 15 minuter före bön',
+                                    icon: FaIcon(
+                                      FontAwesomeIcons.bell,
                                       color: FlutterFlowTheme.of(context)
                                           .primaryText,
                                       size: 18.0,
@@ -529,6 +518,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                           ),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               InkWell(
                                 splashColor: Colors.transparent,
@@ -539,7 +529,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                   await showModalBottomSheet(
                                     isScrollControlled: true,
                                     backgroundColor: Colors.transparent,
-                                    enableDrag: false,
+                                    useSafeArea: true,
                                     context: context,
                                     builder: (context) {
                                       return WebViewAware(
@@ -552,12 +542,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                           child: Padding(
                                             padding: MediaQuery.viewInsetsOf(
                                                 context),
-                                            child: Container(
-                                              height: MediaQuery.sizeOf(context)
-                                                      .height *
-                                                  0.8,
-                                              child: OmappenWidget(),
-                                            ),
+                                            child: OmappenWidget(),
                                           ),
                                         ),
                                       );
@@ -569,7 +554,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                   updateCallback: () => safeSetState(() {}),
                                   child: SettingTabWidget(
                                     label: 'Om appen',
-                                    sunLabel: ' ',
+                                    sunLabel: '',
                                     icon: Icon(
                                       Icons.info_outline,
                                       color: FlutterFlowTheme.of(context)
@@ -591,40 +576,14 @@ class _SettingWidgetState extends State<SettingWidget> {
                                 hoverColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
                                 onTap: () async {
-                                  await showModalBottomSheet(
-                                    isScrollControlled: true,
-                                    backgroundColor: Colors.transparent,
-                                    enableDrag: false,
-                                    context: context,
-                                    builder: (context) {
-                                      return WebViewAware(
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            FocusScope.of(context).unfocus();
-                                            FocusManager.instance.primaryFocus
-                                                ?.unfocus();
-                                          },
-                                          child: Padding(
-                                            padding: MediaQuery.viewInsetsOf(
-                                                context),
-                                            child: Container(
-                                              height: MediaQuery.sizeOf(context)
-                                                      .height *
-                                                  0.85,
-                                              child: BetygsttappenWidget(),
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ).then((value) => safeSetState(() {}));
+                                  await actions.rateApp();
                                 },
                                 child: wrapWithModel(
                                   model: _model.settingTabModel2,
                                   updateCallback: () => safeSetState(() {}),
                                   child: SettingTabWidget(
                                     label: 'Betygsätt appen',
-                                    sunLabel: ' ',
+                                    sunLabel: '',
                                     icon: Icon(
                                       Icons.star_border,
                                       color: FlutterFlowTheme.of(context)
@@ -640,25 +599,31 @@ class _SettingWidgetState extends State<SettingWidget> {
                                 endIndent: 15.0,
                                 color: FlutterFlowTheme.of(context).alternate,
                               ),
-                              InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  await launchURL('');
-                                },
-                                child: wrapWithModel(
-                                  model: _model.settingTabModel3,
-                                  updateCallback: () => safeSetState(() {}),
-                                  child: SettingTabWidget(
-                                    label: 'Dela appen',
-                                    sunLabel: ' ',
-                                    icon: Icon(
-                                      Icons.share_outlined,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                      size: 18.0,
+                              Builder(
+                                builder: (context) => InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: () async {
+                                    await Share.share(
+                                      'com.mycompany.muslimenskompanjon',
+                                      sharePositionOrigin:
+                                          getWidgetBoundingBox(context),
+                                    );
+                                  },
+                                  child: wrapWithModel(
+                                    model: _model.settingTabModel3,
+                                    updateCallback: () => safeSetState(() {}),
+                                    child: SettingTabWidget(
+                                      label: 'Dela appen',
+                                      sunLabel: '',
+                                      icon: Icon(
+                                        Icons.share_outlined,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                        size: 18.0,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -678,7 +643,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                   await showModalBottomSheet(
                                     isScrollControlled: true,
                                     backgroundColor: Colors.transparent,
-                                    enableDrag: false,
+                                    useSafeArea: true,
                                     context: context,
                                     builder: (context) {
                                       return WebViewAware(
@@ -691,12 +656,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                           child: Padding(
                                             padding: MediaQuery.viewInsetsOf(
                                                 context),
-                                            child: Container(
-                                              height: MediaQuery.sizeOf(context)
-                                                      .height *
-                                                  0.9,
-                                              child: KontaktaossWidget(),
-                                            ),
+                                            child: FljossDialogueBoxWidget(),
                                           ),
                                         ),
                                       );
@@ -707,8 +667,38 @@ class _SettingWidgetState extends State<SettingWidget> {
                                   model: _model.settingTabModel4,
                                   updateCallback: () => safeSetState(() {}),
                                   child: SettingTabWidget(
+                                    label: 'Följ oss',
+                                    sunLabel: '',
+                                    icon: Icon(
+                                      Icons.social_distance,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                      size: 18.0,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Divider(
+                                thickness: 1.0,
+                                indent: 15.0,
+                                endIndent: 15.0,
+                                color: FlutterFlowTheme.of(context).alternate,
+                              ),
+                              InkWell(
+                                splashColor: Colors.transparent,
+                                focusColor: Colors.transparent,
+                                hoverColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                onTap: () async {
+                                  await launchURL(
+                                      'mailto:kontakt@muslimenskompanjon.se');
+                                },
+                                child: wrapWithModel(
+                                  model: _model.settingTabModel5,
+                                  updateCallback: () => safeSetState(() {}),
+                                  child: SettingTabWidget(
                                     label: 'Kontakta oss',
-                                    sunLabel: ' ',
+                                    sunLabel: '',
                                     icon: Icon(
                                       Icons.mail_outline_rounded,
                                       color: FlutterFlowTheme.of(context)
@@ -723,48 +713,53 @@ class _SettingWidgetState extends State<SettingWidget> {
                                 .addToEnd(SizedBox(height: 10.0)),
                           ),
                         ),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            AutoSizeText(
+                              'Muslimens Kompanjon Version: 1.10',
+                              minFontSize: FFAppConstants.body.toDouble(),
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    font: GoogleFonts.manrope(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
+                                  ),
+                            ),
+                          ],
+                        ),
                       ]
-                          .divide(SizedBox(height: 20.0))
-                          .around(SizedBox(height: 20.0)),
+                          .divide(SizedBox(height: 15.0))
+                          .around(SizedBox(height: 15.0)),
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AutoSizeText(
-                      'Muslimens Kompanjon Version: 1.0',
-                      minFontSize: FFAppConstants.body.toDouble(),
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            font: GoogleFonts.manrope(
-                              fontWeight: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .fontWeight,
-                              fontStyle: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .fontStyle,
-                            ),
-                            color: FlutterFlowTheme.of(context).primaryText,
-                            letterSpacing: 0.0,
-                            fontWeight: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontWeight,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontStyle,
-                          ),
-                    ),
-                  ],
-                ),
-                wrapWithModel(
-                  model: _model.pageFooterModel,
-                  updateCallback: () => safeSetState(() {}),
-                  child: PageFooterWidget(
+                Container(
+                  width: MediaQuery.sizeOf(context).width * 1.0,
+                  height: FFAppConstants.footerHeight.toDouble(),
+                  child: custom_widgets.CustomPageFooter(
+                    width: MediaQuery.sizeOf(context).width * 1.0,
+                    height: FFAppConstants.footerHeight.toDouble(),
                     selectedIndex: 4,
                   ),
                 ),
-              ].divide(SizedBox(height: 20.0)),
+              ],
             ),
           ),
         ),

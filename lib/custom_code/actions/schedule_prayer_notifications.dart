@@ -22,6 +22,7 @@ final Map<String, Map<String, String>> _localizedStrings = {
   'en': {
     'prayer_reminder': 'Prayer Reminder',
     'in_minutes': 'in {minutes} minutes',
+    'time_for_prayer': 'Time for {prayer}',
     'fajr': 'Fajr',
     'fazr': 'Fajr',
     'shuruq': 'Shuruq',
@@ -34,6 +35,7 @@ final Map<String, Map<String, String>> _localizedStrings = {
   'sv': {
     'prayer_reminder': 'Bönepåminnelse',
     'in_minutes': 'om {minutes} minuter',
+    'time_for_prayer': 'Dags för {prayer}',
     'fajr': 'Fajr',
     'fazr': 'Fajr',
     'shuruq': 'Shuruq',
@@ -219,6 +221,134 @@ Future<String> schedulePrayerNotifications() async {
     };
 
     final isVibration = selectedSound == 'Vibration';
+    final lang = FFAppState().user.languageCode.toLowerCase().trim();
+    final title = _translate('prayer_reminder', lang);
+
+    Future<void> _scheduleNotification({
+      required int id,
+      required tz.TZDateTime time,
+      required String body,
+      required bool playAdhanSound,
+    }) async {
+      final playSoundActual = playAdhanSound && !isVibration;
+
+      String? androidSoundResource;
+      String? iosSoundFile;
+
+      if (playSoundActual) {
+        switch (selectedSound) {
+          case 'Standard':
+            androidSoundResource = null;
+            iosSoundFile = null;
+            break;
+          case 'Adhan1':
+            androidSoundResource = 'adhan_1';
+            iosSoundFile = 'Adhan_1.aiff';
+            break;
+          case 'Adhan2':
+            androidSoundResource = 'adhan_2';
+            iosSoundFile = 'Adhan_2.aiff';
+            break;
+          case 'Adhan3':
+            androidSoundResource = 'adhan_3';
+            iosSoundFile = 'Adhan_3.aiff';
+            break;
+          case 'Adhan4':
+            androidSoundResource = 'adhan_4';
+            iosSoundFile = 'Adhan_4.aiff';
+            break;
+          default:
+            androidSoundResource = null;
+            iosSoundFile = null;
+        }
+      }
+
+      final channelId = playSoundActual
+          ? (androidSoundResource != null
+              ? 'prayer_channel_$androidSoundResource'
+              : 'prayer_channel_sound')
+          : 'prayer_channel_vibration';
+      final channelName = playSoundActual
+          ? 'Prayer Sound Notifications'
+          : 'Prayer Vibration Notifications';
+      final channelDesc = playSoundActual
+          ? 'Prayer reminder notifications with sound'
+          : 'Prayer reminder notifications with vibration only';
+
+      var scheduleMode = AndroidScheduleMode.exactAllowWhileIdle;
+      try {
+        await fln.zonedSchedule(
+          id,
+          title,
+          body,
+          time,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channelId,
+              channelName,
+              channelDescription: channelDesc,
+              importance: Importance.max,
+              priority: Priority.high,
+              playSound: playSoundActual,
+              enableVibration: true,
+              sound: playSoundActual && androidSoundResource != null
+                  ? RawResourceAndroidNotificationSound(
+                      androidSoundResource,
+                    )
+                  : null,
+            ),
+            iOS: DarwinNotificationDetails(
+              presentAlert: true,
+              presentBadge: true,
+              presentSound: playSoundActual,
+              sound: iosSoundFile,
+            ),
+          ),
+          androidScheduleMode: scheduleMode,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime,
+          matchDateTimeComponents: null,
+        );
+      } catch (e) {
+        if (e is PlatformException && e.code == 'exact_alarms_not_permitted') {
+          scheduleMode = AndroidScheduleMode.inexactAllowWhileIdle;
+          await fln.zonedSchedule(
+            id,
+            title,
+            body,
+            time,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channelId,
+                channelName,
+                channelDescription: channelDesc,
+                importance: Importance.max,
+                priority: Priority.high,
+                playSound: playSoundActual,
+                enableVibration: true,
+                sound: playSoundActual && androidSoundResource != null
+                    ? RawResourceAndroidNotificationSound(
+                        androidSoundResource,
+                      )
+                    : null,
+              ),
+              iOS: DarwinNotificationDetails(
+                presentAlert: true,
+                presentBadge: true,
+                presentSound: playSoundActual,
+                sound: iosSoundFile,
+              ),
+            ),
+            androidScheduleMode: scheduleMode,
+            uiLocalNotificationDateInterpretation:
+                UILocalNotificationDateInterpretation.absoluteTime,
+            matchDateTimeComponents: null,
+          );
+        } else {
+          rethrow;
+        }
+      }
+    }
 
     for (int dayOffset = 0; dayOffset < 10; dayOffset++) {
       final targetDate = now.add(Duration(days: dayOffset));
@@ -251,155 +381,44 @@ Future<String> schedulePrayerNotifications() async {
       }
 
       for (final prayer in order) {
-        final noticeEnabled = _getPrayerSetting(prayer, 'notice');
-        final soundEnabled = _getPrayerSetting(prayer, 'adhan');
-        final playSoundActual = soundEnabled && !isVibration;
-
-        // Skip only if both disabled
-        if (!noticeEnabled && !soundEnabled) {
-          continue;
-        }
-
         final timeStr = times[prayer];
         if (timeStr == null) continue;
 
         final prayerTime = _toTZ(timeStr, location, targetDate);
-        final offsetMinutes = FFAppState().user.prayerReminder;
-
-        final reminderTime =
-            prayerTime.subtract(Duration(minutes: offsetMinutes));
-
-        // Skip if this reminder time is already in the past
-        if (reminderTime.isBefore(now)) {
-          continue;
-        }
-
-        // Generate a unique, deterministic notification ID
-        final int id = dayOffset * 10 + prayerIndices[prayer]!;
-
-        final lang = FFAppState().user.languageCode.toLowerCase().trim();
-        final title = _translate('prayer_reminder', lang);
         final capitalizedPrayer = _capitalize(_translate(prayer, lang));
-        final bodySuffix = _inMinutesSuffix(offsetMinutes, lang);
-        final body = "$capitalizedPrayer $bodySuffix";
 
-        String? androidSoundResource;
-        String? iosSoundFile;
-
-        if (playSoundActual) {
-          switch (selectedSound) {
-            case 'Standard':
-              androidSoundResource = null;
-              iosSoundFile = null;
-              break;
-            case 'Adhan1':
-              androidSoundResource = 'adhan_1';
-              iosSoundFile = 'short_adhan.aiff';
-              break;
-            case 'Adhan2':
-              androidSoundResource = 'adhan_2';
-              iosSoundFile = 'adhan_makkah.aiff';
-              break;
-            case 'Adhan3':
-              androidSoundResource = 'adhan_3';
-              iosSoundFile = 'adhan_madinah.aiff';
-              break;
-            case 'Adhan4':
-              androidSoundResource = 'adhan_4';
-              iosSoundFile = 'standard_adhan.aiff';
-              break;
-            default:
-              androidSoundResource = null;
-              iosSoundFile = null;
+        // 1. Before-time Reminder (notice)
+        final noticeEnabled = _getPrayerSetting(prayer, 'notice');
+        if (noticeEnabled) {
+          final offsetMinutes = FFAppState().user.prayerReminder;
+          final reminderTime =
+              prayerTime.subtract(Duration(minutes: offsetMinutes));
+          if (reminderTime.isAfter(now)) {
+            final int noticeId = dayOffset * 20 + prayerIndices[prayer]!;
+            final bodySuffix = _inMinutesSuffix(offsetMinutes, lang);
+            final body = "$capitalizedPrayer $bodySuffix";
+            await _scheduleNotification(
+              id: noticeId,
+              time: reminderTime,
+              body: body,
+              playAdhanSound: false,
+            );
           }
         }
 
-        final channelId = playSoundActual
-            ? (androidSoundResource != null
-                ? 'prayer_channel_$androidSoundResource'
-                : 'prayer_channel_sound')
-            : 'prayer_channel_vibration';
-        final channelName = playSoundActual
-            ? 'Prayer Sound Notifications'
-            : 'Prayer Vibration Notifications';
-        final channelDesc = playSoundActual
-            ? 'Prayer reminder notifications with sound'
-            : 'Prayer reminder notifications with vibration only';
-
-        var scheduleMode = AndroidScheduleMode.exactAllowWhileIdle;
-        try {
-          await fln.zonedSchedule(
-            id,
-            title,
-            body,
-            reminderTime,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                channelId,
-                channelName,
-                channelDescription: channelDesc,
-                importance: Importance.max,
-                priority: Priority.high,
-                // icon: 'ic_notification',
-                playSound: playSoundActual,
-                enableVibration: true,
-                sound: playSoundActual && androidSoundResource != null
-                    ? RawResourceAndroidNotificationSound(
-                        androidSoundResource,
-                      )
-                    : null,
-              ),
-              iOS: DarwinNotificationDetails(
-                presentAlert: true,
-                presentBadge: true,
-                presentSound: playSoundActual,
-                sound: iosSoundFile,
-              ),
-            ),
-            androidScheduleMode: scheduleMode,
-            uiLocalNotificationDateInterpretation:
-                UILocalNotificationDateInterpretation.absoluteTime,
-            matchDateTimeComponents: null,
-          );
-        } catch (e) {
-          if (e is PlatformException &&
-              e.code == 'exact_alarms_not_permitted') {
-            scheduleMode = AndroidScheduleMode.inexactAllowWhileIdle;
-            await fln.zonedSchedule(
-              id,
-              title,
-              body,
-              reminderTime,
-              NotificationDetails(
-                android: AndroidNotificationDetails(
-                  channelId,
-                  channelName,
-                  channelDescription: channelDesc,
-                  importance: Importance.max,
-                  priority: Priority.high,
-                  // icon: 'ic_notification',
-                  playSound: playSoundActual,
-                  enableVibration: true,
-                  sound: playSoundActual && androidSoundResource != null
-                      ? RawResourceAndroidNotificationSound(
-                          androidSoundResource,
-                        )
-                      : null,
-                ),
-                iOS: DarwinNotificationDetails(
-                  presentAlert: true,
-                  presentBadge: true,
-                  presentSound: playSoundActual,
-                  sound: iosSoundFile,
-                ),
-              ),
-              androidScheduleMode: scheduleMode,
-              uiLocalNotificationDateInterpretation:
-                  UILocalNotificationDateInterpretation.absoluteTime,
-              matchDateTimeComponents: null,
+        // 2. Exact-time Adhan (adhan)
+        final adhanEnabled = _getPrayerSetting(prayer, 'adhan');
+        if (adhanEnabled) {
+          if (prayerTime.isAfter(now)) {
+            final int adhanId = dayOffset * 20 + 10 + prayerIndices[prayer]!;
+            final template = _translate('time_for_prayer', lang);
+            final body = template.replaceAll('{prayer}', capitalizedPrayer);
+            await _scheduleNotification(
+              id: adhanId,
+              time: prayerTime,
+              body: body,
+              playAdhanSound: true,
             );
-          } else {
-            rethrow;
           }
         }
       }

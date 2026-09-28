@@ -1,4 +1,5 @@
 import '/flutter_flow/flutter_flow_util.dart';
+import '/pages/setting_page/bottom_sheet_icon/bottom_sheet_icon_widget.dart';
 import '/pages/setting_page/kontaktaoss_component/kontaktaoss_component_widget.dart';
 import 'kontaktaoss_widget.dart' show KontaktaossWidget;
 import 'package:flutter/material.dart';
@@ -6,6 +7,8 @@ import 'package:flutter/material.dart';
 class KontaktaossModel extends FlutterFlowModel<KontaktaossWidget> {
   ///  State fields for stateful widgets in this component.
 
+  // Model for bottomSheetIcon component.
+  late BottomSheetIconModel bottomSheetIconModel;
   // Model for KontaktaossComponent component.
   late KontaktaossComponentModel kontaktaossComponentModel1;
   // Model for KontaktaossComponent component.
@@ -27,6 +30,7 @@ class KontaktaossModel extends FlutterFlowModel<KontaktaossWidget> {
 
   @override
   void initState(BuildContext context) {
+    bottomSheetIconModel = createModel(context, () => BottomSheetIconModel());
     kontaktaossComponentModel1 =
         createModel(context, () => KontaktaossComponentModel());
     kontaktaossComponentModel2 =
@@ -37,6 +41,7 @@ class KontaktaossModel extends FlutterFlowModel<KontaktaossWidget> {
 
   @override
   void dispose() {
+    bottomSheetIconModel.dispose();
     kontaktaossComponentModel1.dispose();
     kontaktaossComponentModel2.dispose();
     kontaktaossComponentModel3.dispose();

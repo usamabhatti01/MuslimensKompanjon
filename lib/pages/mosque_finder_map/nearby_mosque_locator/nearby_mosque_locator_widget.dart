@@ -84,7 +84,7 @@ class _NearbyMosqueLocatorWidgetState extends State<NearbyMosqueLocatorWidget> {
           child: Padding(
             padding: EdgeInsetsDirectional.fromSTEB(
                 FlutterFlowTheme.of(context).designToken.spacing.md,
-                0.0,
+                FlutterFlowTheme.of(context).designToken.spacing.sm,
                 FlutterFlowTheme.of(context).designToken.spacing.md,
                 0.0),
             child: Column(
@@ -331,18 +331,19 @@ class _NearbyMosqueLocatorWidgetState extends State<NearbyMosqueLocatorWidget> {
                         ),
                       ),
                       AutoSizeText(
-                        'NÄRMAST MOSKÉER (SORTERAT EFTER AVSTÅND)',
+                        'Närmsta moskéer (sorterade efter avstånd)',
                         minFontSize: FFAppConstants.heading.toDouble(),
                         style:
                             FlutterFlowTheme.of(context).titleMedium.override(
                                   font: GoogleFonts.plusJakartaSans(
-                                    fontWeight: FontWeight.w500,
+                                    fontWeight: FontWeight.w300,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .titleMedium
                                         .fontStyle,
                                   ),
+                                  fontSize: 12.0,
                                   letterSpacing: 0.0,
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.w300,
                                   fontStyle: FlutterFlowTheme.of(context)
                                       .titleMedium
                                       .fontStyle,
@@ -452,6 +453,7 @@ class _NearbyMosqueLocatorWidgetState extends State<NearbyMosqueLocatorWidget> {
                                                                     .titleMedium
                                                                     .fontStyle,
                                                           ),
+                                                          fontSize: 14.0,
                                                           letterSpacing: 0.0,
                                                           fontWeight:
                                                               FlutterFlowTheme.of(
@@ -541,12 +543,15 @@ class _NearbyMosqueLocatorWidgetState extends State<NearbyMosqueLocatorWidget> {
                                                 ].divide(SizedBox(height: 4.0)),
                                               ),
                                             ),
-                                            Icon(
-                                              Icons.pin_drop,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryText,
-                                              size: 24.0,
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(0.0),
+                                              child: Image.asset(
+                                                'assets/images/way.png',
+                                                width: 25.0,
+                                                height: 25.0,
+                                                fit: BoxFit.fill,
+                                              ),
                                             ),
                                           ].divide(SizedBox(width: 12.0)),
                                         ),

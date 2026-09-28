@@ -2,10 +2,12 @@ import '/backend/schema/enums/enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/pages/setting_page/bottom_sheet_icon/bottom_sheet_icon_widget.dart';
 import '/pages/setting_page/tema_component/tema_component_widget.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'tema_model.dart';
@@ -57,7 +59,6 @@ class _TemaWidgetState extends State<TemaWidget> {
 
     return Container(
       width: MediaQuery.sizeOf(context).width * 1.0,
-      height: MediaQuery.sizeOf(context).height * 1.0,
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).primaryBackground,
         borderRadius: BorderRadius.only(
@@ -69,9 +70,14 @@ class _TemaWidgetState extends State<TemaWidget> {
         padding:
             EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.md),
         child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            wrapWithModel(
+              model: _model.bottomSheetIconModel,
+              updateCallback: () => safeSetState(() {}),
+              child: BottomSheetIconWidget(),
+            ),
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
@@ -133,10 +139,6 @@ class _TemaWidgetState extends State<TemaWidget> {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12.0),
-                    border: Border.all(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      width: 1.5,
-                    ),
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
@@ -149,6 +151,10 @@ class _TemaWidgetState extends State<TemaWidget> {
                           subLabel: 'Följer telefonens tema automatiskt',
                           checkValue: _model.selectedCard == Mode.System.name,
                           azanName: FFAppConstants.NullValue,
+                          icon: FaIcon(
+                            FontAwesomeIcons.sun,
+                            size: 18.0,
+                          ),
                           onCheck: () async {
                             _model.selectedCard = Mode.System.name;
                             safeSetState(() {});
@@ -163,6 +169,10 @@ class _TemaWidgetState extends State<TemaWidget> {
                           subLabel: 'Ljust och rent utseende',
                           checkValue: _model.selectedCard == Mode.Light.name,
                           azanName: FFAppConstants.NullValue,
+                          icon: Icon(
+                            Icons.wb_sunny_outlined,
+                            size: 18.0,
+                          ),
                           onCheck: () async {
                             _model.selectedCard = Mode.Light.name;
                             safeSetState(() {});
@@ -177,13 +187,17 @@ class _TemaWidgetState extends State<TemaWidget> {
                           subLabel: 'Bekvämt för mörka miljöer',
                           checkValue: _model.selectedCard == Mode.Dark.name,
                           azanName: FFAppConstants.NullValue,
+                          icon: FaIcon(
+                            FontAwesomeIcons.moon,
+                            size: 18.0,
+                          ),
                           onCheck: () async {
                             _model.selectedCard = Mode.Dark.name;
                             safeSetState(() {});
                           },
                         ),
                       ),
-                    ],
+                    ].divide(SizedBox(height: 10.0)),
                   ),
                 ),
               ],
@@ -233,29 +247,9 @@ class _TemaWidgetState extends State<TemaWidget> {
             ),
             Row(
               mainAxisSize: MainAxisSize.max,
-              children: [
-                AutoSizeText(
-                  'Du kan ändra dina bönetidsnotiser när som helst.',
-                  minFontSize: FFAppConstants.body.toDouble(),
-                  style: FlutterFlowTheme.of(context).labelMedium.override(
-                        font: GoogleFonts.manrope(
-                          fontWeight: FlutterFlowTheme.of(context)
-                              .labelMedium
-                              .fontWeight,
-                          fontStyle: FlutterFlowTheme.of(context)
-                              .labelMedium
-                              .fontStyle,
-                        ),
-                        letterSpacing: 0.0,
-                        fontWeight:
-                            FlutterFlowTheme.of(context).labelMedium.fontWeight,
-                        fontStyle:
-                            FlutterFlowTheme.of(context).labelMedium.fontStyle,
-                      ),
-                ),
-              ],
+              children: [],
             ),
-          ].divide(SizedBox(height: 20.0)).around(SizedBox(height: 20.0)),
+          ].divide(SizedBox(height: 20.0)).addToEnd(SizedBox(height: 20.0)),
         ),
       ),
     );

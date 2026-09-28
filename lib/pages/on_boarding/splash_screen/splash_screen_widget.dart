@@ -5,7 +5,6 @@ import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'splash_screen_model.dart';
 export 'splash_screen_model.dart';
@@ -32,11 +31,10 @@ class _SplashScreenWidgetState extends State<SplashScreenWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      await actions.loadAzkharFromGit();
-      await actions.youtubeChannelData();
+      await actions.loadAzkhar();
       await actions.loadMosquesData();
       await actions.fetchYoutubeVideos();
-      _model.allResult = await actions.loadCitiesFromAsset(
+      _model.allResult = await actions.loadCities(
         null,
       );
       await actions.loadOnIslamData();
@@ -96,42 +94,17 @@ class _SplashScreenWidgetState extends State<SplashScreenWidget> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
+                        borderRadius: BorderRadius.circular(0.0),
                         child: Image.asset(
                           'assets/images/My_workflow.png',
-                          width: 66.0,
-                          height: 66.0,
+                          width: 80.0,
+                          height: 80.0,
                           fit: BoxFit.cover,
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Muslimens Kompanjon',
-                    style: FlutterFlowTheme.of(context).titleLarge.override(
-                          font: GoogleFonts.plusJakartaSans(
-                            fontWeight: FlutterFlowTheme.of(context)
-                                .titleLarge
-                                .fontWeight,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .titleLarge
-                                .fontStyle,
-                          ),
-                          letterSpacing: 0.0,
-                          fontWeight: FlutterFlowTheme.of(context)
-                              .titleLarge
-                              .fontWeight,
-                          fontStyle:
-                              FlutterFlowTheme.of(context).titleLarge.fontStyle,
-                        ),
-                  ),
-                ],
               ),
             ],
           ),

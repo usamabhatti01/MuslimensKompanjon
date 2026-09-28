@@ -1,8 +1,9 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/index.dart';
+import '/pages/kalender/habit_checklist_component/habit_checklist_component_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:webviewx_plus/webviewx_plus.dart';
 import 'kalender_page_sub_header_model.dart';
 export 'kalender_page_sub_header_model.dart';
 
@@ -88,28 +89,6 @@ class _KalenderPageSubHeaderWidgetState
                     ),
                   ].divide(SizedBox(width: 20.0)),
                 ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Text(
-                      'Gregorianska och Hijri',
-                      style: FlutterFlowTheme.of(context).bodySmall.override(
-                            font: GoogleFonts.manrope(
-                              fontWeight: FontWeight.w300,
-                              fontStyle: FlutterFlowTheme.of(context)
-                                  .bodySmall
-                                  .fontStyle,
-                            ),
-                            color: FlutterFlowTheme.of(context).primaryText,
-                            letterSpacing: 0.0,
-                            fontWeight: FontWeight.w300,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .bodySmall
-                                .fontStyle,
-                          ),
-                    ),
-                  ],
-                ),
               ],
             ),
           ].divide(SizedBox(width: 20.0)),
@@ -117,49 +96,32 @@ class _KalenderPageSubHeaderWidgetState
         Row(
           mainAxisSize: MainAxisSize.max,
           children: [
-            Icon(
-              Icons.share_outlined,
-              color: FlutterFlowTheme.of(context).primaryText,
-              size: 24.0,
-            ),
             InkWell(
               splashColor: Colors.transparent,
               focusColor: Colors.transparent,
               hoverColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onTap: () async {
-                context.pushNamed(
-                  SettingWidget.routeName,
-                  queryParameters: {
-                    'headerNav': serializeParam(
-                      true,
-                      ParamType.bool,
-                    ),
-                  }.withoutNulls,
-                  extra: <String, dynamic>{
-                    '__transition_info__': TransitionInfo(
-                      hasTransition: true,
-                      transitionType: PageTransitionType.bottomToTop,
-                    ),
+                await showModalBottomSheet(
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  useSafeArea: true,
+                  context: context,
+                  builder: (context) {
+                    return WebViewAware(
+                      child: Padding(
+                        padding: MediaQuery.viewInsetsOf(context),
+                        child: Container(
+                          height: MediaQuery.sizeOf(context).height * 0.85,
+                          child: HabitChecklistComponentWidget(),
+                        ),
+                      ),
+                    );
                   },
-                );
+                ).then((value) => safeSetState(() {}));
               },
               child: Icon(
-                Icons.notifications_none_sharp,
-                color: FlutterFlowTheme.of(context).primaryText,
-                size: 24.0,
-              ),
-            ),
-            InkWell(
-              splashColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              onTap: () async {
-                context.pushNamed(SettingWidget.routeName);
-              },
-              child: Icon(
-                Icons.more_vert,
+                Icons.settings_sharp,
                 color: FlutterFlowTheme.of(context).primaryText,
                 size: 24.0,
               ),

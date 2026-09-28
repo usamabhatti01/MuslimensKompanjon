@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 class TashbihCounterModel extends FlutterFlowModel<TashbihCounterWidget> {
   ///  Local state fields for this page.
 
-  int counter = 0;
+  int counter = 33;
 
-  int? pageIndex;
+  int pageIndex = 0;
 
   ///  State fields for stateful widgets in this page.
 

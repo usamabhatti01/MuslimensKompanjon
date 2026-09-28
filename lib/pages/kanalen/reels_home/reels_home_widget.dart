@@ -80,7 +80,7 @@ class _ReelsHomeWidgetState extends State<ReelsHomeWidget> {
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        context.pushNamed(MKkanalenWidget.routeName);
+                        context.pushNamed(MKkanalenCopyyWidget.routeName);
                       },
                       child: Icon(
                         Icons.chevron_left,
@@ -94,6 +94,7 @@ class _ReelsHomeWidgetState extends State<ReelsHomeWidget> {
                         updateCallback: () => safeSetState(() {}),
                         child: MkHomePageHeaderWidget(
                           pageName: 'Shorts',
+                          searchBtn: true,
                         ),
                       ),
                     ),
@@ -108,118 +109,113 @@ class _ReelsHomeWidgetState extends State<ReelsHomeWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(
-                          FlutterFlowTheme.of(context).designToken.spacing.md,
-                          0.0,
-                          FlutterFlowTheme.of(context).designToken.spacing.md,
-                          0.0),
-                      child: Container(
-                        width: 200.0,
-                        child: TextFormField(
-                          controller: _model.textController,
-                          focusNode: _model.textFieldFocusNode,
-                          onChanged: (_) => EasyDebounce.debounce(
-                            '_model.textController',
-                            Duration(milliseconds: 2000),
-                            () async {
-                              _model.searchOutput = await actions.searchReels(
-                                FFAppState().reelsData.toList(),
-                                _model.textController.text,
-                                ShortFilter.Latest.name,
-                              );
-                              _model.reelSearchValue = _model.searchOutput!
-                                  .toList()
-                                  .cast<YoutubeStruct>();
-                              safeSetState(() {});
+                    if (FFAppState().searchBar)
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            FlutterFlowTheme.of(context).designToken.spacing.md,
+                            0.0,
+                            FlutterFlowTheme.of(context).designToken.spacing.md,
+                            0.0),
+                        child: Container(
+                          width: 200.0,
+                          child: TextFormField(
+                            controller: _model.textController,
+                            focusNode: _model.textFieldFocusNode,
+                            onChanged: (_) => EasyDebounce.debounce(
+                              '_model.textController',
+                              Duration(milliseconds: 2000),
+                              () async {
+                                _model.searchOutput = await actions.searchReels(
+                                  FFAppState().reelsData.toList(),
+                                  _model.textController.text,
+                                  ShortFilter.Latest.name,
+                                );
+                                _model.reelSearchValue = _model.searchOutput!
+                                    .toList()
+                                    .cast<YoutubeStruct>();
+                                safeSetState(() {});
 
-                              safeSetState(() {});
-                            },
-                          ),
-                          autofocus: false,
-                          enabled: true,
-                          obscureText: false,
-                          decoration: InputDecoration(
-                            isDense: true,
-                            labelStyle: FlutterFlowTheme.of(context)
-                                .labelMedium
-                                .override(
-                                  font: GoogleFonts.manrope(
+                                safeSetState(() {});
+                              },
+                            ),
+                            autofocus: false,
+                            enabled: true,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              labelStyle: FlutterFlowTheme.of(context)
+                                  .labelMedium
+                                  .override(
+                                    font: GoogleFonts.manrope(
+                                      fontWeight: FontWeight.w500,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .labelMedium
+                                          .fontStyle,
+                                    ),
+                                    letterSpacing: 0.0,
                                     fontWeight: FontWeight.w500,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .labelMedium
                                         .fontStyle,
                                   ),
-                                  letterSpacing: 0.0,
-                                  fontWeight: FontWeight.w500,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .labelMedium
-                                      .fontStyle,
-                                ),
-                            hintText: 'Sök shorts...',
-                            hintStyle: FlutterFlowTheme.of(context)
-                                .labelLarge
-                                .override(
-                                  font: GoogleFonts.manrope(
+                              hintText: 'Sök shorts...',
+                              hintStyle: FlutterFlowTheme.of(context)
+                                  .labelLarge
+                                  .override(
+                                    font: GoogleFonts.manrope(
+                                      fontWeight: FontWeight.w500,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .labelLarge
+                                          .fontStyle,
+                                    ),
+                                    letterSpacing: 0.0,
                                     fontWeight: FontWeight.w500,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .labelLarge
                                         .fontStyle,
                                   ),
-                                  letterSpacing: 0.0,
-                                  fontWeight: FontWeight.w500,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .labelLarge
-                                      .fontStyle,
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0x00000000),
+                                  width: 1.0,
                                 ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0x00000000),
-                                width: 1.0,
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0x00000000),
-                                width: 1.0,
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0x00000000),
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).error,
-                                width: 1.0,
+                              errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: FlutterFlowTheme.of(context).error,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).error,
-                                width: 1.0,
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: FlutterFlowTheme.of(context).error,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
-                              borderRadius: BorderRadius.circular(8.0),
+                              filled: true,
+                              fillColor: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              suffixIcon: Icon(
+                                FontAwesomeIcons.search,
+                                color:
+                                    FlutterFlowTheme.of(context).secondaryText,
+                                size: 12.0,
+                              ),
                             ),
-                            filled: true,
-                            fillColor: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            suffixIcon: Icon(
-                              FontAwesomeIcons.search,
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              size: 12.0,
-                            ),
-                          ),
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.manrope(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    letterSpacing: 0.0,
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  font: GoogleFonts.manrope(
                                     fontWeight: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .fontWeight,
@@ -227,13 +223,22 @@ class _ReelsHomeWidgetState extends State<ReelsHomeWidget> {
                                         .bodyMedium
                                         .fontStyle,
                                   ),
-                          cursorColor: FlutterFlowTheme.of(context).primaryText,
-                          enableInteractiveSelection: true,
-                          validator: _model.textControllerValidator
-                              .asValidator(context),
+                                  letterSpacing: 0.0,
+                                  fontWeight: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .fontWeight,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .fontStyle,
+                                ),
+                            cursorColor:
+                                FlutterFlowTheme.of(context).primaryText,
+                            enableInteractiveSelection: true,
+                            validator: _model.textControllerValidator
+                                .asValidator(context),
+                          ),
                         ),
                       ),
-                    ),
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(
                           FlutterFlowTheme.of(context).designToken.spacing.md,

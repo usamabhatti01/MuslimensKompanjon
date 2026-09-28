@@ -1,4 +1,3 @@
-import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -121,20 +120,13 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              FlutterFlowIconButton(
-                                                borderRadius: 8.0,
-                                                buttonSize: 40.0,
-                                                fillColor:
-                                                    FlutterFlowTheme.of(context)
-                                                        .reelBg,
-                                                icon: Icon(
-                                                  Icons.close_rounded,
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .white,
-                                                  size: 24.0,
-                                                ),
-                                                onPressed: () async {
+                                              InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () async {
                                                   context.pushNamed(
                                                     AboutIslamDetailsPageWidget
                                                         .routeName,
@@ -146,6 +138,14 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                                                     }.withoutNulls,
                                                   );
                                                 },
+                                                child: Icon(
+                                                  Icons.arrow_back,
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .white,
+                                                  size: FFAppConstants.iconSize
+                                                      .toDouble(),
+                                                ),
                                               ),
                                               InkWell(
                                                 splashColor: Colors.transparent,
@@ -209,7 +209,8 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                                                   color: FlutterFlowTheme.of(
                                                           context)
                                                       .white,
-                                                  size: 24.0,
+                                                  size: FFAppConstants.iconSize
+                                                      .toDouble(),
                                                 ),
                                               ),
                                             ],
@@ -244,24 +245,30 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                                                       videoListItem.videoUrl));
                                             },
                                             child: Icon(
-                                              Icons.thumb_up_off_alt_outlined,
+                                              Icons.favorite_border,
                                               color:
                                                   FlutterFlowTheme.of(context)
                                                       .alternate,
                                               size: 24.0,
                                             ),
                                           ),
-                                          Icon(
-                                            Icons.thumb_down_outlined,
-                                            color: FlutterFlowTheme.of(context)
-                                                .alternate,
-                                            size: 24.0,
-                                          ),
-                                          Icon(
-                                            Icons.message_outlined,
-                                            color: FlutterFlowTheme.of(context)
-                                                .alternate,
-                                            size: 24.0,
+                                          InkWell(
+                                            splashColor: Colors.transparent,
+                                            focusColor: Colors.transparent,
+                                            hoverColor: Colors.transparent,
+                                            highlightColor: Colors.transparent,
+                                            onTap: () async {
+                                              await launchURL(
+                                                  functions.videoToString(
+                                                      videoListItem.videoUrl));
+                                            },
+                                            child: Icon(
+                                              Icons.mode_comment_outlined,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .alternate,
+                                              size: 24.0,
+                                            ),
                                           ),
                                           Builder(
                                             builder: (context) => InkWell(
@@ -297,10 +304,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                                   alignment: AlignmentDirectional(0.0, 1.0),
                                   child: Container(
                                     height: 150.0,
-                                    decoration: BoxDecoration(
-                                      color:
-                                          FlutterFlowTheme.of(context).reelBg,
-                                    ),
+                                    decoration: BoxDecoration(),
                                     alignment: AlignmentDirectional(0.0, 1.0),
                                     child: Align(
                                       alignment: AlignmentDirectional(0.0, 0.9),
@@ -324,19 +328,24 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                                                   alignment:
                                                       AlignmentDirectional(
                                                           -1.0, 0.0),
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.0),
+                                                  child: Container(
+                                                    width: MediaQuery.sizeOf(
+                                                                context)
+                                                            .width *
+                                                        0.12,
+                                                    height: MediaQuery.sizeOf(
+                                                                context)
+                                                            .width *
+                                                        0.12,
+                                                    clipBehavior:
+                                                        Clip.antiAlias,
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                    ),
                                                     child: Image.network(
                                                       FFAppState()
                                                           .channelData
                                                           .image,
-                                                      width: MediaQuery.sizeOf(
-                                                                  context)
-                                                              .width *
-                                                          0.12,
-                                                      height: 45.0,
                                                       fit: BoxFit.fill,
                                                     ),
                                                   ),
@@ -428,164 +437,39 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                                                   ].divide(
                                                       SizedBox(height: 4.0)),
                                                 ),
-                                                FFButtonWidget(
-                                                  onPressed: () {
-                                                    print('Button pressed ...');
-                                                  },
-                                                  text: 'Följ',
-                                                  options: FFButtonOptions(
-                                                    width: 60.0,
-                                                    height: 40.0,
-                                                    padding:
-                                                        EdgeInsets.all(0.0),
-                                                    iconPadding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(0.0, 0.0,
-                                                                0.0, 0.0),
-                                                    color: Color(0x40FFFFFF),
-                                                    textStyle: FlutterFlowTheme
-                                                            .of(context)
-                                                        .titleSmall
-                                                        .override(
-                                                          font: GoogleFonts
-                                                              .plusJakartaSans(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .titleSmall
-                                                                    .fontStyle,
-                                                          ),
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .alternate,
-                                                          letterSpacing: 0.0,
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .titleSmall
-                                                                  .fontStyle,
-                                                        ),
-                                                    elevation: 0.0,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            18.0),
-                                                  ),
-                                                ),
-                                              ].divide(SizedBox(width: 16.0)),
-                                            ),
-                                            Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                AutoSizeText(
-                                                  videoListItem.title,
-                                                  maxLines: 2,
-                                                  minFontSize: FFAppConstants
-                                                      .body
-                                                      .toDouble(),
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font:
-                                                            GoogleFonts.manrope(
-                                                          fontWeight:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontWeight,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .white,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontWeight,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                        lineHeight: 1.5,
-                                                      ),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                                Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      '#Islam #Shorts #MKKanalen',
-                                                      style:
+                                                Expanded(
+                                                  child: FFButtonWidget(
+                                                    onPressed: () {
+                                                      print(
+                                                          'Button pressed ...');
+                                                    },
+                                                    text: 'Prenumerera',
+                                                    options: FFButtonOptions(
+                                                      width: 60.0,
+                                                      height: 40.0,
+                                                      padding:
+                                                          EdgeInsets.all(0.0),
+                                                      iconPadding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0.0,
+                                                                  0.0,
+                                                                  0.0,
+                                                                  0.0),
+                                                      color: Color(0x40FFFFFF),
+                                                      textStyle:
                                                           FlutterFlowTheme.of(
                                                                   context)
-                                                              .labelSmall
+                                                              .titleSmall
                                                               .override(
                                                                 font: GoogleFonts
-                                                                    .manrope(
+                                                                    .plusJakartaSans(
                                                                   fontWeight:
                                                                       FontWeight
-                                                                          .w300,
+                                                                          .normal,
                                                                   fontStyle: FlutterFlowTheme.of(
                                                                           context)
-                                                                      .labelSmall
-                                                                      .fontStyle,
-                                                                ),
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .secondaryText,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w300,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .labelSmall
-                                                                    .fontStyle,
-                                                                lineHeight: 1.3,
-                                                              ),
-                                                    ),
-                                                    Text(
-                                                      '•',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                font: GoogleFonts
-                                                                    .manrope(
-                                                                  fontWeight: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontWeight,
-                                                                  fontStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
+                                                                      .titleSmall
                                                                       .fontStyle,
                                                                 ),
                                                                 color: FlutterFlowTheme.of(
@@ -593,53 +477,61 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                                                                     .alternate,
                                                                 letterSpacing:
                                                                     0.0,
-                                                                fontWeight: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontWeight,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                                lineHeight: 1.5,
-                                                              ),
-                                                    ),
-                                                    Text(
-                                                      '12K visningar',
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .labelSmall
-                                                              .override(
-                                                                font: GoogleFonts
-                                                                    .manrope(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w300,
-                                                                  fontStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .labelSmall
-                                                                      .fontStyle,
-                                                                ),
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .secondaryText,
-                                                                letterSpacing:
-                                                                    0.0,
                                                                 fontWeight:
                                                                     FontWeight
-                                                                        .w300,
+                                                                        .normal,
                                                                 fontStyle: FlutterFlowTheme.of(
                                                                         context)
-                                                                    .labelSmall
+                                                                    .titleSmall
                                                                     .fontStyle,
-                                                                lineHeight: 1.3,
                                                               ),
+                                                      elevation: 0.0,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              18.0),
                                                     ),
-                                                  ].divide(
-                                                      SizedBox(width: 8.0)),
+                                                  ),
                                                 ),
-                                              ].divide(SizedBox(height: 5.0)),
+                                              ].divide(SizedBox(width: 10.0)),
+                                            ),
+                                            AutoSizeText(
+                                              videoListItem.title,
+                                              maxLines: 2,
+                                              minFontSize: FFAppConstants
+                                                  .heading
+                                                  .toDouble(),
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyMedium
+                                                  .override(
+                                                    font: GoogleFonts.manrope(
+                                                      fontWeight:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .fontWeight,
+                                                      fontStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .fontStyle,
+                                                    ),
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .white,
+                                                    letterSpacing: 0.0,
+                                                    fontWeight:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontWeight,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
+                                              overflow: TextOverflow.ellipsis,
                                             ),
                                           ].divide(SizedBox(height: 10.0)),
                                         ),

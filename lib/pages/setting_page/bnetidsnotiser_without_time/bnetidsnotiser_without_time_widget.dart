@@ -71,6 +71,7 @@ class _BnetidsnotiserWithoutTimeWidgetState
                     Container(
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).secondaryBackground,
+                        borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: Padding(
                         padding: EdgeInsets.all(5.0),
@@ -86,7 +87,7 @@ class _BnetidsnotiserWithoutTimeWidgetState
                                   height: 44.0,
                                   decoration: BoxDecoration(
                                     color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
+                                        .primaryBackground,
                                     borderRadius: BorderRadius.circular(
                                         FlutterFlowTheme.of(context)
                                             .designToken
@@ -141,42 +142,50 @@ class _BnetidsnotiserWithoutTimeWidgetState
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Transform.scale(
-                                  scaleX: 0.6,
-                                  scaleY: 0.6,
-                                  child: Switch.adaptive(
-                                    value: _model.notisValue!,
-                                    onChanged: (newValue) async {
-                                      safeSetState(
-                                          () => _model.notisValue = newValue);
-                                    },
-                                    activeColor: FlutterFlowTheme.of(context)
-                                        .switchColor,
-                                    activeTrackColor:
-                                        FlutterFlowTheme.of(context).primary,
-                                    inactiveTrackColor:
-                                        FlutterFlowTheme.of(context)
-                                            .switchColor,
-                                    inactiveThumbColor: Colors.white,
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 15.0, 0.0),
+                                  child: Transform.scale(
+                                    scaleX: 0.6,
+                                    scaleY: 0.6,
+                                    child: Switch.adaptive(
+                                      value: _model.notisValue!,
+                                      onChanged: (newValue) async {
+                                        safeSetState(() =>
+                                            _model.notisValue = newValue);
+                                      },
+                                      activeColor: FlutterFlowTheme.of(context)
+                                          .switchColor,
+                                      activeTrackColor:
+                                          FlutterFlowTheme.of(context).primary,
+                                      inactiveTrackColor:
+                                          FlutterFlowTheme.of(context)
+                                              .switchColor,
+                                      inactiveThumbColor: Colors.white,
+                                    ),
                                   ),
                                 ),
-                                Transform.scale(
-                                  scaleX: 0.6,
-                                  scaleY: 0.6,
-                                  child: Switch.adaptive(
-                                    value: _model.adhanValue!,
-                                    onChanged: (newValue) async {
-                                      safeSetState(
-                                          () => _model.adhanValue = newValue);
-                                    },
-                                    activeColor: FlutterFlowTheme.of(context)
-                                        .switchColor,
-                                    activeTrackColor:
-                                        FlutterFlowTheme.of(context).primary,
-                                    inactiveTrackColor:
-                                        FlutterFlowTheme.of(context)
-                                            .switchColor,
-                                    inactiveThumbColor: Colors.white,
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      10.0, 0.0, 0.0, 0.0),
+                                  child: Transform.scale(
+                                    scaleX: 0.6,
+                                    scaleY: 0.6,
+                                    child: Switch.adaptive(
+                                      value: _model.adhanValue!,
+                                      onChanged: (newValue) async {
+                                        safeSetState(() =>
+                                            _model.adhanValue = newValue);
+                                      },
+                                      activeColor: FlutterFlowTheme.of(context)
+                                          .switchColor,
+                                      activeTrackColor:
+                                          FlutterFlowTheme.of(context).primary,
+                                      inactiveTrackColor:
+                                          FlutterFlowTheme.of(context)
+                                              .switchColor,
+                                      inactiveThumbColor: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ],

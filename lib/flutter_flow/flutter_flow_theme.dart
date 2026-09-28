@@ -67,6 +67,7 @@ abstract class FlutterFlowTheme {
   late Color switchColor;
   late Color white;
   late Color reelBg;
+  late Color dialogueBg;
 
   FFDesignTokens get designToken => FFDesignTokens(this);
 
@@ -195,6 +196,7 @@ class LightModeTheme extends FlutterFlowTheme {
   late Color switchColor = const Color(0xFFEBEBEB);
   late Color white = const Color(0xFFFFFFFF);
   late Color reelBg = const Color(0xCB1A1A1A);
+  late Color dialogueBg = const Color(0xFFE6EAE1);
 }
 
 abstract class Typography {
@@ -437,7 +439,7 @@ class DarkModeTheme extends FlutterFlowTheme {
   @Deprecated('Use tertiary instead')
   Color get tertiaryColor => tertiary;
 
-  late Color primary = const Color(0xFF00A300);
+  late Color primary = const Color(0xFF007A00);
   late Color secondary = const Color(0xFF385749);
   late Color tertiary = const Color(0xFFFF375F);
   late Color alternate = const Color(0xFF262626);
@@ -462,6 +464,7 @@ class DarkModeTheme extends FlutterFlowTheme {
   late Color switchColor = const Color(0xFF59595B);
   late Color white = const Color(0xFFFFFFFF);
   late Color reelBg = const Color(0xCB1A1A1A);
+  late Color dialogueBg = const Color(0xFFE6EAE1);
 }
 
 class FFDesignTokens {

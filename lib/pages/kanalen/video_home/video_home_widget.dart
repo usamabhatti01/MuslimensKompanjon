@@ -103,7 +103,7 @@ class _VideoHomeWidgetState extends State<VideoHomeWidget> {
                         hoverColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         onTap: () async {
-                          context.pushNamed(VideoSearchWidget.routeName);
+                          context.pushNamed(MKkanalenWidget.routeName);
                         },
                         child: Icon(
                           Icons.chevron_left,
@@ -117,6 +117,7 @@ class _VideoHomeWidgetState extends State<VideoHomeWidget> {
                           updateCallback: () => safeSetState(() {}),
                           child: MkHomePageHeaderWidget(
                             pageName: 'Video',
+                            searchBtn: false,
                           ),
                         ),
                       ),

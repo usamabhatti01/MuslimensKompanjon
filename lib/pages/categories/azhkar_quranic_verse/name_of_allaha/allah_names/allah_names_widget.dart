@@ -1,13 +1,12 @@
-import '/backend/schema/enums/enums.dart';
 import '/custom_header_footer/adhkar_header/adhkar_header_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/pages/categories/azhkar_quranic_verse/name_of_allaha/name_arabic_box/name_arabic_box_widget.dart';
-import '/pages/categories/azhkar_quranic_verse/name_of_allaha/name_meaning_popup/name_meaning_popup_widget.dart';
+import '/pages/categories/azhkar_quranic_verse/name_of_allaha/name_meaning_popup_ar/name_meaning_popup_ar_widget.dart';
+import '/pages/categories/azhkar_quranic_verse/name_of_allaha/name_meaning_popup_sw/name_meaning_popup_sw_widget.dart';
 import '/pages/categories/azhkar_quranic_verse/name_of_allaha/name_svenska_box/name_svenska_box_widget.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
-import '/index.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,10 +18,10 @@ export 'allah_names_model.dart';
 class AllahNamesWidget extends StatefulWidget {
   const AllahNamesWidget({
     super.key,
-    required this.adkar,
-  });
+    String? adkar,
+  }) : this.adkar = adkar ?? 'AllahNames';
 
-  final String? adkar;
+  final String adkar;
 
   static String routeName = 'AllahNames';
   static String routePath = '/allahNames';
@@ -75,7 +74,7 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
           child: Padding(
             padding: EdgeInsetsDirectional.fromSTEB(
                 FlutterFlowTheme.of(context).designToken.spacing.md,
-                0.0,
+                FlutterFlowTheme.of(context).designToken.spacing.sm,
                 FlutterFlowTheme.of(context).designToken.spacing.md,
                 0.0),
             child: Column(
@@ -91,16 +90,11 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        context.pushNamed(
-                          AdhkarWidget.routeName,
-                          extra: <String, dynamic>{
-                            '__transition_info__': TransitionInfo(
-                              hasTransition: true,
-                              transitionType: PageTransitionType.fade,
-                              duration: Duration(milliseconds: 0),
-                            ),
-                          },
+                        FFAppState().updateAdhkarSettingStruct(
+                          (e) => e..audioDisplay = false,
                         );
+                        safeSetState(() {});
+                        context.safePop();
                       },
                       child: Icon(
                         Icons.chevron_left,
@@ -113,8 +107,13 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                         model: _model.adhkarHeaderModel,
                         updateCallback: () => safeSetState(() {}),
                         child: AdhkarHeaderWidget(
-                          pageName: widget.adkar!,
-                          volume: true,
+                          pageName: valueOrDefault<String>(
+                            widget.adkar,
+                            'Allahs namn',
+                          ),
+                          heptic: false,
+                          textSize: false,
+                          audio: true,
                         ),
                       ),
                     ),
@@ -209,22 +208,6 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                                     Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Container(
-                                          width:
-                                              MediaQuery.sizeOf(context).width *
-                                                  1.0,
-                                          height: 110.0,
-                                          child:
-                                              custom_widgets.SimpleAudioPlayer(
-                                            width: MediaQuery.sizeOf(context)
-                                                    .width *
-                                                1.0,
-                                            height: 110.0,
-                                            audioUrl:
-                                                AllahNames.AllahNamesAr.name,
-                                            autoPlay: false,
-                                          ),
-                                        ),
                                         Padding(
                                           padding: EdgeInsets.all(12.0),
                                           child: Row(
@@ -256,7 +239,7 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                                                           FlutterFlowTheme.of(
                                                                   context)
                                                               .primaryText,
-                                                      fontSize: 11.0,
+                                                      fontSize: 10.0,
                                                       letterSpacing: 0.0,
                                                       fontWeight:
                                                           FlutterFlowTheme.of(
@@ -271,7 +254,7 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                                                     ),
                                               ),
                                               AutoSizeText(
-                                                'وَلِلَّهِ الْأَسْمَاءُ الْحُسْنَىٰ فَادْعُوهُ بِهَا',
+                                                '﴾وَلِلَّهِ الْأَسْمَاءُ الْحُسْنَىٰ فَادْعُوهُ بِهَا﴿',
                                                 textAlign: TextAlign.center,
                                                 minFontSize: FFAppConstants
                                                     .heading
@@ -284,7 +267,7 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                                                           color: FlutterFlowTheme
                                                                   .of(context)
                                                               .primary,
-                                                          fontSize: 22.0,
+                                                          fontSize: 20.0,
                                                           letterSpacing: 0.0,
                                                           fontWeight:
                                                               FontWeight.bold,
@@ -360,12 +343,9 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                                                                       .viewInsetsOf(
                                                                           context),
                                                                   child:
-                                                                      NameMeaningPopupWidget(
+                                                                      NameMeaningPopupArWidget(
                                                                     name: arabicNameItem
                                                                         .arabic,
-                                                                    translation:
-                                                                        arabicNameItem
-                                                                            .transliteration,
                                                                     explanation:
                                                                         arabicNameItem
                                                                             .arabicExplanation,
@@ -410,22 +390,6 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                                     Column(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
-                                        Container(
-                                          width:
-                                              MediaQuery.sizeOf(context).width *
-                                                  1.0,
-                                          height: 120.0,
-                                          child:
-                                              custom_widgets.SimpleAudioPlayer(
-                                            width: MediaQuery.sizeOf(context)
-                                                    .width *
-                                                1.0,
-                                            height: 120.0,
-                                            audioUrl:
-                                                AllahNames.AllahNamesSv.name,
-                                            autoPlay: false,
-                                          ),
-                                        ),
                                         Padding(
                                           padding: EdgeInsets.all(12.0),
                                           child: Row(
@@ -437,7 +401,7 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                                             children: [
                                               Expanded(
                                                 child: AutoSizeText(
-                                                  ' Guds är fullkomlighetens sköna namn; anropa Honom alltså med dessa',
+                                                  ' Guds är fullkomlighetens sköna namn, anropa Honom alltså med dessa',
                                                   textAlign: TextAlign.center,
                                                   minFontSize: FFAppConstants
                                                       .heading
@@ -459,7 +423,7 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                                                             FlutterFlowTheme.of(
                                                                     context)
                                                                 .primary,
-                                                        fontSize: 20.0,
+                                                        fontSize: 14.0,
                                                         letterSpacing: 0.0,
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -589,12 +553,9 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                                                                     .viewInsetsOf(
                                                                         context),
                                                                 child:
-                                                                    NameMeaningPopupWidget(
+                                                                    NameMeaningPopupSwWidget(
                                                                   name: svenskaNameItem
                                                                       .transliteration,
-                                                                  translation:
-                                                                      svenskaNameItem
-                                                                          .swedishTranslation,
                                                                   explanation:
                                                                       svenskaNameItem
                                                                           .swedishExplanation,
@@ -641,6 +602,16 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                           ),
                         ),
                       ),
+                      if (FFAppState().adhkarSetting.audioDisplay)
+                        Container(
+                          width: MediaQuery.sizeOf(context).width * 1.0,
+                          height: 100.0,
+                          child: custom_widgets.SimpleAudioPlayer(
+                            width: MediaQuery.sizeOf(context).width * 1.0,
+                            height: 100.0,
+                            autoPlay: true,
+                          ),
+                        ),
                     ],
                   ),
                 ),

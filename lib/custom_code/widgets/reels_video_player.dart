@@ -16,6 +16,7 @@ import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'dart:async';
+import 'dart:ui';
 
 class ReelsVideoPlayer extends StatefulWidget {
   const ReelsVideoPlayer({
@@ -465,6 +466,9 @@ class _ReelsVideoPlayerState extends State<ReelsVideoPlayer>
         builder: (context, constraints) {
           final width = constraints.maxWidth;
           final height = constraints.maxHeight;
+          final isLandscape = width > height;
+          final playerWidth = isLandscape ? 1600.0 : 900.0;
+          final playerHeight = isLandscape ? 900.0 : 1600.0;
 
           if (_hasError) {
             return Container(
@@ -552,32 +556,24 @@ class _ReelsVideoPlayerState extends State<ReelsVideoPlayer>
                 height: height,
                 color: Colors.black,
                 child: SafeArea(
-                  top: true,
+                  top: false,
                   bottom: false,
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
                       FittedBox(
                         fit: BoxFit.cover,
-                        alignment: Alignment.topCenter,
+                        alignment: Alignment.center,
                         child: SizedBox(
-                          width: 1600.0,
-                          height: 900.0,
+                          width: playerWidth,
+                          height: playerHeight,
                           child: YoutubePlayer(
                             controller: _youtubeController!,
+                            aspectRatio: 9 / 16,
                             gestureRecognizers: const <Factory<
                                 TapGestureRecognizer>>{},
                             enableFullScreenOnVerticalDrag: false,
                           ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          width: 80.0,
-                          height: 35.0,
-                          color: Colors.black,
                         ),
                       ),
                       Positioned.fill(
@@ -625,15 +621,18 @@ class _ReelsVideoPlayerState extends State<ReelsVideoPlayer>
                   children: [
                     FittedBox(
                       fit: BoxFit.cover,
-                      alignment: Alignment.topCenter,
+                      alignment: Alignment.center,
                       child: SizedBox(
                         width: _controller!.value.size.width > 0
                             ? _controller!.value.size.width
-                            : 16.0,
+                            : (isLandscape ? 16.0 : 9.0),
                         height: _controller!.value.size.height > 0
                             ? _controller!.value.size.height
-                            : 9.0,
-                        child: VideoPlayer(_controller!),
+                            : (isLandscape ? 9.0 : 16.0),
+                        child: AspectRatio(
+                          aspectRatio: _controller!.value.aspectRatio,
+                          child: VideoPlayer(_controller!),
+                        ),
                       ),
                     ),
                     if (!_controller!.value.isPlaying)

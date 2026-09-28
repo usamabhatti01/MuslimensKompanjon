@@ -14,12 +14,12 @@ import 'package:flutter/material.dart';
 /// reurn alll videos else only matched adn return
 Future<List<YoutubeStruct>?> searchReels(
   List<YoutubeStruct> searchList,
-  String searchValue,
+  String? searchValue,
   String? order,
 ) async {
   List<YoutubeStruct> results = [];
 
-  if (searchValue.isEmpty || searchValue.trim().isEmpty) {
+  if (searchValue == null || searchValue.trim().isEmpty) {
     results = List<YoutubeStruct>.from(searchList);
   } else {
     final String lowerCaseSearchValue = searchValue.toLowerCase().trim();

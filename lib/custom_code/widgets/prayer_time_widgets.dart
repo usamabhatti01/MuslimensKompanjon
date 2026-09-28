@@ -31,6 +31,7 @@ class PrayerWidgetStrings {
       'Maghrib': 'Maghrib',
       'Isha': 'Isha',
       'timeLeft': 'Time left until {nextPrayer}: {time}',
+      'today': 'Today',
     },
     'sv': {
       'Fajr': 'Fajr',
@@ -40,6 +41,7 @@ class PrayerWidgetStrings {
       'Maghrib': 'Maghrib',
       'Isha': 'Isha',
       'timeLeft': 'Tid kvar till {nextPrayer}: {time}',
+      'today': 'Idag',
     },
   };
 }
@@ -92,7 +94,11 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
   late List<DateTime> days;
   final double itemWidth = 90.0;
   bool _scrolledToSelected = false;
+  bool _isScrolledFar = false;
+  bool _isProgrammaticScroll = false;
+  double _viewportWidth = 0.0;
   dynamic decodedJson;
+  int? loadedYear;
 
   @override
   void initState() {
@@ -100,10 +106,77 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
     WidgetsBinding.instance.addObserver(this);
 
     _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
     _generateMonthDays();
 
     tz.initializeTimeZones();
 
+    loadPrayerData();
+  }
+
+  void _onScroll() {
+    if (_isProgrammaticScroll ||
+        !_scrollController.hasClients ||
+        _viewportWidth <= 0 ||
+        days.isEmpty) return;
+    const double totalItemWidth = 90.0;
+    final now = timezone.isNotEmpty ? nowInCity() : DateTime.now();
+    final todayDate = DateTime(now.year, now.month, now.day);
+    final todayIndex = days.indexWhere((d) =>
+        d.year == todayDate.year &&
+        d.month == todayDate.month &&
+        d.day == todayDate.day);
+    if (todayIndex == -1) return;
+
+    final double todayOffset = (todayIndex * totalItemWidth) +
+        (totalItemWidth / 2) -
+        (_viewportWidth / 2);
+    final double maxScroll = _scrollController.position.maxScrollExtent;
+    final double clampedTodayOffset =
+        todayOffset.clamp(0.0, maxScroll > 0 ? maxScroll : 0.0);
+    final double scrollDiff =
+        (_scrollController.offset - clampedTodayOffset).abs();
+    final bool far = (scrollDiff / totalItemWidth) >= 2.2;
+
+    if (far != _isScrolledFar) {
+      setState(() {
+        _isScrolledFar = far;
+      });
+    }
+  }
+
+  void _setDateAndRefresh(DateTime newDate) {
+    selectedDate = newDate;
+    _isScrolledFar = false;
+
+    if (decodedJson != null && loadedYear == selectedDate.year) {
+      final key = "${selectedDate.year.toString().padLeft(4, '0')}-"
+          "${selectedDate.month.toString().padLeft(2, '0')}-"
+          "${selectedDate.day.toString().padLeft(2, '0')}";
+      final prayerData = decodedJson['prayer_times']?[key];
+      if (prayerData != null) {
+        prayerTimes = {
+          'Fajr': _fmt(prayerData['fajr']),
+          'Shuruq': _fmt(prayerData['shuruq']),
+          'Dhuhr': _fmt(prayerData['dhuhr']),
+          'Asr': _fmt(prayerData['asr']),
+          'Maghrib': _fmt(prayerData['maghrib']),
+          'Isha': _fmt(prayerData['isha']),
+        };
+        updatePrayerState();
+      }
+    }
+  }
+
+  void _recenterToToday() {
+    final now = timezone.isNotEmpty ? nowInCity() : DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    setState(() {
+      _setDateAndRefresh(today);
+    });
+    if (_viewportWidth > 0) {
+      _scrollToSelected(_viewportWidth);
+    }
     loadPrayerData();
   }
 
@@ -130,6 +203,7 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
     ticker?.cancel();
 
     remaining.dispose();
+    _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
 
     super.dispose();
@@ -159,13 +233,13 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
 
   Future<void> loadPrayerData() async {
     try {
-      if (decodedJson == null) {
-        final now = DateTime.now();
+      if (decodedJson == null || loadedYear != selectedDate.year) {
         final jsonString = await loadPrayerJson(
           widget.cityName,
-          now.year,
+          selectedDate.year,
         );
         decodedJson = json.decode(jsonString);
+        loadedYear = selectedDate.year;
       }
 
       final key = "${selectedDate.year.toString().padLeft(4, '0')}-"
@@ -284,20 +358,25 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
     // rollover
 
     if (next == null) {
-      next = parseTime(
-        prayerTimes['Fajr']!,
-        loc,
-        now.add(const Duration(days: 1)),
-      );
-
-      nextName = 'Fajr';
+      final fajr = prayerTimes['Fajr'];
+      if (fajr != null) {
+        next = parseTime(
+          fajr,
+          loc,
+          now.add(const Duration(days: 1)),
+        );
+        nextName = 'Fajr';
+      }
     }
 
     currentPrayer = current;
-
-    nextPrayer = nextName!;
-
+    nextPrayer = nextName ?? 'Fajr';
     nextPrayerTime = next;
+
+    if (next != null) {
+      final diff = next.difference(now);
+      remaining.value = diff.isNegative ? Duration.zero : diff;
+    }
 
     startTicker();
   }
@@ -397,20 +476,20 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
               _t(title),
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 12.5,
+                fontSize: 12.0,
                 fontWeight: active ? FontWeight.w700 : FontWeight.w600,
                 color: active ? theme.primary : theme.primaryText,
               ),
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
           FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
               time,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 12.5,
+                fontSize: 12.0,
                 fontWeight: active ? FontWeight.w700 : FontWeight.w500,
                 color: active ? theme.primary : theme.primaryText,
               ),
@@ -423,13 +502,15 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
 
   void _generateMonthDays() {
     final now = timezone.isNotEmpty ? nowInCity() : DateTime.now();
-    final firstDay = DateTime(now.year, now.month, 1);
-    final nextMonth = DateTime(now.year, now.month + 1, 1);
-    final totalDays = nextMonth.difference(firstDay).inDays;
-    days = List.generate(
-      totalDays,
-      (index) => DateTime(now.year, now.month, index + 1),
-    );
+    final today = DateTime(now.year, now.month, now.day);
+    final List<DateTime> list = [];
+
+    // Generate dates from today - 15 days to today + 15 days
+    for (int i = -15; i <= 15; i++) {
+      list.add(today.add(Duration(days: i)));
+    }
+
+    days = list;
   }
 
   void _scrollToSelected(double viewportWidth) {
@@ -444,17 +525,24 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
       if (selectedIndex == -1) return;
 
       final double totalItemWidth =
-          80.0 + 12.0; // width (80) + horizontal margins (6 * 2)
+          80.0 + 10.0; // width (80) + horizontal margins (5 * 2)
       final double itemCenter =
           (selectedIndex * totalItemWidth) + (totalItemWidth / 2);
       final double targetOffset = itemCenter - (viewportWidth / 2);
       final double maxScroll = (days.length * totalItemWidth) - viewportWidth;
 
-      _scrollController.animateTo(
+      _isProgrammaticScroll = true;
+      _scrollController
+          .animateTo(
         targetOffset.clamp(0.0, maxScroll > 0 ? maxScroll : 0.0),
         duration: const Duration(milliseconds: 400),
         curve: Curves.easeInOut,
-      );
+      )
+          .then((_) {
+        if (mounted) {
+          _isProgrammaticScroll = false;
+        }
+      });
     });
   }
 
@@ -507,11 +595,12 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
     final theme = FlutterFlowTheme.of(context);
     final primary = theme.primary;
     return SizedBox(
-      height: 44,
+      height: 36,
       width: double.infinity,
       child: LayoutBuilder(
         builder: (context, constraints) {
           final double viewportWidth = constraints.maxWidth;
+          _viewportWidth = viewportWidth;
           if (viewportWidth > 0 && !_scrolledToSelected) {
             _scrolledToSelected = true;
             WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -531,7 +620,7 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
               return GestureDetector(
                 onTap: () {
                   setState(() {
-                    selectedDate = date;
+                    _setDateAndRefresh(date);
                   });
                   _scrollToSelected(viewportWidth);
                   loadPrayerData();
@@ -539,9 +628,9 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
                   width: 80.0,
-                  height: 32.0,
+                  height: 28.0,
                   margin:
-                      const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 4),
                   decoration: BoxDecoration(
                     color: isSelected ? primary : Colors.grey.shade100,
                     borderRadius: BorderRadius.circular(30),
@@ -555,7 +644,7 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
                           formatDate(context, date),
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 11.5,
                             fontWeight: FontWeight.bold,
                             color: isSelected
                                 ? Colors.white
@@ -587,6 +676,67 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
       return const Center(child: CircularProgressIndicator());
     }
 
+    final isCurrentDay = isToday(selectedDate);
+    final now = timezone.isNotEmpty ? nowInCity() : DateTime.now();
+    final todayDate = DateTime(now.year, now.month, now.day);
+    final selDate =
+        DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+    final int dayDiff = (selDate.difference(todayDate).inDays).abs();
+
+    final bool showTodayButton =
+        _isScrolledFar || (!isCurrentDay && dayDiff >= 3);
+
+    Widget bottomBarContent;
+    if (showTodayButton) {
+      bottomBarContent = GestureDetector(
+        key: const ValueKey('today_capsule_btn'),
+        onTap: _recenterToToday,
+        child: Container(
+          width: 76.0,
+          height: 26.0,
+          decoration: BoxDecoration(
+            color: theme.primary,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            _t('today'),
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 12.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      );
+    } else if (isCurrentDay) {
+      bottomBarContent = ValueListenableBuilder<Duration>(
+        key: const ValueKey('countdown_timer_view'),
+        valueListenable: remaining,
+        builder: (context, value, _) {
+          final displayPrayer =
+              nextPrayer.isNotEmpty ? nextPrayer : prayerOrder.first;
+          return FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              _t('timeLeft', args: {
+                'nextPrayer': _t(displayPrayer),
+                'time': formatDuration(value),
+              }),
+              style: TextStyle(
+                fontSize: 12.5,
+                fontWeight: FontWeight.bold,
+                color: theme.primary,
+              ),
+            ),
+          );
+        },
+      );
+    } else {
+      bottomBarContent = const SizedBox.shrink(key: ValueKey('empty_spacer'));
+    }
+
     return Container(
       width: widget.width ?? double.infinity,
       height: widget.height,
@@ -595,50 +745,27 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           buildDatePicker(context),
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                item('Fajr', prayerTimes['Fajr']!),
-                item('Shuruq', prayerTimes['Shuruq']!),
-                item('Dhuhr', prayerTimes['Dhuhr']!),
-                item('Asr', prayerTimes['Asr']!),
-                item('Maghrib', prayerTimes['Maghrib']!),
-                item('Isha', prayerTimes['Isha']!),
+                item('Fajr', prayerTimes['Fajr'] ?? '--:--'),
+                item('Shuruq', prayerTimes['Shuruq'] ?? '--:--'),
+                item('Dhuhr', prayerTimes['Dhuhr'] ?? '--:--'),
+                item('Asr', prayerTimes['Asr'] ?? '--:--'),
+                item('Maghrib', prayerTimes['Maghrib'] ?? '--:--'),
+                item('Isha', prayerTimes['Isha'] ?? '--:--'),
               ],
             ),
           ),
-          const SizedBox(height: 8),
-          ValueListenableBuilder<Duration>(
-            valueListenable: remaining,
-            builder: (context, value, _) {
-              final isCurrentDay = isToday(selectedDate);
-              final displayPrayer = isCurrentDay && nextPrayer.isNotEmpty
-                  ? nextPrayer
-                  : prayerOrder.first;
-              return Visibility(
-                visible: isCurrentDay,
-                maintainSize: true,
-                maintainAnimation: true,
-                maintainState: true,
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    _t('timeLeft', args: {
-                      'nextPrayer': _t(displayPrayer),
-                      'time': formatDuration(value),
-                    }),
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: theme.primary,
-                    ),
-                  ),
-                ),
-              );
-            },
+          const SizedBox(height: 4),
+          SizedBox(
+            height: 26,
+            child: Center(
+              child: bottomBarContent,
+            ),
           ),
         ],
       ),

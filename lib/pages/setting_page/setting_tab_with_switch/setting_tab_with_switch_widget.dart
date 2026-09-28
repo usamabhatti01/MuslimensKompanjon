@@ -106,16 +106,27 @@ class _SettingTabWithSwitchWidgetState
                                         .fontStyle,
                                   ),
                         ),
-                        AutoSizeText(
-                          valueOrDefault<String>(
-                            widget.sunLabel,
-                            'add sublabel',
-                          ),
-                          minFontSize: FFAppConstants.body.toDouble(),
-                          style: FlutterFlowTheme.of(context)
-                              .bodySmall
-                              .override(
-                                font: GoogleFonts.manrope(
+                        if (widget.sunLabel != null && widget.sunLabel != '')
+                          AutoSizeText(
+                            valueOrDefault<String>(
+                              widget.sunLabel,
+                              'add sublabel',
+                            ),
+                            minFontSize: FFAppConstants.body.toDouble(),
+                            style: FlutterFlowTheme.of(context)
+                                .bodySmall
+                                .override(
+                                  font: GoogleFonts.manrope(
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodySmall
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodySmall
+                                        .fontStyle,
+                                  ),
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                  letterSpacing: 0.0,
                                   fontWeight: FlutterFlowTheme.of(context)
                                       .bodySmall
                                       .fontWeight,
@@ -123,16 +134,7 @@ class _SettingTabWithSwitchWidgetState
                                       .bodySmall
                                       .fontStyle,
                                 ),
-                                color: FlutterFlowTheme.of(context).primaryText,
-                                letterSpacing: 0.0,
-                                fontWeight: FlutterFlowTheme.of(context)
-                                    .bodySmall
-                                    .fontWeight,
-                                fontStyle: FlutterFlowTheme.of(context)
-                                    .bodySmall
-                                    .fontStyle,
-                              ),
-                        ),
+                          ),
                       ],
                     ),
                   ].divide(SizedBox(width: 10.0)),

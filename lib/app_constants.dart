@@ -6,7 +6,8 @@ abstract class FFAppConstants {
   static const int body = 10;
   static const int footerIcon = 20;
   static const String bannerUrl =
-      'https://ifis.se/mkprod/data/banner/banner.png';
+      'https://ifis.se/mkprod/data/banner/banner.gif';
   static const String channelLink =
       'https://www.youtube.com/@Muslimenskompanjon/shorts';
+  static const int footerHeight = 60;
 }

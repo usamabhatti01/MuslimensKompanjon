@@ -1,12 +1,11 @@
+import '/backend/schema/enums/enums.dart';
 import '/backend/schema/structs/index.dart';
 import '/custom_header_footer/adhkar_header/adhkar_header_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/pages/categories/azhkar_quranic_verse/mornng_and_evebing_adhkar/adhkar_ar_component/adhkar_ar_component_widget.dart';
-import '/pages/categories/azhkar_quranic_verse/mornng_and_evebing_adhkar/adhkar_sv_component/adhkar_sv_component_widget.dart';
-import '/index.dart';
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'morning_evening_adhkar_model.dart';
 export 'morning_evening_adhkar_model.dart';
 
@@ -28,8 +27,8 @@ class MorningEveningAdhkarWidget extends StatefulWidget {
       _MorningEveningAdhkarWidgetState();
 }
 
-class _MorningEveningAdhkarWidgetState extends State<MorningEveningAdhkarWidget>
-    with TickerProviderStateMixin {
+class _MorningEveningAdhkarWidgetState
+    extends State<MorningEveningAdhkarWidget> {
   late MorningEveningAdhkarModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -38,12 +37,6 @@ class _MorningEveningAdhkarWidgetState extends State<MorningEveningAdhkarWidget>
   void initState() {
     super.initState();
     _model = createModel(context, () => MorningEveningAdhkarModel());
-
-    _model.tabBarController = TabController(
-      vsync: this,
-      length: 2,
-      initialIndex: 0,
-    )..addListener(() => safeSetState(() {}));
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
@@ -57,6 +50,8 @@ class _MorningEveningAdhkarWidgetState extends State<MorningEveningAdhkarWidget>
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -70,11 +65,12 @@ class _MorningEveningAdhkarWidgetState extends State<MorningEveningAdhkarWidget>
           child: Padding(
             padding: EdgeInsetsDirectional.fromSTEB(
                 FlutterFlowTheme.of(context).designToken.spacing.md,
-                0.0,
+                FlutterFlowTheme.of(context).designToken.spacing.sm,
                 FlutterFlowTheme.of(context).designToken.spacing.md,
                 0.0),
             child: Column(
-              mainAxisSize: MainAxisSize.max,
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   mainAxisSize: MainAxisSize.max,
@@ -85,16 +81,7 @@ class _MorningEveningAdhkarWidgetState extends State<MorningEveningAdhkarWidget>
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        context.pushNamed(
-                          AdhkarWidget.routeName,
-                          extra: <String, dynamic>{
-                            '__transition_info__': TransitionInfo(
-                              hasTransition: true,
-                              transitionType: PageTransitionType.fade,
-                              duration: Duration(milliseconds: 0),
-                            ),
-                          },
-                        );
+                        context.safePop();
                       },
                       child: Icon(
                         Icons.chevron_left,
@@ -108,7 +95,11 @@ class _MorningEveningAdhkarWidgetState extends State<MorningEveningAdhkarWidget>
                         updateCallback: () => safeSetState(() {}),
                         child: AdhkarHeaderWidget(
                           pageName: widget.adkar!,
-                          volume: true,
+                          heptic: true,
+                          textSize: true,
+                          audio: true,
+                          initialValue: FFAppState().adhkarSetting,
+                          fontType: Font.adhkar.name,
                         ),
                       ),
                     ),
@@ -118,172 +109,17 @@ class _MorningEveningAdhkarWidgetState extends State<MorningEveningAdhkarWidget>
                 ),
                 Expanded(
                   child: Column(
-                    mainAxisSize: MainAxisSize.max,
+                    mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Expanded(
                         child: Container(
                           width: MediaQuery.sizeOf(context).width * 1.0,
-                          height: MediaQuery.sizeOf(context).height * 0.7,
-                          decoration: BoxDecoration(),
-                          child: Column(
-                            children: [
-                              Align(
-                                alignment: Alignment(0.0, 0),
-                                child: TabBar(
-                                  labelColor:
-                                      FlutterFlowTheme.of(context).primary,
-                                  unselectedLabelColor:
-                                      FlutterFlowTheme.of(context)
-                                          .secondaryText,
-                                  labelStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .override(
-                                        font: GoogleFonts.plusJakartaSans(
-                                          fontWeight:
-                                              FlutterFlowTheme.of(context)
-                                                  .titleSmall
-                                                  .fontWeight,
-                                          fontStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .titleSmall
-                                                  .fontStyle,
-                                        ),
-                                        letterSpacing: 0.0,
-                                        fontWeight: FlutterFlowTheme.of(context)
-                                            .titleSmall
-                                            .fontWeight,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .titleSmall
-                                            .fontStyle,
-                                      ),
-                                  unselectedLabelStyle:
-                                      FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .override(
-                                            font: GoogleFonts.plusJakartaSans(
-                                              fontWeight:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleSmall
-                                                      .fontWeight,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleSmall
-                                                      .fontStyle,
-                                            ),
-                                            letterSpacing: 0.0,
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .titleSmall
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .titleSmall
-                                                    .fontStyle,
-                                          ),
-                                  indicatorColor:
-                                      FlutterFlowTheme.of(context).primary,
-                                  tabs: [
-                                    Tab(
-                                      text: 'Arabiska',
-                                    ),
-                                    Tab(
-                                      text: 'Svenska',
-                                    ),
-                                  ],
-                                  controller: _model.tabBarController,
-                                  onTap: (i) async {
-                                    [() async {}, () async {}][i]();
-                                  },
-                                ),
-                              ),
-                              Expanded(
-                                child: TabBarView(
-                                  controller: _model.tabBarController,
-                                  children: [
-                                    Builder(
-                                      builder: (context) {
-                                        final adhkarList =
-                                            widget.adhkar?.toList() ?? [];
-
-                                        return SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: List.generate(
-                                                    adhkarList.length,
-                                                    (adhkarListIndex) {
-                                              final adhkarListItem =
-                                                  adhkarList[adhkarListIndex];
-                                              return wrapWithModel(
-                                                model: _model
-                                                    .adhkarArComponentModels
-                                                    .getModel(
-                                                  adhkarListIndex.toString(),
-                                                  adhkarListIndex,
-                                                ),
-                                                updateCallback: () =>
-                                                    safeSetState(() {}),
-                                                child: AdhkarArComponentWidget(
-                                                  key: Key(
-                                                    'Keyzqr_${adhkarListIndex.toString()}',
-                                                  ),
-                                                  value: adhkarListItem.arabic,
-                                                  total: adhkarListItem.counter,
-                                                  audio: adhkarListItem.audio,
-                                                ),
-                                              );
-                                            })
-                                                .divide(SizedBox(height: 20.0))
-                                                .around(SizedBox(height: 20.0)),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    Builder(
-                                      builder: (context) {
-                                        final adhkarListSv =
-                                            widget.adhkar?.toList() ?? [];
-
-                                        return SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: List.generate(
-                                                    adhkarListSv.length,
-                                                    (adhkarListSvIndex) {
-                                              final adhkarListSvItem =
-                                                  adhkarListSv[
-                                                      adhkarListSvIndex];
-                                              return wrapWithModel(
-                                                model: _model
-                                                    .adhkarSvComponentModels
-                                                    .getModel(
-                                                  adhkarListSvIndex.toString(),
-                                                  adhkarListSvIndex,
-                                                ),
-                                                updateCallback: () =>
-                                                    safeSetState(() {}),
-                                                child: AdhkarSvComponentWidget(
-                                                  key: Key(
-                                                    'Keynsu_${adhkarListSvIndex.toString()}',
-                                                  ),
-                                                  value:
-                                                      adhkarListSvItem.swedish,
-                                                  total:
-                                                      adhkarListSvItem.counter,
-                                                  audio: adhkarListSvItem.audio,
-                                                ),
-                                              );
-                                            })
-                                                .divide(SizedBox(height: 20.0))
-                                                .around(SizedBox(height: 20.0)),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                          height: MediaQuery.sizeOf(context).height * 1.0,
+                          child: custom_widgets.AdhkarPageView(
+                            width: MediaQuery.sizeOf(context).width * 1.0,
+                            height: MediaQuery.sizeOf(context).height * 1.0,
+                            adhkarList: widget.adhkar!,
                           ),
                         ),
                       ),

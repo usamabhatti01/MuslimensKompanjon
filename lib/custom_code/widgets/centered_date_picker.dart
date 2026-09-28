@@ -63,14 +63,16 @@ class _CenteredDatePickerState extends State<CenteredDatePicker>
 
   void _generateMonthDays() {
     final now = DateTime.now();
-    final firstDay = DateTime(now.year, now.month, 1);
-    final nextMonth = DateTime(now.year, now.month + 1, 1);
-    final totalDays = nextMonth.difference(firstDay).inDays;
-    days = List.generate(
-      totalDays,
-      (index) => DateTime(now.year, now.month, index + 1),
-    );
-    todayIndex = now.day - 1;
+    final today = DateTime(now.year, now.month, now.day);
+    final List<DateTime> list = [];
+
+    // Generate dates from today - 15 days to today + 15 days
+    for (int i = -15; i <= 15; i++) {
+      list.add(today.add(Duration(days: i)));
+    }
+
+    days = list;
+    todayIndex = 15; // "Today" is at index 15 in this 31-day list
   }
 
   void _scrollToToday(double viewportWidth) {

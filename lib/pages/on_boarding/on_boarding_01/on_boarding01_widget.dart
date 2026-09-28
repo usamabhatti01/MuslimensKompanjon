@@ -45,144 +45,188 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
         FocusScope.of(context).unfocus();
         FocusManager.instance.primaryFocus?.unfocus();
       },
-      child: Scaffold(
-        key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        body: SafeArea(
-          top: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Align(
-                alignment: AlignmentDirectional(0.0, 1.0),
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(
-                      FlutterFlowTheme.of(context).designToken.spacing.lg,
-                      0.0,
-                      FlutterFlowTheme.of(context).designToken.spacing.lg,
-                      0.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(),
+      child: PopScope(
+        canPop: false,
+        child: Scaffold(
+          key: scaffoldKey,
+          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+          body: SafeArea(
+            top: true,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Align(
+                    alignment: AlignmentDirectional(0.0, -0.6),
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(
+                          FlutterFlowTheme.of(context).designToken.spacing.lg,
+                          0.0,
+                          FlutterFlowTheme.of(context).designToken.spacing.lg,
+                          0.0),
+                      child: SingleChildScrollView(
                         child: Column(
-                          mainAxisSize: MainAxisSize.min,
+                          mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.asset(
-                                'assets/images/My_workflow.png',
-                                width: 50.0,
-                                height: 50.0,
-                                fit: BoxFit.contain,
+                            Container(
+                              decoration: BoxDecoration(),
+                              child: Align(
+                                alignment: AlignmentDirectional(0.0, 0.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(0.0),
+                                      child: Image.asset(
+                                        'assets/images/My_workflow.png',
+                                        width: 45.0,
+                                        height: 45.0,
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                    Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Text(
+                                          'Allt du behöver för ett rikare muslimskt liv',
+                                          style: FlutterFlowTheme.of(context)
+                                              .titleSmall
+                                              .override(
+                                                font:
+                                                    GoogleFonts.plusJakartaSans(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .titleSmall
+                                                          .fontStyle,
+                                                ),
+                                                fontSize: 13.0,
+                                                letterSpacing: 0.0,
+                                                fontWeight: FontWeight.bold,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleSmall
+                                                        .fontStyle,
+                                              ),
+                                        ),
+                                        Align(
+                                          alignment:
+                                              AlignmentDirectional(0.0, 0.0),
+                                          child: AutoSizeText(
+                                            'Läs och lyssna på Koranen på arabiska, svenska och engelska. Utforska MK videokanal, gör dhikr och få tillgång till bönetider, Hijri-kalender, Qibla och fler användbara verktyg – alltid nära till hands.',
+                                            textAlign: TextAlign.justify,
+                                            minFontSize:
+                                                FFAppConstants.body.toDouble(),
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyLarge
+                                                .override(
+                                                  font: GoogleFonts.manrope(
+                                                    fontWeight:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyLarge
+                                                            .fontWeight,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyLarge
+                                                            .fontStyle,
+                                                  ),
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .onBoardingColor,
+                                                  fontSize: 14.0,
+                                                  letterSpacing: 0.0,
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyLarge
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyLarge
+                                                          .fontStyle,
+                                                ),
+                                          ),
+                                        ),
+                                      ].divide(SizedBox(height: 10.0)),
+                                    ),
+                                  ].divide(SizedBox(height: 10.0)),
+                                ),
                               ),
                             ),
                             Align(
                               alignment: AlignmentDirectional(0.0, 0.0),
-                              child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 15.0, 0.0, 0.0),
-                                child: AutoSizeText(
-                                  'Din vardagliga kompanjon för ett rikare muslimskt liv – med allt från Koranen på arabiska, svenska och engelska (text och ljud), MK-videokanalen och Dhikr till information om islam. Appen innehåller även viktiga verktyg som bönetider, Hijri-kalender, Qibla, to-do-lista och en karta över Sveriges moskéer.',
-                                  textAlign: TextAlign.start,
-                                  minFontSize: FFAppConstants.body.toDouble(),
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyLarge
-                                      .override(
-                                        font: GoogleFonts.manrope(
-                                          fontWeight:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyLarge
-                                                  .fontWeight,
-                                          fontStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyLarge
-                                                  .fontStyle,
-                                        ),
-                                        color: FlutterFlowTheme.of(context)
-                                            .onBoardingColor,
-                                        letterSpacing: 0.0,
-                                        fontWeight: FlutterFlowTheme.of(context)
-                                            .bodyLarge
-                                            .fontWeight,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .bodyLarge
-                                            .fontStyle,
-                                      ),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  borderRadius: BorderRadius.circular(12.0),
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Align(
-                        alignment: AlignmentDirectional(0.0, 0.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          child: Align(
-                            alignment: AlignmentDirectional(0.0, 0.0),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                                child: Align(
+                                  alignment: AlignmentDirectional(0.0, 0.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      Container(
-                                        width: 55.0,
-                                        height: 55.0,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .primary,
-                                          borderRadius:
-                                              BorderRadius.circular(12.0),
-                                          shape: BoxShape.rectangle,
-                                        ),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius: BorderRadius.only(),
-                                              child: Image.asset(
-                                                'assets/images/si_book-line.png',
-                                                width: 30.0,
-                                                fit: BoxFit.contain,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            AutoSizeText(
-                                              'Koranen',
-                                              minFontSize: FFAppConstants
-                                                  .heading
-                                                  .toDouble(),
-                                              style:
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: 40.0,
+                                            height: 40.0,
+                                            decoration: BoxDecoration(
+                                              color:
                                                   FlutterFlowTheme.of(context)
+                                                      .primary,
+                                              borderRadius:
+                                                  BorderRadius.circular(12.0),
+                                              shape: BoxShape.rectangle,
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.only(),
+                                                  child: Image.asset(
+                                                    'assets/images/si_book-line.png',
+                                                    width: 22.0,
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                AutoSizeText(
+                                                  'Koranen',
+                                                  minFontSize: FFAppConstants
+                                                      .heading
+                                                      .toDouble(),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
                                                       .headlineSmall
                                                       .override(
                                                         font: GoogleFonts
@@ -198,7 +242,7 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                                                   .headlineSmall
                                                                   .fontStyle,
                                                         ),
-                                                        fontSize: 20.0,
+                                                        fontSize: 12.0,
                                                         letterSpacing: 0.0,
                                                         fontWeight:
                                                             FlutterFlowTheme.of(
@@ -211,92 +255,98 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                                                 .headlineSmall
                                                                 .fontStyle,
                                                       ),
+                                                ),
+                                                AutoSizeText(
+                                                  'Arabisk/svensk/Engelsk text och ljud.',
+                                                  minFontSize: FFAppConstants
+                                                      .body
+                                                      .toDouble(),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        font:
+                                                            GoogleFonts.manrope(
+                                                          fontWeight:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontWeight,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                        fontSize: 12.0,
+                                                        letterSpacing: 0.0,
+                                                        fontWeight:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .fontWeight,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .fontStyle,
+                                                      ),
+                                                ),
+                                              ],
                                             ),
-                                            AutoSizeText(
-                                              'Arabisk/svensk/Engelsk text och ljud.',
-                                              minFontSize: FFAppConstants.body
-                                                  .toDouble(),
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    font: GoogleFonts.manrope(
-                                                      fontWeight:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontWeight,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText,
-                                                    letterSpacing: 0.0,
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontStyle,
-                                                  ),
-                                            ),
-                                          ],
-                                        ),
+                                          ),
+                                        ]
+                                            .divide(SizedBox(width: 20.0))
+                                            .around(SizedBox(width: 20.0)),
                                       ),
-                                    ]
-                                        .divide(SizedBox(width: 20.0))
-                                        .around(SizedBox(width: 20.0)),
-                                  ),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Container(
-                                        width: 55.0,
-                                        height: 55.0,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .primary,
-                                          borderRadius:
-                                              BorderRadius.circular(12.0),
-                                          shape: BoxShape.rectangle,
-                                        ),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius: BorderRadius.only(),
-                                              child: Image.asset(
-                                                'assets/images/hugeicons_audio-book-01.png',
-                                                width: 30.0,
-                                                fit: BoxFit.contain,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            AutoSizeText(
-                                              'Information om islam',
-                                              minFontSize: FFAppConstants
-                                                  .heading
-                                                  .toDouble(),
-                                              style:
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Container(
+                                            width: 40.0,
+                                            height: 40.0,
+                                            decoration: BoxDecoration(
+                                              color:
                                                   FlutterFlowTheme.of(context)
+                                                      .primary,
+                                              borderRadius:
+                                                  BorderRadius.circular(12.0),
+                                              shape: BoxShape.rectangle,
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.only(),
+                                                  child: Image.asset(
+                                                    'assets/images/hugeicons_audio-book-01.png',
+                                                    width: 22.0,
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                AutoSizeText(
+                                                  'Information om islam',
+                                                  minFontSize: FFAppConstants
+                                                      .heading
+                                                      .toDouble(),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
                                                       .headlineLarge
                                                       .override(
                                                         font: GoogleFonts
@@ -312,7 +362,7 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                                                   .headlineLarge
                                                                   .fontStyle,
                                                         ),
-                                                        fontSize: 20.0,
+                                                        fontSize: 12.0,
                                                         letterSpacing: 0.0,
                                                         fontWeight:
                                                             FlutterFlowTheme.of(
@@ -325,92 +375,98 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                                                 .headlineLarge
                                                                 .fontStyle,
                                                       ),
+                                                ),
+                                                AutoSizeText(
+                                                  'Lär dig islams grunder.',
+                                                  minFontSize: FFAppConstants
+                                                      .body
+                                                      .toDouble(),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        font:
+                                                            GoogleFonts.manrope(
+                                                          fontWeight:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontWeight,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                        fontSize: 12.0,
+                                                        letterSpacing: 0.0,
+                                                        fontWeight:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .fontWeight,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .fontStyle,
+                                                      ),
+                                                ),
+                                              ],
                                             ),
-                                            AutoSizeText(
-                                              'Lär dig islams grunder.',
-                                              minFontSize: FFAppConstants.body
-                                                  .toDouble(),
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    font: GoogleFonts.manrope(
-                                                      fontWeight:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontWeight,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText,
-                                                    letterSpacing: 0.0,
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontStyle,
-                                                  ),
-                                            ),
-                                          ],
-                                        ),
+                                          ),
+                                        ]
+                                            .divide(SizedBox(width: 20.0))
+                                            .around(SizedBox(width: 20.0)),
                                       ),
-                                    ]
-                                        .divide(SizedBox(width: 20.0))
-                                        .around(SizedBox(width: 20.0)),
-                                  ),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Container(
-                                        width: 55.0,
-                                        height: 55.0,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .primary,
-                                          borderRadius:
-                                              BorderRadius.circular(12.0),
-                                          shape: BoxShape.rectangle,
-                                        ),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius: BorderRadius.only(),
-                                              child: Image.asset(
-                                                'assets/images/catppuccin_video.png',
-                                                width: 30.0,
-                                                fit: BoxFit.contain,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            AutoSizeText(
-                                              'MK-videokanalen',
-                                              minFontSize: FFAppConstants
-                                                  .heading
-                                                  .toDouble(),
-                                              style:
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Container(
+                                            width: 40.0,
+                                            height: 40.0,
+                                            decoration: BoxDecoration(
+                                              color:
                                                   FlutterFlowTheme.of(context)
+                                                      .primary,
+                                              borderRadius:
+                                                  BorderRadius.circular(12.0),
+                                              shape: BoxShape.rectangle,
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.only(),
+                                                  child: Image.asset(
+                                                    'assets/images/catppuccin_video.png',
+                                                    width: 22.0,
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                AutoSizeText(
+                                                  'MK-videokanalen',
+                                                  minFontSize: FFAppConstants
+                                                      .heading
+                                                      .toDouble(),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
                                                       .headlineLarge
                                                       .override(
                                                         font: GoogleFonts
@@ -426,7 +482,7 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                                                   .headlineLarge
                                                                   .fontStyle,
                                                         ),
-                                                        fontSize: 20.0,
+                                                        fontSize: 12.0,
                                                         letterSpacing: 0.0,
                                                         fontWeight:
                                                             FlutterFlowTheme.of(
@@ -439,92 +495,98 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                                                 .headlineLarge
                                                                 .fontStyle,
                                                       ),
+                                                ),
+                                                AutoSizeText(
+                                                  'Inspirerande och lärorika videor.',
+                                                  minFontSize: FFAppConstants
+                                                      .body
+                                                      .toDouble(),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        font:
+                                                            GoogleFonts.manrope(
+                                                          fontWeight:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontWeight,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                        fontSize: 12.0,
+                                                        letterSpacing: 0.0,
+                                                        fontWeight:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .fontWeight,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .fontStyle,
+                                                      ),
+                                                ),
+                                              ],
                                             ),
-                                            AutoSizeText(
-                                              'Inspirerande och lärorika videor.',
-                                              minFontSize: FFAppConstants.body
-                                                  .toDouble(),
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    font: GoogleFonts.manrope(
-                                                      fontWeight:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontWeight,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText,
-                                                    letterSpacing: 0.0,
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontStyle,
-                                                  ),
-                                            ),
-                                          ],
-                                        ),
+                                          ),
+                                        ]
+                                            .divide(SizedBox(width: 20.0))
+                                            .around(SizedBox(width: 20.0)),
                                       ),
-                                    ]
-                                        .divide(SizedBox(width: 20.0))
-                                        .around(SizedBox(width: 20.0)),
-                                  ),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Container(
-                                        width: 55.0,
-                                        height: 55.0,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .primary,
-                                          borderRadius:
-                                              BorderRadius.circular(12.0),
-                                          shape: BoxShape.rectangle,
-                                        ),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius: BorderRadius.only(),
-                                              child: Image.asset(
-                                                'assets/images/qibla-8_1.png',
-                                                width: 30.0,
-                                                fit: BoxFit.contain,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            AutoSizeText(
-                                              'Bönetider & Verktyg',
-                                              minFontSize: FFAppConstants
-                                                  .heading
-                                                  .toDouble(),
-                                              style:
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Container(
+                                            width: 40.0,
+                                            height: 40.0,
+                                            decoration: BoxDecoration(
+                                              color:
                                                   FlutterFlowTheme.of(context)
+                                                      .primary,
+                                              borderRadius:
+                                                  BorderRadius.circular(12.0),
+                                              shape: BoxShape.rectangle,
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.only(),
+                                                  child: Image.asset(
+                                                    'assets/images/qibla-8_1.png',
+                                                    width: 22.0,
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                AutoSizeText(
+                                                  'Bönetider & Verktyg',
+                                                  minFontSize: FFAppConstants
+                                                      .heading
+                                                      .toDouble(),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
                                                       .headlineLarge
                                                       .override(
                                                         font: GoogleFonts
@@ -540,7 +602,7 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                                                   .headlineLarge
                                                                   .fontStyle,
                                                         ),
-                                                        fontSize: 20.0,
+                                                        fontSize: 12.0,
                                                         letterSpacing: 0.0,
                                                         fontWeight:
                                                             FlutterFlowTheme.of(
@@ -553,92 +615,98 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                                                 .headlineLarge
                                                                 .fontStyle,
                                                       ),
+                                                ),
+                                                AutoSizeText(
+                                                  'Bönetider, Qibla, Dhikr och to-do-lista.',
+                                                  minFontSize: FFAppConstants
+                                                      .body
+                                                      .toDouble(),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        font:
+                                                            GoogleFonts.manrope(
+                                                          fontWeight:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontWeight,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                        fontSize: 12.0,
+                                                        letterSpacing: 0.0,
+                                                        fontWeight:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .fontWeight,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .fontStyle,
+                                                      ),
+                                                ),
+                                              ],
                                             ),
-                                            AutoSizeText(
-                                              'Bönetider, Qibla, Dhikr och to-do-lista.',
-                                              minFontSize: FFAppConstants.body
-                                                  .toDouble(),
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    font: GoogleFonts.manrope(
-                                                      fontWeight:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontWeight,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText,
-                                                    letterSpacing: 0.0,
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontStyle,
-                                                  ),
-                                            ),
-                                          ],
-                                        ),
+                                          ),
+                                        ]
+                                            .divide(SizedBox(width: 20.0))
+                                            .around(SizedBox(width: 20.0)),
                                       ),
-                                    ]
-                                        .divide(SizedBox(width: 20.0))
-                                        .around(SizedBox(width: 20.0)),
-                                  ),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Container(
-                                        width: 55.0,
-                                        height: 55.0,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .primary,
-                                          borderRadius:
-                                              BorderRadius.circular(12.0),
-                                          shape: BoxShape.rectangle,
-                                        ),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius: BorderRadius.only(),
-                                              child: Image.asset(
-                                                'assets/images/calendar_1.png',
-                                                width: 30.0,
-                                                fit: BoxFit.contain,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            AutoSizeText(
-                                              'Hijri-kalender & Kartor',
-                                              minFontSize: FFAppConstants
-                                                  .heading
-                                                  .toDouble(),
-                                              style:
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Container(
+                                            width: 40.0,
+                                            height: 40.0,
+                                            decoration: BoxDecoration(
+                                              color:
                                                   FlutterFlowTheme.of(context)
+                                                      .primary,
+                                              borderRadius:
+                                                  BorderRadius.circular(12.0),
+                                              shape: BoxShape.rectangle,
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.only(),
+                                                  child: Image.asset(
+                                                    'assets/images/calendar_1.png',
+                                                    width: 22.0,
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                AutoSizeText(
+                                                  'Hijri-kalender & Kartor',
+                                                  minFontSize: FFAppConstants
+                                                      .heading
+                                                      .toDouble(),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
                                                       .headlineLarge
                                                       .override(
                                                         font: GoogleFonts
@@ -654,7 +722,7 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                                                   .headlineLarge
                                                                   .fontStyle,
                                                         ),
-                                                        fontSize: 20.0,
+                                                        fontSize: 12.0,
                                                         letterSpacing: 0.0,
                                                         fontWeight:
                                                             FlutterFlowTheme.of(
@@ -667,65 +735,68 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                                                                 .headlineLarge
                                                                 .fontStyle,
                                                       ),
+                                                ),
+                                                AutoSizeText(
+                                                  'Viktiga datum och karta över moskéer.',
+                                                  minFontSize: FFAppConstants
+                                                      .body
+                                                      .toDouble(),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        font:
+                                                            GoogleFonts.manrope(
+                                                          fontWeight:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontWeight,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                        fontSize: 12.0,
+                                                        letterSpacing: 0.0,
+                                                        fontWeight:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .fontWeight,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .fontStyle,
+                                                      ),
+                                                ),
+                                              ],
                                             ),
-                                            AutoSizeText(
-                                              'Viktiga datum och karta över moskéer.',
-                                              minFontSize: FFAppConstants.body
-                                                  .toDouble(),
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    font: GoogleFonts.manrope(
-                                                      fontWeight:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontWeight,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText,
-                                                    letterSpacing: 0.0,
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontStyle,
-                                                  ),
-                                            ),
-                                          ],
-                                        ),
+                                          ),
+                                        ]
+                                            .divide(SizedBox(width: 20.0))
+                                            .around(SizedBox(width: 20.0)),
                                       ),
                                     ]
-                                        .divide(SizedBox(width: 20.0))
-                                        .around(SizedBox(width: 20.0)),
+                                        .divide(SizedBox(height: 10.0))
+                                        .around(SizedBox(height: 10.0)),
                                   ),
-                                ]
-                                    .divide(SizedBox(height: 15.0))
-                                    .around(SizedBox(height: 15.0)),
+                                ),
                               ),
                             ),
-                          ),
+                          ].divide(SizedBox(height: 10.0)),
                         ),
                       ),
-                    ].divide(SizedBox(height: 10.0)),
+                    ),
                   ),
                 ),
-              ),
-              Align(
-                alignment: AlignmentDirectional(0.0, 1.0),
-                child: FFButtonWidget(
+                FFButtonWidget(
                   onPressed: () async {
                     context.pushNamed(OnBoarding02Widget.routeName);
                   },
@@ -765,8 +836,8 @@ class _OnBoarding01WidgetState extends State<OnBoarding01Widget> {
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                 ),
-              ),
-            ],
+              ].divide(SizedBox(height: 20.0)).around(SizedBox(height: 20.0)),
+            ),
           ),
         ),
       ),

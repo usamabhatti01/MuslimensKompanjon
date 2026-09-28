@@ -2,7 +2,6 @@ import '/custom_header_footer/adhkar_header/adhkar_header_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/pages/categories/azhkar_quranic_verse/name_of_allaha/name_arabic_box/name_arabic_box_widget.dart';
 import '/pages/categories/azhkar_quranic_verse/name_of_allaha/name_svenska_box/name_svenska_box_widget.dart';
-import '/index.dart';
 import 'allah_names_widget.dart' show AllahNamesWidget;
 import 'package:flutter/material.dart';
 

@@ -1,12 +1,12 @@
+import '/backend/schema/enums/enums.dart';
 import '/backend/schema/structs/index.dart';
 import '/custom_header_footer/adhkar_header/adhkar_header_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/pages/categories/azhkar_quranic_verse/akallan_dua/akallan_dua_box_ar/akallan_dua_box_ar_widget.dart';
-import '/pages/categories/azhkar_quranic_verse/akallan_dua/akallan_dua_box_sv/akallan_dua_box_sv_widget.dart';
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/index.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'akallan_dua_model.dart';
 export 'akallan_dua_model.dart';
 
@@ -27,8 +27,7 @@ class AkallanDuaWidget extends StatefulWidget {
   State<AkallanDuaWidget> createState() => _AkallanDuaWidgetState();
 }
 
-class _AkallanDuaWidgetState extends State<AkallanDuaWidget>
-    with TickerProviderStateMixin {
+class _AkallanDuaWidgetState extends State<AkallanDuaWidget> {
   late AkallanDuaModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -37,12 +36,6 @@ class _AkallanDuaWidgetState extends State<AkallanDuaWidget>
   void initState() {
     super.initState();
     _model = createModel(context, () => AkallanDuaModel());
-
-    _model.tabBarController = TabController(
-      vsync: this,
-      length: 2,
-      initialIndex: 0,
-    )..addListener(() => safeSetState(() {}));
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
@@ -56,6 +49,8 @@ class _AkallanDuaWidgetState extends State<AkallanDuaWidget>
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -69,7 +64,7 @@ class _AkallanDuaWidgetState extends State<AkallanDuaWidget>
           child: Padding(
             padding: EdgeInsetsDirectional.fromSTEB(
                 FlutterFlowTheme.of(context).designToken.spacing.md,
-                0.0,
+                FlutterFlowTheme.of(context).designToken.spacing.sm,
                 FlutterFlowTheme.of(context).designToken.spacing.md,
                 0.0),
             child: Column(
@@ -107,7 +102,11 @@ class _AkallanDuaWidgetState extends State<AkallanDuaWidget>
                         updateCallback: () => safeSetState(() {}),
                         child: AdhkarHeaderWidget(
                           pageName: widget.pageHeader!,
-                          volume: false,
+                          heptic: false,
+                          textSize: true,
+                          audio: false,
+                          initialValue: FFAppState().DuasSetting,
+                          fontType: Font.duas.name,
                         ),
                       ),
                     ),
@@ -123,197 +122,11 @@ class _AkallanDuaWidgetState extends State<AkallanDuaWidget>
                       Expanded(
                         child: Container(
                           width: MediaQuery.sizeOf(context).width * 1.0,
-                          decoration: BoxDecoration(),
-                          child: Column(
-                            children: [
-                              Align(
-                                alignment: Alignment(0.0, 0),
-                                child: TabBar(
-                                  labelColor:
-                                      FlutterFlowTheme.of(context).primary,
-                                  unselectedLabelColor:
-                                      FlutterFlowTheme.of(context)
-                                          .secondaryText,
-                                  labelStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .override(
-                                        font: GoogleFonts.plusJakartaSans(
-                                          fontWeight:
-                                              FlutterFlowTheme.of(context)
-                                                  .titleSmall
-                                                  .fontWeight,
-                                          fontStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .titleSmall
-                                                  .fontStyle,
-                                        ),
-                                        letterSpacing: 0.0,
-                                        fontWeight: FlutterFlowTheme.of(context)
-                                            .titleSmall
-                                            .fontWeight,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .titleSmall
-                                            .fontStyle,
-                                      ),
-                                  unselectedLabelStyle:
-                                      FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .override(
-                                            font: GoogleFonts.plusJakartaSans(
-                                              fontWeight:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleSmall
-                                                      .fontWeight,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleSmall
-                                                      .fontStyle,
-                                            ),
-                                            letterSpacing: 0.0,
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .titleSmall
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .titleSmall
-                                                    .fontStyle,
-                                          ),
-                                  indicatorColor:
-                                      FlutterFlowTheme.of(context).primary,
-                                  tabs: [
-                                    Tab(
-                                      text: 'Arabiska',
-                                    ),
-                                    Tab(
-                                      text: 'Svenska',
-                                    ),
-                                  ],
-                                  controller: _model.tabBarController,
-                                  onTap: (i) async {
-                                    [() async {}, () async {}][i]();
-                                  },
-                                ),
-                              ),
-                              Expanded(
-                                child: TabBarView(
-                                  controller: _model.tabBarController,
-                                  children: [
-                                    Builder(
-                                      builder: (context) {
-                                        final arabic =
-                                            widget.adkarList!.toList();
-
-                                        return SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: List
-                                                    .generate(arabic.length,
-                                                        (arabicIndex) {
-                                              final arabicItem =
-                                                  arabic[arabicIndex];
-                                              return Padding(
-                                                padding: EdgeInsets.all(12.0),
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  children: [
-                                                    Expanded(
-                                                      child: wrapWithModel(
-                                                        model: _model
-                                                            .akallanDuaBoxArModels
-                                                            .getModel(
-                                                          arabicIndex
-                                                              .toString(),
-                                                          arabicIndex,
-                                                        ),
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child:
-                                                            AkallanDuaBoxArWidget(
-                                                          key: Key(
-                                                            'Keyp85_${arabicIndex.toString()}',
-                                                          ),
-                                                          tasbihName: arabicItem
-                                                              .titleAr,
-                                                          tasbih:
-                                                              arabicItem.arabic,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            })
-                                                .divide(SizedBox(height: 12.0))
-                                                .around(SizedBox(height: 12.0)),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    Builder(
-                                      builder: (context) {
-                                        final svenska =
-                                            widget.adkarList!.toList();
-
-                                        return SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: List
-                                                    .generate(svenska.length,
-                                                        (svenskaIndex) {
-                                              final svenskaItem =
-                                                  svenska[svenskaIndex];
-                                              return Padding(
-                                                padding: EdgeInsets.all(12.0),
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  children: [
-                                                    Expanded(
-                                                      child: wrapWithModel(
-                                                        model: _model
-                                                            .akallanDuaBoxSvModels
-                                                            .getModel(
-                                                          svenskaIndex
-                                                              .toString(),
-                                                          svenskaIndex,
-                                                        ),
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child:
-                                                            AkallanDuaBoxSvWidget(
-                                                          key: Key(
-                                                            'Keyqu9_${svenskaIndex.toString()}',
-                                                          ),
-                                                          tasbihName:
-                                                              svenskaItem
-                                                                  .titleSv,
-                                                          tasbih: svenskaItem
-                                                              .swedish,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            })
-                                                .divide(SizedBox(height: 12.0))
-                                                .around(SizedBox(height: 12.0)),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                          height: MediaQuery.sizeOf(context).height * 1.0,
+                          child: custom_widgets.DuaPageView(
+                            width: MediaQuery.sizeOf(context).width * 1.0,
+                            height: MediaQuery.sizeOf(context).height * 1.0,
+                            duaList: widget.adkarList,
                           ),
                         ),
                       ),

@@ -34,7 +34,7 @@ class _CustomPowerSwitchState extends State<CustomPowerSwitch> {
   void initState() {
     super.initState();
 
-    value = FFAppState().adhkarSound;
+    value = FFAppState().adhkarSetting.adhkarSound;
   }
 
   void toggle() {
@@ -42,7 +42,7 @@ class _CustomPowerSwitchState extends State<CustomPowerSwitch> {
       value = !value;
 
       FFAppState().update(() {
-        FFAppState().adhkarSound = value;
+        FFAppState().adhkarSetting.adhkarSound = value;
       });
     });
   }

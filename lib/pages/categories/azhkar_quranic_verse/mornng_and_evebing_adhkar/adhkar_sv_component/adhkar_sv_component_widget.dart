@@ -1,6 +1,5 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,12 +11,12 @@ class AdhkarSvComponentWidget extends StatefulWidget {
     super.key,
     required this.value,
     required this.total,
-    required this.audio,
+    required this.fontSize,
   });
 
   final String? value;
   final int? total;
-  final String? audio;
+  final double? fontSize;
 
   @override
   State<AdhkarSvComponentWidget> createState() =>
@@ -54,24 +53,6 @@ class _AdhkarSvComponentWidgetState extends State<AdhkarSvComponentWidget> {
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            if (widget.audio != null && widget.audio != '')
-              Expanded(
-                child: Container(
-                  width: MediaQuery.sizeOf(context).width * 1.0,
-                  height: 120.0,
-                  child: custom_widgets.SimpleAudioPlayer(
-                    width: MediaQuery.sizeOf(context).width * 1.0,
-                    height: 120.0,
-                    audioUrl: widget.audio!,
-                    autoPlay: false,
-                  ),
-                ),
-              ),
-          ],
-        ),
         Container(
           decoration: BoxDecoration(
             color: FlutterFlowTheme.of(context).secondaryBackground,
@@ -101,7 +82,7 @@ class _AdhkarSvComponentWidgetState extends State<AdhkarSvComponentWidget> {
                                 .fontStyle,
                           ),
                           color: FlutterFlowTheme.of(context).primaryText,
-                          fontSize: 14.0,
+                          fontSize: widget.fontSize,
                           letterSpacing: 0.0,
                           fontWeight: FontWeight.w500,
                           fontStyle: FlutterFlowTheme.of(context)

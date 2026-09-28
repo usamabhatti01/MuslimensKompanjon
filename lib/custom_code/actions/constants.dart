@@ -15,6 +15,8 @@ Future constants() async {
 
 class FileConstants {
   static const String citiesJsonPath = 'assets/jsons/cities.json';
+  static const String citiesSgdJsonPath = 'assets/jsons/citiesSgd.json';
+
   static const String mosquesJsonPath = 'assets/jsons/mosques.json';
   static const String omIslamJsonPath = 'assets/jsons/om_islam.json';
   static const String islamicDatesUrlPrefix =

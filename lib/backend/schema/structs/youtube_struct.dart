@@ -16,6 +16,7 @@ class YoutubeStruct extends BaseStruct {
     String? thumbnail,
     DateTime? postDate,
     bool? isFav,
+    String? comment,
   })  : _video = video,
         _title = title,
         _topic = topic,
@@ -24,7 +25,8 @@ class YoutubeStruct extends BaseStruct {
         _duration = duration,
         _thumbnail = thumbnail,
         _postDate = postDate,
-        _isFav = isFav;
+        _isFav = isFav,
+        _comment = comment;
 
   // "video" field.
   String? _video;
@@ -89,6 +91,13 @@ class YoutubeStruct extends BaseStruct {
 
   bool hasIsFav() => _isFav != null;
 
+  // "comment" field.
+  String? _comment;
+  String get comment => _comment ?? '';
+  set comment(String? val) => _comment = val;
+
+  bool hasComment() => _comment != null;
+
   static YoutubeStruct fromMap(Map<String, dynamic> data) => YoutubeStruct(
         video: data['video'] as String?,
         title: data['title'] as String?,
@@ -99,6 +108,7 @@ class YoutubeStruct extends BaseStruct {
         thumbnail: data['thumbnail'] as String?,
         postDate: data['postDate'] as DateTime?,
         isFav: data['isFav'] as bool?,
+        comment: data['comment'] as String?,
       );
 
   static YoutubeStruct? maybeFromMap(dynamic data) =>
@@ -114,6 +124,7 @@ class YoutubeStruct extends BaseStruct {
         'thumbnail': _thumbnail,
         'postDate': _postDate,
         'isFav': _isFav,
+        'comment': _comment,
       }.withoutNulls;
 
   @override
@@ -153,6 +164,10 @@ class YoutubeStruct extends BaseStruct {
         'isFav': serializeParam(
           _isFav,
           ParamType.bool,
+        ),
+        'comment': serializeParam(
+          _comment,
+          ParamType.String,
         ),
       }.withoutNulls;
 
@@ -203,6 +218,11 @@ class YoutubeStruct extends BaseStruct {
           ParamType.bool,
           false,
         ),
+        comment: deserializeParam(
+          data['comment'],
+          ParamType.String,
+          false,
+        ),
       );
 
   @override
@@ -219,7 +239,8 @@ class YoutubeStruct extends BaseStruct {
         duration == other.duration &&
         thumbnail == other.thumbnail &&
         postDate == other.postDate &&
-        isFav == other.isFav;
+        isFav == other.isFav &&
+        comment == other.comment;
   }
 
   @override
@@ -232,7 +253,8 @@ class YoutubeStruct extends BaseStruct {
         duration,
         thumbnail,
         postDate,
-        isFav
+        isFav,
+        comment
       ]);
 }
 
@@ -246,6 +268,7 @@ YoutubeStruct createYoutubeStruct({
   String? thumbnail,
   DateTime? postDate,
   bool? isFav,
+  String? comment,
 }) =>
     YoutubeStruct(
       video: video,
@@ -257,4 +280,5 @@ YoutubeStruct createYoutubeStruct({
       thumbnail: thumbnail,
       postDate: postDate,
       isFav: isFav,
+      comment: comment,
     );

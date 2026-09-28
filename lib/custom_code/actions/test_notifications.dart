@@ -67,19 +67,19 @@ Future<String> testNotifications() async {
           break;
         case 'Adhan1':
           androidSoundResource = 'adhan_1';
-          iosSoundFile = 'short_adhan.aiff';
+          iosSoundFile = 'Adhan_1.aiff';
           break;
         case 'Adhan2':
           androidSoundResource = 'adhan_2';
-          iosSoundFile = 'adhan_makkah.aiff';
+          iosSoundFile = 'Adhan_2.aiff';
           break;
         case 'Adhan3':
           androidSoundResource = 'adhan_3';
-          iosSoundFile = 'adhan_madinah.aiff';
+          iosSoundFile = 'Adhan_3.aiff';
           break;
         case 'Adhan4':
           androidSoundResource = 'adhan_4';
-          iosSoundFile = 'standard_adhan.aiff';
+          iosSoundFile = 'Adhan_4.aiff';
           break;
         default:
           androidSoundResource = null;

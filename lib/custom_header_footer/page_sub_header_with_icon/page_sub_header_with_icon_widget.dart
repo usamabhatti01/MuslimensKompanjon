@@ -131,7 +131,9 @@ class _PageSubHeaderWithIconWidgetState
                 hoverColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 onTap: () async {
-                  context.pushNamed(SettingWidget.routeName);
+                  if (getCurrentRoute(context) != '/setting') {
+                    context.pushNamed(SettingWidget.routeName);
+                  }
                 },
                 child: Icon(
                   Icons.more_vert,

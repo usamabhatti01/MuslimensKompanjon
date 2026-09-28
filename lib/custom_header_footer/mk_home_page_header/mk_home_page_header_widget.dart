@@ -2,17 +2,18 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'mk_home_page_header_model.dart';
 export 'mk_home_page_header_model.dart';
 
 class MkHomePageHeaderWidget extends StatefulWidget {
   const MkHomePageHeaderWidget({
     super.key,
-    required this.pageName,
+    this.pageName,
+    required this.searchBtn,
   });
 
   final String? pageName;
+  final bool? searchBtn;
 
   @override
   State<MkHomePageHeaderWidget> createState() => _MkHomePageHeaderWidgetState();
@@ -51,31 +52,27 @@ class _MkHomePageHeaderWidgetState extends State<MkHomePageHeaderWidget> {
         Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              valueOrDefault<String>(
-                widget.pageName,
-                'Name',
-              ),
-              style: FlutterFlowTheme.of(context).titleMedium.override(
-                    font: GoogleFonts.plusJakartaSans(
-                      fontWeight:
-                          FlutterFlowTheme.of(context).titleMedium.fontWeight,
-                      fontStyle:
-                          FlutterFlowTheme.of(context).titleMedium.fontStyle,
-                    ),
-                    letterSpacing: 0.0,
-                    fontWeight:
-                        FlutterFlowTheme.of(context).titleMedium.fontWeight,
-                    fontStyle:
-                        FlutterFlowTheme.of(context).titleMedium.fontStyle,
-                  ),
-            ),
-          ].divide(SizedBox(width: 20.0)),
+          children: <Widget>[].divide(SizedBox(width: 20.0)),
         ),
         Row(
           mainAxisSize: MainAxisSize.max,
           children: [
+            if (widget.searchBtn ?? true)
+              InkWell(
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap: () async {
+                  FFAppState().searchBar = !(FFAppState().searchBar ?? true);
+                  FFAppState().update(() {});
+                },
+                child: Icon(
+                  Icons.search,
+                  color: FlutterFlowTheme.of(context).primaryText,
+                  size: 24.0,
+                ),
+              ),
             Icon(
               Icons.share_outlined,
               color: FlutterFlowTheme.of(context).primaryText,

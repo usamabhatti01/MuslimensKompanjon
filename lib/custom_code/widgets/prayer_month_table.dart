@@ -34,6 +34,7 @@ class PrayerTableStrings {
       'asr': 'Asr',
       'magrib': 'Maghrib',
       'isha': 'Isha',
+      'no_data': 'Inga bönetider tillgängliga för vald månad',
     },
     // Swedish Translations
     'sv': {
@@ -44,6 +45,7 @@ class PrayerTableStrings {
       'asr': 'Asr',
       'magrib': 'Maghrib',
       'isha': 'Isha',
+      'no_data': 'Inga bönetider tillgängliga för vald månad',
     },
   };
   // Month labels shown in the horizontal scroller
@@ -107,7 +109,7 @@ class _PrayerMonthTableState extends State<PrayerMonthTable>
       2.0; // Extra container padding for header row
   final double bodyCellFontSize = 12.0; // Font size of regular body cells
   final double bodyRowVerticalPadding =
-      8.0; // Height/padding of regular row cells
+      5.0; // Height/padding of regular row cells
   List<Map<String, dynamic>> prayerTimes = [];
   bool isLoading = true;
   late int selectedMonth;
@@ -145,10 +147,12 @@ class _PrayerMonthTableState extends State<PrayerMonthTable>
     }
     if (needReload) {
       _scrolledToSelectedMonth = false;
-      setState(() {
-        isLoading = true;
-        prayerTimes = [];
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = true;
+          prayerTimes = [];
+        });
+      }
       loadPrayerTimes();
       _scrollToActiveMonth();
     }
@@ -165,8 +169,7 @@ class _PrayerMonthTableState extends State<PrayerMonthTable>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
-      setState(
-          () {}); // Re-evaluates isToday(date) highlights for the current calendar day
+      if (mounted) setState(() {});
     }
   }
 
@@ -194,6 +197,23 @@ class _PrayerMonthTableState extends State<PrayerMonthTable>
         curve: Curves.easeInOut,
       );
     });
+  }
+
+  void _changeMonth(int offset) {
+    int newMonth = selectedMonth + offset;
+    if (newMonth > 12 || newMonth < 1) {
+      return; // Stop/bounce: do not cross the year boundary
+    }
+
+    _scrolledToSelectedMonth = false;
+    if (mounted) {
+      setState(() {
+        selectedMonth = newMonth;
+        isLoading = true;
+      });
+    }
+    _scrollToActiveMonth();
+    loadPrayerTimes();
   }
 
   // Helper method to detect language code from FlutterFlow and return translations
@@ -252,15 +272,19 @@ class _PrayerMonthTableState extends State<PrayerMonthTable>
           b['date'] as DateTime,
         ),
       );
-      setState(() {
-        prayerTimes = loaded;
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          prayerTimes = loaded;
+          isLoading = false;
+        });
+      }
     } catch (e) {
       debugPrint('❌ Error loading prayer times: $e');
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -306,18 +330,14 @@ class _PrayerMonthTableState extends State<PrayerMonthTable>
           fit: BoxFit.scaleDown,
           child: Text(
             text,
-            textAlign: TextAlign.center,
             maxLines: 1,
-            softWrap: false,
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: isHeader ? headerFontSize : bodyCellFontSize,
               fontWeight: isHeader
-                  ? FontWeight.w600
-                  : highlighted
-                      ? FontWeight.w700
-                      : FontWeight.w600,
+                  ? FontWeight.w700
+                  : (highlighted ? FontWeight.w700 : FontWeight.w500),
               color: textColor,
-              letterSpacing: 0.2,
             ),
           ),
         ),
@@ -326,7 +346,7 @@ class _PrayerMonthTableState extends State<PrayerMonthTable>
   }
 
   // =========================================================================
-  // MONTH SCROLLER WIDGET: Horizontal month selector pills styling
+  // HORIZONTAL MONTH SCROLLER: Center-aligned active month with smooth scroll
   // =========================================================================
   Widget _buildMonthScroller() {
     final theme = FlutterFlowTheme.of(context);
@@ -345,33 +365,33 @@ class _PrayerMonthTableState extends State<PrayerMonthTable>
         PrayerTableStrings.monthLabels['en']!;
 
     return SizedBox(
-      height: 36, // Compact month bar height
-      width: double.infinity,
+      height: 44,
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final double viewportWidth = constraints.maxWidth;
-          if (viewportWidth > 0 && !_scrolledToSelectedMonth) {
+          final viewportWidth = constraints.maxWidth;
+
+          if (!_scrolledToSelectedMonth) {
             _scrolledToSelectedMonth = true;
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              _scrollToActiveMonth(viewportWidth);
-            });
+            _scrollToActiveMonth(viewportWidth);
           }
 
           return ListView.builder(
             controller: _monthScrollController,
             scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
             itemCount: 12,
-            padding: const EdgeInsets.symmetric(horizontal: 8),
             itemBuilder: (context, index) {
               final monthNum = index + 1;
               final isSelected = selectedMonth == monthNum;
               final label = labels[index];
               return GestureDetector(
                 onTap: () {
-                  setState(() {
-                    selectedMonth = monthNum;
-                    isLoading = true;
-                  });
+                  if (mounted) {
+                    setState(() {
+                      selectedMonth = monthNum;
+                      isLoading = true;
+                    });
+                  }
                   _scrollToActiveMonth(viewportWidth);
                   loadPrayerTimes();
                 },
@@ -379,11 +399,11 @@ class _PrayerMonthTableState extends State<PrayerMonthTable>
                   duration: const Duration(milliseconds: 200),
                   width: 70.0,
                   margin:
-                      const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                      const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
                   decoration: BoxDecoration(
                     color:
                         isSelected ? theme.primary : theme.secondaryBackground,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(30),
                   ),
                   child: Center(
                     child: Text(
@@ -415,135 +435,184 @@ class _PrayerMonthTableState extends State<PrayerMonthTable>
     return Container(
       width: widget.width,
       height: widget.height,
-      color: Colors.transparent,
+      color: theme.primaryBackground,
       child: Column(
         children: [
           // 1. Month Selector scroller
           _buildMonthScroller(),
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
 
-          // 2. Table Header Container (Fits single screen width without horizontal scroll)
-          Container(
-            padding: const EdgeInsets.symmetric(
-              vertical: 2.0,
-              horizontal: 4.0,
-            ),
-            decoration: BoxDecoration(
-              color: isDark ? const Color(0x292ECC71) : const Color(0xFFEAF5EA),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Row(
-              children: [
-                buildCell(
-                  _translate('day'),
-                  flex: 2,
-                  isHeader: true,
-                ),
-                buildCell(
-                  _translate('fajr'),
-                  flex: 3,
-                  isHeader: true,
-                ),
-                buildCell(
-                  _translate('shuroq'),
-                  flex: 3,
-                  isHeader: true,
-                ),
-                buildCell(
-                  _translate('dhohr'),
-                  flex: 3,
-                  isHeader: true,
-                ),
-                buildCell(
-                  _translate('asr'),
-                  flex: 3,
-                  isHeader: true,
-                ),
-                buildCell(
-                  _translate('magrib'),
-                  flex: 3,
-                  isHeader: true,
-                ),
-                buildCell(
-                  _translate('isha'),
-                  flex: 3,
-                  isHeader: true,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 6),
-
-          // 3. Grid list showing monthly prayer times with zebra striping & orange today highlight
           Expanded(
-            child: isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : ListView.builder(
-                    padding: EdgeInsets.zero,
-                    itemCount: prayerTimes.length,
-                    itemBuilder: (context, index) {
-                      final item = prayerTimes[index];
-                      final date = item['date'] as DateTime;
-                      final highlighted = isToday(date);
-                      final isEven = index % 2 == 0;
-                      return Container(
-                        margin: const EdgeInsets.symmetric(vertical: 1.0),
-                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                        decoration: BoxDecoration(
-                          // Today highlighted in vibrant orange, compact alternating zebra striping
-                          color: highlighted
-                              ? const Color(0xFFFF9500)
-                              : (isEven
-                                  ? (isDark
-                                      ? const Color(0xFF26262A)
-                                      : const Color(0xFFF2F2F7))
-                                  : (isDark
-                                      ? const Color(0xFF1C1C1E)
-                                      : Colors.white)),
-                          borderRadius: BorderRadius.circular(4),
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onHorizontalDragEnd: (details) {
+                if (details.primaryVelocity == null) return;
+                // Swipe left (velocity < 0) -> move to next month
+                // Swipe right (velocity > 0) -> move to previous month
+                if (details.primaryVelocity! < -200) {
+                  _changeMonth(1);
+                } else if (details.primaryVelocity! > 200) {
+                  _changeMonth(-1);
+                }
+              },
+              child: Column(
+                children: [
+                  // 2. Table Header Container (Fits single screen width without horizontal scroll)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 2.0,
+                      horizontal: 4.0,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isDark
+                          ? const Color(0x292ECC71)
+                          : const Color(0xFFEAF5EA),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Row(
+                      children: [
+                        buildCell(
+                          _translate('day'),
+                          flex: 2,
+                          isHeader: true,
                         ),
-                        child: Row(
-                          children: [
-                            buildCell(
-                              date.day.toString(),
-                              flex: 2,
-                              highlighted: highlighted,
-                            ),
-                            buildCell(
-                              item['fajr'],
-                              flex: 3,
-                              highlighted: highlighted,
-                            ),
-                            buildCell(
-                              item['shuruq'],
-                              flex: 3,
-                              highlighted: highlighted,
-                            ),
-                            buildCell(
-                              item['dhuhr'],
-                              flex: 3,
-                              highlighted: highlighted,
-                            ),
-                            buildCell(
-                              item['asr'],
-                              flex: 3,
-                              highlighted: highlighted,
-                            ),
-                            buildCell(
-                              item['maghrib'],
-                              flex: 3,
-                              highlighted: highlighted,
-                            ),
-                            buildCell(
-                              item['isha'],
-                              flex: 3,
-                              highlighted: highlighted,
-                            ),
-                          ],
+                        buildCell(
+                          _translate('fajr'),
+                          flex: 3,
+                          isHeader: true,
                         ),
-                      );
-                    },
+                        buildCell(
+                          _translate('shuroq'),
+                          flex: 3,
+                          isHeader: true,
+                        ),
+                        buildCell(
+                          _translate('dhohr'),
+                          flex: 3,
+                          isHeader: true,
+                        ),
+                        buildCell(
+                          _translate('asr'),
+                          flex: 3,
+                          isHeader: true,
+                        ),
+                        buildCell(
+                          _translate('magrib'),
+                          flex: 3,
+                          isHeader: true,
+                        ),
+                        buildCell(
+                          _translate('isha'),
+                          flex: 3,
+                          isHeader: true,
+                        ),
+                      ],
+                    ),
                   ),
+                  const SizedBox(height: 6),
+
+                  // 3. Grid list showing monthly prayer times with zebra striping & orange today highlight
+                  Expanded(
+                    child: isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : prayerTimes.isEmpty
+                            ? Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.event_busy_rounded,
+                                        size: 44,
+                                        color: theme.secondaryText,
+                                      ),
+                                      const SizedBox(height: 12),
+                                      Text(
+                                        _translate('no_data'),
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: theme.secondaryText,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : ListView.builder(
+                                padding: EdgeInsets.zero,
+                                itemCount: prayerTimes.length,
+                                itemBuilder: (context, index) {
+                                  final item = prayerTimes[index];
+                                  final date = item['date'] as DateTime;
+                                  final highlighted = isToday(date);
+                                  final isEven = index % 2 == 0;
+                                  return Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 1.0),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 4.0),
+                                    decoration: BoxDecoration(
+                                      // Today highlighted in vibrant orange, compact alternating zebra striping
+                                      color: highlighted
+                                          ? const Color(0xFFFF9500)
+                                          : (isEven
+                                              ? (isDark
+                                                  ? const Color(0xFF26262A)
+                                                  : const Color(0xFFF2F2F7))
+                                              : (isDark
+                                                  ? const Color(0xFF1C1C1E)
+                                                  : Colors.white)),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        buildCell(
+                                          date.day.toString(),
+                                          flex: 2,
+                                          highlighted: highlighted,
+                                        ),
+                                        buildCell(
+                                          item['fajr'],
+                                          flex: 3,
+                                          highlighted: highlighted,
+                                        ),
+                                        buildCell(
+                                          item['shuruq'],
+                                          flex: 3,
+                                          highlighted: highlighted,
+                                        ),
+                                        buildCell(
+                                          item['dhuhr'],
+                                          flex: 3,
+                                          highlighted: highlighted,
+                                        ),
+                                        buildCell(
+                                          item['asr'],
+                                          flex: 3,
+                                          highlighted: highlighted,
+                                        ),
+                                        buildCell(
+                                          item['maghrib'],
+                                          flex: 3,
+                                          highlighted: highlighted,
+                                        ),
+                                        buildCell(
+                                          item['isha'],
+                                          flex: 3,
+                                          highlighted: highlighted,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),

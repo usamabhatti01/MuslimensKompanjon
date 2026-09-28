@@ -1,4 +1,5 @@
 import '/flutter_flow/flutter_flow_util.dart';
+import '/pages/setting_page/bottom_sheet_icon/bottom_sheet_icon_widget.dart';
 import '/pages/setting_page/pminnelsefre_adhan_component/pminnelsefre_adhan_component_widget.dart';
 import 'pminnelsefre_adhan_widget.dart' show PminnelsefreAdhanWidget;
 import 'package:flutter/material.dart';
@@ -10,6 +11,8 @@ class PminnelsefreAdhanModel extends FlutterFlowModel<PminnelsefreAdhanWidget> {
 
   ///  State fields for stateful widgets in this component.
 
+  // Model for bottomSheetIcon component.
+  late BottomSheetIconModel bottomSheetIconModel;
   // Model for PminnelsefreAdhanComponent component.
   late PminnelsefreAdhanComponentModel pminnelsefreAdhanComponentModel1;
   // Model for PminnelsefreAdhanComponent component.
@@ -19,6 +22,7 @@ class PminnelsefreAdhanModel extends FlutterFlowModel<PminnelsefreAdhanWidget> {
 
   @override
   void initState(BuildContext context) {
+    bottomSheetIconModel = createModel(context, () => BottomSheetIconModel());
     pminnelsefreAdhanComponentModel1 =
         createModel(context, () => PminnelsefreAdhanComponentModel());
     pminnelsefreAdhanComponentModel2 =
@@ -29,6 +33,7 @@ class PminnelsefreAdhanModel extends FlutterFlowModel<PminnelsefreAdhanWidget> {
 
   @override
   void dispose() {
+    bottomSheetIconModel.dispose();
     pminnelsefreAdhanComponentModel1.dispose();
     pminnelsefreAdhanComponentModel2.dispose();
     pminnelsefreAdhanComponentModel3.dispose();

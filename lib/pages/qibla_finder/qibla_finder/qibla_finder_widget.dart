@@ -1,8 +1,8 @@
-import '/custom_header_footer/page_footer/page_footer_widget.dart';
 import '/custom_header_footer/page_sub_header_with_icon/page_sub_header_with_icon_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'qibla_finder_model.dart';
 export 'qibla_finder_model.dart';
@@ -52,7 +52,7 @@ class _QiblaFinderWidgetState extends State<QiblaFinderWidget> {
           child: Padding(
             padding: EdgeInsetsDirectional.fromSTEB(
                 FlutterFlowTheme.of(context).designToken.spacing.md,
-                0.0,
+                FlutterFlowTheme.of(context).designToken.spacing.sm,
                 FlutterFlowTheme.of(context).designToken.spacing.md,
                 0.0),
             child: Column(
@@ -63,17 +63,26 @@ class _QiblaFinderWidgetState extends State<QiblaFinderWidget> {
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Icon(
-                      Icons.arrow_back,
-                      color: Color(0x001A1A1A),
-                      size: FFAppConstants.iconSize.toDouble(),
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        context.pushNamed(HomeWidget.routeName);
+                      },
+                      child: Icon(
+                        Icons.chevron_left,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        size: FFAppConstants.iconSize.toDouble(),
+                      ),
                     ),
                     Expanded(
                       child: wrapWithModel(
                         model: _model.pageSubHeaderWithIconModel,
                         updateCallback: () => safeSetState(() {}),
                         child: PageSubHeaderWithIconWidget(
-                          pageName: 'Qibla Finder',
+                          pageName: 'Qibla',
                         ),
                       ),
                     ),
@@ -110,10 +119,12 @@ class _QiblaFinderWidgetState extends State<QiblaFinderWidget> {
                     ),
                   ),
                 ),
-                wrapWithModel(
-                  model: _model.pageFooterModel,
-                  updateCallback: () => safeSetState(() {}),
-                  child: PageFooterWidget(
+                Container(
+                  width: MediaQuery.sizeOf(context).width * 1.0,
+                  height: FFAppConstants.footerHeight.toDouble(),
+                  child: custom_widgets.CustomPageFooter(
+                    width: MediaQuery.sizeOf(context).width * 1.0,
+                    height: FFAppConstants.footerHeight.toDouble(),
                     selectedIndex: 3,
                   ),
                 ),

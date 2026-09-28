@@ -13,3 +13,6 @@ export '/custom_code/functions/check_index.dart';
 export '/custom_code/functions/calculate_distance.dart';
 export '/custom_code/functions/return_index.dart';
 export '/custom_code/functions/return_city_index.dart';
+export '/custom_code/functions/increment_i_d.dart';
+export '/custom_code/functions/int_to_string.dart';
+export '/custom_code/functions/format_r_t_l.dart';

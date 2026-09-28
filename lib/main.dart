@@ -62,17 +62,12 @@ class _MyAppState extends State<MyApp> {
       _router.routerDelegate.currentConfiguration.matches
           .map((e) => getRoute(e))
           .toList();
-  bool displaySplashImage = true;
-
   @override
   void initState() {
     super.initState();
 
     _appStateNotifier = AppStateNotifier.instance;
     _router = createRouter(_appStateNotifier);
-
-    Future.delayed(Duration(milliseconds: 1000),
-        () => safeSetState(() => _appStateNotifier.stopShowingSplashImage()));
   }
 
   void setLocale(String language) {
@@ -126,12 +121,12 @@ class _MyAppState extends State<MyApp> {
           thickness: WidgetStateProperty.all(1.0),
           thumbColor: WidgetStateProperty.resolveWith((states) {
             if (states.contains(WidgetState.dragged)) {
-              return Color(4278231808);
+              return Color(4278221312);
             }
             if (states.contains(WidgetState.hovered)) {
-              return Color(4278231808);
+              return Color(4278221312);
             }
-            return Color(4278231808);
+            return Color(4278221312);
           }),
         ),
         colorSchemeSeed: FlutterFlowTheme.darkColorSchemeSeed,

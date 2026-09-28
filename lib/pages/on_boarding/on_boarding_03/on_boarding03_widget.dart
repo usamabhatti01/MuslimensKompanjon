@@ -1,8 +1,10 @@
+import '/extra/dialogue_box/dialogue_box_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
+import '/pages/setting_page/bottom_sheet_icon/bottom_sheet_icon_widget.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -65,6 +67,11 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                wrapWithModel(
+                  model: _model.bottomSheetIconModel,
+                  updateCallback: () => safeSetState(() {}),
+                  child: BottomSheetIconWidget(),
+                ),
                 Container(
                   height: MediaQuery.sizeOf(context).height * 0.5,
                   decoration: BoxDecoration(),
@@ -77,7 +84,7 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Sök plats',
+                            'Plats',
                             style: FlutterFlowTheme.of(context)
                                 .titleMedium
                                 .override(
@@ -97,20 +104,6 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
                                       .titleMedium
                                       .fontStyle,
                                 ),
-                          ),
-                          InkWell(
-                            splashColor: Colors.transparent,
-                            focusColor: Colors.transparent,
-                            hoverColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            onTap: () async {
-                              Navigator.pop(context);
-                            },
-                            child: Icon(
-                              Icons.close_sharp,
-                              color: FlutterFlowTheme.of(context).primaryText,
-                              size: 14.0,
-                            ),
                           ),
                         ],
                       ),
@@ -204,7 +197,7 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
                                         .bodyMedium
                                         .fontStyle,
                                   ),
-                              hintText: 'Sök stad...',
+                              hintText: 'Plats...',
                               searchHintText: '',
                               icon: Icon(
                                 Icons.search_outlined,
@@ -231,56 +224,60 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
                   ),
                 ),
                 Expanded(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      FFButtonWidget(
-                        onPressed: () async {
-                          FFAppState().updateUserStruct(
-                            (e) => e..city = _model.dropDownValue,
-                          );
-                          safeSetState(() {});
-                          if (FFAppState().user.city != '') {
-                            context.pushNamed(OnBoarding04Widget.routeName);
-                          } else {
-                            await showDialog(
-                              context: context,
-                              builder: (alertDialogContext) {
-                                return WebViewAware(
-                                  child: AlertDialog(
-                                    title: Text('Warning '),
-                                    content: Text('Please Select City.'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.pop(alertDialogContext),
-                                        child: Text('Ok'),
+                  child: Align(
+                    alignment: AlignmentDirectional(0.0, -0.6),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Builder(
+                          builder: (context) => FFButtonWidget(
+                            onPressed: () async {
+                              FFAppState().updateUserStruct(
+                                (e) => e..city = _model.dropDownValue,
+                              );
+                              safeSetState(() {});
+                              if (FFAppState().user.city != '') {
+                                context.pushNamed(OnBoarding04Widget.routeName);
+                              } else {
+                                await showDialog(
+                                  context: context,
+                                  builder: (dialogContext) {
+                                    return Dialog(
+                                      elevation: 0,
+                                      insetPadding: EdgeInsets.zero,
+                                      backgroundColor: Colors.transparent,
+                                      alignment: AlignmentDirectional(0.0, 0.0)
+                                          .resolve(Directionality.of(context)),
+                                      child: WebViewAware(
+                                        child: DialogueBoxWidget(
+                                          heading: 'Varning:',
+                                          body: ' Vänligen välj stad.',
+                                        ),
                                       ),
-                                    ],
-                                  ),
+                                    );
+                                  },
                                 );
-                              },
-                            );
-                          }
-                        },
-                        text: 'Kom igång  ',
-                        icon: Icon(
-                          Icons.arrow_forward_outlined,
-                          size: 16.0,
-                        ),
-                        options: FFButtonOptions(
-                          width: 250.0,
-                          height: 50.0,
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              16.0, 0.0, 16.0, 0.0),
-                          iconAlignment: IconAlignment.end,
-                          iconPadding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 0.0),
-                          iconColor: Colors.white,
-                          color: FlutterFlowTheme.of(context).primary,
-                          textStyle:
-                              FlutterFlowTheme.of(context).titleSmall.override(
+                              }
+                            },
+                            text: 'Kom igång  ',
+                            icon: Icon(
+                              Icons.arrow_forward_outlined,
+                              size: 16.0,
+                            ),
+                            options: FFButtonOptions(
+                              width: 250.0,
+                              height: 50.0,
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  16.0, 0.0, 16.0, 0.0),
+                              iconAlignment: IconAlignment.end,
+                              iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
+                              iconColor: Colors.white,
+                              color: FlutterFlowTheme.of(context).primary,
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .titleSmall
+                                  .override(
                                     font: GoogleFonts.plusJakartaSans(
                                       fontWeight: FlutterFlowTheme.of(context)
                                           .titleSmall
@@ -298,14 +295,16 @@ class _OnBoarding03WidgetState extends State<OnBoarding03Widget> {
                                         .titleSmall
                                         .fontStyle,
                                   ),
-                          elevation: 0.0,
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).alternate,
+                              elevation: 0.0,
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).alternate,
+                              ),
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
                           ),
-                          borderRadius: BorderRadius.circular(12.0),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],

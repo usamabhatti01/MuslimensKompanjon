@@ -59,12 +59,16 @@ Future youtubeChannelData() async {
         }
 
         final channelFollowers = formatSubscribers(subCountStr);
+        final videoCountStr = statistics?['videoCount'] as String?;
+        final totalVideos =
+            videoCountStr != null ? int.tryParse(videoCountStr) : 0;
 
         final channelStruct = ChannelStruct(
           name: channelName,
           description: channelDesc,
           image: channelImage,
           followers: channelFollowers,
+          totalVideos: totalVideos,
         );
 
         FFAppState().update(() {

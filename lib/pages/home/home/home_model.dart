@@ -1,4 +1,4 @@
-import '/custom_header_footer/page_footer/page_footer_widget.dart';
+import '/backend/schema/structs/index.dart';
 import '/custom_header_footer/section_header/section_header_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/form_field_controller.dart';
@@ -11,6 +11,10 @@ class HomeModel extends FlutterFlowModel<HomeWidget> {
 
   bool isValid = false;
 
+  bool isLoading = false;
+
+  bool isHistory = false;
+
   ///  State fields for stateful widgets in this page.
 
   // Stores action output result for [Custom Action - isImageValid] action in Home widget.
@@ -18,20 +22,18 @@ class HomeModel extends FlutterFlowModel<HomeWidget> {
   // State field(s) for DropDown widget.
   String? dropDownValue;
   FormFieldController<String>? dropDownValueController;
+  // Stores action output result for [Custom Action - searchCitiesByLatLon] action in Icon widget.
+  CityRecordStruct? latlonResult;
   // Model for SectionHeader component.
   late SectionHeaderModel sectionHeaderModel;
-  // Model for PageFooter component.
-  late PageFooterModel pageFooterModel;
 
   @override
   void initState(BuildContext context) {
     sectionHeaderModel = createModel(context, () => SectionHeaderModel());
-    pageFooterModel = createModel(context, () => PageFooterModel());
   }
 
   @override
   void dispose() {
     sectionHeaderModel.dispose();
-    pageFooterModel.dispose();
   }
 }

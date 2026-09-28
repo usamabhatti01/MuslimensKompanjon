@@ -22,7 +22,8 @@ export '/pages/setting_page/setting/setting_widget.dart' show SettingWidget;
 export '/pages/home/full_calender/full_calender_widget.dart'
     show FullCalenderWidget;
 export '/pages/kuran/kuran_home/kuran_home_widget.dart' show KuranHomeWidget;
-export '/pages/kanalen/m_kkanalen/m_kkanalen_widget.dart' show MKkanalenWidget;
+export '/pages/kanalen/m_kkanalen_copyy/m_kkanalen_copyy_widget.dart'
+    show MKkanalenCopyyWidget;
 export '/pages/kanalen/live_video/live_video_widget.dart' show LiveVideoWidget;
 export '/pages/kanalen/video_search/video_search_widget.dart'
     show VideoSearchWidget;
@@ -49,3 +50,7 @@ export '/pages/mosque_finder_map/nearby_mosque_locator/nearby_mosque_locator_wid
 export '/pages/mosque_finder_map/location_search_interface/location_search_interface_widget.dart'
     show LocationSearchInterfaceWidget;
 export '/pages/kuran/kuran_page/kuran_page_widget.dart' show KuranPageWidget;
+export '/pages/home/web_view/web_view_widget.dart' show WebViewWidget;
+export '/pages/kanalen/m_kkanalen/m_kkanalen_widget.dart' show MKkanalenWidget;
+export '/pages/categories/azhkar_quranic_verse/mornng_and_evebing_adhkar/nar_hjartat_detail/nar_hjartat_detail_widget.dart'
+    show NarHjartatDetailWidget;

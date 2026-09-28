@@ -1,11 +1,13 @@
+import '/backend/schema/enums/enums.dart';
+import '/extra/lsinstllningar/lsinstllningar_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/pages/kuran/lsinstllningar/lsinstllningar_widget.dart';
 import '/pages/kuran/search_kuran/search_kuran_widget.dart';
 import '/index.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 import 'koran_page_sub_header_model.dart';
 export 'koran_page_sub_header_model.dart';
@@ -49,6 +51,8 @@ class _KoranPageSubHeaderWidgetState extends State<KoranPageSubHeaderWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Container(
       decoration: BoxDecoration(),
       child: Row(
@@ -129,9 +133,9 @@ class _KoranPageSubHeaderWidgetState extends State<KoranPageSubHeaderWidget> {
                       return WebViewAware(
                         child: Padding(
                           padding: MediaQuery.viewInsetsOf(context),
-                          child: Container(
-                            height: MediaQuery.sizeOf(context).height * 0.6,
-                            child: LsinstllningarWidget(),
+                          child: LsinstllningarWidget(
+                            initialValue: FFAppState().qurantSetting,
+                            value: Font.quran.name,
                           ),
                         ),
                       );

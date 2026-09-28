@@ -71,7 +71,7 @@ class _LiveVideoWidgetState extends State<LiveVideoWidget> {
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        context.pushNamed(MKkanalenWidget.routeName);
+                        context.pushNamed(MKkanalenCopyyWidget.routeName);
                       },
                       child: Icon(
                         Icons.chevron_left,
@@ -85,6 +85,7 @@ class _LiveVideoWidgetState extends State<LiveVideoWidget> {
                         updateCallback: () => safeSetState(() {}),
                         child: MkHomePageHeaderWidget(
                           pageName: 'Video',
+                          searchBtn: false,
                         ),
                       ),
                     ),

@@ -55,6 +55,15 @@ class _FooterComponentWidgetState extends State<FooterComponentWidget> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(0.0),
+                child: Image.asset(
+                  'assets/images/home.png',
+                  width: 18.0,
+                  height: 18.0,
+                  fit: BoxFit.cover,
+                ),
+              ),
               widget.icon!,
               Text(
                 valueOrDefault<String>(

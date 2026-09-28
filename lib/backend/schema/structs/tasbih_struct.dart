@@ -8,17 +8,27 @@ import '/flutter_flow/flutter_flow_util.dart';
 class TasbihStruct extends BaseStruct {
   TasbihStruct({
     int? id,
+    String? titleAr,
+    String? titleSv,
     String? arabic,
     String? transliteration,
-    String? swedishMeaning,
-    String? arabicMeaning,
-    int? counter,
+    String? swedish,
+    String? whyRead,
+    String? reward,
+    String? source,
+    String? status,
+    int? targetCount,
   })  : _id = id,
+        _titleAr = titleAr,
+        _titleSv = titleSv,
         _arabic = arabic,
         _transliteration = transliteration,
-        _swedishMeaning = swedishMeaning,
-        _arabicMeaning = arabicMeaning,
-        _counter = counter;
+        _swedish = swedish,
+        _whyRead = whyRead,
+        _reward = reward,
+        _source = source,
+        _status = status,
+        _targetCount = targetCount;
 
   // "id" field.
   int? _id;
@@ -28,6 +38,20 @@ class TasbihStruct extends BaseStruct {
   void incrementId(int amount) => id = id + amount;
 
   bool hasId() => _id != null;
+
+  // "titleAr" field.
+  String? _titleAr;
+  String get titleAr => _titleAr ?? '';
+  set titleAr(String? val) => _titleAr = val;
+
+  bool hasTitleAr() => _titleAr != null;
+
+  // "titleSv" field.
+  String? _titleSv;
+  String get titleSv => _titleSv ?? '';
+  set titleSv(String? val) => _titleSv = val;
+
+  bool hasTitleSv() => _titleSv != null;
 
   // "arabic" field.
   String? _arabic;
@@ -43,36 +67,62 @@ class TasbihStruct extends BaseStruct {
 
   bool hasTransliteration() => _transliteration != null;
 
-  // "swedishMeaning" field.
-  String? _swedishMeaning;
-  String get swedishMeaning => _swedishMeaning ?? '';
-  set swedishMeaning(String? val) => _swedishMeaning = val;
+  // "swedish" field.
+  String? _swedish;
+  String get swedish => _swedish ?? '';
+  set swedish(String? val) => _swedish = val;
 
-  bool hasSwedishMeaning() => _swedishMeaning != null;
+  bool hasSwedish() => _swedish != null;
 
-  // "arabicMeaning" field.
-  String? _arabicMeaning;
-  String get arabicMeaning => _arabicMeaning ?? '';
-  set arabicMeaning(String? val) => _arabicMeaning = val;
+  // "whyRead" field.
+  String? _whyRead;
+  String get whyRead => _whyRead ?? '';
+  set whyRead(String? val) => _whyRead = val;
 
-  bool hasArabicMeaning() => _arabicMeaning != null;
+  bool hasWhyRead() => _whyRead != null;
 
-  // "counter" field.
-  int? _counter;
-  int get counter => _counter ?? 0;
-  set counter(int? val) => _counter = val;
+  // "reward" field.
+  String? _reward;
+  String get reward => _reward ?? '';
+  set reward(String? val) => _reward = val;
 
-  void incrementCounter(int amount) => counter = counter + amount;
+  bool hasReward() => _reward != null;
 
-  bool hasCounter() => _counter != null;
+  // "source" field.
+  String? _source;
+  String get source => _source ?? '';
+  set source(String? val) => _source = val;
+
+  bool hasSource() => _source != null;
+
+  // "status" field.
+  String? _status;
+  String get status => _status ?? '';
+  set status(String? val) => _status = val;
+
+  bool hasStatus() => _status != null;
+
+  // "targetCount" field.
+  int? _targetCount;
+  int get targetCount => _targetCount ?? 0;
+  set targetCount(int? val) => _targetCount = val;
+
+  void incrementTargetCount(int amount) => targetCount = targetCount + amount;
+
+  bool hasTargetCount() => _targetCount != null;
 
   static TasbihStruct fromMap(Map<String, dynamic> data) => TasbihStruct(
         id: castToType<int>(data['id']),
+        titleAr: data['titleAr'] as String?,
+        titleSv: data['titleSv'] as String?,
         arabic: data['arabic'] as String?,
         transliteration: data['transliteration'] as String?,
-        swedishMeaning: data['swedishMeaning'] as String?,
-        arabicMeaning: data['arabicMeaning'] as String?,
-        counter: castToType<int>(data['counter']),
+        swedish: data['swedish'] as String?,
+        whyRead: data['whyRead'] as String?,
+        reward: data['reward'] as String?,
+        source: data['source'] as String?,
+        status: data['status'] as String?,
+        targetCount: castToType<int>(data['targetCount']),
       );
 
   static TasbihStruct? maybeFromMap(dynamic data) =>
@@ -80,11 +130,16 @@ class TasbihStruct extends BaseStruct {
 
   Map<String, dynamic> toMap() => {
         'id': _id,
+        'titleAr': _titleAr,
+        'titleSv': _titleSv,
         'arabic': _arabic,
         'transliteration': _transliteration,
-        'swedishMeaning': _swedishMeaning,
-        'arabicMeaning': _arabicMeaning,
-        'counter': _counter,
+        'swedish': _swedish,
+        'whyRead': _whyRead,
+        'reward': _reward,
+        'source': _source,
+        'status': _status,
+        'targetCount': _targetCount,
       }.withoutNulls;
 
   @override
@@ -92,6 +147,14 @@ class TasbihStruct extends BaseStruct {
         'id': serializeParam(
           _id,
           ParamType.int,
+        ),
+        'titleAr': serializeParam(
+          _titleAr,
+          ParamType.String,
+        ),
+        'titleSv': serializeParam(
+          _titleSv,
+          ParamType.String,
         ),
         'arabic': serializeParam(
           _arabic,
@@ -101,16 +164,28 @@ class TasbihStruct extends BaseStruct {
           _transliteration,
           ParamType.String,
         ),
-        'swedishMeaning': serializeParam(
-          _swedishMeaning,
+        'swedish': serializeParam(
+          _swedish,
           ParamType.String,
         ),
-        'arabicMeaning': serializeParam(
-          _arabicMeaning,
+        'whyRead': serializeParam(
+          _whyRead,
           ParamType.String,
         ),
-        'counter': serializeParam(
-          _counter,
+        'reward': serializeParam(
+          _reward,
+          ParamType.String,
+        ),
+        'source': serializeParam(
+          _source,
+          ParamType.String,
+        ),
+        'status': serializeParam(
+          _status,
+          ParamType.String,
+        ),
+        'targetCount': serializeParam(
+          _targetCount,
           ParamType.int,
         ),
       }.withoutNulls;
@@ -120,6 +195,16 @@ class TasbihStruct extends BaseStruct {
         id: deserializeParam(
           data['id'],
           ParamType.int,
+          false,
+        ),
+        titleAr: deserializeParam(
+          data['titleAr'],
+          ParamType.String,
+          false,
+        ),
+        titleSv: deserializeParam(
+          data['titleSv'],
+          ParamType.String,
           false,
         ),
         arabic: deserializeParam(
@@ -132,18 +217,33 @@ class TasbihStruct extends BaseStruct {
           ParamType.String,
           false,
         ),
-        swedishMeaning: deserializeParam(
-          data['swedishMeaning'],
+        swedish: deserializeParam(
+          data['swedish'],
           ParamType.String,
           false,
         ),
-        arabicMeaning: deserializeParam(
-          data['arabicMeaning'],
+        whyRead: deserializeParam(
+          data['whyRead'],
           ParamType.String,
           false,
         ),
-        counter: deserializeParam(
-          data['counter'],
+        reward: deserializeParam(
+          data['reward'],
+          ParamType.String,
+          false,
+        ),
+        source: deserializeParam(
+          data['source'],
+          ParamType.String,
+          false,
+        ),
+        status: deserializeParam(
+          data['status'],
+          ParamType.String,
+          false,
+        ),
+        targetCount: deserializeParam(
+          data['targetCount'],
           ParamType.int,
           false,
         ),
@@ -156,31 +256,57 @@ class TasbihStruct extends BaseStruct {
   bool operator ==(Object other) {
     return other is TasbihStruct &&
         id == other.id &&
+        titleAr == other.titleAr &&
+        titleSv == other.titleSv &&
         arabic == other.arabic &&
         transliteration == other.transliteration &&
-        swedishMeaning == other.swedishMeaning &&
-        arabicMeaning == other.arabicMeaning &&
-        counter == other.counter;
+        swedish == other.swedish &&
+        whyRead == other.whyRead &&
+        reward == other.reward &&
+        source == other.source &&
+        status == other.status &&
+        targetCount == other.targetCount;
   }
 
   @override
-  int get hashCode => const ListEquality().hash(
-      [id, arabic, transliteration, swedishMeaning, arabicMeaning, counter]);
+  int get hashCode => const ListEquality().hash([
+        id,
+        titleAr,
+        titleSv,
+        arabic,
+        transliteration,
+        swedish,
+        whyRead,
+        reward,
+        source,
+        status,
+        targetCount
+      ]);
 }
 
 TasbihStruct createTasbihStruct({
   int? id,
+  String? titleAr,
+  String? titleSv,
   String? arabic,
   String? transliteration,
-  String? swedishMeaning,
-  String? arabicMeaning,
-  int? counter,
+  String? swedish,
+  String? whyRead,
+  String? reward,
+  String? source,
+  String? status,
+  int? targetCount,
 }) =>
     TasbihStruct(
       id: id,
+      titleAr: titleAr,
+      titleSv: titleSv,
       arabic: arabic,
       transliteration: transliteration,
-      swedishMeaning: swedishMeaning,
-      arabicMeaning: arabicMeaning,
-      counter: counter,
+      swedish: swedish,
+      whyRead: whyRead,
+      reward: reward,
+      source: source,
+      status: status,
+      targetCount: targetCount,
     );

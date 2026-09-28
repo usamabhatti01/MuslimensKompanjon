@@ -1,7 +1,7 @@
-import '/custom_header_footer/page_footer/page_footer_widget.dart';
 import '/custom_header_footer/page_sub_header_with_icon/page_sub_header_with_icon_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/index.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +57,7 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
           child: Padding(
             padding: EdgeInsetsDirectional.fromSTEB(
                 FlutterFlowTheme.of(context).designToken.spacing.md,
-                0.0,
+                FlutterFlowTheme.of(context).designToken.spacing.sm,
                 FlutterFlowTheme.of(context).designToken.spacing.md,
                 0.0),
             child: Column(
@@ -77,7 +77,7 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
                       },
                       child: Icon(
                         Icons.chevron_left,
-                        color: Color(0x001A1A1A),
+                        color: FlutterFlowTheme.of(context).primaryText,
                         size: FFAppConstants.iconSize.toDouble(),
                       ),
                     ),
@@ -98,6 +98,158 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
+                      InkWell(
+                        splashColor: Colors.transparent,
+                        focusColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onTap: () async {
+                          context.pushNamed(
+                            NarHjartatDetailWidget.routeName,
+                            queryParameters: {
+                              'adkar': serializeParam(
+                                'När hjärtat minns Allah',
+                                ParamType.String,
+                              ),
+                            }.withoutNulls,
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: FlutterFlowTheme.of(context)
+                                .secondaryBackground,
+                            borderRadius: BorderRadius.circular(
+                                FlutterFlowTheme.of(context)
+                                    .designToken
+                                    .radius
+                                    .sm),
+                            border: Border.all(
+                              color: FlutterFlowTheme.of(context).alternate,
+                            ),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(FlutterFlowTheme.of(context)
+                                .designToken
+                                .spacing
+                                .md),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: Image.asset(
+                                        'assets/images/love.png',
+                                        width: 36.0,
+                                        height: 36.0,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: AutoSizeText(
+                                        'När hjärtat minns Allah',
+                                        minFontSize:
+                                            FFAppConstants.body.toDouble(),
+                                        style: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .override(
+                                              font: GoogleFonts.plusJakartaSans(
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleSmall
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleSmall
+                                                        .fontStyle,
+                                              ),
+                                              letterSpacing: 0.0,
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleSmall
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleSmall
+                                                      .fontStyle,
+                                            ),
+                                      ),
+                                    ),
+                                  ].divide(SizedBox(width: 20.0)),
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        'Ta några minuter varje dag för att minnas Allah, stärke din tro och finna ro i hjärtat.',
+                                        style: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .override(
+                                              font: GoogleFonts.plusJakartaSans(
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleSmall
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleSmall
+                                                        .fontStyle,
+                                              ),
+                                              letterSpacing: 0.0,
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleSmall
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleSmall
+                                                      .fontStyle,
+                                            ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      'Läs mer →',
+                                      style: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .override(
+                                            font: GoogleFonts.plusJakartaSans(
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleSmall
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleSmall
+                                                      .fontStyle,
+                                            ),
+                                            letterSpacing: 0.0,
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .titleSmall
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .titleSmall
+                                                    .fontStyle,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ].divide(SizedBox(height: 5.0)),
+                            ),
+                          ),
+                        ),
+                      ),
                       Expanded(
                         child: GridView(
                           padding: EdgeInsets.zero,
@@ -138,7 +290,10 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
                                       ParamType.String,
                                     ),
                                     'adhkar': serializeParam(
-                                      FFAppState().azkhar,
+                                      FFAppState()
+                                          .adhkar
+                                          .where((e) => e.morning == true)
+                                          .toList(),
                                       ParamType.DataStruct,
                                       isList: true,
                                     ),
@@ -171,14 +326,18 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                        child: Image.asset(
-                                          'assets/images/solar_sun-fog-outline.png',
-                                          width: 35.0,
-                                          height: 35.0,
-                                          fit: BoxFit.cover,
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 0.0, 0.0, 5.0),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          child: Image.asset(
+                                            'assets/images/solar_sun-fog-outline.png',
+                                            width: 36.0,
+                                            height: 36.0,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       ),
                                       Expanded(
@@ -235,7 +394,10 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
                                       ParamType.String,
                                     ),
                                     'adhkar': serializeParam(
-                                      FFAppState().azkhar,
+                                      FFAppState()
+                                          .adhkar
+                                          .where((e) => e.evening == true)
+                                          .toList(),
                                       ParamType.DataStruct,
                                       isList: true,
                                     ),
@@ -273,9 +435,10 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
                                             BorderRadius.circular(8.0),
                                         child: Image.asset(
                                           'assets/images/Group_1.png',
-                                          width: 35.0,
-                                          height: 35.0,
+                                          width: 36.0,
+                                          height: 36.0,
                                           fit: BoxFit.cover,
+                                          alignment: Alignment(0.0, -18.0),
                                         ),
                                       ),
                                       Expanded(
@@ -457,8 +620,8 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
                                             BorderRadius.circular(8.0),
                                         child: Image.asset(
                                           'assets/images/tabler_number-99-small.png',
-                                          width: 35.0,
-                                          height: 35.0,
+                                          width: 36.0,
+                                          height: 36.0,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -549,7 +712,7 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
                                       ),
                                       Expanded(
                                         child: AutoSizeText(
-                                          'Kväll\nAdhkar',
+                                          'Dua &\nÅkallan',
                                           minFontSize:
                                               FFAppConstants.body.toDouble(),
                                           style: FlutterFlowTheme.of(context)
@@ -590,13 +753,15 @@ class _AdhkarWidgetState extends State<AdhkarWidget> {
                           ],
                         ),
                       ),
-                    ],
+                    ].divide(SizedBox(height: 10.0)),
                   ),
                 ),
-                wrapWithModel(
-                  model: _model.pageFooterModel,
-                  updateCallback: () => safeSetState(() {}),
-                  child: PageFooterWidget(
+                Container(
+                  width: MediaQuery.sizeOf(context).width * 1.0,
+                  height: FFAppConstants.footerHeight.toDouble(),
+                  child: custom_widgets.CustomPageFooter(
+                    width: MediaQuery.sizeOf(context).width * 1.0,
+                    height: FFAppConstants.footerHeight.toDouble(),
                     selectedIndex: 2,
                   ),
                 ),

@@ -19,8 +19,7 @@ Route? _lastObservedRoute;
 class AudioAppLifecycleObserver extends WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached) {
+    if (state == AppLifecycleState.detached) {
       _audioPlayer.stop();
     }
   }
@@ -34,11 +33,29 @@ Future audioPlay(String audioLink) async {
       return;
     }
 
-    // Register app lifecycle observer to stop audio when app is minimized or closed
+    // Register app lifecycle observer to stop audio when app is terminated
     if (!_isLifecycleObserverRegistered) {
       WidgetsBinding.instance.addObserver(AudioAppLifecycleObserver());
       _isLifecycleObserverRegistered = true;
     }
+
+    await _audioPlayer.setAudioContext(
+      AudioContext(
+        iOS: AudioContextIOS(
+          category: AVAudioSessionCategory.playback,
+          options: [
+            AVAudioSessionOptions.defaultToSpeaker,
+          ],
+        ),
+        android: AudioContextAndroid(
+          isSpeakerphoneOn: false,
+          stayAwake: true,
+          contentType: AndroidContentType.music,
+          usageType: AndroidUsageType.media,
+          audioFocus: AndroidAudioFocus.gain,
+        ),
+      ),
+    );
 
     await _audioPlayer.stop();
 

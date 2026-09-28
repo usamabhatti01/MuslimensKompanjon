@@ -56,12 +56,11 @@ class _JuzHeadingWidgetState extends State<JuzHeadingWidget> {
   Widget build(BuildContext context) {
     return Container(
       width: 300.0,
-      height: 100.0,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 0.0, 12.0),
+        padding: EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 12.0, 12.0),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -105,17 +104,16 @@ class _JuzHeadingWidgetState extends State<JuzHeadingWidget> {
               children: [
                 AutoSizeText(
                   valueOrDefault<String>(
-                    widget.heading,
-                    'Al-Fatiha',
+                    widget.suratName,
+                    'الرَّحِيْم',
                   ),
-                  textAlign: TextAlign.end,
                   minFontSize: FFAppConstants.heading.toDouble(),
-                  style: FlutterFlowTheme.of(context).arabicBody.override(
+                  style: FlutterFlowTheme.of(context).arabiTitle.override(
                         fontFamily: 'arabic',
                         color: FlutterFlowTheme.of(context).primaryText,
-                        fontSize: 14.0,
+                        fontSize: 22.0,
                         letterSpacing: 0.0,
-                        fontWeight: FontWeight.normal,
+                        fontWeight: FontWeight.bold,
                       ),
                 ),
                 AutoSizeText(
@@ -157,23 +155,9 @@ class _JuzHeadingWidgetState extends State<JuzHeadingWidget> {
                                 .fontStyle,
                           ),
                     ),
-                  ].divide(SizedBox(width: 5.0)),
+                  ],
                 ),
               ].divide(SizedBox(height: 5.0)),
-            ),
-            AutoSizeText(
-              valueOrDefault<String>(
-                widget.suratName,
-                'الرَّحِيْم',
-              ),
-              minFontSize: FFAppConstants.heading.toDouble(),
-              style: FlutterFlowTheme.of(context).arabiTitle.override(
-                    fontFamily: 'arabic',
-                    color: FlutterFlowTheme.of(context).primaryText,
-                    fontSize: 22.0,
-                    letterSpacing: 0.0,
-                    fontWeight: FontWeight.bold,
-                  ),
             ),
           ],
         ),

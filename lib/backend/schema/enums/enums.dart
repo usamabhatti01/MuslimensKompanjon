@@ -45,12 +45,40 @@ enum Direction {
 enum Quran {
   juz,
   sura,
+  ayat,
 }
 
 enum ShortFilter {
   Latest,
   Popular,
   Old,
+}
+
+enum VideoCategory {
+  Shorts,
+  Videor,
+  Spellistor,
+  Inlgg,
+}
+
+enum Font {
+  quran,
+  adhkar,
+  enFont,
+  swFont,
+  arFont,
+  arActive,
+  swActive,
+  enActive,
+  duas,
+  tasbih,
+}
+
+enum HabitCategory {
+  all,
+  holidays,
+  fasting,
+  prayers,
 }
 
 extension FFEnumExtensions<T extends Enum> on T {
@@ -80,6 +108,12 @@ T? deserializeEnum<T>(String? value) {
       return Quran.values.deserialize(value) as T?;
     case (ShortFilter):
       return ShortFilter.values.deserialize(value) as T?;
+    case (VideoCategory):
+      return VideoCategory.values.deserialize(value) as T?;
+    case (Font):
+      return Font.values.deserialize(value) as T?;
+    case (HabitCategory):
+      return HabitCategory.values.deserialize(value) as T?;
     default:
       return null;
   }
