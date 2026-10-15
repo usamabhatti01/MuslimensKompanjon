@@ -188,7 +188,10 @@ class _AdhanljudWidgetState extends State<AdhanljudWidget> {
                                         AdhanSound.Standard.name,
                                     azanName: SoundName.Standard.name,
                                     icon: FaIcon(
-                                      FontAwesomeIcons.volumeUp,
+                                      FaIconData(const IconData(
+                                          /* volumeUp */ 0xf028,
+                                          fontFamily: 'FontAwesomeSolid',
+                                          fontPackage: 'font_awesome_flutter')),
                                       size: 18.0,
                                     ),
                                     onCheck: () async {

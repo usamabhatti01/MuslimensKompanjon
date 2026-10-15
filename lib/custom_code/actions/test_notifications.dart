@@ -1,11 +1,12 @@
 // Automatic FlutterFlow imports
 import '/backend/schema/structs/index.dart';
 import '/backend/schema/enums/enums.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/actions/index.dart'; // Imports other custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
@@ -49,6 +50,12 @@ Future<String> testNotifications() async {
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.requestNotificationsPermission();
+    try {
+      await fln
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()
+          ?.requestExactAlarmsPermission();
+    } catch (_) {}
 
     // ================= LOAD USER PREFERENCE SOUND =================
     final selectedSound = FFAppState().user.adhanSound;
@@ -93,10 +100,14 @@ Future<String> testNotifications() async {
             : 'prayer_channel_sound')
         : 'prayer_channel_vibration';
     final channelName = playSoundActual
-        ? 'Prayer Sound Notifications'
+        ? (androidSoundResource != null
+            ? 'Prayer Adhan Notifications'
+            : 'Prayer Alerts & Reminders')
         : 'Prayer Vibration Notifications';
     final channelDesc = playSoundActual
-        ? 'Prayer reminder notifications with sound'
+        ? (androidSoundResource != null
+            ? 'Prayer reminder notifications with Adhan sound'
+            : 'Standard prayer notifications with customizable system sound')
         : 'Prayer reminder notifications with vibration only';
 
     // ================= ANDROID CHANNEL =================
@@ -152,77 +163,52 @@ Future<String> testNotifications() async {
     debugLog.writeln(now);
     final testTime = now.add(const Duration(seconds: 10));
 
-    var scheduleMode = AndroidScheduleMode.exactAllowWhileIdle;
+    // Check exact alarm permission at runtime before scheduling.
+    // alarmClock mode bypasses Doze/screen-off entirely.
+    bool canExact = false;
+    final androidPlugin = fln.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>();
     try {
-      await fln.zonedSchedule(
-        999,
-        "Test Notification",
-        "This is a standalone test notification 10 seconds from now.",
-        testTime,
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-            channelId,
-            channelName,
-            channelDescription: channelDesc,
-            importance: Importance.max,
-            priority: Priority.high,
-            //  icon: 'ic_notification',
-            playSound: playSoundActual,
-            enableVibration: true,
-            sound: playSoundActual && androidSoundResource != null
-                ? RawResourceAndroidNotificationSound(androidSoundResource)
-                : null,
-          ),
-          iOS: DarwinNotificationDetails(
-            presentAlert: true,
-            presentBadge: true,
-            presentSound: playSoundActual,
-            sound: iosSoundFile,
-          ),
-        ),
-        androidScheduleMode: scheduleMode,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-        matchDateTimeComponents: null,
-      );
-    } catch (e) {
-      if (e is PlatformException && e.code == 'exact_alarms_not_permitted') {
-        scheduleMode = AndroidScheduleMode.inexactAllowWhileIdle;
-        await fln.zonedSchedule(
-          999,
-          "Test Notification",
-          "This is a standalone test notification 10 seconds from now.",
-          testTime,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channelId,
-              channelName,
-              channelDescription: channelDesc,
-              importance: Importance.max,
-              priority: Priority.high,
-              //   icon: 'ic_notification',
-              playSound: playSoundActual,
-              enableVibration: true,
-              sound: playSoundActual && androidSoundResource != null
-                  ? RawResourceAndroidNotificationSound(androidSoundResource)
-                  : null,
-            ),
-            iOS: DarwinNotificationDetails(
-              presentAlert: true,
-              presentBadge: true,
-              presentSound: playSoundActual,
-              sound: iosSoundFile,
-            ),
-          ),
-          androidScheduleMode: scheduleMode,
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
-          matchDateTimeComponents: null,
-        );
-      } else {
-        rethrow;
-      }
+      canExact = await androidPlugin?.canScheduleExactNotifications() ?? false;
+    } catch (_) {
+      canExact = false;
     }
+    final scheduleMode = canExact
+        ? AndroidScheduleMode.alarmClock
+        : AndroidScheduleMode.inexactAllowWhileIdle;
+    debugLog.writeln(
+        'Schedule mode: ${canExact ? "alarmClock" : "inexactAllowWhileIdle"}');
+
+    await fln.zonedSchedule(
+      999,
+      "Test Notification",
+      "This is a standalone test notification 10 seconds from now.",
+      testTime,
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          channelId,
+          channelName,
+          channelDescription: channelDesc,
+          importance: Importance.max,
+          priority: Priority.high,
+          playSound: playSoundActual,
+          enableVibration: true,
+          sound: playSoundActual && androidSoundResource != null
+              ? RawResourceAndroidNotificationSound(androidSoundResource)
+              : null,
+        ),
+        iOS: DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: playSoundActual,
+          sound: iosSoundFile,
+        ),
+      ),
+      androidScheduleMode: scheduleMode,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: null,
+    );
 
     debugLog.writeln("TEST NOTIFICATION SCHEDULED: triggers at $testTime");
     return debugLog.toString();

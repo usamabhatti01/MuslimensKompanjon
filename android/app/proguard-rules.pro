@@ -21,3 +21,14 @@
 -keep class com.google.gson.reflect.TypeToken
 -keep class * extends com.google.gson.reflect.TypeToken
 -keep public class * implements java.lang.reflect.Type
+
+# Flutter Local Notifications
+-keep class com.dexterous.** { *; }
+-keep class androidx.core.app.NotificationCompat** { *; }
+-dontwarn com.dexterous.**
+
+# Preserve all Gson annotations and fields in model classes for notifications
+-keepclassmembers class * {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
+-keep class com.dexterous.flutterlocalnotifications.models.** { *; }

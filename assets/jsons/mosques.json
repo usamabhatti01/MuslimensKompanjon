@@ -2,421 +2,505 @@
   {
     "name": "Alingsås, Islamiska Center i Alingsås Moské",
     "latitude": 57.93,
+    "address": "Stora Torget 3, 441 30 Alingsås",
     "longitude": 12.5322222
   },
   {
     "name": "Avesta, Alfarok moské",
     "latitude": 60.144984,
+    "address": "Corneliusgatan 21, 774 31 Avesta",
     "longitude": 16.16196
   },
   {
     "name": "Boden, Boden Moské",
     "latitude": 65.824109,
+    "address": "Drottninggatan 5, 961 35 Boden",
     "longitude": 21.6877373
   },
   {
     "name": "Bollnäs, Bollnäs Islamic Center",
     "latitude": 61.3537331,
+    "address": "Fabriksgatan 8B, 821 33 Bollnäs",
     "longitude": 16.3886237
   },
   {
     "name": "Borlänge, Al-rahma moské",
     "latitude": 60.4837102,
+    "address": "Jaxtorget, 784 53 Borlänge",
     "longitude": 15.4039891
   },
   {
     "name": "Borlänge, Borlänge Islamic Centre",
     "latitude": 60.4965634,
+    "address": "Betesgatan 1, 784 41 Borlänge",
     "longitude": 15.4136553
   },
   {
     "name": "Borås, Borås Moské",
     "latitude": 57.721152,
+    "address": "Magasinsgatan 16, 504 35 Borås",
     "longitude": 12.9309617
   },
   {
     "name": "Borås, Bosnisk Islamiska Församlingen",
     "latitude": 57.7164713,
+    "address": "Teknikgatan 9, 504 62 Borås",
     "longitude": 12.8967294
   },
   {
-    "name": "Eksjö, Ambassadörer Förening moské",
+    "name": "Eksjö, Ambassadörer Förening moské",
     "latitude": 57.6703379,
+    "address": "Skomakargränd, 575 32 Eksjö",
     "longitude": 14.9686517
   },
   {
-    "name": "Enköping, Enköping Moské",
+    "name": "Enköping, Enköping Moské",
     "latitude": 59.6466953,
+    "address": "Östra Järnvägsgatan 1, 745 37 Enköping",
     "longitude": 17.0847365
   },
   {
     "name": "Eskilstuna, Eritreanska Islamiska Föreningen",
     "latitude": 59.3584979,
+    "address": "Bellmansplan 2C, 632 37 Eskilstuna",
     "longitude": 16.5058003
   },
   {
     "name": "Eskilstuna, Eskilstuna Stora Moské",
     "latitude": 59.3850701,
+    "address": "Årbygatan 6, 633 45 Eskilstuna",
     "longitude": 16.5146106
   },
   {
     "name": "Eslövs, Islamiska Kulturförening",
     "latitude": 55.8420634,
+    "address": "Vålarödsvägen 6, 241 39 Eslöv",
     "longitude": 13.3177783
   },
   {
     "name": "Falkenberg, Bilal Moské",
     "latitude": 56.90441,
+    "address": "Kvekatorpsvägen 2B, 311 75 Falkenberg",
     "longitude": 12.4810179
   },
   {
     "name": "Falköping, Falköpings Moské",
     "latitude": 58.1777831,
+    "address": "Sten Sturegatan 5, 521 32 Falköping",
     "longitude": 13.5578007
   },
   {
-    "name": "Falun, Falun Islamic Center",
-    "latitude": 60.6101030695953,
-    "longitude": 15.6517378305178
+    "name": "Falun, Falun Islamic Center",
+    "latitude": 60.5966214,
+    "address": "Ugglevägen 2, 791 50 Falun",
+    "longitude": 15.6515314
   },
   {
     "name": "Filipstad, Filipstad Moské",
     "latitude": 59.7102947754621,
+    "address": "Allégatan 4, 682 31 Filipstad",
     "longitude": 14.1615006253211
   },
   {
     "name": "Flen, Flens Moské",
     "latitude": 59.0553056,
+    "address": "Floragatan 4, 642 35 Flen",
     "longitude": 16.5954134
   },
   {
     "name": "Gislaved, Bosniska Islamiska Församlingen",
     "latitude": 57.2895481,
+    "address": "Sörgårdsvägen 3, 332 37 Gislaved",
     "longitude": 13.525564
   },
   {
     "name": "Gislaved, Gislaved Moské",
     "latitude": 57.303268,
+    "address": "Västergatan 15B, 332 32 Gislaved",
     "longitude": 13.532072
   },
   {
     "name": "Gotland, Moské",
     "latitude": 57.6409953,
+    "address": "Mästergatan, 621 39 Visby",
     "longitude": 18.3125208
   },
   {
     "name": "Gnosjö, Somaliska Muslimska Föreningen",
     "latitude": 57.361866,
+    "address": "Järnvägsgatan, 583 31 Gnosjö",
     "longitude": 13.7282653
   },
   {
     "name": "Göteborg, Bellevue Moské",
     "latitude": 57.7302766,
+    "address": "Stallmästaregatan 5, 415 05 Göteborg",
     "longitude": 12.0235029
   },
   {
     "name": "Göteborg, Bosniska Islamiska Församlingen",
     "latitude": 57.7309172,
+    "address": "Generalsgatan 5, 415 05 Göteborg",
     "longitude": 12.0240454
   },
   {
     "name": "Göteborg, Göteborgs moské",
     "latitude": 57.7147564,
+    "address": "Myntgatan 4, 417 01 Göteborg",
     "longitude": 11.9441567
   },
   {
     "name": "Gävle, Al Rashideen Mosque",
     "latitude": 60.6688335,
+    "address": "Södra Rådmansgatan 25, 802 51 Gävle",
     "longitude": 17.1514536
   },
   {
     "name": "Gävle, Gävle Moské",
     "latitude": 60.6682377,
+    "address": "Nedre Åkargatan 70, 802 51 Gävle",
     "longitude": 17.1530187
   },
   {
     "name": "Halmstad, Halmstad moské",
     "latitude": 56.6731642,
+    "address": "Fredsgatan 15, 302 46 Halmstad",
     "longitude": 12.8655895
   },
   {
     "name": "Hudiksvall, Hudiksvall Moské",
-    "latitude": 61.7222511,
-    "longitude": 17.087564
+    "latitude": 61.7270656,
+    "address": "Hamngatan 45, 824 52 Hudiksvall",
+    "longitude": 17.1205525
   },
   {
     "name": "Högsby, Högsby moské",
     "latitude": 57.1638359982727,
+    "address": "Storgatan 38B, 579 30 Högsby",
     "longitude": 16.0276881460894
   },
   {
     "name": "Jönköping, Islamic Center",
     "latitude": 57.7866623,
+    "address": "Birkagatan 40, 561 33 Huskvarna",
     "longitude": 14.2572611
   },
   {
     "name": "Jönköping, Islamiska Församling",
     "latitude": 57.737109,
+    "address": "Kärrhöksgatan 78, 556 12 Jönköping",
     "longitude": 14.1467752
   },
   {
     "name": "Karlstad, Karlstad Moské",
     "latitude": 59.4058261,
+    "address": "Jakthornsgatan 98A, 656 32 Karlstad",
     "longitude": 13.5680505
   },
   {
     "name": "Kiruna, Kiruna moské",
     "latitude": 67.8489854,
+    "address": "Tuolluvaaravägen 8, 981 41 Kiruna",
     "longitude": 20.3318841
   },
   {
     "name": "Kramfors, Kramfors moské",
-    "latitude": 62.9319502,
-    "longitude": 17.7676299
+    "latitude": 62.930981,
+    "address": "Viktoriagatan 17, 872 35 Kramfors",
+    "longitude": 17.7637626
   },
   {
     "name": "Laholm, Social Kultur Förening i Laholm",
     "latitude": 56.4985355,
+    "address": "Kullsgårdsvägen 29, 312 34 Laholm",
     "longitude": 13.0173913
   },
   {
     "name": "Linköping, Abisko Moské",
     "latitude": 58.4168152,
+    "address": "Norgegatan 3, 582 31 Linköping",
     "longitude": 15.6062089
   },
   {
     "name": "Linköping, Linköping Moské",
     "latitude": 58.4035129,
+    "address": "Hamngatan 49, 582 43 Linköping",
     "longitude": 15.6337156
   },
   {
     "name": "Luleå, Luleå Moské Församling",
-    "latitude": 65.5923807,
-    "longitude": 22.1889847
+    "latitude": 65.592073,
+    "address": "Kronanvägen 1, 974 42 Luleå",
+    "longitude": 22.1899246
   },
   {
     "name": "Lund, Islamisk Kulturen in Lund",
     "latitude": 55.6917657,
+    "address": "Sunnanväg 18H, 222 26 Lund",
     "longitude": 13.1737271
   },
   {
     "name": "Lund, Lund Moské",
     "latitude": 55.6937788,
+    "address": "Vikingavägen 26C, 224 77 Lund",
     "longitude": 13.2398534
   },
   {
     "name": "Malmö, Al-Huda Moskén",
     "latitude": 55.5664558,
+    "address": "Docentgatan 3B, 215 52 Malmö",
     "longitude": 13.019865
   },
   {
     "name": "Malmö, Bosniska Islamiska Föreningen",
     "latitude": 55.5807342,
+    "address": "Ystadvägen 42, 214 45 Malmö",
     "longitude": 13.0167521
   },
   {
     "name": "Malmö, Islamic Center i Malmö - Moskén",
-    "latitude": 55.575056,
-    "longitude": 13.051347
+    "latitude": 55.57468,
+    "address": "Jägersrovägen 90, 212 37 Malmö",
+    "longitude": 13.0520653
   },
   {
     "name": "Malmö, Islamiska Förbundet i Malmö",
-    "latitude": 55.5872247,
-    "longitude": 13.0459425
+    "latitude": 55.5860611,
+    "address": "Adlerfelts väg 4B, 213 73 Malmö",
+    "longitude": 13.0444432
   },
   {
     "name": "Malmö, Skandinaviska WAKF Moské",
     "latitude": 55.5944436,
+    "address": "Danska vägen 26, 212 29 Malmö",
     "longitude": 13.0394215
   },
   {
     "name": "Märsta, Märsta moské",
     "latitude": 59.6279408927345,
+    "address": "Stationsgatan 3B, 195 47 Märsta",
     "longitude": 17.8584903832541
   },
   {
     "name": "Mönsterås, Mönsterås Moské",
     "latitude": 57.0439136,
+    "address": "Kyrkogatan 18, 383 30 Mönsterås",
     "longitude": 16.4460104
   },
   {
     "name": "Norrköping, Norrköpings Islamiska Center",
-    "latitude": 58.5848296,
-    "longitude": 16.1801665
+    "latitude": 58.5843957,
+    "address": "Grundläggaregatan 149, 603 48 Norrköping",
+    "longitude": 16.1791162
   },
   {
     "name": "Nybro, Nybro moské",
     "latitude": 56.7524754293992,
+    "address": "Kungshallsvägen 17, 382 44 Nybro",
     "longitude": 15.9032443429601
   },
   {
     "name": "Nyköping, Nyköpings Moske ( Islamiska Kultur Center )",
     "latitude": 58.7541423,
+    "address": "S:t Annegatan 4, 611 34 Nyköping",
     "longitude": 17.0140572
   },
   {
     "name": "Nynäshamn, Nynäshamn Moské",
-    "latitude": 58.9215898,
-    "longitude": 17.9336072
+    "latitude": 58.9119915,
+    "address": "Backluravägen 31A, 149 43 Nynäshamn",
+    "longitude": 17.9369433
   },
   {
     "name": "Perstorp, Islamiska kultur center",
     "latitude": 56.1368779,
+    "address": "Hantverkaregatan 1, 284 31 Perstorp",
     "longitude": 13.3966574
   },
   {
     "name": "Piteå, Islamiska Föreningen Piteå",
     "latitude": 65.3136784,
+    "address": "Trädgårdsgatan 3B, 941 61 Piteå",
     "longitude": 21.4875203
   },
   {
     "name": "Sigtuna, Islamiska Kultur Förening",
     "latitude": 59.618358,
+    "address": "Vänortsringen 1, 195 30 Märsta",
     "longitude": 17.8503479
   },
   {
     "name": "Skellefteå, Skellefteå Moské",
-    "latitude": 64.751367,
-    "longitude": 20.9552866
+    "latitude": 64.7508671,
+    "address": "Hörnellgatan 13, 931 30 Skellefteå",
+    "longitude": 20.9550712
   },
   {
     "name": "Skövde, Al-Salam Kulturförening",
     "latitude": 58.3889242,
+    "address": "Grenanders gata 5A, 541 35 Skövde",
     "longitude": 13.8637867
   },
   {
     "name": "Stockholm, Alby moské",
     "latitude": 59.24055,
+    "address": "Rotemannavägen 24, 145 57 Norsborg",
     "longitude": 17.8580743
   },
   {
     "name": "Stockholm, Fittja Moské",
     "latitude": 59.2511754,
+    "address": "Tegelbruksvägen 10, 145 53 Norsborg",
     "longitude": 17.8679355
   },
   {
     "name": "Stockholm, Hallunda Moské",
     "latitude": 59.2368867,
+    "address": "Kumla gårdsväg, 145 63 Hallunda",
     "longitude": 17.8268185
   },
   {
     "name": "Stockholm, Husby Islamiska Kultur Center",
     "latitude": 59.4084188,
+    "address": "Edvard Griegsgången 7A, 164 32 Kista",
     "longitude": 17.9275599
   },
   {
     "name": "Stockholm, Islamiska Förbundet i Järva",
     "latitude": 59.3896538,
+    "address": "Hinderstorps gränd 37, 163 72 Spånga",
     "longitude": 17.9297828
   },
   {
     "name": "Stockholm, Islamiska Föreningen i Stockholm",
     "latitude": 59.3365393,
+    "address": "Apelbergsgatan 34, 111 37 Stockholm",
     "longitude": 18.0648087
   },
   {
     "name": "Stockholm, Islamiska kultur föreningen Bro",
     "latitude": 59.5125795,
+    "address": "Fjärilsstigen 25A, 197 35 Bro",
     "longitude": 17.6542327
   },
   {
     "name": "Stockholm, Sollentuna Moské",
     "latitude": 59.4291667,
+    "address": "Oppegårdsstråket 11, 191 60 Sollentuna",
     "longitude": 17.9452778
   },
   {
     "name": "Stockholm, Stockholms Moské",
-    "latitude": 59.3158351,
-    "longitude": 18.0747386
+    "latitude": 59.3158111,
+    "address": "Kapellgränd 10, 116 25 Stockholm",
+    "longitude": 18.0746756
   },
   {
     "name": "Stockholm, Vårby Moské",
     "latitude": 59.2655451,
+    "address": "Bäckgårdsvägen, 127 49 Vårby",
     "longitude": 17.8873739
   },
   {
     "name": "Stockholm, Väsby Moské",
     "latitude": 59.5268682,
+    "address": "Hammarbyvägen 62, 194 36 Upplands Väsby",
     "longitude": 17.917404
   },
   {
     "name": "Sundsvall, Islamiska Kulturcentret Sundsvall",
     "latitude": 62.3859159,
+    "address": "Nybrogatan 37, 852 36 Sundsvall",
     "longitude": 17.3093918
   },
   {
     "name": "Sunne, Sunne moské",
     "latitude": 59.839755,
+    "address": "Långgatan, 686 30 Sunne",
     "longitude": 13.142854
   },
   {
     "name": "Säffle, Somali Sunni Centre Moské",
     "latitude": 59.132947,
+    "address": "Industrigatan 2, 661 32 Säffle",
     "longitude": 12.9108853
   },
   {
     "name": "Söderhamn, Söderhamn moské",
     "latitude": 61.3085346518118,
+    "address": "Tallvägen, 826 34 Söderhamn",
     "longitude": 17.0488914102721
   },
   {
     "name": "Tranås, Ihsan Förening Moské",
     "latitude": 58.0391022,
+    "address": "Ydrevägen 13, 573 35 Tranås",
     "longitude": 14.9880342
   },
   {
     "name": "Trollhättan, Trollhättans Moské",
     "latitude": 58.258748,
+    "address": "Lextorpsvägen 976, 461 65 Trollhättan",
     "longitude": 12.2850935
   },
   {
     "name": "Trelleborg, Bosniska Islamiska Församlingen",
     "latitude": 55.3825343,
+    "address": "Hedvägen, 231 42 Trelleborg",
     "longitude": 13.1436326
   },
   {
     "name": "Trelleborgs, islamiska församling",
-    "latitude": 55.368833,
-    "longitude": 13.1795046
+    "latitude": 55.3688764,
+    "address": "Östra Förstadsgatan 66, 231 32 Trelleborg",
+    "longitude": 13.1784747
   },
   {
     "name": "Uppsala, Uppsala Moskén",
     "latitude": 59.8738868,
+    "address": "Sportfältsvägen 1, 754 19 Uppsala",
     "longitude": 17.6383539
   },
   {
-    "name": "Umeå, Wow-rummet",
-    "latitude": 63.7012275,
-    "longitude": 20.3177125
+    "name": "Umeå, Umeå Moské",
+    "latitude": 63.8276515,
+    "address": "Skolgatan 41, 903 27 Umeå",
+    "longitude": 20.2586425
   },
   {
     "name": "Västerås, Västerås Moské",
     "latitude": 59.6068788,
+    "address": "Stora gatan 88, 724 60 Västerås",
     "longitude": 16.5334354
   },
   {
     "name": "Växjö, Bosnian Moské",
     "latitude": 56.8915972,
+    "address": "Arabygatan 80, 352 46 Växjö",
     "longitude": 14.7826601
   },
   {
     "name": "Växjö, Stiftelsen Växjö Muslimer",
     "latitude": 56.8957049,
+    "address": "Försommarvägen 2, 352 37 Växjö",
     "longitude": 14.7982132
   },
   {
-    "name": "Örebro, Bosnisk Islamiska Församlingen",
+    "name": "Örebro, Bosnisk Islamiska Församlingen",
     "latitude": 59.275321907931,
+    "address": "Karlslundsgatan 81, 703 47 Örebro",
     "longitude": 15.1833515729826
   },
   {
     "name": "Örebro, Örebro moské",
     "latitude": 59.2985103489114,
+    "address": "Epiloggatan 1, 703 70 Örebro",
     "longitude": 15.1975177243011
   },
   {
     "name": "Östersund, Östersunds moské",
-    "latitude": 63.1849771473859,
-    "longitude": 14.644864198891
+    "latitude": 63.1852506,
+    "address": "Infanterigatan 24B, 831 32 Östersund",
+    "longitude": 14.642926
   }
 ]

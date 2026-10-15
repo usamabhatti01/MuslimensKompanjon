@@ -1,5 +1,6 @@
 import '/backend/schema/structs/index.dart';
 import '/custom_header_footer/simple_header/simple_header_widget.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -66,7 +67,8 @@ class _OnBoarding04WidgetState extends State<OnBoarding04Widget> {
                 FlutterFlowTheme.of(context).designToken.spacing.sm),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment:
+                  (FFMainAxisAlignment.spaceBetween).flutterValue,
               children: [
                 Row(
                   mainAxisSize: MainAxisSize.max,
@@ -104,7 +106,8 @@ class _OnBoarding04WidgetState extends State<OnBoarding04Widget> {
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment:
+                            (FFMainAxisAlignment.center).flutterValue,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           ClipRRect(
@@ -319,7 +322,11 @@ class _OnBoarding04WidgetState extends State<OnBoarding04Widget> {
                                     child: BnetidsnotiserWithoutTimeWidget(
                                       label: 'Fajr',
                                       icon: FaIcon(
-                                        FontAwesomeIcons.cloudSun,
+                                        FaIconData(const IconData(
+                                            /* cloudSun */ 0xf6c4,
+                                            fontFamily: 'FontAwesomeSolid',
+                                            fontPackage:
+                                                'font_awesome_flutter')),
                                         color: FlutterFlowTheme.of(context)
                                             .primaryText,
                                         size: 18.0,
@@ -342,7 +349,11 @@ class _OnBoarding04WidgetState extends State<OnBoarding04Widget> {
                                     child: BnetidsnotiserWithoutTimeWidget(
                                       label: 'Dhohr',
                                       icon: FaIcon(
-                                        FontAwesomeIcons.sun,
+                                        FaIconData(const IconData(
+                                            /* sun */ 0xf185,
+                                            fontFamily: 'FontAwesomeRegular',
+                                            fontPackage:
+                                                'font_awesome_flutter')),
                                         color: FlutterFlowTheme.of(context)
                                             .primaryText,
                                         size: 18.0,
@@ -388,7 +399,11 @@ class _OnBoarding04WidgetState extends State<OnBoarding04Widget> {
                                     child: BnetidsnotiserWithoutTimeWidget(
                                       label: 'Maghrib',
                                       icon: FaIcon(
-                                        FontAwesomeIcons.cloudMoon,
+                                        FaIconData(const IconData(
+                                            /* cloudMoon */ 0xf6c3,
+                                            fontFamily: 'FontAwesomeSolid',
+                                            fontPackage:
+                                                'font_awesome_flutter')),
                                         color: FlutterFlowTheme.of(context)
                                             .primaryText,
                                         size: 18.0,
@@ -411,7 +426,11 @@ class _OnBoarding04WidgetState extends State<OnBoarding04Widget> {
                                     child: BnetidsnotiserWithoutTimeWidget(
                                       label: 'Isha',
                                       icon: FaIcon(
-                                        FontAwesomeIcons.moon,
+                                        FaIconData(const IconData(
+                                            /* moon */ 0xf186,
+                                            fontFamily: 'FontAwesomeRegular',
+                                            fontPackage:
+                                                'font_awesome_flutter')),
                                         color: FlutterFlowTheme.of(context)
                                             .primaryText,
                                         size: 18.0,
@@ -468,7 +487,7 @@ class _OnBoarding04WidgetState extends State<OnBoarding04Widget> {
                     safeSetState(() {});
                     await actions.schedulePrayerNotifications();
 
-                    context.pushNamed(HomeWidget.routeName);
+                    context.goNamed(HomeWidget.routeName);
                   },
                   text: 'Aktivera notiser',
                   options: FFButtonOptions(

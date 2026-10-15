@@ -73,7 +73,7 @@ class _AkallanAndDuaWidgetState extends State<AkallanAndDuaWidget> {
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        context.safePop();
+                        context.pushNamed(HomeWidget.routeName);
                       },
                       child: Icon(
                         Icons.chevron_left,

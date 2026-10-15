@@ -18,6 +18,7 @@ class AdhkarHeaderWidget extends StatefulWidget {
     this.audio,
     this.initialValue,
     this.fontType,
+    required this.favt,
   });
 
   final String? pageName;
@@ -26,6 +27,7 @@ class AdhkarHeaderWidget extends StatefulWidget {
   final bool? audio;
   final FontSettingStruct? initialValue;
   final String? fontType;
+  final bool? favt;
 
   @override
   State<AdhkarHeaderWidget> createState() => _AdhkarHeaderWidgetState();
@@ -90,6 +92,44 @@ class _AdhkarHeaderWidgetState extends State<AdhkarHeaderWidget> {
         Row(
           mainAxisSize: MainAxisSize.max,
           children: [
+            if (widget.favt ?? true)
+              Builder(
+                builder: (context) {
+                  if (FFAppState().tasbihFav) {
+                    return InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        FFAppState().tasbihFav = false;
+                        FFAppState().update(() {});
+                      },
+                      child: Icon(
+                        Icons.star,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        size: 24.0,
+                      ),
+                    );
+                  } else {
+                    return InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        FFAppState().tasbihFav = true;
+                        FFAppState().update(() {});
+                      },
+                      child: Icon(
+                        Icons.star_border,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        size: 24.0,
+                      ),
+                    );
+                  }
+                },
+              ),
             if (widget.audio ?? true)
               InkWell(
                 splashColor: Colors.transparent,
@@ -97,9 +137,8 @@ class _AdhkarHeaderWidgetState extends State<AdhkarHeaderWidget> {
                 hoverColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 onTap: () async {
-                  FFAppState().updateAdhkarSettingStruct(
-                    (e) => e..audioDisplay = !e.audioDisplay,
-                  );
+                  FFAppState().allahNameAudio =
+                      !(FFAppState().allahNameAudio ?? true);
                   FFAppState().update(() {});
                 },
                 child: Icon(

@@ -1,3 +1,4 @@
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +59,7 @@ class _AyatHeadingWidgetState extends State<AyatHeadingWidget> {
         padding: EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 12.0, 12.0),
         child: Row(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: (FFMainAxisAlignment.start).flutterValue,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
@@ -96,7 +97,8 @@ class _AyatHeadingWidgetState extends State<AyatHeadingWidget> {
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: (FFCrossAxisAlignment.start).flutterValue,
+                textBaseline: TextBaseline.alphabetic,
                 children: [
                   Text(
                     valueOrDefault<String>(
@@ -150,6 +152,7 @@ class _AyatHeadingWidgetState extends State<AyatHeadingWidget> {
                                 .labelMedium
                                 .fontStyle,
                           ),
+                          color: FlutterFlowTheme.of(context).primaryText,
                           fontSize: 14.0,
                           letterSpacing: 0.0,
                           fontWeight: FontWeight.normal,
@@ -162,7 +165,7 @@ class _AyatHeadingWidgetState extends State<AyatHeadingWidget> {
                 ].divide(SizedBox(height: 5.0)),
               ),
             ),
-          ].divide(SizedBox(width: 10.0)).around(SizedBox(width: 10.0)),
+          ].divide(SizedBox(width: 20.0)),
         ),
       ),
     );

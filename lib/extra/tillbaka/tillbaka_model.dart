@@ -45,5 +45,6 @@ class TillbakaModel extends FlutterFlowModel<TillbakaWidget> {
     if (!output) {
       await action?.call();
     }
+    updatePage(() {});
   }
 }

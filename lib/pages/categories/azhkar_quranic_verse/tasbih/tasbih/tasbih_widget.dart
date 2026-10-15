@@ -95,6 +95,7 @@ class _TasbihWidgetState extends State<TasbihWidget> {
                           audio: false,
                           initialValue: FFAppState().tasbihSetting,
                           fontType: Font.tasbih.name,
+                          favt: true,
                         ),
                       ),
                     ),

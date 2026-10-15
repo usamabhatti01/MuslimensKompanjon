@@ -21,3 +21,4 @@ export '/custom_code/widgets/habit_checklist_bottom_sheet.dart'
     show HabitChecklistBottomSheet;
 export '/custom_code/widgets/nar_hjartat_minns_allah_detail_widget.dart'
     show NarHjartatMinnsAllahDetailWidget;
+export '/custom_code/widgets/juz_card_widget.dart' show JuzCardWidget;

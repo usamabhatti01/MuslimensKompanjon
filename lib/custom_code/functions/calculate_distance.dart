@@ -11,11 +11,22 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/backend/schema/structs/index.dart';
 import '/backend/schema/enums/enums.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 
 String calculateDistance(
-  LatLng currentLocation,
-  LatLng mapLocation,
+  LatLng? currentLocation,
+  LatLng? mapLocation,
 ) {
+  if (currentLocation == null || mapLocation == null) {
+    return '';
+  }
+
+  // If location is default 0,0 (not yet resolved or permission denied), return empty
+  if ((currentLocation.latitude == 0 && currentLocation.longitude == 0) ||
+      (mapLocation.latitude == 0 && mapLocation.longitude == 0)) {
+    return '';
+  }
+
   const double p = 0.017453292519943295; // math.pi / 180
   final double lat1 = currentLocation.latitude;
   final double lon1 = currentLocation.longitude;
@@ -29,7 +40,8 @@ String calculateDistance(
           (1 - math.cos((lon2 - lon1) * p)) /
           2;
 
-  final double distanceInMeters = 12742000 * math.asin(math.sqrt(a));
+  final double distanceInMeters =
+      12742000 * math.asin(math.sqrt(math.max(0.0, a)));
 
   return distanceInMeters < 1000
       ? '${distanceInMeters.toStringAsFixed(0)} m'

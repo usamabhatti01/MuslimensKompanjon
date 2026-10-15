@@ -1,12 +1,13 @@
 // Automatic FlutterFlow imports
 import '/backend/schema/structs/index.dart';
 import '/backend/schema/enums/enums.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/widgets/index.dart'; // Imports other custom widgets
 import '/custom_code/actions/index.dart'; // Imports custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
@@ -19,6 +20,47 @@ import 'package:hijri/hijri_calendar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '/custom_code/actions/habit_tracker_service.dart';
 import '/custom_code/actions/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '/pages/setting_page/bottom_sheet_icon/bottom_sheet_icon_widget.dart';
+
+String sanitizeJsonString(String raw) {
+  var text = raw.trim();
+  if (text.startsWith('```json')) {
+    text = text.substring(7);
+  } else if (text.startsWith('```')) {
+    text = text.substring(3);
+  }
+  text = text.replaceAll(RegExp(r'```[\s\S]*$'), '');
+  text = text.replaceAll(RegExp(r'\[cite:[\s\S]*?\]'), '');
+  return text.trim();
+}
+
+Future<String?> fetchLiveJsonFromUrl(List<String> urls) async {
+  for (final url in urls) {
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'User-Agent':
+              'Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148',
+          'Accept': 'application/json; charset=utf-8',
+        },
+      ).timeout(const Duration(seconds: 15));
+      if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
+        // Explicitly decode as UTF-8 so characters like emojis (🌙, 🤲, etc.) and Swedish letters (å, ä, ö)
+        // are never corrupted into Latin-1 mojibake (like ðŸ™)
+        final rawDecoded =
+            utf8.decode(response.bodyBytes, allowMalformed: true);
+        final downloadedContent = sanitizeJsonString(rawDecoded);
+        if (downloadedContent.startsWith('[') ||
+            downloadedContent.startsWith('{')) {
+          return downloadedContent;
+        }
+      }
+    } catch (_) {}
+  }
+  return null;
+}
 
 Future<String?> loadJsonFromUrlOrCache({
   required String fileName,
@@ -28,18 +70,29 @@ Future<String?> loadJsonFromUrlOrCache({
   // 1. Download from online URL first to get latest data
   for (final url in urls) {
     try {
-      final response =
-          await http.get(Uri.parse(url)).timeout(const Duration(seconds: 5));
-      if (response.statusCode == 200 && response.body.isNotEmpty) {
-        final downloadedContent = response.body;
-
-        // Save to local device storage for future offline access
-        try {
-          final directory = await getApplicationDocumentsDirectory();
-          final localFile = File('${directory.path}/$fileName');
-          await localFile.writeAsString(downloadedContent);
-        } catch (_) {}
-        return downloadedContent;
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'User-Agent':
+              'Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148',
+          'Accept': 'application/json; charset=utf-8',
+        },
+      ).timeout(const Duration(seconds: 15));
+      if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
+        final rawDecoded =
+            utf8.decode(response.bodyBytes, allowMalformed: true);
+        final downloadedContent = sanitizeJsonString(rawDecoded);
+        // Ensure downloaded content is valid JSON (not an HTML error/404 page)
+        if (downloadedContent.startsWith('[') ||
+            downloadedContent.startsWith('{')) {
+          // Save to local device storage for future offline access
+          try {
+            final directory = await getApplicationDocumentsDirectory();
+            final localFile = File('${directory.path}/$fileName');
+            await localFile.writeAsString(downloadedContent);
+          } catch (_) {}
+          return downloadedContent;
+        }
       }
     } catch (_) {}
   }
@@ -49,8 +102,8 @@ Future<String?> loadJsonFromUrlOrCache({
     final directory = await getApplicationDocumentsDirectory();
     final localFile = File('${directory.path}/$fileName');
     if (await localFile.exists()) {
-      final content = await localFile.readAsString();
-      if (content.isNotEmpty) {
+      final content = sanitizeJsonString(await localFile.readAsString());
+      if (content.startsWith('[') || content.startsWith('{')) {
         return content;
       }
     }
@@ -59,8 +112,8 @@ Future<String?> loadJsonFromUrlOrCache({
   // 3. Fallback to bundled asset
   for (final assetPath in assetPaths) {
     try {
-      final content = await rootBundle.loadString(assetPath);
-      if (content.isNotEmpty) {
+      final content = (await rootBundle.loadString(assetPath)).trim();
+      if (content.startsWith('[') || content.startsWith('{')) {
         return content;
       }
     } catch (_) {}
@@ -122,11 +175,50 @@ class IslamicEvent {
         json['title'] ??
         '';
 
-    final String subtitleStr = (isSwedish
+    String rawSubtitle = (isSwedish
             ? (json['subtitle_sv'] ?? json['subtitle'])
             : (json['subtitle_en'] ?? json['subtitle'])) ??
         json['subtitle'] ??
         '';
+    if (rawSubtitle.isEmpty) {
+      final t = titleStr.toLowerCase();
+      if (t.contains('nyår') || t.contains('hijra')) {
+        rawSubtitle = isSwedish
+            ? 'Starten på det nya islamiska året'
+            : 'Start of the Islamic New Year';
+      } else if (t.contains('ashura')) {
+        rawSubtitle = isSwedish
+            ? 'Rekommenderad fasta. Historisk räddningsdag'
+            : 'Recommended fasting day';
+      } else if (t.contains('miraj') || t.contains('nattresa')) {
+        rawSubtitle = isSwedish
+            ? 'Profetens nattliga resa och himmelsfärd'
+            : 'The Night Journey and Ascension';
+      } else if (t.contains('ramadan') &&
+          (t.contains('första') || t.contains('fastan'))) {
+        rawSubtitle = isSwedish
+            ? 'Den heliga fastemånaden inleds'
+            : 'First day of fasting month';
+      } else if (t.contains('eid al-fitr') || t.contains('ramadanfest')) {
+        rawSubtitle = isSwedish
+            ? 'Fastebrytelsens fest'
+            : 'Celebration marking the end of Ramadan';
+      } else if ((t.contains('dhu al-hijjah') || t.contains('dhul-hijjah')) &&
+          t.contains('första')) {
+        rawSubtitle = isSwedish
+            ? 'De tio välsignade dagarna inleds'
+            : 'First of the ten blessed days';
+      } else if (t.contains('arafa')) {
+        rawSubtitle = isSwedish
+            ? 'Hajjens höjdpunkt. Rekommenderad fasta'
+            : 'Peak of Hajj. Recommended fast';
+      } else if (t.contains('eid al-adha') || t.contains('offerfest')) {
+        rawSubtitle = isSwedish
+            ? 'Offerhögtiden till minne av profeten Ibrahim'
+            : 'Feast of Sacrifice';
+      }
+    }
+    final String subtitleStr = rawSubtitle;
 
     final int month = castToType<int>(json['hijriMonth'] ??
             json['Hijri_Month_No'] ??
@@ -151,6 +243,19 @@ class IslamicEvent {
             '';
     final String finalHijriDate =
         rawHijriDate.isNotEmpty ? rawHijriDate : fallbackHijriDate;
+    final String rawDesc =
+        (isSwedish ? json['description_sv'] : json['description_en']) ??
+            json['Description'] ??
+            json['description'] ??
+            '';
+    final String finalDesc = rawDesc;
+
+    // Use actual Icon directly from live JSON link (e.g. 🌙, 🤲, ✨, 🎉, 🕋, ⛰️, 🐑)
+    final String icon = (json['Icon'] ?? json['iconType'] ?? json['icon'] ?? '')
+        .toString()
+        .trim();
+
+    final bool isMajor = (json['isMajorHoliday'] as bool?) ?? true;
 
     return IslamicEvent(
       title: titleStr,
@@ -158,18 +263,15 @@ class IslamicEvent {
       hijriMonth: month,
       hijriDay: day,
       hijriYear: year,
-      description:
-          (isSwedish ? json['description_sv'] : json['description_en']) ??
-              json['description'] ??
-              '',
-      iconType: json['iconType'] ?? 'moon',
+      description: finalDesc,
+      iconType: icon,
       hijriDate: finalHijriDate,
       gregorianDate:
           (isSwedish ? json['gregorianDate_sv'] : json['gregorianDate_en']) ??
               json['gregorianDate'] ??
               json['Gregorian_Date'] ??
               '',
-      isMajorHoliday: json['isMajorHoliday'] as bool? ?? false,
+      isMajorHoliday: isMajor,
     );
   }
 }
@@ -183,6 +285,53 @@ class EventOccurrence {
     required this.gregorianDate,
     required this.hijriDate,
   });
+}
+
+Widget _buildEventIconWidget(
+  String iconType, {
+  String title = '',
+  double size = 20.0,
+  Color? color,
+}) {
+  final clean = iconType.trim();
+  if (clean.isNotEmpty) {
+    return Text(
+      clean,
+      style: TextStyle(
+        fontSize: size,
+        height: 1.1,
+      ),
+      textAlign: TextAlign.center,
+    );
+  }
+  return Icon(
+    Icons.nightlight_round,
+    color: color,
+    size: size,
+  );
+}
+
+IconData _getEventIconData(String iconType) {
+  switch (iconType) {
+    case '🤲':
+      return Icons.front_hand_rounded;
+    case '✨':
+      return Icons.auto_awesome_rounded;
+    case '🐑':
+      return Icons.pets_rounded;
+    case '⛰️':
+    case '⛰':
+      return Icons.landscape_rounded;
+    case '🕋':
+      return Icons.square_rounded;
+    case '🎉':
+      return Icons.celebration_rounded;
+    case '📖':
+      return Icons.menu_book_rounded;
+    case '🌙':
+    default:
+      return Icons.nightlight_round;
+  }
 }
 
 class _IslamicCalenderState extends State<IslamicCalender> {
@@ -203,236 +352,117 @@ class _IslamicCalenderState extends State<IslamicCalender> {
   List<Map<String, dynamic>> _rawIslamicEvents = [];
   bool get _isSwedish => Localizations.localeOf(context).languageCode == 'sv';
 
+  int? _cachedPrayerYear;
+  int? _selectedUpcomingYear;
+
+  Future<void> _loadYearFromExistingPrayerData() async {
+    try {
+      final String city = FFAppState().user.city.isNotEmpty
+          ? FFAppState().user.city
+          : 'Alingsås';
+      final jsonString = await loadPrayerJson(city, DateTime.now().year);
+      final decoded = json.decode(jsonString);
+      if (decoded is Map && decoded.containsKey('year')) {
+        final y = castToType<int>(decoded['year']);
+        if (y != null && mounted) {
+          setState(() {
+            _cachedPrayerYear = y;
+          });
+        }
+      }
+    } catch (_) {}
+  }
+
+  List<int> get availableYears {
+    final Set<int> years = {};
+
+    // 1. From existing prayer data ('year': 2026 property directly)
+    if (_cachedPrayerYear != null) {
+      years.add(_cachedPrayerYear!);
+    }
+
+    // 2. From raw Islamic events / holidays JSON (only years that actually have events)
+    for (var ev in _rawIslamicEvents) {
+      final g = (ev['Gregorian_Date'] ?? ev['gregorianDate']) as String?;
+      if (g != null && g.length >= 4) {
+        final y = int.tryParse(g.substring(0, 4));
+        if (y != null) years.add(y);
+      }
+    }
+
+    // Fallback if still loading cache
+    if (years.isEmpty) {
+      years.add(currentDate.year);
+    }
+
+    final list = years.toList()..sort();
+    return list;
+  }
+
+  Future<void> _loadHolidayNotifications() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final keys = prefs.getKeys().where((k) => k.startsWith('holiday_notif_'));
+      final Map<String, bool> notifs = {};
+      for (var k in keys) {
+        final title = k.replaceFirst('holiday_notif_', '');
+        notifs[title] = prefs.getBool(k) ?? false;
+      }
+      if (mounted) {
+        setState(() {
+          activeNotifications = notifs;
+        });
+      }
+    } catch (_) {}
+  }
+
+  Future<void> _toggleEventNotification(IslamicEvent event,
+      [DateTime? date]) async {
+    try {
+      final current = activeNotifications[event.title] ?? false;
+      final newVal = !current;
+      setState(() {
+        activeNotifications[event.title] = newVal;
+      });
+
+      await scheduleEventNotifications(
+        event.title,
+        date,
+        newVal,
+        event.hijriDate,
+      );
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              newVal
+                  ? 'Påminnelse aktiverad för ${event.title}'
+                  : 'Påminnelse inaktiverad för ${event.title}',
+              style: GoogleFonts.manrope(),
+            ),
+            duration: const Duration(seconds: 2),
+            backgroundColor: newVal
+                ? FlutterFlowTheme.of(context).primary
+                : Colors.grey.shade700,
+          ),
+        );
+      }
+    } catch (_) {}
+  }
+
   List<IslamicEvent> get islamicEvents {
     final sv = _isSwedish;
     if (_rawIslamicEvents.isNotEmpty) {
       return _rawIslamicEvents
-          .map((json) => IslamicEvent.fromJson(json, sv,
-              castToType<int>(json['hijriYear'] ?? json['Hijri_Year']) ?? 1448))
+          .map((json) => IslamicEvent.fromJson(
+              json,
+              sv,
+              castToType<int>(json['hijriYear'] ?? json['Hijri_Year']) ??
+                  HijriCalendar.now().hYear))
           .toList();
     }
-    return _getDefaultIslamicEvents(sv);
-  }
-
-  List<IslamicEvent> _getDefaultIslamicEvents(bool sv) {
-    return [
-      IslamicEvent(
-        title: sv ? "Islamiskt nyår (Al-Hijra)" : "Islamic New Year",
-        subtitle: sv
-            ? "Början på det nya islamiska året"
-            : "Start of the Islamic New Year",
-        hijriMonth: 1,
-        hijriDay: 1,
-        hijriYear: 0,
-        description: sv
-            ? "Början på det nya islamiska året. Muslimer reflekterar över tidens gång och emigrationen (Hijrah) som profeten Muhammed (saw) gjorde från Mecka till Medina."
-            : "Beginning of the new Islamic year. Muslims reflect on the passage of time and the emigration (Hijrah) of Prophet Muhammad (pbuh) from Mecca to Medina.",
-        iconType: "moon",
-        isMajorHoliday: false,
-        hijriDate: "1 Muharram",
-        gregorianDate: "",
-      ),
-      IslamicEvent(
-        title: sv ? "Ashura-dagen" : "Day of Ashura",
-        subtitle: sv
-            ? "Rekommenderad fasta. Historisk räddningsdag"
-            : "Recommended fasting day",
-        hijriMonth: 1,
-        hijriDay: 10,
-        hijriYear: 0,
-        description: sv
-            ? "Ashura-dagen firas till minne av att Allah räddade profeten Musa (Moses) och Israels barn från Farao genom att klyva havet. Det rekommenderas starkt att fasta denna dag."
-            : "Day of Ashura marks the day Allah saved Prophet Musa (Moses) and the Israelites from Pharaoh. Fasting on this day is strongly recommended.",
-        iconType: "moon",
-        isMajorHoliday: true,
-        hijriDate: "10 Muharram",
-        gregorianDate: "",
-      ),
-      IslamicEvent(
-        title: sv
-            ? "Profetens födelsedag (Mawlid)"
-            : "Prophet's Birthday (Mawlid)",
-        subtitle: sv
-            ? "Födelsen av profeten Muhammed (saw)"
-            : "Birth of Prophet Muhammad (pbuh)",
-        hijriMonth: 3,
-        hijriDay: 12,
-        hijriYear: 0,
-        description: sv
-            ? "Mawlid an-Nabi markerar födelsen av profeten Muhammed (saw), Allahs sista sändebud. En tid för reflektion över hans liv och läror."
-            : "Mawlid an-Nabi marks the birth of Prophet Muhammad (pbuh), the final messenger of Allah.",
-        iconType: "mosque",
-        isMajorHoliday: false,
-        hijriDate: "12 Rabi' al-Awwal",
-        gregorianDate: "",
-      ),
-      IslamicEvent(
-        title: sv ? "Isra' och Mi'raj" : "Isra and Mi'raj",
-        subtitle: sv
-            ? "Profetens nattliga resa och himmelsfärd"
-            : "The Night Journey and Ascension",
-        hijriMonth: 7,
-        hijriDay: 27,
-        hijriYear: 0,
-        description: sv
-            ? "Den mirakulösa nattliga resan från Mecka till Jerusalem och uppstigningen till himlarna, där de fem dagliga bönerna instiftades."
-            : "The miraculous night journey from Mecca to Jerusalem and ascension to the heavens, where the five daily prayers were ordained.",
-        iconType: "moon",
-        isMajorHoliday: false,
-        hijriDate: "27 Rajab",
-        gregorianDate: "",
-      ),
-      IslamicEvent(
-        title: sv
-            ? "Laylat al-Bara'at (Nisf Sha'ban)"
-            : "Mid-Sha'ban (Laylat al-Bara'at)",
-        subtitle: sv
-            ? "Förlåtelsens och barmhärtighetens natt"
-            : "Night of Forgiveness",
-        hijriMonth: 8,
-        hijriDay: 15,
-        hijriYear: 0,
-        description: sv
-            ? "Förlåtelsens natt mitt i Sha'ban då muslimer ber om förlåtelse för synder och förbereder sig inför Ramadan."
-            : "The Night of Forgiveness in the middle of Sha'ban where Muslims seek forgiveness and prepare for Ramadan.",
-        iconType: "moon",
-        isMajorHoliday: false,
-        hijriDate: "15 Sha'ban",
-        gregorianDate: "",
-      ),
-      IslamicEvent(
-        title: sv ? "Första dagen i Ramadan (Fasta)" : "First Day of Ramadan",
-        subtitle: sv
-            ? "Den heliga fastemånaden inleds"
-            : "First day of fasting month",
-        hijriMonth: 9,
-        hijriDay: 1,
-        hijriYear: 0,
-        description: sv
-            ? "Den heliga månaden Ramadan inleds då muslimer världen över fastar från gryning till solnedgång under en månad av bön och andlighet."
-            : "The holy month of Ramadan begins. Muslims worldwide observe daily fasting from dawn to sunset.",
-        iconType: "moon",
-        isMajorHoliday: true,
-        hijriDate: "1 Ramadan",
-        gregorianDate: "",
-      ),
-      IslamicEvent(
-        title: sv
-            ? "Laylat al-Qadr (Allmaktens natt)"
-            : "Laylat al-Qadr (Night of Power)",
-        subtitle: sv
-            ? "Koranens uppenbarelse. Bättre än tusen månader"
-            : "Better than a thousand months",
-        hijriMonth: 9,
-        hijriDay: 27,
-        hijriYear: 0,
-        description: sv
-            ? "Allmaktens natt då Koranen först uppenbarades. Denna natt är bättre än tusen månader i andlig belöning och välsignelse."
-            : "The Night of Power when the first verses of the Quran were revealed to Prophet Muhammad (pbuh). Better than a thousand months.",
-        iconType: "moon",
-        isMajorHoliday: true,
-        hijriDate: "27 Ramadan",
-        gregorianDate: "",
-      ),
-      IslamicEvent(
-        title: sv ? "Eid al-Fitr (festival)" : "Eid al-Fitr (festival)",
-        subtitle: sv
-            ? "Firandet av fastemånadens slut"
-            : "Celebration marking the end of Ramadan",
-        hijriMonth: 10,
-        hijriDay: 1,
-        hijriYear: 0,
-        description: sv
-            ? "Eid al-Fitr markerar slutet på Ramadan. En glädjefylld högtid som firas med gemensam Eid-bön, välgörenhet (Zakat al-Fitr) och festmåltider med nära och kära."
-            : "Eid al-Fitr marks the joyous completion of Ramadan, celebrated with morning prayers, charity, family gatherings, and feasts.",
-        iconType: "mosque",
-        isMajorHoliday: true,
-        hijriDate: "1 Shawwal",
-        gregorianDate: "",
-      ),
-      IslamicEvent(
-        title: sv ? "Början av Dhu al-Hijjah" : "Start of Dhu al-Hijjah",
-        subtitle: sv
-            ? "De tio välsignade dagarna inleds"
-            : "First of the ten blessed days",
-        hijriMonth: 12,
-        hijriDay: 1,
-        hijriYear: 0,
-        description: sv
-            ? "Början på pilgrimsfärdsmånaden Dhu al-Hijjah. De första tio dagarna är de mest älskade dagarna hos Allah för goda gärningar."
-            : "The first ten days of Dhu al-Hijjah are considered the best and most beloved days of the year for righteous deeds.",
-        iconType: "kaaba",
-        isMajorHoliday: false,
-        hijriDate: "1 Dhu al-Hijjah",
-        gregorianDate: "",
-      ),
-      IslamicEvent(
-        title: sv ? "Hajj-pilgrimsfärd börjar" : "Hajj Pilgrimage Begins",
-        subtitle: sv
-            ? "Pilgrimerna reser till Mina"
-            : "Pilgrims travel to Mina (Yawm at-Tarwiyah)",
-        hijriMonth: 12,
-        hijriDay: 8,
-        hijriYear: 0,
-        description: sv
-            ? "Den årliga pilgrimsfärden Hajj börjar i Mecka. Pilgrimerna beger sig till Mina för att förbereda sig inför Arafat."
-            : "The annual Hajj pilgrimage begins in Mecca as pilgrims gather in Mina.",
-        iconType: "kaaba",
-        isMajorHoliday: false,
-        hijriDate: "8 Dhu al-Hijjah",
-        gregorianDate: "",
-      ),
-      IslamicEvent(
-        title: sv ? "Arafah-dagen (Fasta)" : "Day of Arafah (Fasting)",
-        subtitle: sv
-            ? "Hajjens höjdpunkt. Rekommenderad fasta"
-            : "Peak of Hajj. Recommended fast",
-        hijriMonth: 12,
-        hijriDay: 9,
-        hijriYear: 0,
-        description: sv
-            ? "Arafah-dagen är den viktigaste dagen under Hajj. För de som inte är på Hajj är fasta denna dag starkt rekommenderad och utplånar två års synder."
-            : "The Day of Arafah is the pinnacle of Hajj. Fasting this day is highly virtuous and expiates sins of previous and upcoming year.",
-        iconType: "moon",
-        isMajorHoliday: true,
-        hijriDate: "9 Dhu al-Hijjah",
-        gregorianDate: "",
-      ),
-      IslamicEvent(
-        title: sv ? "Eid al-Adha (festival)" : "Eid al-Adha (festival)",
-        subtitle: sv
-            ? "Offerhögtiden till minne av profeten Ibrahim"
-            : "Feast of Sacrifice",
-        hijriMonth: 12,
-        hijriDay: 10,
-        hijriYear: 0,
-        description: sv
-            ? "Offerhögtiden Eid al-Adha firas till minne av profeten Ibrahims hängivenhet till Allah. Muslimer samlas för Eid-bön, offrar ett djur och delar köttet med behövande."
-            : "Eid al-Adha honors the willingness of Prophet Ibrahim to sacrifice his son in obedience to God. Celebrated with Eid prayer and sharing food with family and needy.",
-        iconType: "mosque",
-        isMajorHoliday: true,
-        hijriDate: "10 Dhu al-Hijjah",
-        gregorianDate: "",
-      ),
-      IslamicEvent(
-        title: sv
-            ? "Tashreeq-dagarna (Eid al-Adha)"
-            : "Days of Tashreeq (Eid al-Adha)",
-        subtitle: sv
-            ? "Dagar av tacksägelse, takbeer och gemenskap"
-            : "Days of takbeer and celebration",
-        hijriMonth: 12,
-        hijriDay: 11,
-        hijriYear: 0,
-        description: sv
-            ? "Dagarna 11, 12 och 13 i Dhu al-Hijjah fortsätter firandet av Eid al-Adha med takbeerat, måltider och tacksamhet till Allah."
-            : "Days 11, 12, and 13 of Dhu al-Hijjah continue the celebrations of Eid al-Adha with takbeer and remembrance of Allah.",
-        iconType: "mosque",
-        isMajorHoliday: false,
-        hijriDate: "11 Dhu al-Hijjah",
-        gregorianDate: "",
-      ),
-    ];
+    return [];
   }
 
   @override
@@ -441,6 +471,8 @@ class _IslamicCalenderState extends State<IslamicCalender> {
     _habitService.init().then((_) {
       if (mounted) setState(() {});
     });
+    _loadHolidayNotifications();
+    _loadYearFromExistingPrayerData();
     final now = DateTime.now();
     if (now.year == 2026 || now.year == 2027) {
       currentDate = DateTime(now.year, now.month, 1);
@@ -457,22 +489,21 @@ class _IslamicCalenderState extends State<IslamicCalender> {
   // =========================================================================
 
   Future<void> loadAllCalendarData() async {
-    if (hijriDateCache.isNotEmpty) {
+    if (hijriDateCache.isNotEmpty && _rawIslamicEvents.isNotEmpty) {
       setState(() => isLoading = false);
       return;
     }
     setState(() => isLoading = true);
     try {
       HijriCalendar.setLocal("en");
-      final int currentHijriYear = HijriCalendar.now().hYear;
-
+      final int prayerYear = _cachedPrayerYear ?? currentDate.year;
+      final int startH =
+          HijriCalendar.fromDate(DateTime(prayerYear, 1, 1)).hYear;
+      final int endH =
+          HijriCalendar.fromDate(DateTime(prayerYear + 2, 12, 31)).hYear;
       final List<int> candidateYears = [
-        currentHijriYear - 1,
-        currentHijriYear,
-        currentHijriYear + 1,
-        1447,
-        1448,
-      ].toSet().toList();
+        for (int y = startH; y <= endH; y++) y,
+      ];
 
       Future<int?> loadYear(int y) async {
         final String fileName = 'Islamic_dates_$y.json';
@@ -505,55 +536,61 @@ class _IslamicCalenderState extends State<IslamicCalender> {
         }
       }
 
-      final List<int?> loadedYears = await Future.wait(
-        candidateYears.map((y) => loadYear(y)),
-      );
-      final List<int> yearsToLoad = loadedYears.whereType<int>().toList()
-        ..sort();
+      print(
+          "📅 [Kalender] Loading calendar & holiday data for candidate years: $candidateYears");
 
-      if (yearsToLoad.isEmpty) {
-        await loadYear(1447);
-        await loadYear(1448);
-        yearsToLoad.addAll([1447, 1448]);
-      }
+      final List<Future<dynamic>> parallelTasks = [
+        Future.wait(candidateYears.map((y) => loadYear(y))),
+        Future.wait(candidateYears.map((y) async {
+          final List<String> urls = [
+            '${FileConstants.islamicHolidaysUrlPrefix}$y.json',
+            'https://ifis.se/mkprod/data/Islamic_holidays_$y.json',
+          ];
+          try {
+            // Delete any existing local device cache file so we always get fresh live data
+            try {
+              final directory = await getApplicationDocumentsDirectory();
+              final localFile =
+                  File('${directory.path}/Islamic-holiday_$y.json');
+              if (await localFile.exists()) {
+                await localFile.delete();
+              }
+            } catch (_) {}
 
-      final List<Future<List<dynamic>>> holidayTasks =
-          yearsToLoad.map((y) async {
-        final String fileName = 'Islamic-holiday_$y.json';
-        final List<String> urls = [
-          '${FileConstants.islamicHolidaysUrlPrefix}$y.json',
-          'https://ifis.se/mkprod/data/Islamic_holidays_$y.json',
-        ];
-        final List<String> assetPaths = [
-          'assets/jsons/Islamic-holiday_$y.json',
-        ];
-        try {
-          final String? holidaysJsonString = await loadJsonFromUrlOrCache(
-            fileName: fileName,
-            urls: urls,
-            assetPaths: assetPaths,
-          );
-          if (holidaysJsonString == null) return [];
-
-          final List<dynamic> holidaysData = json.decode(holidaysJsonString);
-          for (var item in holidaysData) {
-            if (item is Map) {
-              item['hijriYear'] = y;
+            final String? holidaysJsonString = await fetchLiveJsonFromUrl(urls);
+            if (holidaysJsonString == null) {
+              print(
+                  "📅 [Kalender] No holiday data returned from live link for year $y");
+              return [];
             }
-          }
-          return holidaysData;
-        } catch (_) {
-          return [];
-        }
-      }).toList();
 
+            final List<dynamic> holidaysData =
+                json.decode(sanitizeJsonString(holidaysJsonString));
+            print(
+                "📅 [Kalender] Successfully fetched ${holidaysData.length} holidays for year $y from live link");
+            for (var item in holidaysData) {
+              if (item is Map) {
+                item['hijriYear'] = y;
+              }
+            }
+            return holidaysData;
+          } catch (e) {
+            print("📅 [Kalender] Error loading holidays for year $y: $e");
+            return [];
+          }
+        })),
+      ];
+
+      final results = await Future.wait(parallelTasks);
       final List<List<dynamic>> holidaysResults =
-          await Future.wait(holidayTasks);
+          (results[1] as List).cast<List<dynamic>>();
       final List<dynamic> allHolidays =
           holidaysResults.expand((x) => x).toList();
 
       _rawIslamicEvents =
           allHolidays.map((e) => Map<String, dynamic>.from(e as Map)).toList();
+      print(
+          "📅 [Kalender] Total raw Islamic events loaded: ${_rawIslamicEvents.length}");
     } catch (e) {
       print("Error loading Hijri calendar or holidays data: $e");
     } finally {
@@ -564,7 +601,7 @@ class _IslamicCalenderState extends State<IslamicCalender> {
   }
 
   Future<void> loadCalendarDataForYear(int year) async {
-    if (hijriDateCache.isNotEmpty) {
+    if (hijriDateCache.isNotEmpty && _rawIslamicEvents.isNotEmpty) {
       if (mounted) setState(() => isLoading = false);
       return;
     }
@@ -680,7 +717,9 @@ class _IslamicCalenderState extends State<IslamicCalender> {
     if (isLoading) return '...';
     final middleDay = DateTime(currentDate.year, currentDate.month, 15);
     final hj = getHijriDate(middleDay);
-    final year = hj['Hijri_Year'] ?? hj['HijriYear'] ?? 1448;
+    final year = hj['Hijri_Year'] ??
+        hj['HijriYear'] ??
+        HijriCalendar.fromDate(middleDay).hYear;
     final name =
         hj['Hijri_Month_Name'] ?? hj['HijriMonthName'] ?? 'Rabi al-Awwal';
     return '${_mapHijriMonthToSwedish(name.toString())} $year';
@@ -763,56 +802,114 @@ class _IslamicCalenderState extends State<IslamicCalender> {
     return list;
   }
 
+  IslamicEvent? _getEventForDate(DateTime date) {
+    if (isLoading) return null;
+    final hj = getHijriDate(date);
+    final int? hjYear = castToType<int>(hj['Hijri_Year'] ?? hj['HijriYear']);
+    final int? hjMonth =
+        castToType<int>(hj['Hijri_Month_No'] ?? hj['HijriMonthNo']);
+    final int? hjDay = castToType<int>(hj['Hijri_Day'] ?? hj['HijriDay']);
+    if (hjMonth == null || hjDay == null) return null;
+    final dateStr = DateFormat('yyyy-MM-dd').format(date);
+    for (var e in islamicEvents) {
+      if (e.gregorianDate.isNotEmpty && e.gregorianDate.startsWith(dateStr)) {
+        return e;
+      }
+      if ((e.hijriYear == 0 || hjYear == null || e.hijriYear == hjYear) &&
+          e.hijriMonth == hjMonth &&
+          e.hijriDay == hjDay) {
+        return e;
+      }
+    }
+    return null;
+  }
+
+  bool _hasMajorHoliday(DateTime date) {
+    final ev = _getEventForDate(date);
+    return ev != null && ev.isMajorHoliday;
+  }
+
   List<EventOccurrence> getEventsForYear(int year) {
     if (isLoading) return [];
     List<EventOccurrence> list = [];
-    final int hStart = HijriCalendar.fromDate(DateTime(year, 1, 1)).hYear;
-    final int hEnd = HijriCalendar.fromDate(DateTime(year, 12, 31)).hYear;
+    final Set<String> seen = {};
 
     for (var ev in islamicEvents) {
-      for (int hy = hStart - 1; hy <= hEnd + 1; hy++) {
-        if (ev.hijriYear != 0 && ev.hijriYear != hy) continue;
-        try {
-          DateTime? gregDate;
-          for (final entry in hijriDateCache.values) {
-            final g = entry['Gregorian_Date'] as String?;
-            if (g == null || !g.startsWith(year.toString())) continue;
-            final eYear =
-                castToType<int>(entry['Hijri_Year'] ?? entry['HijriYear']);
-            final eMonth = castToType<int>(
-                entry['Hijri_Month_No'] ?? entry['HijriMonthNo']);
-            final eDay =
-                castToType<int>(entry['Hijri_Day'] ?? entry['HijriDay']);
-            if (eYear == hy && eMonth == ev.hijriMonth && eDay == ev.hijriDay) {
-              gregDate = DateTime.tryParse(g);
+      DateTime? gregDate;
+      // 1. Direct Gregorian date from file/network event
+      if (ev.gregorianDate.isNotEmpty) {
+        final parsed = DateTime.tryParse(ev.gregorianDate);
+        if (parsed != null && parsed.year == year) {
+          gregDate = parsed;
+        }
+      }
+
+      // 2. Lookup in hijriDateCache
+      if (gregDate == null) {
+        for (final entry in hijriDateCache.values) {
+          final g = entry['Gregorian_Date'] as String?;
+          if (g == null || !g.startsWith(year.toString())) continue;
+          final eYear =
+              castToType<int>(entry['Hijri_Year'] ?? entry['HijriYear']);
+          final eMonth =
+              castToType<int>(entry['Hijri_Month_No'] ?? entry['HijriMonthNo']);
+          final eDay = castToType<int>(entry['Hijri_Day'] ?? entry['HijriDay']);
+          if ((ev.hijriYear == 0 || eYear == null || eYear == ev.hijriYear) &&
+              eMonth == ev.hijriMonth &&
+              eDay == ev.hijriDay) {
+            gregDate = DateTime.tryParse(g);
+            break;
+          }
+        }
+      }
+
+      // 3. Fallback to HijriCalendar conversion
+      if (gregDate == null) {
+        final int hStart = HijriCalendar.fromDate(DateTime(year, 1, 1)).hYear;
+        final int hEnd = HijriCalendar.fromDate(DateTime(year, 12, 31)).hYear;
+        for (int hy = hStart - 1; hy <= hEnd + 1; hy++) {
+          if (ev.hijriYear != 0 && ev.hijriYear != hy) continue;
+          try {
+            final dt = HijriCalendar()
+                .hijriToGregorian(hy, ev.hijriMonth, ev.hijriDay);
+            if (dt.year == year) {
+              gregDate = dt;
               break;
             }
-          }
-          gregDate ??=
-              HijriCalendar().hijriToGregorian(hy, ev.hijriMonth, ev.hijriDay);
-          if (gregDate.year == year) {
-            final hj = getHijriDate(gregDate);
-            final resolvedEvent = IslamicEvent(
-              title: ev.title,
-              subtitle: ev.subtitle,
-              hijriMonth: ev.hijriMonth,
-              hijriDay: ev.hijriDay,
-              hijriYear: hy,
-              description: ev.description,
-              iconType: ev.iconType,
-              hijriDate:
-                  '${ev.hijriDay} ${_mapHijriMonthToSwedish(_getHijriMonthNameStandard(ev.hijriMonth))} $hy',
-              gregorianDate:
-                  '${_getWeekdayAbbrSwedish(gregDate.weekday)}, ${gregDate.day} ${_getGregorianMonthNameSwedish(gregDate.month)}',
-              isMajorHoliday: ev.isMajorHoliday,
-            );
-            list.add(EventOccurrence(
-              event: resolvedEvent,
-              gregorianDate: gregDate,
-              hijriDate: hj,
-            ));
-          }
-        } catch (_) {}
+          } catch (_) {}
+        }
+      }
+
+      if (gregDate != null && gregDate.year == year) {
+        final key =
+            '${ev.title}_${gregDate.year}_${gregDate.month}_${gregDate.day}';
+        if (seen.contains(key)) continue;
+        seen.add(key);
+
+        final hj = getHijriDate(gregDate);
+        final int hy = castToType<int>(hj['Hijri_Year'] ?? hj['HijriYear']) ??
+            (ev.hijriYear != 0
+                ? ev.hijriYear
+                : HijriCalendar.fromDate(gregDate).hYear);
+        final resolvedEvent = IslamicEvent(
+          title: ev.title,
+          subtitle: ev.subtitle,
+          hijriMonth: ev.hijriMonth,
+          hijriDay: ev.hijriDay,
+          hijriYear: hy,
+          description: ev.description,
+          iconType: ev.iconType,
+          hijriDate:
+              '${ev.hijriDay} ${_mapHijriMonthToSwedish(_getHijriMonthNameStandard(ev.hijriMonth))} $hy',
+          gregorianDate:
+              '${_getWeekdayAbbrSwedish(gregDate.weekday)}, ${gregDate.day} ${_getGregorianMonthNameSwedish(gregDate.month)}',
+          isMajorHoliday: ev.isMajorHoliday,
+        );
+        list.add(EventOccurrence(
+          event: resolvedEvent,
+          gregorianDate: gregDate,
+          hijriDate: hj,
+        ));
       }
     }
     list.sort((a, b) => a.gregorianDate.compareTo(b.gregorianDate));
@@ -900,11 +997,7 @@ class _IslamicCalenderState extends State<IslamicCalender> {
             duration: const Duration(milliseconds: 200),
             padding: const EdgeInsets.symmetric(vertical: 9.0, horizontal: 8.0),
             decoration: BoxDecoration(
-              color: isSelected
-                  ? theme.primary
-                  : (isDark
-                      ? const Color(0xFF1E293B)
-                      : theme.secondaryBackground),
+              color: isSelected ? theme.primary : theme.secondaryBackground,
               borderRadius: BorderRadius.circular(24.0),
               border: Border.all(
                 color: isSelected
@@ -1028,41 +1121,32 @@ class _IslamicCalenderState extends State<IslamicCalender> {
           final Color catColor = cat['color'] as Color;
           final bool isSelected = selectedCategory == label;
 
-          Color cardBg;
-          Color textColor;
-          Color iconColor;
-          Border? border;
+          // Keep all category chips in their default pastel colors at all times:
+          final Color cardBg = catColor.withValues(alpha: isDark ? 0.25 : 0.16);
+          final Color textColor =
+              isDark ? catColor.withValues(alpha: 0.95) : catColor;
+          final Color iconColor = catColor;
 
-          if (label == 'Alla') {
-            if (isSelected) {
-              cardBg = theme.primary;
-              textColor = Colors.white;
-              iconColor = Colors.white;
-            } else {
-              cardBg = isDark
-                  ? const Color(0xFF1E293B)
-                  : theme.primary.withValues(alpha: 0.12);
-              textColor = theme.primary;
-              iconColor = theme.primary;
-            }
-          } else {
-            if (isSelected) {
-              cardBg = catColor;
-              textColor = Colors.white;
-              iconColor = Colors.white;
-            } else {
-              cardBg = catColor.withValues(alpha: isDark ? 0.22 : 0.14);
-              textColor = isDark ? Colors.white : catColor;
-              iconColor = catColor;
-              border = Border.all(
-                  color: catColor.withValues(alpha: 0.3), width: 1.0);
-            }
-          }
+          // Selected State: Indicate that a category filter is active ONLY by
+          // applying a green outer border/outline around the chip.
+          final Border border = isSelected
+              ? Border.all(
+                  color: theme.primary,
+                  width: 2.0,
+                )
+              : Border.all(
+                  color: catColor.withValues(alpha: isDark ? 0.40 : 0.28),
+                  width: 1.0,
+                );
 
           return GestureDetector(
             onTap: () {
               setState(() {
-                selectedCategory = label;
+                if (selectedCategory == label && label != 'Alla') {
+                  selectedCategory = 'Alla';
+                } else {
+                  selectedCategory = label;
+                }
               });
             },
             child: AnimatedContainer(
@@ -1074,16 +1158,6 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                 color: cardBg,
                 borderRadius: BorderRadius.circular(10.0),
                 border: border,
-                boxShadow: isSelected
-                    ? [
-                        BoxShadow(
-                          color: (label == 'Alla' ? theme.primary : catColor)
-                              .withValues(alpha: 0.25),
-                          blurRadius: 4.0,
-                          offset: const Offset(0, 1.5),
-                        )
-                      ]
-                    : null,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -1118,30 +1192,23 @@ class _IslamicCalenderState extends State<IslamicCalender> {
     final emptyCells = firstDay.weekday - 1; // Mon=1, ..., Sun=7
     final totalDaysInCurrentMonth =
         DateTime(currentDate.year, currentDate.month + 1, 0).day;
-    final prevMonthTotalDays =
-        DateTime(currentDate.year, currentDate.month, 0).day;
 
     List<Widget> cellWidgets = [];
 
-    // Overflow days from previous month (dimmed inline style)
-    for (int i = emptyCells - 1; i >= 0; i--) {
-      final prevDate = DateTime(
-          currentDate.year, currentDate.month - 1, prevMonthTotalDays - i);
-      cellWidgets.add(_buildCalendarCell(prevDate, isCurrentMonth: false));
+    // Empty blank cells before first day of current month (framed/clean grid per Screenshot_10-27_1.png)
+    for (int i = 0; i < emptyCells; i++) {
+      cellWidgets.add(const SizedBox(height: 42.0));
     }
 
     // Days of current month
     for (int d = 1; d <= totalDaysInCurrentMonth; d++) {
       final cellDate = DateTime(currentDate.year, currentDate.month, d);
-      cellWidgets.add(_buildCalendarCell(cellDate, isCurrentMonth: true));
+      cellWidgets.add(_buildCalendarCell(cellDate));
     }
 
-    // Overflow days into next month to complete the 7-column rows
-    int nextMonthDay = 1;
+    // Empty blank cells to complete the 7-column grid
     while (cellWidgets.length % 7 != 0) {
-      final nextDate =
-          DateTime(currentDate.year, currentDate.month + 1, nextMonthDay++);
-      cellWidgets.add(_buildCalendarCell(nextDate, isCurrentMonth: false));
+      cellWidgets.add(const SizedBox(height: 42.0));
     }
 
     List<TableRow> tableRows = [];
@@ -1163,6 +1230,12 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                 children: [
                   // 1. Category Filter Pills (Alla, Fasta, Koran, Bön, Dhikr, Välgörenhet, Eget)
                   _buildCategoryFilterPills(),
+
+                  // Daily Progress Counter (re-activated from v1.25)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: _buildDailyProgressCounter(theme, isDark),
+                  ),
 
                   // Calendar Card Container with Swipe gesture support
                   GestureDetector(
@@ -1265,13 +1338,41 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                               );
                             }),
                           ),
-                          const SizedBox(height: 6.0),
+                          const SizedBox(height: 8.0),
 
-                          // Month Grid
-                          Table(
-                            defaultVerticalAlignment:
-                                TableCellVerticalAlignment.middle,
-                            children: tableRows,
+                          // Month Grid with Continuous Framed Borders around all four rounded corners
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16.0),
+                              border: Border.all(
+                                color: isDark
+                                    ? const Color(0xFF334155)
+                                    : const Color(0xFFE2E8F0),
+                                width: 0.8,
+                              ),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15.2),
+                              child: Table(
+                                border: TableBorder(
+                                  horizontalInside: BorderSide(
+                                    color: isDark
+                                        ? const Color(0xFF334155)
+                                        : const Color(0xFFE2E8F0),
+                                    width: 0.8,
+                                  ),
+                                  verticalInside: BorderSide(
+                                    color: isDark
+                                        ? const Color(0xFF334155)
+                                        : const Color(0xFFE2E8F0),
+                                    width: 0.8,
+                                  ),
+                                ),
+                                defaultVerticalAlignment:
+                                    TableCellVerticalAlignment.middle,
+                                children: tableRows,
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -1296,70 +1397,78 @@ class _IslamicCalenderState extends State<IslamicCalender> {
     );
   }
 
-  // BOTTOM ACTION BUTTONS: [ 📅 Idag ] and [ ➕ ] ALIGNED ON EXACT SAME HORIZONTAL BASELINE
+  // BOTTOM ACTION BUTTONS: [ 📅 Idag ] and [ ➕ ]
+  // [ 📅 Idag ] is HIDDEN when on current month, and ONLY rendered when navigated to a different month
   Widget _buildBottomActionButtons(FlutterFlowTheme theme, bool isDark) {
     const double actionHeight = 46.0;
+    final now = DateTime.now();
+    final bool isViewingCurrentMonth =
+        currentDate.year == now.year && currentDate.month == now.month;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: isViewingCurrentMonth
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Bottom-Left: [ 📅 Idag ]
-          Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: () {
-                final now = DateTime.now();
-                setState(() {
-                  currentDate = DateTime(now.year, now.month, 1);
-                  selectedDate = now;
-                });
-                loadCalendarDataForYear(now.year);
-              },
-              borderRadius: BorderRadius.circular(actionHeight / 2),
-              child: Container(
-                height: actionHeight,
-                padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF1E293B) : Colors.white,
-                  borderRadius: BorderRadius.circular(actionHeight / 2),
-                  border: Border.all(
-                    color: theme.primary.withValues(alpha: 0.35),
-                    width: 1.2,
+          // Bottom-Left: [ 📅 Idag ] - ONLY rendered when swiped/navigated away to a different month
+          if (!isViewingCurrentMonth)
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {
+                  final n = DateTime.now();
+                  setState(() {
+                    currentDate = DateTime(n.year, n.month, 1);
+                    selectedDate = n;
+                  });
+                  loadCalendarDataForYear(n.year);
+                },
+                borderRadius: BorderRadius.circular(actionHeight / 2),
+                child: Container(
+                  height: actionHeight,
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  decoration: BoxDecoration(
+                    color: theme.secondaryBackground,
+                    borderRadius: BorderRadius.circular(actionHeight / 2),
+                    border: Border.all(
+                      color: theme.primary.withValues(alpha: 0.35),
+                      width: 1.2,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color:
+                            Colors.black.withValues(alpha: isDark ? 0.3 : 0.08),
+                        blurRadius: 8.0,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color:
-                          Colors.black.withValues(alpha: isDark ? 0.3 : 0.08),
-                      blurRadius: 8.0,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.calendar_today_rounded,
-                      size: 15.0,
-                      color: theme.primary,
-                    ),
-                    const SizedBox(width: 7.0),
-                    Text(
-                      'Idag',
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 13.5,
-                        fontWeight: FontWeight.w700,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.calendar_today_rounded,
+                        size: 15.0,
                         color: theme.primary,
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 7.0),
+                      Text(
+                        'Idag',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 13.5,
+                          fontWeight: FontWeight.w700,
+                          color: theme.primary,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
 
           // Bottom-Right: [ ➕ ] – EXACT SAME HEIGHT & ALIGNMENT
           SizedBox(
@@ -1380,9 +1489,10 @@ class _IslamicCalenderState extends State<IslamicCalender> {
     );
   }
 
-  // 3. DATE CELL LAYOUT: INLINE GREGORIAN + HIJRI e.g. "21 (10)" + ENLARGED ACTIVITY DOTS
-  Widget _buildCalendarCell(DateTime date, {required bool isCurrentMonth}) {
+  // 3. DATE CELL LAYOUT: INLINE GREGORIAN + HIJRI e.g. "21 (10)" + ENLARGED ACTIVITY DOTS & FRAMED SELECTION
+  Widget _buildCalendarCell(DateTime date) {
     final theme = FlutterFlowTheme.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final hj = getHijriDate(date);
     final int hijriDay =
         castToType<int>(hj['Hijri_Day'] ?? hj['HijriDay']) ?? 1;
@@ -1397,33 +1507,53 @@ class _IslamicCalenderState extends State<IslamicCalender> {
         date.month == selectedDate!.month &&
         date.day == selectedDate!.day;
 
-    final indicatorDots = _habitService.getIndicatorDotsForDate(
+    final specialEvent = _getEventForDate(date);
+    final bool isMajorHoliday = specialEvent?.isMajorHoliday ?? false;
+    List<Color> indicatorDots = _habitService.getIndicatorDotsForDate(
       gregorianDate: date,
       hijriDay: hijriDay,
       hijriMonth: hjMonth,
       categoryFilter: selectedCategory,
     );
-
-    BoxDecoration? cellDecoration;
-    if (isToday) {
-      cellDecoration = BoxDecoration(
-        color: theme.primary.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(10.0),
-        border: Border.all(color: theme.primary, width: 1.5),
-      );
-    } else if (isSelected) {
-      cellDecoration = BoxDecoration(
-        color: theme.primary.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(10.0),
-        border: Border.all(
-          color: theme.primary.withValues(alpha: 0.45),
-          width: 1.0,
-        ),
-      );
+    if (isMajorHoliday) {
+      const holidayColor = Color(0xFF10B981);
+      if (!indicatorDots.contains(holidayColor)) {
+        indicatorDots = [holidayColor, ...indicatorDots].take(4).toList();
+      }
     }
 
-    return AspectRatio(
-      aspectRatio: 1.0,
+    BoxDecoration? cellDecoration;
+    Color gregorianColor;
+    Color hijriColor;
+
+    if (isToday) {
+      // Today's Date: Highlight with our standard green background
+      cellDecoration = BoxDecoration(
+        color: theme.primary,
+        borderRadius: BorderRadius.circular(8.0),
+      );
+      gregorianColor = Colors.white;
+      hijriColor = Colors.white.withValues(alpha: 0.85);
+    } else if (isSelected) {
+      // Selected Date: Highlight with a subtle/light green background & green border to distinguish from today
+      cellDecoration = BoxDecoration(
+        color: theme.primary.withValues(alpha: isDark ? 0.25 : 0.12),
+        borderRadius: BorderRadius.circular(8.0),
+        border: Border.all(
+          color: theme.primary,
+          width: 1.5,
+        ),
+      );
+      gregorianColor = theme.primaryText;
+      hijriColor = theme.secondaryText;
+    } else {
+      cellDecoration = null;
+      gregorianColor = theme.primaryText;
+      hijriColor = theme.secondaryText;
+    }
+
+    return SizedBox(
+      height: 42.0,
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
@@ -1433,70 +1563,101 @@ class _IslamicCalenderState extends State<IslamicCalender> {
           _showDayModalBottomSheet(date);
         },
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 1.5, vertical: 2.0),
+          margin: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 1.0),
           decoration: cellDecoration,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Stack(
+            alignment: Alignment.center,
             children: [
-              // Gregorian + Hijri on the same horizontal line: e.g. 21 (10)
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                  child: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: '${date.day} ',
-                          style: GoogleFonts.manrope(
-                            fontSize: 13.0,
-                            fontWeight:
-                                isToday ? FontWeight.w800 : FontWeight.w700,
-                            color: !isCurrentMonth
-                                ? theme.secondaryText.withValues(alpha: 0.35)
-                                : (isToday ? theme.primary : theme.primaryText),
+              // Dedicated Special Islamic Event Icon (e.g. celebration, mosque, star, kaaba, moon)
+              if (specialEvent != null)
+                Positioned(
+                  top: 2.0,
+                  right: 2.5,
+                  child: Icon(
+                    _getEventIconData(specialEvent.iconType),
+                    size: 9.5,
+                    color: isToday
+                        ? Colors.white
+                        : (isDark
+                            ? const Color(0xFF34D399)
+                            : const Color(0xFF047857)),
+                  ),
+                ),
+
+              // Gregorian + Hijri on the same horizontal line, perfectly centered
+              Center(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '${date.day} ',
+                            style: GoogleFonts.manrope(
+                              fontSize: 14.5,
+                              fontWeight:
+                                  isToday ? FontWeight.w800 : FontWeight.w700,
+                              color: gregorianColor,
+                            ),
                           ),
-                        ),
-                        TextSpan(
-                          text: '($hijriDay)',
-                          style: GoogleFonts.manrope(
-                            fontSize: 9.5,
-                            fontWeight: FontWeight.w600,
-                            color: !isCurrentMonth
-                                ? theme.secondaryText.withValues(alpha: 0.35)
-                                : (isToday
-                                    ? theme.primary.withValues(alpha: 0.85)
-                                    : theme.secondaryText),
+                          TextSpan(
+                            text: '($hijriDay)',
+                            style: GoogleFonts.manrope(
+                              fontSize: 10.5,
+                              fontWeight: FontWeight.w600,
+                              color: hijriColor,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 3.0),
-
-              // Activity Indicator Dots: nicely aligned directly under inline text with slightly increased size
+              // Activity Indicator Dots: positioned at the bottom so date text remains perfectly centered
               if (indicatorDots.isNotEmpty)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: indicatorDots.take(4).map((c) {
-                    return Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 1.2),
-                      width: 5.5,
-                      height: 5.5,
-                      decoration: BoxDecoration(
-                        color: c,
-                        shape: BoxShape.circle,
+                Positioned(
+                  bottom: 2.5,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: indicatorDots.take(4).map((c) {
+                          return Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 0.8),
+                            width: 5.0,
+                            height: 5.0,
+                            decoration: BoxDecoration(
+                              color: c,
+                              shape: BoxShape.circle,
+                              border: isToday
+                                  ? Border.all(color: Colors.white, width: 1.0)
+                                  : null,
+                              boxShadow: isToday
+                                  ? [
+                                      BoxShadow(
+                                        color: Colors.black
+                                            .withValues(alpha: 0.35),
+                                        blurRadius: 1.0,
+                                        offset: const Offset(0, 0.5),
+                                      ),
+                                    ]
+                                  : null,
+                            ),
+                          );
+                        }).toList(),
                       ),
-                    );
-                  }).toList(),
-                )
-              else
-                const SizedBox(height: 5.5),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
@@ -1511,10 +1672,12 @@ class _IslamicCalenderState extends State<IslamicCalender> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       backgroundColor: Colors.transparent,
       builder: (ctx) {
         return _DayModalContent(
           date: date,
+          dayEvent: _getEventForDate(date),
           habitService: _habitService,
           getHijriDate: getHijriDate,
           mapHijriMonthToSwedish: _mapHijriMonthToSwedish,
@@ -1523,6 +1686,13 @@ class _IslamicCalenderState extends State<IslamicCalender> {
           onAddActivity: (selectedDate) {
             Navigator.of(ctx).pop();
             _showQuickMenuModal(selectedDate);
+          },
+          onEditActivity: (activity) {
+            _showActivityCreationModal(
+              date: activity.date,
+              initialCategoryKey: activity.categoryKey,
+              initialActivity: activity,
+            );
           },
           onChanged: () {
             setState(() {});
@@ -1542,7 +1712,7 @@ class _IslamicCalenderState extends State<IslamicCalender> {
     final categories = [
       {
         'key': 'custom',
-        'title': 'Egen aktivitet / Personligt',
+        'title': 'Egen aktivitet',
         'color': HabitTrackerService.colorCustom,
         'icon': Icons.person_rounded,
       },
@@ -1582,115 +1752,146 @@ class _IslamicCalenderState extends State<IslamicCalender> {
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
+      useSafeArea: true,
       builder: (ctx) {
         return Container(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.88,
+          ),
           decoration: BoxDecoration(
             color: theme.secondaryBackground,
             borderRadius:
                 const BorderRadius.vertical(top: Radius.circular(24.0)),
           ),
-          padding: const EdgeInsets.fromLTRB(20.0, 12.0, 20.0, 30.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Drag Handle with tap to close
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () => Navigator.of(ctx).pop(),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 4.0, bottom: 12.0),
-                  child: Center(
-                    child: Container(
-                      width: 44.0,
-                      height: 5.0,
-                      decoration: BoxDecoration(
-                        color: isDark
-                            ? const Color(0xFF555555)
-                            : const Color(0xFFD1D5DB),
-                        borderRadius: BorderRadius.circular(2.5),
-                      ),
-                    ),
+          child: SafeArea(
+            top: false,
+            bottom: false,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    theme.designToken.spacing.md,
+                    theme.designToken.spacing.md,
+                    theme.designToken.spacing.md,
+                    0.0,
                   ),
+                  child: const BottomSheetIconWidget(),
                 ),
-              ),
-              const SizedBox(height: 8.0),
-
-              Text(
-                'Välj kategori',
-                style: GoogleFonts.plusJakartaSans(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w700,
-                  color: theme.primaryText,
-                ),
-              ),
-              const SizedBox(height: 14.0),
-
-              Column(
-                children: categories.map((cat) {
-                  final Color c = cat['color'] as Color;
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 10.0),
-                    decoration: BoxDecoration(
-                      color: theme.primaryBackground,
-                      borderRadius: BorderRadius.circular(14.0),
-                      border: Border.all(
-                        color: theme.alternate,
-                        width: 1.0,
-                      ),
+                Flexible(
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.fromLTRB(
+                      theme.designToken.spacing.md,
+                      0.0,
+                      theme.designToken.spacing.md,
+                      theme.designToken.spacing.md +
+                          MediaQuery.of(ctx).padding.bottom,
                     ),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(14.0),
-                        onTap: () {
-                          Navigator.of(ctx).pop();
-                          _showActivityCreationModal(
-                            date: date,
-                            initialCategoryKey: cat['key'] as String,
-                            initialColor: c,
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12.0),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 36.0,
-                                height: 36.0,
-                                decoration: BoxDecoration(
-                                  color: c.withValues(alpha: 0.15),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  cat['icon'] as IconData,
-                                  color: c,
-                                  size: 18.0,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Välj kategori',
+                                style: FlutterFlowTheme.of(context)
+                                    .titleLarge
+                                    .override(
+                                      font: GoogleFonts.plusJakartaSans(
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .titleLarge
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .titleLarge
+                                            .fontStyle,
+                                      ),
+                                      letterSpacing: 0.0,
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .titleLarge
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .titleLarge
+                                          .fontStyle,
+                                    ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 14.0),
+                        Column(
+                          children: categories.map((cat) {
+                            final Color c = cat['color'] as Color;
+                            return Container(
+                              margin: const EdgeInsets.only(bottom: 10.0),
+                              decoration: BoxDecoration(
+                                color: theme.primaryBackground,
+                                borderRadius: BorderRadius.circular(14.0),
+                                border: Border.all(
+                                  color: theme.alternate,
+                                  width: 1.0,
                                 ),
                               ),
-                              const SizedBox(width: 14.0),
-                              Expanded(
-                                child: Text(
-                                  cat['title'] as String,
-                                  style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.w600,
-                                    color: theme.primaryText,
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(14.0),
+                                  onTap: () {
+                                    Navigator.of(ctx).pop();
+                                    _showActivityCreationModal(
+                                      date: date,
+                                      initialCategoryKey: cat['key'] as String,
+                                      initialColor: c,
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16.0, vertical: 12.0),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          width: 36.0,
+                                          height: 36.0,
+                                          decoration: BoxDecoration(
+                                            color: c.withValues(alpha: 0.15),
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Icon(
+                                            cat['icon'] as IconData,
+                                            color: c,
+                                            size: 18.0,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 14.0),
+                                        Expanded(
+                                          child: Text(
+                                            cat['title'] as String,
+                                            style: GoogleFonts.plusJakartaSans(
+                                              fontSize: 15.0,
+                                              fontWeight: FontWeight.w600,
+                                              color: theme.primaryText,
+                                            ),
+                                          ),
+                                        ),
+                                        Icon(Icons.chevron_right,
+                                            color: theme.secondaryText,
+                                            size: 20.0),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                              Icon(Icons.chevron_right,
-                                  color: theme.secondaryText, size: 20.0),
-                            ],
-                          ),
+                            );
+                          }).toList(),
                         ),
-                      ),
+                      ],
                     ),
-                  );
-                }).toList(),
-              ),
-            ],
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -1704,15 +1905,18 @@ class _IslamicCalenderState extends State<IslamicCalender> {
     required DateTime date,
     String initialCategoryKey = 'custom',
     Color initialColor = const Color(0xFF8E44AD),
+    CustomCalendarActivity? initialActivity,
   }) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       backgroundColor: Colors.transparent,
       builder: (ctx) {
         return _ActivityCreationFormModal(
           initialDate: date,
           initialCategoryKey: initialCategoryKey,
+          initialActivity: initialActivity,
           habitService: _habitService,
           getGregorianMonthNameSwedish: _getGregorianMonthNameSwedish,
           onSaved: () {
@@ -1723,10 +1927,140 @@ class _IslamicCalenderState extends State<IslamicCalender> {
     );
   }
 
+  // DAILY PROGRESS COUNTER COMPONENT (Re-activated from v1.25)
+  Widget _buildDailyProgressCounter(FlutterFlowTheme theme, bool isDark) {
+    final now = DateTime.now();
+    return FutureBuilder<Map<String, dynamic>>(
+      future: _habitService.getProgressStatistics(
+        now,
+        getHijriDate: getHijriDate,
+      ),
+      builder: (context, snapshot) {
+        final stats = snapshot.data;
+        final dayStats = stats?['day'] as Map<String, dynamic>?;
+        final int completed = dayStats?['completed'] ?? 0;
+        final int total = dayStats?['total'] ?? 0;
+        final double rate = (dayStats?['rate'] as num?)?.toDouble() ?? 0.0;
+
+        return Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(16.0),
+            onTap: () {
+              Navigator.of(context)
+                  .push(
+                    MaterialPageRoute(
+                      builder: (_) => CalendarProgressPage(
+                        habitService: _habitService,
+                        getHijriDate: getHijriDate,
+                      ),
+                    ),
+                  )
+                  .then((_) => setState(() {}));
+            },
+            child: Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0),
+              decoration: BoxDecoration(
+                color: theme.secondaryBackground,
+                borderRadius: BorderRadius.circular(16.0),
+                border: Border.all(
+                  color: isDark ? theme.alternate : const Color(0xFFE2E8F0),
+                  width: 1.0,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+                    blurRadius: 6.0,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(6.0),
+                            decoration: BoxDecoration(
+                              color: theme.primary.withValues(alpha: 0.12),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.trending_up_rounded,
+                              color: theme.primary,
+                              size: 16.0,
+                            ),
+                          ),
+                          const SizedBox(width: 8.0),
+                          Text(
+                            'Dagens framsteg',
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 13.5,
+                              fontWeight: FontWeight.w700,
+                              color: theme.primaryText,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            total > 0
+                                ? '$completed av $total (${(rate * 100).round()}%)'
+                                : 'Inga aktiva vanor',
+                            style: GoogleFonts.manrope(
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w700,
+                              color: theme.primary,
+                            ),
+                          ),
+                          const SizedBox(width: 4.0),
+                          Icon(
+                            Icons.chevron_right_rounded,
+                            size: 18.0,
+                            color: theme.secondaryText,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  if (total > 0) ...[
+                    const SizedBox(height: 8.0),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(4.0),
+                      child: LinearProgressIndicator(
+                        value: rate,
+                        minHeight: 6.0,
+                        backgroundColor: isDark
+                            ? const Color(0xFF334155)
+                            : const Color(0xFFE2E8F0),
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(theme.primary),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   // 2. KOMMANDE HÄNDELSER SCREEN
   Widget _buildUpcomingEventsView() {
     final theme = FlutterFlowTheme.of(context);
-    final yearEvents = getEventsForYear(currentDate.year);
+    final int displayYear = _selectedUpcomingYear ?? currentDate.year;
+    final int activeYear = availableYears.contains(displayYear)
+        ? displayYear
+        : (availableYears.isNotEmpty ? availableYears.first : 2026);
+    final yearEvents = getEventsForYear(activeYear);
     final majorHolidays =
         yearEvents.where((oe) => oe.event.isMajorHoliday).toList();
 
@@ -1750,8 +2084,8 @@ class _IslamicCalenderState extends State<IslamicCalender> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'VIKTIGA ISLAMISKA DAGAR',
@@ -1762,71 +2096,124 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                     letterSpacing: 0.5,
                   ),
                 ),
-                const SizedBox(height: 12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    _buildYearChip(2026),
-                    const SizedBox(width: 8),
-                    _buildYearChip(2027),
-                  ],
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: theme.secondaryBackground,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: theme.alternate, width: 1.0),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<int>(
+                      value: activeYear,
+                      icon: Icon(Icons.keyboard_arrow_down_rounded,
+                          color: theme.primary, size: 20),
+                      isDense: true,
+                      style: GoogleFonts.manrope(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                        color: theme.primaryText,
+                      ),
+                      dropdownColor: theme.secondaryBackground,
+                      items: availableYears.map((y) {
+                        return DropdownMenuItem<int>(
+                          value: y,
+                          child: Text(y.toString()),
+                        );
+                      }).toList(),
+                      onChanged: (newYear) {
+                        if (newYear != null) {
+                          setState(() {
+                            _selectedUpcomingYear = newYear;
+                          });
+                          loadCalendarDataForYear(newYear);
+                        }
+                      },
+                    ),
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 12),
-            if (majorHolidays.isNotEmpty)
-              ListView.separated(
+            if (isLoading)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 40.0),
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: theme.primary,
+                  ),
+                ),
+              )
+            else if (yearEvents.isEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 40.0),
+                child: Center(
+                  child: Text(
+                    'Inga händelser hittades för $activeYear',
+                    style: GoogleFonts.manrope(
+                      fontSize: 14,
+                      color: theme.secondaryText,
+                    ),
+                  ),
+                ),
+              )
+            else ...[
+              if (majorHolidays.isNotEmpty)
+                ListView.separated(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: majorHolidays.length,
+                  separatorBuilder: (context, idx) =>
+                      const SizedBox(height: 10),
+                  itemBuilder: (context, index) {
+                    return _buildUpcomingEventCard(majorHolidays[index]);
+                  },
+                ),
+              if (sortedMonthsKeys.isNotEmpty) const SizedBox(height: 20),
+              ListView.builder(
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: majorHolidays.length,
-                separatorBuilder: (context, idx) => const SizedBox(height: 10),
+                itemCount: sortedMonthsKeys.length,
                 itemBuilder: (context, index) {
-                  return _buildUpcomingEventCard(majorHolidays[index]);
-                },
-              ),
-            const SizedBox(height: 20),
-            ListView.builder(
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: sortedMonthsKeys.length,
-              itemBuilder: (context, index) {
-                final monthNo = sortedMonthsKeys[index];
-                final monthEvents = groupedByMonth[monthNo]!;
-                final monthName =
-                    _mapHijriMonthToSwedish(_getHijriMonthNameStandard(monthNo))
-                        .toUpperCase();
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15.0, bottom: 8.0),
-                      child: Text(
-                        'MÅNADEN $monthName',
-                        style: GoogleFonts.manrope(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: theme.primaryText,
-                          letterSpacing: 0.5,
+                  final monthNo = sortedMonthsKeys[index];
+                  final monthEvents = groupedByMonth[monthNo]!;
+                  final monthName = _mapHijriMonthToSwedish(
+                          _getHijriMonthNameStandard(monthNo))
+                      .toUpperCase();
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 15.0, bottom: 8.0),
+                        child: Text(
+                          'MÅNADEN $monthName',
+                          style: GoogleFonts.manrope(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: theme.primaryText,
+                            letterSpacing: 0.5,
+                          ),
                         ),
                       ),
-                    ),
-                    ListView.separated(
-                      padding: EdgeInsets.zero,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: monthEvents.length,
-                      separatorBuilder: (context, idx) =>
-                          const SizedBox(height: 10),
-                      itemBuilder: (context, idx) {
-                        return _buildUpcomingEventCard(monthEvents[idx]);
-                      },
-                    ),
-                  ],
-                );
-              },
-            ),
+                      ListView.separated(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: monthEvents.length,
+                        separatorBuilder: (context, idx) =>
+                            const SizedBox(height: 10),
+                        itemBuilder: (context, idx) {
+                          return _buildUpcomingEventCard(monthEvents[idx]);
+                        },
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ],
             const SizedBox(height: 30),
           ],
         ),
@@ -1834,38 +2221,10 @@ class _IslamicCalenderState extends State<IslamicCalender> {
     );
   }
 
-  Widget _buildYearChip(int year) {
-    final theme = FlutterFlowTheme.of(context);
-    final isSelected = currentDate.year == year;
-    return GestureDetector(
-      onTap: () {
-        if (currentDate.year != year) {
-          setState(() {
-            currentDate = DateTime(year, currentDate.month, 1);
-          });
-          loadCalendarDataForYear(year);
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-        decoration: BoxDecoration(
-          color: isSelected ? theme.primary : theme.secondaryBackground,
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Text(
-          year.toString(),
-          style: GoogleFonts.manrope(
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            color: isSelected ? Colors.white : theme.secondaryText,
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildUpcomingEventCard(EventOccurrence occurrence) {
     final theme = FlutterFlowTheme.of(context);
+    final isNotified = activeNotifications[occurrence.event.title] ?? false;
+
     return Container(
       decoration: BoxDecoration(
         color: theme.secondaryBackground,
@@ -1878,19 +2237,33 @@ class _IslamicCalenderState extends State<IslamicCalender> {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {
-            setState(() {
-              selectedDate = occurrence.gregorianDate;
-              currentDate = DateTime(occurrence.gregorianDate.year,
-                  occurrence.gregorianDate.month, 1);
-            });
-            _showDayModalBottomSheet(occurrence.gregorianDate);
-          },
+          onTap: () => _showEventDetailModal(occurrence),
           borderRadius: BorderRadius.circular(16),
           child: Padding(
-            padding: const EdgeInsets.all(12),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
             child: Row(
               children: [
+                // Category / Event Icon
+                Container(
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: BoxDecoration(
+                    color: theme.primary.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Center(
+                    child: _buildEventIconWidget(
+                      occurrence.event.iconType,
+                      title: occurrence.event.title,
+                      size: 20.0,
+                      color: theme.primary,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12.0),
+
+                // Event Title & Dates
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -1898,16 +2271,16 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                       Text(
                         occurrence.event.title,
                         style: GoogleFonts.manrope(
-                          fontSize: 16,
+                          fontSize: 15.0,
                           fontWeight: FontWeight.bold,
                           color: theme.primaryText,
                         ),
                       ),
+                      const SizedBox(height: 3.0),
                       Text(
                         '${occurrence.event.hijriDate} • ${occurrence.event.gregorianDate}',
-                        style: TextStyle(
-                          fontFamily: 'Manrope',
-                          fontSize: 12,
+                        style: GoogleFonts.manrope(
+                          fontSize: 12.0,
                           fontWeight: FontWeight.w600,
                           color: theme.secondaryText,
                         ),
@@ -1915,11 +2288,255 @@ class _IslamicCalenderState extends State<IslamicCalender> {
                     ],
                   ),
                 ),
+
+                // Calendar Icon — jump to this date in calendar view
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedTab = 0;
+                      selectedEvent = occurrence;
+                      selectedDate = occurrence.gregorianDate;
+                      currentDate = DateTime(
+                        occurrence.gregorianDate.year,
+                        occurrence.gregorianDate.month,
+                        1,
+                      );
+                    });
+                    loadCalendarDataForYear(occurrence.gregorianDate.year);
+                  },
+                  behavior: HitTestBehavior.opaque,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 4.0, vertical: 8.0),
+                    child: Icon(
+                      Icons.calendar_month_rounded,
+                      color: theme.secondaryText,
+                      size: 22.0,
+                    ),
+                  ),
+                ),
+
+                // Bell Icon (🔔) toggle for holiday notifications
+                GestureDetector(
+                  onTap: () => _toggleEventNotification(
+                      occurrence.event, occurrence.gregorianDate),
+                  behavior: HitTestBehavior.opaque,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 4.0, vertical: 8.0),
+                    child: Icon(
+                      isNotified
+                          ? Icons.notifications_active_rounded
+                          : Icons.notifications_none_rounded,
+                      color: isNotified ? theme.primary : theme.secondaryText,
+                      size: 22.0,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 4.0),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  void _showEventDetailModal(EventOccurrence occurrence) {
+    final theme = FlutterFlowTheme.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final String description = occurrence.event.description;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            final isNotified =
+                activeNotifications[occurrence.event.title] ?? false;
+            return Container(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.88,
+              ),
+              decoration: BoxDecoration(
+                color: theme.secondaryBackground,
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(24.0)),
+              ),
+              child: SafeArea(
+                top: false,
+                bottom: false,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(
+                        theme.designToken.spacing.md,
+                        theme.designToken.spacing.md,
+                        theme.designToken.spacing.md,
+                        0.0,
+                      ),
+                      child: const BottomSheetIconWidget(),
+                    ),
+                    Flexible(
+                      child: SingleChildScrollView(
+                        padding: EdgeInsets.fromLTRB(
+                          theme.designToken.spacing.md,
+                          0.0,
+                          theme.designToken.spacing.md,
+                          theme.designToken.spacing.md +
+                              MediaQuery.of(ctx).padding.bottom,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Header row with Icon, Title, and Bell Toggle
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 44.0,
+                                  height: 44.0,
+                                  decoration: BoxDecoration(
+                                    color:
+                                        theme.primary.withValues(alpha: 0.12),
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                  child: Center(
+                                    child: _buildEventIconWidget(
+                                      occurrence.event.iconType,
+                                      title: occurrence.event.title,
+                                      size: 24.0,
+                                      color: theme.primary,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 12.0),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        occurrence.event.title,
+                                        style: GoogleFonts.plusJakartaSans(
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.w700,
+                                          color: theme.primaryText,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4.0),
+                                      Text(
+                                        '${occurrence.event.hijriDate} • ${occurrence.event.gregorianDate}',
+                                        style: GoogleFonts.manrope(
+                                          fontSize: 13.0,
+                                          fontWeight: FontWeight.w600,
+                                          color: theme.primary,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: Icon(
+                                    isNotified
+                                        ? Icons.notifications_active_rounded
+                                        : Icons.notifications_none_rounded,
+                                    color: isNotified
+                                        ? theme.primary
+                                        : theme.secondaryText,
+                                    size: 24.0,
+                                  ),
+                                  onPressed: () async {
+                                    await _toggleEventNotification(
+                                        occurrence.event,
+                                        occurrence.gregorianDate);
+                                    setModalState(() {});
+                                  },
+                                ),
+                              ],
+                            ),
+
+                            if (description.isNotEmpty) ...[
+                              const SizedBox(height: 16.0),
+                              const Divider(height: 1.0, thickness: 1.0),
+                              const SizedBox(height: 16.0),
+                              Text(
+                                'Om denna dag',
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w700,
+                                  color: theme.primaryText,
+                                ),
+                              ),
+                              const SizedBox(height: 8.0),
+                              Text(
+                                description,
+                                style: GoogleFonts.manrope(
+                                  fontSize: 14.0,
+                                  height: 1.6,
+                                  color: theme.primaryText,
+                                ),
+                              ),
+                            ],
+
+                            const SizedBox(height: 24.0),
+
+                            // "Visa i kalendern" (View in calendar) button
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: theme.primary,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 14.0),
+                                ),
+                                icon: const Icon(Icons.calendar_month_rounded,
+                                    color: Colors.white, size: 20.0),
+                                label: Text(
+                                  'Visa i kalendern',
+                                  style: GoogleFonts.manrope(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(ctx).pop();
+                                  setState(() {
+                                    selectedTab = 0;
+                                    selectedEvent = occurrence;
+                                    selectedDate = occurrence.gregorianDate;
+                                    currentDate = DateTime(
+                                      occurrence.gregorianDate.year,
+                                      occurrence.gregorianDate.month,
+                                      1,
+                                    );
+                                  });
+                                  loadCalendarDataForYear(
+                                      occurrence.gregorianDate.year);
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
@@ -1929,22 +2546,26 @@ class _IslamicCalenderState extends State<IslamicCalender> {
 // =========================================================================
 class _DayModalContent extends StatefulWidget {
   final DateTime date;
+  final IslamicEvent? dayEvent;
   final HabitTrackerService habitService;
   final Map<String, dynamic> Function(DateTime) getHijriDate;
   final String Function(String) mapHijriMonthToSwedish;
   final String Function(int) getWeekdayNameSwedish;
   final String Function(int) getGregorianMonthNameSwedish;
   final Function(DateTime) onAddActivity;
+  final Function(CustomCalendarActivity)? onEditActivity;
   final VoidCallback onChanged;
 
   const _DayModalContent({
     required this.date,
+    this.dayEvent,
     required this.habitService,
     required this.getHijriDate,
     required this.mapHijriMonthToSwedish,
     required this.getWeekdayNameSwedish,
     required this.getGregorianMonthNameSwedish,
     required this.onAddActivity,
+    this.onEditActivity,
     required this.onChanged,
   });
 
@@ -1983,8 +2604,8 @@ class _DayModalContentState extends State<_DayModalContent> {
         castToType<int>(hj['Hijri_Day'] ?? hj['HijriDay']) ?? 1;
     final int hjMonth =
         castToType<int>(hj['Hijri_Month_No'] ?? hj['HijriMonthNo']) ?? 1;
-    final int hjYear =
-        castToType<int>(hj['Hijri_Year'] ?? hj['HijriYear']) ?? 1448;
+    final int hjYear = castToType<int>(hj['Hijri_Year'] ?? hj['HijriYear']) ??
+        HijriCalendar.fromDate(widget.date).hYear;
     final String rawHjName = hj['Hijri_Month_Name']?.toString() ??
         hj['HijriMonthName']?.toString() ??
         'Rabi al-Awwal';
@@ -2005,308 +2626,475 @@ class _DayModalContentState extends State<_DayModalContent> {
 
     return Container(
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.85,
+        maxHeight: MediaQuery.of(context).size.height * 0.88,
       ),
       decoration: BoxDecoration(
         color: theme.secondaryBackground,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24.0)),
       ),
-      padding: const EdgeInsets.fromLTRB(20.0, 12.0, 20.0, 30.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Drag handle with tap to close
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () => Navigator.of(context).pop(),
-            child: Padding(
-              padding: const EdgeInsets.only(top: 4.0, bottom: 12.0),
-              child: Center(
-                child: Container(
-                  width: 44.0,
-                  height: 5.0,
-                  decoration: BoxDecoration(
-                    color: isDark
-                        ? const Color(0xFF555555)
-                        : const Color(0xFFD1D5DB),
-                    borderRadius: BorderRadius.circular(2.5),
-                  ),
-                ),
+      child: SafeArea(
+        top: false,
+        bottom: false,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                theme.designToken.spacing.md,
+                theme.designToken.spacing.md,
+                theme.designToken.spacing.md,
+                0.0,
               ),
+              child: const BottomSheetIconWidget(),
             ),
-          ),
-          const SizedBox(height: 8.0),
-
-          // Header: Torsdag 24 September 2026 & (12 Rabi' al-Awwal 1448)
-          Center(
-            child: Column(
-              children: [
-                Text(
-                  '$weekday ${widget.date.day} $monthName ${widget.date.year}',
-                  style: GoogleFonts.plusJakartaSans(
-                    fontSize: 19.0,
-                    fontWeight: FontWeight.w700,
-                    color: theme.primaryText,
-                  ),
-                  textAlign: TextAlign.center,
+            Flexible(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(
+                  theme.designToken.spacing.md,
+                  0.0,
+                  theme.designToken.spacing.md,
+                  theme.designToken.spacing.md +
+                      MediaQuery.of(context).padding.bottom,
                 ),
-                const SizedBox(height: 4.0),
-                Text(
-                  '($hijriDay $hjMonthName $hjYear)',
-                  style: GoogleFonts.manrope(
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w600,
-                    color: theme.primary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16.0),
-          const Divider(height: 1.0, thickness: 1.0),
-          const SizedBox(height: 16.0),
-
-          // Section Title: Dagens schemalagda aktiviteter:
-          Text(
-            'Dagens schemalagda aktiviteter:',
-            style: GoogleFonts.plusJakartaSans(
-              fontSize: 15.0,
-              fontWeight: FontWeight.w700,
-              color: theme.primaryText,
-            ),
-          ),
-          const SizedBox(height: 12.0),
-
-          // List of activities
-          Flexible(
-            child: _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : (habits.isEmpty && customActivities.isEmpty)
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 24.0),
-                        child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Header: Torsdag 24 September 2026 & (12 Rabi' al-Awwal 1448)
+                    Row(
+                      children: [
+                        Expanded(
                           child: Text(
-                            'Inga schemalagda aktiviteter för denna dag.',
-                            style: GoogleFonts.manrope(
-                              fontSize: 13.5,
-                              color: theme.secondaryText,
-                              fontStyle: FontStyle.italic,
-                            ),
+                            '$weekday ${widget.date.day} $monthName ${widget.date.year}',
+                            style: FlutterFlowTheme.of(context)
+                                .titleLarge
+                                .override(
+                                  font: GoogleFonts.plusJakartaSans(
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .titleLarge
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .titleLarge
+                                        .fontStyle,
+                                  ),
+                                  letterSpacing: 0.0,
+                                  fontWeight: FlutterFlowTheme.of(context)
+                                      .titleLarge
+                                      .fontWeight,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .titleLarge
+                                      .fontStyle,
+                                ),
                           ),
                         ),
-                      )
-                    : ListView(
-                        shrinkWrap: true,
-                        children: [
-                          // Master habits
-                          ...habits.map((habit) {
-                            final isDone = _completedHabits.contains(habit.id);
-                            final String categoryLabel =
-                                _getCategoryLabel(habit.categoryKey);
-                            final String timeStr = habit.defaultTime.isNotEmpty
-                                ? ' (${habit.defaultTime})'
-                                : '';
+                      ],
+                    ),
+                    const SizedBox(height: 4.0),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            '$hijriDay $hjMonthName $hjYear AH',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  font: GoogleFonts.manrope(
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
+                                  ),
+                                  color: theme.primary,
+                                  letterSpacing: 0.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16.0),
+                    const Divider(height: 1.0, thickness: 1.0),
+                    const SizedBox(height: 16.0),
 
-                            return Container(
-                              margin: const EdgeInsets.only(bottom: 8.0),
-                              padding: const EdgeInsets.all(12.0),
+                    // Special Islamic Event Banner (if any)
+                    if (widget.dayEvent != null) ...[
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 16.0),
+                        padding: const EdgeInsets.all(12.0),
+                        decoration: BoxDecoration(
+                          color: theme.primary
+                              .withValues(alpha: isDark ? 0.22 : 0.08),
+                          borderRadius: BorderRadius.circular(12.0),
+                          border: Border.all(
+                            color: theme.primary
+                                .withValues(alpha: isDark ? 0.4 : 0.25),
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 36.0,
+                              height: 36.0,
                               decoration: BoxDecoration(
-                                color: theme.primaryBackground,
-                                borderRadius: BorderRadius.circular(12.0),
-                                border: Border.all(
-                                  color: theme.alternate,
-                                  width: 1.0,
+                                color: theme.primary
+                                    .withValues(alpha: isDark ? 0.35 : 0.15),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: _buildEventIconWidget(
+                                  widget.dayEvent!.iconType,
+                                  title: widget.dayEvent!.title,
+                                  size: 18.0,
+                                  color: theme.primary,
                                 ),
                               ),
-                              child: Row(
+                            ),
+                            const SizedBox(width: 10.0),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  GestureDetector(
-                                    onTap: () async {
-                                      final toggled = await widget.habitService
-                                          .toggleHabitCompletion(
-                                              widget.date, habit.id);
-                                      setState(() {
-                                        if (toggled) {
-                                          _completedHabits.add(habit.id);
-                                        } else {
-                                          _completedHabits.remove(habit.id);
-                                        }
-                                      });
-                                      widget.onChanged();
-                                    },
-                                    child: Container(
-                                      width: 22.0,
-                                      height: 22.0,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: isDone
-                                            ? habit.color
-                                            : Colors.transparent,
-                                        border: Border.all(
-                                          color: isDone
-                                              ? habit.color
-                                              : theme.secondaryText,
-                                          width: 1.5,
-                                        ),
-                                      ),
-                                      child: isDone
-                                          ? const Icon(Icons.check,
-                                              size: 14.0, color: Colors.white)
-                                          : null,
+                                  Text(
+                                    widget.dayEvent!.title,
+                                    style: GoogleFonts.plusJakartaSans(
+                                      fontSize: 14.5,
+                                      fontWeight: FontWeight.w700,
+                                      color: theme.primaryText,
                                     ),
                                   ),
-                                  const SizedBox(width: 10.0),
-                                  // Category tag: [🟢 Fasta]
-                                  _buildCategoryTag(categoryLabel, habit.color),
-                                  const SizedBox(width: 8.0),
-                                  Expanded(
-                                    child: Text(
-                                      '${habit.title}$timeStr',
+                                  if (widget.dayEvent!.subtitle.isNotEmpty) ...[
+                                    const SizedBox(height: 2.0),
+                                    Text(
+                                      widget.dayEvent!.subtitle,
                                       style: GoogleFonts.manrope(
-                                        fontSize: 14.0,
+                                        fontSize: 12.0,
                                         fontWeight: FontWeight.w600,
-                                        color: isDone
-                                            ? theme.secondaryText
-                                            : theme.primaryText,
-                                        decoration: isDone
-                                            ? TextDecoration.lineThrough
-                                            : null,
+                                        color: theme.primary,
                                       ),
                                     ),
-                                  ),
+                                  ],
+                                  if (widget
+                                      .dayEvent!.description.isNotEmpty) ...[
+                                    const SizedBox(height: 5.0),
+                                    Text(
+                                      widget.dayEvent!.description,
+                                      style: GoogleFonts.manrope(
+                                        fontSize: 11.5,
+                                        color: theme.secondaryText,
+                                        height: 1.35,
+                                      ),
+                                    ),
+                                  ],
                                 ],
                               ),
-                            );
-                          }),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
 
-                          // Custom user activities
-                          ...customActivities.map((act) {
-                            final String categoryLabel =
-                                _getCategoryLabel(act.categoryKey);
-                            final String timeStr =
-                                act.time.isNotEmpty ? ' (${act.time})' : '';
+                    // Section Title: Dagens schemalagda aktiviteter:
+                    Text(
+                      'Dagens schemalagda aktiviteter:',
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.w700,
+                        color: theme.primaryText,
+                      ),
+                    ),
+                    const SizedBox(height: 12.0),
 
-                            return Container(
-                              margin: const EdgeInsets.only(bottom: 8.0),
-                              padding: const EdgeInsets.all(12.0),
-                              decoration: BoxDecoration(
-                                color: theme.primaryBackground,
-                                borderRadius: BorderRadius.circular(12.0),
-                                border: Border.all(
-                                  color: theme.alternate,
-                                  width: 1.0,
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () async {
-                                      await widget.habitService
-                                          .toggleCustomActivityCompletion(
-                                              act.id);
-                                      setState(() {});
-                                      widget.onChanged();
-                                    },
-                                    child: Container(
-                                      width: 22.0,
-                                      height: 22.0,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: act.isCompleted
-                                            ? act.categoryColor
-                                            : Colors.transparent,
-                                        border: Border.all(
-                                          color: act.isCompleted
-                                              ? act.categoryColor
-                                              : theme.secondaryText,
-                                          width: 1.5,
-                                        ),
-                                      ),
-                                      child: act.isCompleted
-                                          ? const Icon(Icons.check,
-                                              size: 14.0, color: Colors.white)
-                                          : null,
+                    // List of activities
+                    _isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : (habits.isEmpty && customActivities.isEmpty)
+                            ? Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 24.0),
+                                child: Center(
+                                  child: Text(
+                                    'Inga schemalagda aktiviteter för denna dag.',
+                                    style: GoogleFonts.manrope(
+                                      fontSize: 13.5,
+                                      color: theme.secondaryText,
+                                      fontStyle: FontStyle.italic,
                                     ),
                                   ),
-                                  const SizedBox(width: 10.0),
-                                  _buildCategoryTag(
-                                      categoryLabel, act.categoryColor),
-                                  const SizedBox(width: 8.0),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '${act.title}$timeStr',
-                                          style: GoogleFonts.manrope(
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.w600,
-                                            color: act.isCompleted
-                                                ? theme.secondaryText
-                                                : theme.primaryText,
-                                            decoration: act.isCompleted
-                                                ? TextDecoration.lineThrough
-                                                : null,
-                                          ),
+                                ),
+                              )
+                            : Column(
+                                children: [
+                                  // Master habits (full card clickable)
+                                  ...habits.map((habit) {
+                                    final isDone =
+                                        _completedHabits.contains(habit.id);
+                                    final String categoryLabel =
+                                        _getCategoryLabel(habit.categoryKey);
+                                    final String timeStr =
+                                        habit.defaultTime.isNotEmpty
+                                            ? ' (${habit.defaultTime})'
+                                            : '';
+
+                                    return Container(
+                                      margin:
+                                          const EdgeInsets.only(bottom: 8.0),
+                                      decoration: BoxDecoration(
+                                        color: theme.primaryBackground,
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
+                                        border: Border.all(
+                                          color: theme.alternate,
+                                          width: 1.0,
                                         ),
-                                        if (act.notes.isNotEmpty)
-                                          Text(
-                                            act.notes,
-                                            style: GoogleFonts.manrope(
-                                              fontSize: 11.5,
-                                              color: theme.secondaryText,
+                                      ),
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
+                                          onTap: () async {
+                                            final toggled = await widget
+                                                .habitService
+                                                .toggleHabitCompletion(
+                                                    widget.date, habit.id);
+                                            setState(() {
+                                              if (toggled) {
+                                                _completedHabits.add(habit.id);
+                                              } else {
+                                                _completedHabits
+                                                    .remove(habit.id);
+                                              }
+                                            });
+                                            widget.onChanged();
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(12.0),
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  width: 22.0,
+                                                  height: 22.0,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: isDone
+                                                        ? habit.color
+                                                        : Colors.transparent,
+                                                    border: Border.all(
+                                                      color: isDone
+                                                          ? habit.color
+                                                          : theme.secondaryText,
+                                                      width: 1.5,
+                                                    ),
+                                                  ),
+                                                  child: isDone
+                                                      ? const Icon(Icons.check,
+                                                          size: 14.0,
+                                                          color: Colors.white)
+                                                      : null,
+                                                ),
+                                                const SizedBox(width: 10.0),
+                                                // Category tag: [🟢 Fasta]
+                                                _buildCategoryTag(
+                                                    categoryLabel, habit.color),
+                                                const SizedBox(width: 8.0),
+                                                Expanded(
+                                                  child: Text(
+                                                    '${habit.title}$timeStr',
+                                                    style: GoogleFonts.manrope(
+                                                      fontSize: 14.0,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: isDone
+                                                          ? theme.secondaryText
+                                                          : theme.primaryText,
+                                                      decoration: isDone
+                                                          ? TextDecoration
+                                                              .lineThrough
+                                                          : null,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                      ],
-                                    ),
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.delete_outline,
-                                        size: 18.0, color: Colors.redAccent),
-                                    onPressed: () async {
-                                      await widget.habitService
-                                          .deleteCustomActivity(act.id);
-                                      setState(() {});
-                                      widget.onChanged();
-                                    },
-                                  ),
+                                        ),
+                                      ),
+                                    );
+                                  }),
+
+                                  // Custom user activities (full card clickable)
+                                  ...customActivities.map((act) {
+                                    final String categoryLabel =
+                                        _getCategoryLabel(act.categoryKey);
+                                    final String timeStr = act.time.isNotEmpty
+                                        ? ' (${act.time})'
+                                        : '';
+
+                                    return Container(
+                                      margin:
+                                          const EdgeInsets.only(bottom: 8.0),
+                                      decoration: BoxDecoration(
+                                        color: theme.primaryBackground,
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
+                                        border: Border.all(
+                                          color: theme.alternate,
+                                          width: 1.0,
+                                        ),
+                                      ),
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
+                                          onTap: () async {
+                                            await widget.habitService
+                                                .toggleCustomActivityCompletion(
+                                                    act.id);
+                                            setState(() {});
+                                            widget.onChanged();
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12.0,
+                                                vertical: 8.0),
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  width: 22.0,
+                                                  height: 22.0,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: act.isCompleted
+                                                        ? act.categoryColor
+                                                        : Colors.transparent,
+                                                    border: Border.all(
+                                                      color: act.isCompleted
+                                                          ? act.categoryColor
+                                                          : theme.secondaryText,
+                                                      width: 1.5,
+                                                    ),
+                                                  ),
+                                                  child: act.isCompleted
+                                                      ? const Icon(Icons.check,
+                                                          size: 14.0,
+                                                          color: Colors.white)
+                                                      : null,
+                                                ),
+                                                const SizedBox(width: 10.0),
+                                                _buildCategoryTag(categoryLabel,
+                                                    act.categoryColor),
+                                                const SizedBox(width: 8.0),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        '${act.title}$timeStr',
+                                                        style:
+                                                            GoogleFonts.manrope(
+                                                          fontSize: 14.0,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: act.isCompleted
+                                                              ? theme
+                                                                  .secondaryText
+                                                              : theme
+                                                                  .primaryText,
+                                                          decoration: act
+                                                                  .isCompleted
+                                                              ? TextDecoration
+                                                                  .lineThrough
+                                                              : null,
+                                                        ),
+                                                      ),
+                                                      if (act.notes.isNotEmpty)
+                                                        Text(
+                                                          act.notes,
+                                                          style: GoogleFonts
+                                                              .manrope(
+                                                            fontSize: 11.5,
+                                                            color: theme
+                                                                .secondaryText,
+                                                          ),
+                                                        ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                IconButton(
+                                                  icon: Icon(
+                                                      Icons.edit_outlined,
+                                                      size: 18.0,
+                                                      color:
+                                                          theme.secondaryText),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                    widget.onEditActivity
+                                                        ?.call(act);
+                                                  },
+                                                ),
+                                                IconButton(
+                                                  icon: const Icon(
+                                                      Icons.delete_outline,
+                                                      size: 18.0,
+                                                      color: Colors.redAccent),
+                                                  onPressed: () async {
+                                                    await widget.habitService
+                                                        .deleteCustomActivity(
+                                                            act.id);
+                                                    setState(() {});
+                                                    widget.onChanged();
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }),
                                 ],
                               ),
-                            );
-                          }),
-                        ],
-                      ),
-          ),
-          const SizedBox(height: 16.0),
+                    const SizedBox(height: 16.0),
 
-          // Button: ➕ Lägg till ny aktivitet på denna dag
-          SizedBox(
-            width: double.infinity,
-            height: 50.0,
-            child: ElevatedButton.icon(
-              onPressed: () => widget.onAddActivity(widget.date),
-              icon: const Icon(Icons.add_rounded, color: Colors.white),
-              label: Text(
-                'Lägg till ny aktivitet på denna dag',
-                style: GoogleFonts.plusJakartaSans(
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
+                    // Button: ➕ Lägg till ny aktivitet
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50.0,
+                      child: ElevatedButton.icon(
+                        onPressed: () => widget.onAddActivity(widget.date),
+                        icon:
+                            const Icon(Icons.add_rounded, color: Colors.white),
+                        label: Text(
+                          'Lägg till ny aktivitet',
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: theme.primary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14.0),
+                          ),
+                          elevation: 0,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: theme.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14.0),
-                ),
-                elevation: 0,
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -2368,6 +3156,7 @@ class _DayModalContentState extends State<_DayModalContent> {
 class _ActivityCreationFormModal extends StatefulWidget {
   final DateTime initialDate;
   final String initialCategoryKey;
+  final CustomCalendarActivity? initialActivity;
   final HabitTrackerService habitService;
   final String Function(int) getGregorianMonthNameSwedish;
   final VoidCallback onSaved;
@@ -2375,6 +3164,7 @@ class _ActivityCreationFormModal extends StatefulWidget {
   const _ActivityCreationFormModal({
     required this.initialDate,
     required this.initialCategoryKey,
+    this.initialActivity,
     required this.habitService,
     required this.getGregorianMonthNameSwedish,
     required this.onSaved,
@@ -2395,6 +3185,8 @@ class _ActivityCreationFormModalState
   String _selectedReminderDay = 'Samma dag';
   TimeOfDay _selectedReminderTime = const TimeOfDay(hour: 17, minute: 0);
   late String _selectedCategoryKey;
+  String _selectedSound = 'Standard (Systemljud)';
+  bool _titleHasError = false;
 
   final List<Map<String, dynamic>> _categories = [
     {
@@ -2429,11 +3221,81 @@ class _ActivityCreationFormModalState
     },
   ];
 
+  static final List<Map<String, dynamic>> _soundList = [
+    {
+      'name': 'Endast vibration',
+      'azanName': FFAppConstants.NullValue,
+      'iconType': 'vibration',
+    },
+    {
+      'name': 'Standard (Systemljud)',
+      'azanName': SoundName.Standard.name,
+      'iconType': 'volume',
+    },
+    {
+      'name': 'Kort Adhan 1',
+      'azanName': SoundName.Adhan_1.name,
+      'iconType': 'mosque',
+    },
+    {
+      'name': 'Kort Adhan 2',
+      'azanName': SoundName.Adhan_2.name,
+      'iconType': 'mosque',
+    },
+    {
+      'name': 'Kort Adhan 3',
+      'azanName': SoundName.Adhan_3.name,
+      'iconType': 'mosque',
+    },
+    {
+      'name': 'Kort Adhan 4',
+      'azanName': SoundName.Adhan_4.name,
+      'iconType': 'mosque',
+    },
+  ];
+
   @override
   void initState() {
     super.initState();
-    _selectedDate = widget.initialDate;
-    _selectedCategoryKey = widget.initialCategoryKey;
+    if (widget.initialActivity != null) {
+      final act = widget.initialActivity!;
+      _titleController.text = act.title;
+      _notesController.text = act.notes;
+      _selectedDate = act.date;
+      _selectedCategoryKey = act.categoryKey;
+      _selectedReminderDay = act.reminderDay;
+      if (act.sound.toLowerCase().contains('vibration')) {
+        _selectedSound = 'Endast vibration';
+      } else if (act.sound.contains('1')) {
+        _selectedSound = 'Kort Adhan 1';
+      } else if (act.sound.contains('2')) {
+        _selectedSound = 'Kort Adhan 2';
+      } else if (act.sound.contains('3')) {
+        _selectedSound = 'Kort Adhan 3';
+      } else if (act.sound.contains('4')) {
+        _selectedSound = 'Kort Adhan 4';
+      } else {
+        _selectedSound = 'Standard (Systemljud)';
+      }
+      if (act.time.contains(':')) {
+        final parts = act.time.split(':');
+        _selectedTime = TimeOfDay(
+          hour: int.tryParse(parts[0]) ?? 17,
+          minute: int.tryParse(parts[1]) ?? 30,
+        );
+      }
+    } else {
+      _selectedDate = widget.initialDate;
+      _selectedCategoryKey = widget.initialCategoryKey;
+    }
+
+    _titleController.addListener(() {
+      if (_titleHasError && _titleController.text.trim().isNotEmpty) {
+        setState(() {
+          _titleHasError = false;
+        });
+      }
+    });
   }
 
   @override
@@ -2496,13 +3358,183 @@ class _ActivityCreationFormModalState
     }
   }
 
+  Widget _buildSoundIcon(String iconType, bool isDark) {
+    if (iconType == 'vibration') {
+      return Icon(
+        Icons.vibration_outlined,
+        size: 22.0,
+        color: FlutterFlowTheme.of(context).primaryText,
+      );
+    } else if (iconType == 'volume') {
+      return Icon(
+        Icons.volume_up_rounded,
+        size: 22.0,
+        color: FlutterFlowTheme.of(context).primaryText,
+      );
+    } else {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(6.0),
+        child: Image.asset(
+          isDark
+              ? 'assets/images/Screenshot_2026-08-01_at_6.26.29_PM.png'
+              : 'assets/images/iconMosque.png',
+          width: 24.0,
+          height: 24.0,
+          fit: BoxFit.contain,
+        ),
+      );
+    }
+  }
+
+  void _showSoundSelectionBottomSheet() {
+    final theme = FlutterFlowTheme.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (modalCtx, setModalState) {
+            return Container(
+              padding: EdgeInsets.fromLTRB(
+                16.0,
+                12.0,
+                16.0,
+                16.0 + MediaQuery.of(ctx).padding.bottom,
+              ),
+              decoration: BoxDecoration(
+                color: theme.primaryBackground,
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(24.0)),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Center(child: BottomSheetIconWidget()),
+                  const SizedBox(height: 12.0),
+                  Text(
+                    'Påminnelseljud',
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                      color: theme.primaryText,
+                    ),
+                  ),
+                  const SizedBox(height: 14.0),
+                  ..._soundList.map((opt) {
+                    final isSelected = _selectedSound == opt['name'];
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 10.0),
+                      decoration: BoxDecoration(
+                        color: theme.secondaryBackground,
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(12.0),
+                          onTap: () async {
+                            setState(() {
+                              _selectedSound = opt['name'] as String;
+                            });
+                            setModalState(() {});
+                            final azanName = opt['azanName'] as String?;
+                            if (azanName != null &&
+                                azanName != FFAppConstants.NullValue) {
+                              try {
+                                await audioPlay(azanName);
+                              } catch (_) {}
+                            }
+                            if (mounted) {
+                              Navigator.of(ctx).pop();
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 14.0, vertical: 12.0),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 46.0,
+                                  height: 46.0,
+                                  decoration: BoxDecoration(
+                                    color: theme.primaryBackground,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: Center(
+                                    child: _buildSoundIcon(
+                                        opt['iconType'] as String, isDark),
+                                  ),
+                                ),
+                                const SizedBox(width: 14.0),
+                                Expanded(
+                                  child: Text(
+                                    opt['name'] as String,
+                                    style: GoogleFonts.plusJakartaSans(
+                                      fontSize: 14.5,
+                                      fontWeight: FontWeight.w600,
+                                      color: theme.primaryText,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  width: 22.0,
+                                  height: 22.0,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: isSelected
+                                          ? const Color(0xFF10B981)
+                                          : theme.secondaryText,
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                  child: isSelected
+                                      ? Center(
+                                          child: Container(
+                                            width: 10.0,
+                                            height: 10.0,
+                                            decoration: const BoxDecoration(
+                                              color: Color(0xFF10B981),
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                        )
+                                      : null,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   Future<void> _save() async {
     final title = _titleController.text.trim();
     if (title.isEmpty) {
+      setState(() {
+        _titleHasError = true;
+      });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Vänligen ange en titel', style: GoogleFonts.manrope()),
+          content: Text(
+            'Vänligen ange en titel för aktiviteten',
+            style: GoogleFonts.manrope(),
+          ),
           backgroundColor: Colors.redAccent,
+          duration: const Duration(seconds: 2),
         ),
       );
       return;
@@ -2513,27 +3545,48 @@ class _ActivityCreationFormModalState
     final formattedReminderTime =
         'kl. ${_selectedReminderTime.hour.toString().padLeft(2, '0')}:${_selectedReminderTime.minute.toString().padLeft(2, '0')}';
 
-    final newActivity = CustomCalendarActivity(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      title: title,
-      categoryKey: _selectedCategoryKey,
-      categoryColor: _getCategoryColor(_selectedCategoryKey),
-      date: _selectedDate,
-      time: formattedTime,
-      reminderDay: _selectedReminderDay,
-      reminderTime: formattedReminderTime,
-      notes: _notesController.text.trim(),
-    );
-
-    await widget.habitService.addCustomActivity(newActivity);
+    if (widget.initialActivity != null) {
+      final updated = CustomCalendarActivity(
+        id: widget.initialActivity!.id,
+        title: title,
+        categoryKey: _selectedCategoryKey,
+        categoryColor: _getCategoryColor(_selectedCategoryKey),
+        date: _selectedDate,
+        time: formattedTime,
+        reminderDay: _selectedReminderDay,
+        reminderTime: formattedReminderTime,
+        sound: _selectedSound,
+        notes: _notesController.text.trim(),
+        isCompleted: widget.initialActivity!.isCompleted,
+      );
+      await widget.habitService.updateCustomActivity(updated);
+    } else {
+      final newActivity = CustomCalendarActivity(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        title: title,
+        categoryKey: _selectedCategoryKey,
+        categoryColor: _getCategoryColor(_selectedCategoryKey),
+        date: _selectedDate,
+        time: formattedTime,
+        reminderDay: _selectedReminderDay,
+        reminderTime: formattedReminderTime,
+        sound: _selectedSound,
+        notes: _notesController.text.trim(),
+      );
+      await widget.habitService.addCustomActivity(newActivity);
+    }
     widget.onSaved();
 
     if (mounted) {
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content:
-              Text('Aktiviteten har sparats!', style: GoogleFonts.manrope()),
+          content: Text(
+            widget.initialActivity != null
+                ? 'Aktiviteten har uppdaterats!'
+                : 'Aktiviteten har sparats!',
+            style: GoogleFonts.manrope(),
+          ),
           backgroundColor: FlutterFlowTheme.of(context).primary,
         ),
       );
@@ -2560,390 +3613,1288 @@ class _ActivityCreationFormModalState
         color: theme.secondaryBackground,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24.0)),
       ),
-      padding: EdgeInsets.fromLTRB(
-          20.0, 12.0, 20.0, MediaQuery.of(context).viewInsets.bottom + 24.0),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Top Drag Handle with tap to close
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () => Navigator.of(context).pop(),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 4.0, bottom: 12.0),
-                child: Center(
-                  child: Container(
-                    width: 44.0,
-                    height: 5.0,
-                    decoration: BoxDecoration(
-                      color: isDark
-                          ? const Color(0xFF555555)
-                          : const Color(0xFFD1D5DB),
-                      borderRadius: BorderRadius.circular(2.5),
-                    ),
+      child: SafeArea(
+        top: false,
+        bottom: false,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+            theme.designToken.spacing.md,
+            theme.designToken.spacing.md,
+            theme.designToken.spacing.md,
+            theme.designToken.spacing.md +
+                MediaQuery.of(context).viewInsets.bottom +
+                MediaQuery.of(context).padding.bottom,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const BottomSheetIconWidget(),
+              Flexible(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.zero,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Header: Ny aktivitet / Redigera aktivitet
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              widget.initialActivity != null
+                                  ? 'Redigera aktivitet'
+                                  : 'Ny aktivitet',
+                              style: FlutterFlowTheme.of(context)
+                                  .titleLarge
+                                  .override(
+                                    font: GoogleFonts.plusJakartaSans(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .titleLarge
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .titleLarge
+                                          .fontStyle,
+                                    ),
+                                    letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .titleLarge
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .titleLarge
+                                        .fontStyle,
+                                  ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16.0),
+                      const Divider(height: 1.0, thickness: 1.0),
+                      const SizedBox(height: 16.0),
+
+                      // Titel: [ Skriv titel här... ]
+                      Text(
+                        'Titel:',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w600,
+                          color: theme.primaryText,
+                        ),
+                      ),
+                      const SizedBox(height: 6.0),
+                      TextField(
+                        controller: _titleController,
+                        decoration: InputDecoration(
+                          hintText: 'Skriv titel här...',
+                          hintStyle: GoogleFonts.manrope(
+                            fontSize: 13.5,
+                            color: theme.secondaryText,
+                          ),
+                          filled: true,
+                          fillColor: theme.primaryBackground,
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 14.0, vertical: 12.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                            borderSide: BorderSide(
+                              color: _titleHasError
+                                  ? Colors.redAccent
+                                  : theme.alternate,
+                              width: _titleHasError ? 1.6 : 1.0,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                            borderSide: BorderSide(
+                              color: _titleHasError
+                                  ? Colors.redAccent
+                                  : theme.alternate,
+                              width: _titleHasError ? 1.6 : 1.0,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                            borderSide: BorderSide(
+                              color: _titleHasError
+                                  ? Colors.redAccent
+                                  : theme.primary,
+                              width: 1.8,
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (_titleHasError)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4.0, left: 4.0),
+                          child: Text(
+                            'Titel är obligatorisk',
+                            style: GoogleFonts.manrope(
+                              fontSize: 12.0,
+                              color: Colors.redAccent,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      const SizedBox(height: 16.0),
+
+                      // Kategori / Färg:
+                      Text(
+                        'Kategori / Färg:',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w600,
+                          color: theme.primaryText,
+                        ),
+                      ),
+                      const SizedBox(height: 8.0),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        child: Row(
+                          children: _categories.map((cat) {
+                            final String key = cat['key'] as String;
+                            final String label = cat['label'] as String;
+                            final Color col = cat['color'] as Color;
+                            final bool isSelected = _selectedCategoryKey == key;
+
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _selectedCategoryKey = key;
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12.0, vertical: 6.0),
+                                  decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? col.withValues(alpha: 0.18)
+                                        : theme.primaryBackground,
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    border: Border.all(
+                                      color: isSelected ? col : theme.alternate,
+                                      width: isSelected ? 1.8 : 1.0,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        width: 8.0,
+                                        height: 8.0,
+                                        decoration: BoxDecoration(
+                                          color: col,
+                                          shape: BoxShape.circle,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 6.0),
+                                      Text(
+                                        label,
+                                        style: GoogleFonts.plusJakartaSans(
+                                          fontSize: 12.5,
+                                          fontWeight: isSelected
+                                              ? FontWeight.w700
+                                              : FontWeight.w500,
+                                          color: isSelected
+                                              ? col
+                                              : theme.primaryText,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      const SizedBox(height: 16.0),
+
+                      // Datum & Tid:
+                      Text(
+                        'Datum & Tid:',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w600,
+                          color: theme.primaryText,
+                        ),
+                      ),
+                      const SizedBox(height: 8.0),
+                      Row(
+                        children: [
+                          // Date picker button
+                          Expanded(
+                            child: InkWell(
+                              onTap: _pickDate,
+                              borderRadius: BorderRadius.circular(12.0),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12.0, vertical: 12.0),
+                                decoration: BoxDecoration(
+                                  color: theme.primaryBackground,
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  border: Border.all(color: theme.alternate),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.calendar_today_rounded,
+                                        size: 16.0, color: Color(0xFF154432)),
+                                    const SizedBox(width: 8.0),
+                                    Expanded(
+                                      child: Text(
+                                        formattedDate,
+                                        style: GoogleFonts.manrope(
+                                          fontSize: 13.0,
+                                          fontWeight: FontWeight.w600,
+                                          color: theme.primaryText,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10.0),
+
+                          // Time picker button
+                          Expanded(
+                            child: InkWell(
+                              onTap: _pickTime,
+                              borderRadius: BorderRadius.circular(12.0),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12.0, vertical: 12.0),
+                                decoration: BoxDecoration(
+                                  color: theme.primaryBackground,
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  border: Border.all(color: theme.alternate),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.access_time_rounded,
+                                        size: 16.0, color: Color(0xFF154432)),
+                                    const SizedBox(width: 8.0),
+                                    Expanded(
+                                      child: Text(
+                                        formattedTime,
+                                        style: GoogleFonts.manrope(
+                                          fontSize: 13.0,
+                                          fontWeight: FontWeight.w600,
+                                          color: theme.primaryText,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16.0),
+
+                      // Påminnelse: [ Samma dag ∨ ]   kl. [ 17:00 ∨ ]
+                      Text(
+                        'Påminnelse:',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w600,
+                          color: theme.primaryText,
+                        ),
+                      ),
+                      const SizedBox(height: 8.0),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              height: 48.0,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12.0),
+                              decoration: BoxDecoration(
+                                color: theme.primaryBackground,
+                                borderRadius: BorderRadius.circular(12.0),
+                                border: Border.all(color: theme.alternate),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: _selectedReminderDay,
+                                  isExpanded: true,
+                                  icon: Icon(Icons.arrow_drop_down,
+                                      color: theme.secondaryText),
+                                  style: GoogleFonts.manrope(
+                                    fontSize: 13.0,
+                                    fontWeight: FontWeight.w500,
+                                    color: theme.primaryText,
+                                  ),
+                                  dropdownColor: theme.secondaryBackground,
+                                  items: const [
+                                    DropdownMenuItem(
+                                      value: 'Samma dag',
+                                      child: Text('Samma dag'),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: '1 dag innan',
+                                      child: Text('1 dag innan'),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: '2 dagar innan',
+                                      child: Text('2 dagar innan'),
+                                    ),
+                                  ],
+                                  onChanged: (val) {
+                                    if (val != null) {
+                                      setState(() {
+                                        _selectedReminderDay = val;
+                                      });
+                                    }
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10.0),
+                          Expanded(
+                            child: InkWell(
+                              onTap: _pickReminderTime,
+                              borderRadius: BorderRadius.circular(12.0),
+                              child: Container(
+                                height: 48.0,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12.0),
+                                decoration: BoxDecoration(
+                                  color: theme.primaryBackground,
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  border: Border.all(color: theme.alternate),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'kl. $formattedReminderTime',
+                                      style: GoogleFonts.manrope(
+                                        fontSize: 13.0,
+                                        fontWeight: FontWeight.w500,
+                                        color: theme.primaryText,
+                                      ),
+                                    ),
+                                    Icon(Icons.arrow_drop_down,
+                                        color: theme.secondaryText),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16.0),
+
+                      // Påminnelseljud (Notification sound selector)
+                      Text(
+                        'Påminnelseljud:',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w600,
+                          color: theme.primaryText,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: _showSoundSelectionBottomSheet,
+                        borderRadius: BorderRadius.circular(12.0),
+                        child: Container(
+                          height: 52.0,
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          decoration: BoxDecoration(
+                            color: theme.primaryBackground,
+                            borderRadius: BorderRadius.circular(12.0),
+                            border: Border.all(color: theme.alternate),
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 34.0,
+                                height: 34.0,
+                                decoration: BoxDecoration(
+                                  color: theme.secondaryBackground,
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                child: Center(
+                                  child: _buildSoundIcon(
+                                    _soundList.firstWhere(
+                                      (s) => s['name'] == _selectedSound,
+                                      orElse: () => _soundList[1],
+                                    )['iconType'] as String,
+                                    isDark,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 12.0),
+                              Expanded(
+                                child: Text(
+                                  _selectedSound,
+                                  style: GoogleFonts.manrope(
+                                    fontSize: 13.5,
+                                    fontWeight: FontWeight.w600,
+                                    color: theme.primaryText,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              Icon(Icons.keyboard_arrow_down_rounded,
+                                  color: theme.secondaryText, size: 22.0),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16.0),
+
+                      // Anteckningar (Valfritt):
+                      Text(
+                        'Anteckningar (Valfritt):',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w600,
+                          color: theme.primaryText,
+                        ),
+                      ),
+                      const SizedBox(height: 6.0),
+                      TextField(
+                        controller: _notesController,
+                        maxLines: 2,
+                        decoration: InputDecoration(
+                          hintText: 'Skriv ytterligare information här...',
+                          hintStyle: GoogleFonts.manrope(
+                            fontSize: 13.5,
+                            color: theme.secondaryText,
+                          ),
+                          filled: true,
+                          fillColor: theme.primaryBackground,
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 14.0, vertical: 12.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                            borderSide: BorderSide(color: theme.alternate),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                            borderSide: BorderSide(color: theme.alternate),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20.0),
+
+                      // Button: Spara
+                      SizedBox(
+                        width: double.infinity,
+                        height: 44.0,
+                        child: ElevatedButton(
+                          onPressed: _save,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: theme.primary,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          ),
+                          child: Text(
+                            'Spara',
+                            style: FlutterFlowTheme.of(context)
+                                .titleSmall
+                                .override(
+                                  font: GoogleFonts.plusJakartaSans(
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .fontStyle,
+                                  ),
+                                  color: Colors.white,
+                                  letterSpacing: 0.0,
+                                  fontWeight: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .fontWeight,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .fontStyle,
+                                ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 8.0),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
 
-            // Header: Ny aktivitet
-            Center(
-              child: Text(
-                'Ny aktivitet',
-                style: GoogleFonts.plusJakartaSans(
-                  fontSize: 20.0,
+// =========================================================================
+// SUB-PAGE: CALENDAR PROGRESS & SELF-REFLECTION (Framsteg / Självrannsakan)
+// =========================================================================
+class CalendarProgressPage extends StatefulWidget {
+  final HabitTrackerService habitService;
+  final Map<String, dynamic> Function(DateTime) getHijriDate;
+
+  const CalendarProgressPage({
+    super.key,
+    required this.habitService,
+    required this.getHijriDate,
+  });
+
+  @override
+  State<CalendarProgressPage> createState() => _CalendarProgressPageState();
+}
+
+class _CalendarProgressPageState extends State<CalendarProgressPage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  Map<String, dynamic>? _stats;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+    _loadStats();
+  }
+
+  Future<void> _loadStats() async {
+    if (_stats == null) {
+      setState(() => _isLoading = true);
+    }
+    final s = await widget.habitService.getProgressStatistics(
+      DateTime.now(),
+      getHijriDate: widget.getHijriDate,
+    );
+    if (mounted) {
+      setState(() {
+        _stats = s;
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = FlutterFlowTheme.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Scaffold(
+      backgroundColor: theme.primaryBackground,
+      body: SafeArea(
+        top: true,
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(
+                theme.designToken.spacing.md,
+                theme.designToken.spacing.sm,
+                theme.designToken.spacing.md,
+                0.0,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    focusColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Icon(
+                      Icons.chevron_left,
+                      color: theme.primaryText,
+                      size: FFAppConstants.iconSize.toDouble(),
+                    ),
+                  ),
+                  SizedBox(width: theme.designToken.spacing.sm),
+                  Text(
+                    'Framsteg & Självrannsakan',
+                    style: theme.titleMedium.override(
+                      font: GoogleFonts.plusJakartaSans(
+                        fontWeight: theme.titleMedium.fontWeight,
+                        fontStyle: theme.titleMedium.fontStyle,
+                      ),
+                      letterSpacing: 0.0,
+                      fontWeight: theme.titleMedium.fontWeight,
+                      fontStyle: theme.titleMedium.fontStyle,
+                      color: theme.primaryText,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12.0),
+            Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: isDark ? theme.alternate : const Color(0xFFE2E8F0),
+                    width: 1.0,
+                  ),
+                ),
+              ),
+              child: TabBar(
+                controller: _tabController,
+                labelColor: theme.primary,
+                unselectedLabelColor: theme.secondaryText,
+                indicatorColor: theme.primary,
+                indicatorWeight: 3.0,
+                labelStyle: GoogleFonts.plusJakartaSans(
+                  fontSize: 14.0,
                   fontWeight: FontWeight.w700,
-                  color: theme.primaryText,
                 ),
+                unselectedLabelStyle: GoogleFonts.plusJakartaSans(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w500,
+                ),
+                tabs: const [
+                  Tab(text: 'Idag'),
+                  Tab(text: 'Vecka'),
+                  Tab(text: 'Månad'),
+                ],
               ),
             ),
-            const SizedBox(height: 16.0),
-            const Divider(height: 1.0, thickness: 1.0),
-            const SizedBox(height: 16.0),
+            Expanded(
+              child: _isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(color: theme.primary))
+                  : TabBarView(
+                      controller: _tabController,
+                      children: [
+                        _buildDayTab(theme, isDark),
+                        _buildWeekTab(theme, isDark),
+                        _buildMonthTab(theme, isDark),
+                      ],
+                    ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-            // Titel: [ Skriv titel här... ]
-            Text(
-              'Titel:',
-              style: GoogleFonts.plusJakartaSans(
-                fontSize: 14.0,
-                fontWeight: FontWeight.w600,
-                color: theme.primaryText,
-              ),
-            ),
-            const SizedBox(height: 6.0),
-            TextField(
-              controller: _titleController,
-              decoration: InputDecoration(
-                hintText: 'Skriv titel här...',
-                hintStyle: GoogleFonts.manrope(
-                  fontSize: 13.5,
-                  color: theme.secondaryText,
-                ),
-                filled: true,
-                fillColor: theme.primaryBackground,
-                contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 14.0, vertical: 12.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.0),
-                  borderSide: BorderSide(color: theme.alternate),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.0),
-                  borderSide: BorderSide(color: theme.alternate),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16.0),
+  Widget _buildDayTab(FlutterFlowTheme theme, bool isDark) {
+    final now = DateTime.now();
+    final dayStats = _stats?['day'] as Map<String, dynamic>?;
+    final int completed = dayStats?['completed'] ?? 0;
+    final int total = dayStats?['total'] ?? 0;
+    final double rate = (dayStats?['rate'] as num?)?.toDouble() ?? 0.0;
 
-            // Kategori / Färg:
-            Text(
-              'Kategori / Färg:',
-              style: GoogleFonts.plusJakartaSans(
-                fontSize: 14.0,
-                fontWeight: FontWeight.w600,
-                color: theme.primaryText,
-              ),
-            ),
-            const SizedBox(height: 8.0),
-            Wrap(
-              spacing: 8.0,
-              runSpacing: 8.0,
-              children: _categories.map((cat) {
-                final String key = cat['key'] as String;
-                final String label = cat['label'] as String;
-                final Color col = cat['color'] as Color;
-                final bool isSelected = _selectedCategoryKey == key;
+    final hj = widget.getHijriDate(now);
+    final int hjDay = castToType<int>(hj['Hijri_Day'] ?? hj['HijriDay']) ?? 1;
+    final int hjMonth =
+        castToType<int>(hj['Hijri_Month_No'] ?? hj['HijriMonthNo']) ?? 1;
+    final habits = widget.habitService.getScheduledHabitsForDate(
+      gregorianDate: now,
+      hijriDay: hjDay,
+      hijriMonth: hjMonth,
+      categoryFilter: 'Alla',
+    );
+    final customActs = widget.habitService
+        .getCustomActivitiesForDate(now, categoryFilter: 'Alla');
 
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _selectedCategoryKey = key;
-                    });
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12.0, vertical: 6.0),
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? col.withValues(alpha: 0.18)
-                          : theme.primaryBackground,
-                      borderRadius: BorderRadius.circular(20.0),
-                      border: Border.all(
-                        color: isSelected ? col : theme.alternate,
-                        width: isSelected ? 1.8 : 1.0,
+    final completedHabitIds = (_stats?['completedHabitIds'] as Set<String>?) ??
+        ((_stats?['completedHabitIds'] as Iterable?)
+                ?.map((e) => e.toString())
+                .toSet() ??
+            <String>{});
+
+    return SingleChildScrollView(
+      padding: EdgeInsets.fromLTRB(
+        16.0,
+        16.0,
+        16.0,
+        16.0 + MediaQuery.of(context).padding.bottom,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Today's summary card
+          Container(
+            padding: const EdgeInsets.all(18.0),
+            decoration: BoxDecoration(
+              color: theme.secondaryBackground,
+              borderRadius: BorderRadius.circular(18.0),
+              border: Border.all(
+                color: isDark ? theme.alternate : const Color(0xFFE2E8F0),
+                width: 1.0,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+                  blurRadius: 10.0,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Dagens översikt',
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w700,
+                        color: theme.primaryText,
                       ),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10.0, vertical: 4.0),
+                      decoration: BoxDecoration(
+                        color: theme.primary.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: Text(
+                        '${(rate * 100).round()}% fullföljt',
+                        style: GoogleFonts.manrope(
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w700,
+                          color: theme.primary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14.0),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(6.0),
+                  child: LinearProgressIndicator(
+                    value: total > 0 ? rate : 0.0,
+                    minHeight: 10.0,
+                    backgroundColor: isDark
+                        ? const Color(0xFF334155)
+                        : const Color(0xFFE2E8F0),
+                    valueColor: AlwaysStoppedAnimation<Color>(theme.primary),
+                  ),
+                ),
+                const SizedBox(height: 12.0),
+                Text(
+                  '$completed av $total aktiviteter slutförda idag',
+                  style: GoogleFonts.manrope(
+                    fontSize: 13.0,
+                    color: theme.secondaryText,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20.0),
+
+          Text(
+            'Aktiviteter idag',
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 16.0,
+              fontWeight: FontWeight.w700,
+              color: theme.primaryText,
+            ),
+          ),
+          const SizedBox(height: 10.0),
+
+          if (habits.isEmpty && customActs.isEmpty)
+            Container(
+              padding: const EdgeInsets.all(24.0),
+              decoration: BoxDecoration(
+                color: theme.secondaryBackground,
+                borderRadius: BorderRadius.circular(14.0),
+              ),
+              child: Center(
+                child: Text(
+                  'Inga schemalagda aktiviteter eller aktiva vanor för idag.\nAktivera vanor i kalenderinställningar!',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.manrope(
+                    fontSize: 13.5,
+                    color: theme.secondaryText,
+                  ),
+                ),
+              ),
+            )
+          else ...[
+            ...habits.map((h) {
+              final isDone = completedHabitIds.contains(h.id);
+              return Container(
+                margin: const EdgeInsets.only(bottom: 8.0),
+                decoration: BoxDecoration(
+                  color: theme.secondaryBackground,
+                  borderRadius: BorderRadius.circular(12.0),
+                  border: Border.all(color: theme.alternate, width: 0.8),
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(12.0),
+                    onTap: () async {
+                      await widget.habitService
+                          .toggleHabitCompletion(now, h.id);
+                      await _loadStats();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14.0, vertical: 12.0),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 24.0,
+                            height: 24.0,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: isDone ? h.color : Colors.transparent,
+                              border: Border.all(
+                                color: isDone ? h.color : theme.secondaryText,
+                                width: 1.6,
+                              ),
+                            ),
+                            child: isDone
+                                ? const Icon(Icons.check,
+                                    size: 15.0, color: Colors.white)
+                                : null,
+                          ),
+                          const SizedBox(width: 12.0),
+                          Expanded(
+                            child: Text(
+                              h.title,
+                              style: GoogleFonts.manrope(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w600,
+                                color: isDone
+                                    ? theme.secondaryText
+                                    : theme.primaryText,
+                                decoration:
+                                    isDone ? TextDecoration.lineThrough : null,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }),
+            ...customActs.map((ca) {
+              return Container(
+                margin: const EdgeInsets.only(bottom: 8.0),
+                decoration: BoxDecoration(
+                  color: theme.secondaryBackground,
+                  borderRadius: BorderRadius.circular(12.0),
+                  border: Border.all(color: theme.alternate, width: 0.8),
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(12.0),
+                    onTap: () async {
+                      await widget.habitService
+                          .toggleCustomActivityCompletion(ca.id);
+                      _loadStats();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14.0, vertical: 12.0),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 24.0,
+                            height: 24.0,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: ca.isCompleted
+                                  ? ca.categoryColor
+                                  : Colors.transparent,
+                              border: Border.all(
+                                color: ca.isCompleted
+                                    ? ca.categoryColor
+                                    : theme.secondaryText,
+                                width: 1.6,
+                              ),
+                            ),
+                            child: ca.isCompleted
+                                ? const Icon(Icons.check,
+                                    size: 15.0, color: Colors.white)
+                                : null,
+                          ),
+                          const SizedBox(width: 12.0),
+                          Expanded(
+                            child: Text(
+                              ca.title,
+                              style: GoogleFonts.manrope(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w600,
+                                color: ca.isCompleted
+                                    ? theme.secondaryText
+                                    : theme.primaryText,
+                                decoration: ca.isCompleted
+                                    ? TextDecoration.lineThrough
+                                    : null,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWeekTab(FlutterFlowTheme theme, bool isDark) {
+    final weekStats = _stats?['week'] as Map<String, dynamic>?;
+    final int completed = weekStats?['completed'] ?? 0;
+    final int total = weekStats?['total'] ?? 0;
+    final double rate = (weekStats?['rate'] as num?)?.toDouble() ?? 0.0;
+    final List<dynamic> days = weekStats?['days'] as List<dynamic>? ?? [];
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Weekly summary card
+          Container(
+            padding: const EdgeInsets.all(18.0),
+            decoration: BoxDecoration(
+              color: theme.secondaryBackground,
+              borderRadius: BorderRadius.circular(18.0),
+              border: Border.all(
+                color: isDark ? theme.alternate : const Color(0xFFE2E8F0),
+                width: 1.0,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+                  blurRadius: 10.0,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Denna veckas framsteg',
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w700,
+                        color: theme.primaryText,
+                      ),
+                    ),
+                    Text(
+                      '${(rate * 100).round()}%',
+                      style: GoogleFonts.manrope(
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.w800,
+                        color: theme.primary,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12.0),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(6.0),
+                  child: LinearProgressIndicator(
+                    value: total > 0 ? rate : 0.0,
+                    minHeight: 10.0,
+                    backgroundColor: isDark
+                        ? const Color(0xFF334155)
+                        : const Color(0xFFE2E8F0),
+                    valueColor: AlwaysStoppedAnimation<Color>(theme.primary),
+                  ),
+                ),
+                const SizedBox(height: 10.0),
+                Text(
+                  '$completed av $total aktiviteter slutförda denna vecka',
+                  style: GoogleFonts.manrope(
+                    fontSize: 13.0,
+                    color: theme.secondaryText,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20.0),
+
+          Text(
+            'Dag för dag (Måndag – Söndag)',
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 16.0,
+              fontWeight: FontWeight.w700,
+              color: theme.primaryText,
+            ),
+          ),
+          const SizedBox(height: 10.0),
+
+          ...days.map((item) {
+            final dayMap = item as Map<String, dynamic>;
+            final String weekdayName = dayMap['weekday'] ?? '';
+            final String dateStr = dayMap['date'] ?? '';
+            final int dayComp = dayMap['completed'] ?? 0;
+            final int dayTot = dayMap['total'] ?? 0;
+            final double dayRate = dayTot > 0 ? dayComp / dayTot : 0.0;
+
+            return Container(
+              margin: const EdgeInsets.only(bottom: 8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0),
+              decoration: BoxDecoration(
+                color: theme.secondaryBackground,
+                borderRadius: BorderRadius.circular(12.0),
+                border: Border.all(color: theme.alternate, width: 0.8),
+              ),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 76.0,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          width: 8.0,
-                          height: 8.0,
-                          decoration: BoxDecoration(
-                            color: col,
-                            shape: BoxShape.circle,
+                        Text(
+                          weekdayName,
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 13.5,
+                            fontWeight: FontWeight.w700,
+                            color: theme.primaryText,
                           ),
                         ),
-                        const SizedBox(width: 6.0),
                         Text(
-                          label,
-                          style: GoogleFonts.plusJakartaSans(
-                            fontSize: 12.5,
-                            fontWeight:
-                                isSelected ? FontWeight.w700 : FontWeight.w500,
-                            color: isSelected ? col : theme.primaryText,
+                          dateStr,
+                          style: GoogleFonts.manrope(
+                            fontSize: 11.5,
+                            color: theme.secondaryText,
                           ),
                         ),
                       ],
                     ),
                   ),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 16.0),
-
-            // Datum & Tid:
-            Text(
-              'Datum & Tid:',
-              style: GoogleFonts.plusJakartaSans(
-                fontSize: 14.0,
-                fontWeight: FontWeight.w600,
-                color: theme.primaryText,
-              ),
-            ),
-            const SizedBox(height: 8.0),
-            Row(
-              children: [
-                // Date picker button
-                Expanded(
-                  child: InkWell(
-                    onTap: _pickDate,
-                    borderRadius: BorderRadius.circular(12.0),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12.0, vertical: 12.0),
-                      decoration: BoxDecoration(
-                        color: theme.primaryBackground,
-                        borderRadius: BorderRadius.circular(12.0),
-                        border: Border.all(color: theme.alternate),
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.calendar_today_rounded,
-                              size: 16.0, color: Color(0xFF154432)),
-                          const SizedBox(width: 8.0),
-                          Expanded(
-                            child: Text(
-                              formattedDate,
-                              style: GoogleFonts.manrope(
-                                fontSize: 13.0,
-                                fontWeight: FontWeight.w600,
-                                color: theme.primaryText,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
+                  const SizedBox(width: 12.0),
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(4.0),
+                      child: LinearProgressIndicator(
+                        value: dayRate,
+                        minHeight: 8.0,
+                        backgroundColor: isDark
+                            ? const Color(0xFF334155)
+                            : const Color(0xFFE2E8F0),
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            dayComp == dayTot && dayTot > 0
+                                ? const Color(0xFF10B981)
+                                : theme.primary),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 10.0),
-
-                // Time picker button
-                Expanded(
-                  child: InkWell(
-                    onTap: _pickTime,
-                    borderRadius: BorderRadius.circular(12.0),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12.0, vertical: 12.0),
-                      decoration: BoxDecoration(
-                        color: theme.primaryBackground,
-                        borderRadius: BorderRadius.circular(12.0),
-                        border: Border.all(color: theme.alternate),
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.access_time_rounded,
-                              size: 16.0, color: Color(0xFF154432)),
-                          const SizedBox(width: 8.0),
-                          Expanded(
-                            child: Text(
-                              formattedTime,
-                              style: GoogleFonts.manrope(
-                                fontSize: 13.0,
-                                fontWeight: FontWeight.w600,
-                                color: theme.primaryText,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                  const SizedBox(width: 14.0),
+                  Text(
+                    dayTot > 0 ? '$dayComp / $dayTot' : '–',
+                    style: GoogleFonts.manrope(
+                      fontSize: 13.0,
+                      fontWeight: FontWeight.w700,
+                      color:
+                          dayTot > 0 ? theme.primaryText : theme.secondaryText,
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16.0),
-
-            // Påminnelse: [ Samma dag ∨ ]   kl. [ 17:00 ∨ ]
-            Text(
-              'Påminnelse:',
-              style: GoogleFonts.plusJakartaSans(
-                fontSize: 14.0,
-                fontWeight: FontWeight.w600,
-                color: theme.primaryText,
+                ],
               ),
-            ),
-            const SizedBox(height: 8.0),
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    height: 48.0,
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    decoration: BoxDecoration(
-                      color: theme.primaryBackground,
-                      borderRadius: BorderRadius.circular(12.0),
-                      border: Border.all(color: theme.alternate),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: _selectedReminderDay,
-                        isExpanded: true,
-                        icon: Icon(Icons.arrow_drop_down,
-                            color: theme.secondaryText),
-                        style: GoogleFonts.manrope(
-                          fontSize: 13.0,
-                          fontWeight: FontWeight.w500,
-                          color: theme.primaryText,
-                        ),
-                        dropdownColor: theme.secondaryBackground,
-                        items: const [
-                          DropdownMenuItem(
-                            value: 'Samma dag',
-                            child: Text('Samma dag'),
-                          ),
-                          DropdownMenuItem(
-                            value: '1 dag innan',
-                            child: Text('1 dag innan'),
-                          ),
-                          DropdownMenuItem(
-                            value: '2 dagar innan',
-                            child: Text('2 dagar innan'),
-                          ),
-                        ],
-                        onChanged: (val) {
-                          if (val != null) {
-                            setState(() {
-                              _selectedReminderDay = val;
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10.0),
-                Expanded(
-                  child: InkWell(
-                    onTap: _pickReminderTime,
-                    borderRadius: BorderRadius.circular(12.0),
-                    child: Container(
-                      height: 48.0,
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      decoration: BoxDecoration(
-                        color: theme.primaryBackground,
-                        borderRadius: BorderRadius.circular(12.0),
-                        border: Border.all(color: theme.alternate),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'kl. $formattedReminderTime',
-                            style: GoogleFonts.manrope(
-                              fontSize: 13.0,
-                              fontWeight: FontWeight.w500,
-                              color: theme.primaryText,
-                            ),
-                          ),
-                          Icon(Icons.arrow_drop_down,
-                              color: theme.secondaryText),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16.0),
-
-            // Anteckningar (Valfritt):
-            Text(
-              'Anteckningar (Valfritt):',
-              style: GoogleFonts.plusJakartaSans(
-                fontSize: 14.0,
-                fontWeight: FontWeight.w600,
-                color: theme.primaryText,
-              ),
-            ),
-            const SizedBox(height: 6.0),
-            TextField(
-              controller: _notesController,
-              maxLines: 2,
-              decoration: InputDecoration(
-                hintText: 'Skriv ytterligare information här...',
-                hintStyle: GoogleFonts.manrope(
-                  fontSize: 13.5,
-                  color: theme.secondaryText,
-                ),
-                filled: true,
-                fillColor: theme.primaryBackground,
-                contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 14.0, vertical: 12.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.0),
-                  borderSide: BorderSide(color: theme.alternate),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.0),
-                  borderSide: BorderSide(color: theme.alternate),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20.0),
-
-            // Button: Spara
-            SizedBox(
-              width: double.infinity,
-              height: 50.0,
-              child: ElevatedButton(
-                onPressed: _save,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: theme.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14.0),
-                  ),
-                  elevation: 0,
-                ),
-                child: Text(
-                  'Spara',
-                  style: GoogleFonts.plusJakartaSans(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+            );
+          }),
+        ],
       ),
+    );
+  }
+
+  Widget _buildMonthTab(FlutterFlowTheme theme, bool isDark) {
+    final monthStats = _stats?['month'] as Map<String, dynamic>?;
+    final int completed = monthStats?['completed'] ?? 0;
+    final int activeDays = monthStats?['daysWithCompletion'] ?? 0;
+    final double rate = (monthStats?['rate'] as num?)?.toDouble() ?? 0.0;
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Monthly overview card
+          Container(
+            padding: const EdgeInsets.all(20.0),
+            decoration: BoxDecoration(
+              color: theme.secondaryBackground,
+              borderRadius: BorderRadius.circular(18.0),
+              border: Border.all(
+                color: isDark ? theme.alternate : const Color(0xFFE2E8F0),
+                width: 1.0,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+                  blurRadius: 10.0,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Månadsöversikt',
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.w700,
+                    color: theme.primaryText,
+                  ),
+                ),
+                const SizedBox(height: 18.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _buildStatPill(
+                      theme,
+                      isDark,
+                      title: 'Slutförda',
+                      value: completed.toString(),
+                      icon: Icons.check_circle_rounded,
+                      iconColor: theme.primary,
+                    ),
+                    _buildStatPill(
+                      theme,
+                      isDark,
+                      title: 'Aktiva dagar',
+                      value: activeDays.toString(),
+                      icon: Icons.calendar_month_rounded,
+                      iconColor: const Color(0xFFF59E0B),
+                    ),
+                    _buildStatPill(
+                      theme,
+                      isDark,
+                      title: 'Genomsnitt',
+                      value: '${(rate * 100).round()}%',
+                      icon: Icons.auto_graph_rounded,
+                      iconColor: const Color(0xFF8B5CF6),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24.0),
+
+          // Hadith reflection card
+          Container(
+            padding: const EdgeInsets.all(18.0),
+            decoration: BoxDecoration(
+              color: theme.primary.withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(16.0),
+              border: Border.all(
+                color: theme.primary.withValues(alpha: 0.25),
+                width: 1.0,
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.lightbulb_outline_rounded,
+                        color: theme.primary, size: 20.0),
+                    const SizedBox(width: 8.0),
+                    Text(
+                      'Visdom om regelbundenhet',
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 14.5,
+                        fontWeight: FontWeight.w700,
+                        color: theme.primary,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10.0),
+                Text(
+                  '”De handlingar som är mest älskade inför Allah är de som utförs regelbundet, även om de är få.”',
+                  style: GoogleFonts.manrope(
+                    fontSize: 13.5,
+                    fontStyle: FontStyle.italic,
+                    height: 1.5,
+                    color: theme.primaryText,
+                  ),
+                ),
+                const SizedBox(height: 6.0),
+                Text(
+                  '– Sahih al-Bukhari & Sahih Muslim',
+                  style: GoogleFonts.manrope(
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.w600,
+                    color: theme.secondaryText,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatPill(
+    FlutterFlowTheme theme,
+    bool isDark, {
+    required String title,
+    required String value,
+    required IconData icon,
+    required Color iconColor,
+  }) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10.0),
+          decoration: BoxDecoration(
+            color: iconColor.withValues(alpha: 0.12),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: iconColor, size: 22.0),
+        ),
+        const SizedBox(height: 8.0),
+        Text(
+          value,
+          style: GoogleFonts.plusJakartaSans(
+            fontSize: 18.0,
+            fontWeight: FontWeight.w800,
+            color: theme.primaryText,
+          ),
+        ),
+        const SizedBox(height: 2.0),
+        Text(
+          title,
+          style: GoogleFonts.manrope(
+            fontSize: 12.0,
+            color: theme.secondaryText,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -10,4 +10,8 @@ abstract class FFAppConstants {
   static const String channelLink =
       'https://www.youtube.com/@Muslimenskompanjon/shorts';
   static const int footerHeight = 60;
+  static const String Android =
+      'https://play.google.com/store/apps/details?id=se.muslimenskompanjon.app';
+  static const String Ios =
+      'https://apps.apple.com/se/app/muslimens-kompanjon/id1614461250';
 }

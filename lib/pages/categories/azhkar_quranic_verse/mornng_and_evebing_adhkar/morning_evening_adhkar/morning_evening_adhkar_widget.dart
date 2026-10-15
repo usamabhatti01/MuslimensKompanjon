@@ -100,6 +100,7 @@ class _MorningEveningAdhkarWidgetState
                           audio: true,
                           initialValue: FFAppState().adhkarSetting,
                           fontType: Font.adhkar.name,
+                          favt: false,
                         ),
                       ),
                     ),

@@ -247,7 +247,7 @@ class OnIslamStruct extends BaseStruct {
         totalParts,
         estimatedReadingTimeMinutes,
         introduction,
-        sections,
+        const ListEquality().hash(sections),
         videoUrl,
         playlistUrl,
         alreadyRead

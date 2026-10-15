@@ -467,7 +467,10 @@ class _MKkanalenCopyyWidgetState extends State<MKkanalenCopyyWidget> {
                                 },
                                 text: 'Prenumerera',
                                 icon: FaIcon(
-                                  FontAwesomeIcons.bellSlash,
+                                  FaIconData(const IconData(
+                                      /* bellSlash */ 0xf1f6,
+                                      fontFamily: 'FontAwesomeRegular',
+                                      fontPackage: 'font_awesome_flutter')),
                                   size: 15.0,
                                 ),
                                 options: FFButtonOptions(

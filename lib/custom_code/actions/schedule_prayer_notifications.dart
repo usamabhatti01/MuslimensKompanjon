@@ -1,14 +1,16 @@
 // Automatic FlutterFlow imports
 import '/backend/schema/structs/index.dart';
 import '/backend/schema/enums/enums.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/actions/index.dart'; // Imports other custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
+//
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -114,6 +116,10 @@ Future<String> schedulePrayerNotifications() async {
     final androidPlugin = fln.resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>();
 
+    try {
+      await androidPlugin?.requestExactAlarmsPermission();
+    } catch (_) {}
+
     await androidPlugin?.createNotificationChannel(
       const AndroidNotificationChannel(
         'prayer_channel_vibration',
@@ -127,8 +133,9 @@ Future<String> schedulePrayerNotifications() async {
     await androidPlugin?.createNotificationChannel(
       const AndroidNotificationChannel(
         'prayer_channel_sound',
-        'Prayer Sound Notifications',
-        description: 'Prayer reminder notifications with sound',
+        'Prayer Alerts & Reminders',
+        description:
+            'Standard prayer notifications with customizable system sound',
         importance: Importance.max,
         playSound: true,
         enableVibration: true,
@@ -223,19 +230,21 @@ Future<String> schedulePrayerNotifications() async {
     final isVibration = selectedSound == 'Vibration';
     final lang = FFAppState().user.languageCode.toLowerCase().trim();
     final title = _translate('prayer_reminder', lang);
+    String capitalize(String text) =>
+        text.isEmpty ? text : text[0].toUpperCase() + text.substring(1);
 
     Future<void> _scheduleNotification({
       required int id,
       required tz.TZDateTime time,
       required String body,
-      required bool playAdhanSound,
+      required bool isAdhan,
     }) async {
-      final playSoundActual = playAdhanSound && !isVibration;
+      final playSoundActual = !isVibration;
 
       String? androidSoundResource;
       String? iosSoundFile;
 
-      if (playSoundActual) {
+      if (playSoundActual && isAdhan) {
         switch (selectedSound) {
           case 'Standard':
             androidSoundResource = null;
@@ -269,85 +278,66 @@ Future<String> schedulePrayerNotifications() async {
               : 'prayer_channel_sound')
           : 'prayer_channel_vibration';
       final channelName = playSoundActual
-          ? 'Prayer Sound Notifications'
+          ? (androidSoundResource != null
+              ? 'Prayer Adhan Notifications'
+              : 'Prayer Alerts & Reminders')
           : 'Prayer Vibration Notifications';
       final channelDesc = playSoundActual
-          ? 'Prayer reminder notifications with sound'
+          ? (androidSoundResource != null
+              ? 'Prayer reminder notifications with Adhan sound'
+              : 'Standard prayer alerts with customizable system sound')
           : 'Prayer reminder notifications with vibration only';
 
-      var scheduleMode = AndroidScheduleMode.exactAllowWhileIdle;
+      // Check if exact alarms are permitted at runtime.
+      // USE_EXACT_ALARM (API 33+) is auto-granted, so canScheduleExactNotifications
+      // returns true without user prompt on modern devices.
+      // alarmClock mode bypasses Doze mode entirely — it wakes the device just
+      // like a real clock alarm, even with screen off.
+      bool canExact = false;
       try {
-        await fln.zonedSchedule(
-          id,
-          title,
-          body,
-          time,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channelId,
-              channelName,
-              channelDescription: channelDesc,
-              importance: Importance.max,
-              priority: Priority.high,
-              playSound: playSoundActual,
-              enableVibration: true,
-              sound: playSoundActual && androidSoundResource != null
-                  ? RawResourceAndroidNotificationSound(
-                      androidSoundResource,
-                    )
-                  : null,
-            ),
-            iOS: DarwinNotificationDetails(
-              presentAlert: true,
-              presentBadge: true,
-              presentSound: playSoundActual,
-              sound: iosSoundFile,
-            ),
-          ),
-          androidScheduleMode: scheduleMode,
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
-          matchDateTimeComponents: null,
-        );
-      } catch (e) {
-        if (e is PlatformException && e.code == 'exact_alarms_not_permitted') {
-          scheduleMode = AndroidScheduleMode.inexactAllowWhileIdle;
-          await fln.zonedSchedule(
-            id,
-            title,
-            body,
-            time,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                channelId,
-                channelName,
-                channelDescription: channelDesc,
-                importance: Importance.max,
-                priority: Priority.high,
-                playSound: playSoundActual,
-                enableVibration: true,
-                sound: playSoundActual && androidSoundResource != null
-                    ? RawResourceAndroidNotificationSound(
-                        androidSoundResource,
-                      )
-                    : null,
-              ),
-              iOS: DarwinNotificationDetails(
-                presentAlert: true,
-                presentBadge: true,
-                presentSound: playSoundActual,
-                sound: iosSoundFile,
-              ),
-            ),
-            androidScheduleMode: scheduleMode,
-            uiLocalNotificationDateInterpretation:
-                UILocalNotificationDateInterpretation.absoluteTime,
-            matchDateTimeComponents: null,
-          );
-        } else {
-          rethrow;
-        }
+        canExact =
+            await androidPlugin?.canScheduleExactNotifications() ?? false;
+      } catch (_) {
+        canExact = false;
       }
+
+      final scheduleMode = canExact
+          ? AndroidScheduleMode
+              .alarmClock // wakes device even from Doze / screen-off
+          : AndroidScheduleMode.inexactAllowWhileIdle;
+
+      final notifDetails = NotificationDetails(
+        android: AndroidNotificationDetails(
+          channelId,
+          channelName,
+          channelDescription: channelDesc,
+          importance: Importance.max,
+          priority: Priority.high,
+          playSound: playSoundActual,
+          enableVibration: true,
+          sound: playSoundActual && androidSoundResource != null
+              ? RawResourceAndroidNotificationSound(androidSoundResource)
+              : null,
+        ),
+        iOS: DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: playSoundActual,
+          sound: iosSoundFile,
+        ),
+      );
+
+      await fln.zonedSchedule(
+        id,
+        title,
+        body,
+        time,
+        notifDetails,
+        androidScheduleMode: scheduleMode,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: null,
+      );
     }
 
     for (int dayOffset = 0; dayOffset < 10; dayOffset++) {
@@ -385,7 +375,7 @@ Future<String> schedulePrayerNotifications() async {
         if (timeStr == null) continue;
 
         final prayerTime = _toTZ(timeStr, location, targetDate);
-        final capitalizedPrayer = _capitalize(_translate(prayer, lang));
+        final capitalizedPrayer = capitalize(_translate(prayer, lang));
 
         // 1. Before-time Reminder (notice)
         final noticeEnabled = _getPrayerSetting(prayer, 'notice');
@@ -401,7 +391,7 @@ Future<String> schedulePrayerNotifications() async {
               id: noticeId,
               time: reminderTime,
               body: body,
-              playAdhanSound: false,
+              isAdhan: false,
             );
           }
         }
@@ -417,7 +407,7 @@ Future<String> schedulePrayerNotifications() async {
               id: adhanId,
               time: prayerTime,
               body: body,
-              playAdhanSound: true,
+              isAdhan: true,
             );
           }
         }
@@ -457,9 +447,4 @@ tz.TZDateTime _toTZ(
     int.parse(parts[0]),
     int.parse(parts[1]),
   );
-}
-
-String _capitalize(String text) {
-  if (text.isEmpty) return text;
-  return text[0].toUpperCase() + text.substring(1);
 }

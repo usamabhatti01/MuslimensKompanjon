@@ -98,6 +98,7 @@ class _NarHjartatDetailWidgetState extends State<NarHjartatDetailWidget> {
                           audio: false,
                           initialValue: FFAppState().adhkarSetting,
                           fontType: Font.adhkar.name,
+                          favt: false,
                         ),
                       ),
                     ),

@@ -1,17 +1,20 @@
 // Automatic FlutterFlow imports
 import '/backend/schema/structs/index.dart';
 import '/backend/schema/enums/enums.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/widgets/index.dart'; // Imports other custom widgets
 import '/custom_code/actions/index.dart'; // Imports custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
 /// Set your widget name, define your parameter, and then add the boilerplate
 /// code using the `</>` button on the right!
+// Automatic FlutterFlow import
+
 import 'package:google_fonts/google_fonts.dart';
 import '/index.dart';
 
@@ -137,7 +140,7 @@ class _NarHjartatMinnsAllahDetailWidgetState
                     fontWeight: FontWeight.w500,
                     height: 1.5,
                   ),
-                  color: const Color(0xFF000000),
+                  color: FlutterFlowTheme.of(context).secondaryText,
                   letterSpacing: 0.0,
                   fontWeight: FontWeight.w500,
                 ),
@@ -303,7 +306,7 @@ class _NarHjartatMinnsAllahDetailWidgetState
                             fontWeight: FontWeight.w500,
                             height: 1.5,
                           ),
-                          color: const Color(0xFF000000),
+                          color: FlutterFlowTheme.of(context).secondaryText,
                           letterSpacing: 0.0,
                           fontWeight: FontWeight.w500,
                         ),
@@ -364,7 +367,7 @@ class _NarHjartatMinnsAllahDetailWidgetState
                     fontWeight: FontWeight.w500,
                     height: 1.5,
                   ),
-                  color: const Color(0xFF000000),
+                  color: FlutterFlowTheme.of(context).secondaryText,
                   letterSpacing: 0.0,
                   fontWeight: FontWeight.w500,
                 ),
@@ -520,7 +523,7 @@ class _NarHjartatMinnsAllahDetailWidgetState
                     fontWeight: FontWeight.w500,
                     height: 1.5,
                   ),
-                  color: const Color(0xFF000000),
+                  color: FlutterFlowTheme.of(context).secondaryText,
                   letterSpacing: 0.0,
                   fontWeight: FontWeight.w500,
                 ),

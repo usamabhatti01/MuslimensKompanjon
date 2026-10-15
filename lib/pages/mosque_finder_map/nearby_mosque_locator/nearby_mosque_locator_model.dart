@@ -17,8 +17,12 @@ class NearbyMosqueLocatorModel
   void updateSearchCitiesAtIndex(int index, Function(MosqueStruct) updateFn) =>
       searchCities[index] = updateFn(searchCities[index]);
 
+  LatLng? userLocation;
+
   ///  State fields for stateful widgets in this page.
 
+  // Stores action output result for [Custom Action - getUserLocationSafe] action in NearbyMosqueLocator widget.
+  LatLng? currentLoc;
   // State field(s) for TextField widget.
   FocusNode? textFieldFocusNode;
   TextEditingController? textController;

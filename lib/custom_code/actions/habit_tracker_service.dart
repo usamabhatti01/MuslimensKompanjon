@@ -1,14 +1,17 @@
 // Automatic FlutterFlow imports
 import '/backend/schema/structs/index.dart';
 import '/backend/schema/enums/enums.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/actions/index.dart'; // Imports other custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
+// Set your action name, define your arguments and return parameter,
+// and then add the boilerplate code using the `</>` button on the right!
 // Set your action name, define your arguments and return parameter,
 // and then add the boilerplate code using the `</>` button on the right!
 import 'dart:convert';
@@ -30,6 +33,8 @@ class CustomCalendarActivity {
   final String time; // e.g. "17:30"
   final String reminderDay; // "Samma dag", "1 dag innan", "2 dagar innan"
   final String reminderTime; // e.g. "kl. 17:00"
+  final String
+      sound; // e.g. "Standard", "Adhan", "Klocka", "Subtil ton", "Mjuk signal"
   final String notes;
   bool isCompleted;
 
@@ -42,6 +47,7 @@ class CustomCalendarActivity {
     required this.time,
     required this.reminderDay,
     required this.reminderTime,
+    this.sound = 'Standard',
     this.notes = '',
     this.isCompleted = false,
   });
@@ -56,6 +62,7 @@ class CustomCalendarActivity {
         'time': time,
         'reminderDay': reminderDay,
         'reminderTime': reminderTime,
+        'sound': sound,
         'notes': notes,
         'isCompleted': isCompleted,
       };
@@ -77,6 +84,7 @@ class CustomCalendarActivity {
       time: json['time'] as String? ?? '12:00',
       reminderDay: json['reminderDay'] as String? ?? 'Samma dag',
       reminderTime: json['reminderTime'] as String? ?? 'kl. 12:00',
+      sound: json['sound'] as String? ?? 'Standard',
       notes: json['notes'] as String? ?? '',
       isCompleted: json['isCompleted'] as bool? ?? false,
     );
@@ -126,31 +134,31 @@ class HabitTrackerService {
   static const Color colorDhikr = Color(0xFFE67E22); // Orange/Red
   static const Color colorCharity = Color(0xFFE91E63); // Pink
 
-  // Default enabled state for all habits
+  // Default enabled state for all habits (OFF by default as per Version 1.27 specs)
   final Map<String, bool> _defaultSettings = {
-    'fasting_monday_thursday': true,
-    'fasting_monday': true,
-    'fasting_thursday': true,
-    'fasting_ayyam_al_bid': true,
-    'fasting_arafah': true,
-    'fasting_ashura': true,
-    'fasting_shawwal': true,
+    'fasting_monday_thursday': false,
+    'fasting_monday': false,
+    'fasting_thursday': false,
+    'fasting_ayyam_al_bid': false,
+    'fasting_arafah': false,
+    'fasting_ashura': false,
+    'fasting_shawwal': false,
     'fasting_kada': false,
-    'quran_kahf_friday': true,
-    'quran_daily': true,
+    'quran_kahf_friday': false,
+    'quran_daily': false,
     'quran_khatm': false,
-    'prayer_duha': true,
-    'prayer_witr': true,
-    'prayer_tahajjud': true,
-    'prayer_rawatib': true,
+    'prayer_duha': false,
+    'prayer_witr': false,
+    'prayer_tahajjud': false,
+    'prayer_rawatib': false,
     'prayer_eclipse': false,
-    'dhikr_morning': true,
-    'dhikr_evening': true,
-    'dhikr_after_prayer': true,
-    'charity_friday': true,
-    'charity_good_deeds': true,
-    'charity_zakat': true,
-    'charity_dhul_hijjah': true,
+    'dhikr_morning': false,
+    'dhikr_evening': false,
+    'dhikr_after_prayer': false,
+    'charity_friday': false,
+    'charity_good_deeds': false,
+    'charity_zakat': false,
+    'charity_dhul_hijjah': false,
     'custom_events_enabled': true,
   };
 
@@ -503,9 +511,9 @@ class HabitTrackerService {
   /// Get current enabled status of a habit
   bool isHabitEnabled(String habitId) {
     if (!_isInitialized || !_currentSettings.containsKey(habitId)) {
-      return _defaultSettings[habitId] ?? true;
+      return _defaultSettings[habitId] ?? false;
     }
-    return _currentSettings[habitId] ?? true;
+    return _currentSettings[habitId] ?? false;
   }
 
   /// Save all habit settings
@@ -578,12 +586,48 @@ class HabitTrackerService {
 
   Future<void> addCustomActivity(CustomCalendarActivity activity) async {
     _customActivities.add(activity);
+    _currentSettings['custom_events_enabled'] = true;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('habit_setting_custom_events_enabled', true);
+    } catch (_) {}
     await _saveCustomActivities();
+    await scheduleActivityNotification(
+      activity.id,
+      activity.title,
+      activity.date,
+      activity.time,
+      activity.reminderDay,
+      activity.reminderTime,
+      activity.sound,
+      activity.notes,
+      false,
+    );
+  }
+
+  Future<void> updateCustomActivity(CustomCalendarActivity activity) async {
+    final idx = _customActivities.indexWhere((a) => a.id == activity.id);
+    if (idx != -1) {
+      _customActivities[idx] = activity;
+      await _saveCustomActivities();
+      await scheduleActivityNotification(
+        activity.id,
+        activity.title,
+        activity.date,
+        activity.time,
+        activity.reminderDay,
+        activity.reminderTime,
+        activity.sound,
+        activity.notes,
+        false,
+      );
+    }
   }
 
   Future<void> deleteCustomActivity(String id) async {
     _customActivities.removeWhere((a) => a.id == id);
     await _saveCustomActivities();
+    await cancelActivityNotification(id);
   }
 
   Future<void> toggleCustomActivityCompletion(String id) async {
@@ -801,5 +845,206 @@ class HabitTrackerService {
       print('Failed to toggle habit completion: $e');
       return false;
     }
+  }
+
+  /// Get progress stats for Day, Week, and Month breakdowns
+  Future<Map<String, dynamic>> getProgressStatistics(
+    DateTime refDate, {
+    Map<String, dynamic> Function(DateTime)? getHijriDate,
+  }) async {
+    final now = DateTime(refDate.year, refDate.month, refDate.day);
+
+    int getHjDay(DateTime d) {
+      if (getHijriDate == null) return 1;
+      try {
+        final hj = getHijriDate(d);
+        return (hj['Hijri_Day'] ?? hj['HijriDay'] as num?)?.toInt() ?? 1;
+      } catch (_) {
+        return 1;
+      }
+    }
+
+    int getHjMonth(DateTime d) {
+      if (getHijriDate == null) return 1;
+      try {
+        final hj = getHijriDate(d);
+        return (hj['Hijri_Month_No'] ?? hj['HijriMonthNo'] as num?)?.toInt() ??
+            1;
+      } catch (_) {
+        return 1;
+      }
+    }
+
+    // 1. Day stats
+    final dayHabits = getScheduledHabitsForDate(
+      gregorianDate: now,
+      hijriDay: getHjDay(now),
+      hijriMonth: getHjMonth(now),
+    );
+    final dayCustom = getCustomActivitiesForDate(now);
+    final completedHabits = await getCompletedHabitsForDate(now);
+
+    int dayTotal = dayHabits.length + dayCustom.length;
+    int dayCompleted = 0;
+    for (var h in dayHabits) {
+      if (completedHabits.contains(h.id)) dayCompleted++;
+    }
+    for (var c in dayCustom) {
+      if (c.isCompleted) dayCompleted++;
+    }
+    final double dayRate = dayTotal > 0 ? dayCompleted / dayTotal : 0.0;
+
+    // 2. Week stats (Mon to Sun of current week)
+    final int currentWeekday = now.weekday; // 1 = Mon, 7 = Sun
+    final DateTime monday = now.subtract(Duration(days: currentWeekday - 1));
+    final Map<int, Map<String, int>> weekData = {};
+    final List<Map<String, dynamic>> weekDaysList = [];
+    int weekCompleted = 0;
+    int weekTotal = 0;
+
+    const weekdayNames = [
+      'Måndag',
+      'Tisdag',
+      'Onsdag',
+      'Torsdag',
+      'Fredag',
+      'Lördag',
+      'Söndag',
+    ];
+
+    const swedishMonthShort = [
+      'jan',
+      'feb',
+      'mar',
+      'apr',
+      'maj',
+      'jun',
+      'jul',
+      'aug',
+      'sep',
+      'okt',
+      'nov',
+      'dec',
+    ];
+
+    for (int i = 0; i < 7; i++) {
+      final dayDate = monday.add(Duration(days: i));
+      final dHabits = getScheduledHabitsForDate(
+        gregorianDate: dayDate,
+        hijriDay: getHjDay(dayDate),
+        hijriMonth: getHjMonth(dayDate),
+      );
+      final dCustom = getCustomActivitiesForDate(dayDate);
+      final dDone = await getCompletedHabitsForDate(dayDate);
+
+      int dTotal = dHabits.length + dCustom.length;
+      int dCompletedCount = 0;
+      for (var h in dHabits) {
+        if (dDone.contains(h.id)) dCompletedCount++;
+      }
+      for (var c in dCustom) {
+        if (c.isCompleted) dCompletedCount++;
+      }
+
+      weekData[dayDate.weekday] = {
+        'completed': dCompletedCount,
+        'total': dTotal,
+      };
+      weekCompleted += dCompletedCount;
+      weekTotal += dTotal;
+
+      final String mShort = dayDate.month >= 1 && dayDate.month <= 12
+          ? swedishMonthShort[dayDate.month - 1]
+          : '';
+      weekDaysList.add({
+        'weekday': weekdayNames[i],
+        'date': '${dayDate.day} $mShort',
+        'completed': dCompletedCount,
+        'total': dTotal,
+      });
+    }
+    final double weekRate = weekTotal > 0 ? weekCompleted / weekTotal : 0.0;
+
+    // 3. Month stats (1st to last day of month)
+    final int daysInMonth = DateUtils.getDaysInMonth(now.year, now.month);
+    int monthCompleted = 0;
+    int monthTotal = 0;
+    int daysWithCompletion = 0;
+    final Map<String, int> categoryCounts = {
+      'fasting': 0,
+      'quran': 0,
+      'prayers': 0,
+      'dhikr': 0,
+      'charity': 0,
+      'custom': 0,
+    };
+
+    for (int d = 1; d <= daysInMonth; d++) {
+      final dDate = DateTime(now.year, now.month, d);
+      final dHabits = getScheduledHabitsForDate(
+        gregorianDate: dDate,
+        hijriDay: getHjDay(dDate),
+        hijriMonth: getHjMonth(dDate),
+      );
+      final dCustom = getCustomActivitiesForDate(dDate);
+      final dDone = await getCompletedHabitsForDate(dDate);
+
+      int dCompletedCount = 0;
+      monthTotal += (dHabits.length + dCustom.length);
+      for (var h in dHabits) {
+        if (dDone.contains(h.id)) {
+          monthCompleted++;
+          dCompletedCount++;
+          categoryCounts[h.categoryKey] =
+              (categoryCounts[h.categoryKey] ?? 0) + 1;
+        }
+      }
+      for (var c in dCustom) {
+        if (c.isCompleted) {
+          monthCompleted++;
+          dCompletedCount++;
+          categoryCounts['custom'] = (categoryCounts['custom'] ?? 0) + 1;
+        }
+      }
+      if (dCompletedCount > 0) {
+        daysWithCompletion++;
+      }
+    }
+    final double monthRate = monthTotal > 0 ? monthCompleted / monthTotal : 0.0;
+
+    return {
+      'day': {
+        'completed': dayCompleted,
+        'total': dayTotal,
+        'rate': dayRate,
+        'habits': dayHabits,
+        'custom': dayCustom,
+      },
+      'week': {
+        'completed': weekCompleted,
+        'total': weekTotal,
+        'rate': weekRate,
+        'days': weekDaysList,
+      },
+      'month': {
+        'completed': monthCompleted,
+        'total': monthTotal,
+        'rate': monthRate,
+        'daysWithCompletion': daysWithCompletion,
+        'categoryCounts': categoryCounts,
+      },
+      // Backward compatibility keys:
+      'dayCompleted': dayCompleted,
+      'dayTotal': dayTotal,
+      'dayHabits': dayHabits,
+      'dayCustom': dayCustom,
+      'completedHabitIds': completedHabits,
+      'weekCompleted': weekCompleted,
+      'weekTotal': weekTotal,
+      'weekData': weekData,
+      'monthCompleted': monthCompleted,
+      'monthTotal': monthTotal,
+      'categoryCounts': categoryCounts,
+    };
   }
 }

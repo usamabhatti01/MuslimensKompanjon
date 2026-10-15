@@ -1,12 +1,13 @@
 // Automatic FlutterFlow imports
 import '/backend/schema/structs/index.dart';
 import '/backend/schema/enums/enums.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/widgets/index.dart'; // Imports other custom widgets
 import '/custom_code/actions/index.dart'; // Imports custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
@@ -64,14 +65,12 @@ class _CenteredDatePickerState extends State<CenteredDatePicker>
   void _generateMonthDays() {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final List<DateTime> list = [];
 
-    // Generate dates from today - 15 days to today + 15 days
-    for (int i = -15; i <= 15; i++) {
-      list.add(today.add(Duration(days: i)));
-    }
-
-    days = list;
+    // Generate dates from today - 15 days to today + 15 days using exact calendar day math
+    days = List.generate(31, (index) {
+      final int offset = index - 15;
+      return DateTime(today.year, today.month, today.day + offset);
+    });
     todayIndex = 15; // "Today" is at index 15 in this 31-day list
   }
 

@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'
+    show ChangeNotifier, Color, Colors, VoidCallback;
 import '/backend/schema/structs/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'flutter_flow/flutter_flow_util.dart';
@@ -996,6 +997,30 @@ class FFAppState extends ChangeNotifier {
     availablePrayerYears.insert(index, value);
     prefs.setStringList('ff_availablePrayerYears',
         _availablePrayerYears.map((x) => x.toString()).toList());
+  }
+
+  bool _tasbihFav = false;
+  bool get tasbihFav => _tasbihFav;
+  set tasbihFav(bool value) {
+    _tasbihFav = value;
+  }
+
+  String _buildNumber = '';
+  String get buildNumber => _buildNumber;
+  set buildNumber(String value) {
+    _buildNumber = value;
+  }
+
+  String _appVersion = '';
+  String get appVersion => _appVersion;
+  set appVersion(String value) {
+    _appVersion = value;
+  }
+
+  bool _allahNameAudio = false;
+  bool get allahNameAudio => _allahNameAudio;
+  set allahNameAudio(bool value) {
+    _allahNameAudio = value;
   }
 }
 

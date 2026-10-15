@@ -9,7 +9,6 @@ import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'reels_home_model.dart';
@@ -206,7 +205,9 @@ class _ReelsHomeWidgetState extends State<ReelsHomeWidget> {
                               fillColor: FlutterFlowTheme.of(context)
                                   .secondaryBackground,
                               suffixIcon: Icon(
-                                FontAwesomeIcons.search,
+                                const IconData(/* search */ 0xf002,
+                                    fontFamily: 'FontAwesomeSolid',
+                                    fontPackage: 'font_awesome_flutter'),
                                 color:
                                     FlutterFlowTheme.of(context).secondaryText,
                                 size: 12.0,

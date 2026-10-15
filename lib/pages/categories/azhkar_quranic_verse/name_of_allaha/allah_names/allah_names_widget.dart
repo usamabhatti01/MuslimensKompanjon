@@ -114,6 +114,7 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                           heptic: false,
                           textSize: false,
                           audio: true,
+                          favt: false,
                         ),
                       ),
                     ),
@@ -225,10 +226,7 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                                                     .override(
                                                       font: GoogleFonts.manrope(
                                                         fontWeight:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .ayatNumber
-                                                                .fontWeight,
+                                                            FontWeight.w300,
                                                         fontStyle:
                                                             FlutterFlowTheme.of(
                                                                     context)
@@ -242,10 +240,7 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                                                       fontSize: 10.0,
                                                       letterSpacing: 0.0,
                                                       fontWeight:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .ayatNumber
-                                                              .fontWeight,
+                                                          FontWeight.w300,
                                                       fontStyle:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -401,7 +396,7 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                                             children: [
                                               Expanded(
                                                 child: AutoSizeText(
-                                                  ' Guds är fullkomlighetens sköna namn, anropa Honom alltså med dessa',
+                                                  ' \"Guds är fullkomlighetens sköna namn, anropa Honom alltså med dessa namn\" ',
                                                   textAlign: TextAlign.center,
                                                   minFontSize: FFAppConstants
                                                       .heading
@@ -423,7 +418,7 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                                                             FlutterFlowTheme.of(
                                                                     context)
                                                                 .primary,
-                                                        fontSize: 14.0,
+                                                        fontSize: 13.0,
                                                         letterSpacing: 0.0,
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -436,40 +431,29 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                                                 ),
                                               ),
                                               AutoSizeText(
-                                                ' (7:180)',
+                                                '(7:180)',
                                                 minFontSize: FFAppConstants.body
                                                     .toDouble(),
                                                 style: FlutterFlowTheme.of(
                                                         context)
-                                                    .bodyMedium
+                                                    .bodySmall
                                                     .override(
                                                       font: GoogleFonts.manrope(
                                                         fontWeight:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontWeight,
+                                                            FontWeight.w300,
                                                         fontStyle:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .bodyMedium
+                                                                .bodySmall
                                                                 .fontStyle,
                                                       ),
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondaryText,
-                                                      fontSize: 12.0,
                                                       letterSpacing: 0.0,
                                                       fontWeight:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontWeight,
+                                                          FontWeight.w300,
                                                       fontStyle:
                                                           FlutterFlowTheme.of(
                                                                   context)
-                                                              .bodyMedium
+                                                              .bodySmall
                                                               .fontStyle,
                                                     ),
                                               ),
@@ -602,7 +586,7 @@ class _AllahNamesWidgetState extends State<AllahNamesWidget>
                           ),
                         ),
                       ),
-                      if (FFAppState().adhkarSetting.audioDisplay)
+                      if (FFAppState().allahNameAudio)
                         Container(
                           width: MediaQuery.sizeOf(context).width * 1.0,
                           height: 100.0,

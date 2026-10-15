@@ -1,12 +1,13 @@
 // Automatic FlutterFlow imports
 import '/backend/schema/structs/index.dart';
 import '/backend/schema/enums/enums.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/widgets/index.dart'; // Imports other custom widgets
 import '/custom_code/actions/index.dart'; // Imports custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
@@ -51,16 +52,46 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
   List<MosqueStruct> searchCities = [];
   LatLng? currentUserLocationValue;
 
+  MosqueStruct? _findMosqueByLocation(LatLng loc) {
+    final list = FFAppState().mosque;
+    if (list.isEmpty) return null;
+    MosqueStruct? closest;
+    double minDiff = double.infinity;
+    for (final m in list) {
+      if (m.latitude == null) continue;
+      final diff = (m.latitude!.latitude - loc.latitude).abs() +
+          (m.latitude!.longitude - loc.longitude).abs();
+      if (diff < minDiff) {
+        minDiff = diff;
+        closest = m;
+      }
+    }
+    return minDiff < 0.05 ? closest : null;
+  }
+
   @override
   void initState() {
     super.initState();
     _controller = Completer();
     _initializeMarkerBitmap();
 
+    if (widget.initialLocation != null) {
+      selectedMosque = _findMosqueByLocation(widget.initialLocation!);
+    }
+
     // Retrieve current user location
     getCurrentUserLocation(
             defaultLocation: const LatLng(59.3293, 18.0686), cached: true)
-        .then((loc) => setState(() => currentUserLocationValue = loc));
+        .then((loc) {
+      if (mounted) {
+        setState(() {
+          currentUserLocationValue = loc;
+          if (selectedMosque == null && widget.initialLocation == null) {
+            selectedMosque = _findMosqueByLocation(loc);
+          }
+        });
+      }
+    });
 
     textController = TextEditingController()
       ..addListener(() {
@@ -182,9 +213,30 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
   }
 
   @override
+  void didUpdateWidget(GoogleMapWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialLocation != oldWidget.initialLocation &&
+        widget.initialLocation != null) {
+      final mosque = _findMosqueByLocation(widget.initialLocation!);
+      if (mosque != null) {
+        setState(() {
+          selectedMosque = mosque;
+        });
+        _animateToMosque(mosque);
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final activeMosque = selectedMosque ??
-        (FFAppState().mosque.isNotEmpty ? FFAppState().mosque.first : null);
+        (widget.initialLocation != null
+            ? _findMosqueByLocation(widget.initialLocation!)
+            : (currentUserLocationValue != null
+                ? _findMosqueByLocation(currentUserLocationValue!)
+                : (FFAppState().mosque.isNotEmpty
+                    ? FFAppState().mosque.first
+                    : null)));
 
     return SizedBox(
       width: widget.width ?? double.infinity,
@@ -289,7 +341,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
                                   height: 44.0,
                                   decoration: BoxDecoration(
                                     color: FlutterFlowTheme.of(context)
-                                        .primaryBackground,
+                                        .secondaryBackground,
                                     boxShadow: [
                                       BoxShadow(
                                         blurRadius: 8.0,
@@ -399,7 +451,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
                                                 Icons.clear_rounded,
                                                 color:
                                                     FlutterFlowTheme.of(context)
-                                                        .primaryText,
+                                                        .secondaryText,
                                                 size: 22.0,
                                               ),
                                             )
@@ -407,7 +459,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
                                               Icons.search_rounded,
                                               color:
                                                   FlutterFlowTheme.of(context)
-                                                      .primaryText,
+                                                      .secondaryText,
                                               size: 24.0,
                                             ),
                                     ),
@@ -533,7 +585,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
                       width: double.infinity,
                       height: 113.2,
                       decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).primaryBackground,
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
                         boxShadow: [
                           BoxShadow(
                             blurRadius: 12.0,
@@ -563,16 +615,16 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
                                 color: FlutterFlowTheme.of(context)
                                     .primaryBackground,
                                 borderRadius: BorderRadius.circular(16.0),
-                                border: Border.all(
-                                  color: FlutterFlowTheme.of(context).alternate,
-                                  width: 1.0,
-                                ),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
                                 child: Image.asset(
-                                  'assets/images/mosque.png',
+                                  'assets/images/iconMosque.png',
                                   fit: BoxFit.contain,
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? Colors.white
+                                      : null,
                                 ),
                               ),
                             ),
@@ -604,7 +656,9 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
                                   Text(
                                     currentUserLocationValue != null
                                         ? '${getMosqueCity(activeMosque.name)} • ${functions.calculateDistance(currentUserLocationValue!, activeMosque.latitude!)}'
-                                        : getMosqueCity(activeMosque.name),
+                                        : (cachedUserLocation != null
+                                            ? '${getMosqueCity(activeMosque.name)} • ${functions.calculateDistance(cachedUserLocation!, activeMosque.latitude!)}'
+                                            : getMosqueCity(activeMosque.name)),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: FlutterFlowTheme.of(context)

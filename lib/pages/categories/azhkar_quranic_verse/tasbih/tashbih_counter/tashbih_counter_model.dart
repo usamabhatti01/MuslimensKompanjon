@@ -11,10 +11,14 @@ class TashbihCounterModel extends FlutterFlowModel<TashbihCounterWidget> {
 
   int pageIndex = 0;
 
+  bool complete = false;
+
   ///  State fields for stateful widgets in this page.
 
   // Model for AdhkarHeader component.
   late AdhkarHeaderModel adhkarHeaderModel;
+  // Stores action output result for [Custom Action - counterIncrement] action in Counts widget.
+  int? updateCounter;
 
   @override
   void initState(BuildContext context) {

@@ -3,6 +3,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:share_plus/share_plus.dart';
 import 'page_sub_header_with_icon_model.dart';
 export 'page_sub_header_with_icon_model.dart';
 
@@ -92,10 +93,24 @@ class _PageSubHeaderWithIconWidgetState
           Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Icon(
-                Icons.share_outlined,
-                color: FlutterFlowTheme.of(context).primaryText,
-                size: 24.0,
+              Builder(
+                builder: (context) => InkWell(
+                  splashColor: Colors.transparent,
+                  focusColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: () async {
+                    await Share.share(
+                      'com.mycompany.muslimenskompanjon',
+                      sharePositionOrigin: getWidgetBoundingBox(context),
+                    );
+                  },
+                  child: Icon(
+                    Icons.share_outlined,
+                    color: FlutterFlowTheme.of(context).primaryText,
+                    size: 24.0,
+                  ),
+                ),
               ),
               InkWell(
                 splashColor: Colors.transparent,

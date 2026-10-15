@@ -207,7 +207,10 @@ class _KontaktaossWidgetState extends State<KontaktaossWidget> {
                                 child: KontaktaossComponentWidget(
                                   label: 'Adress',
                                   icon: FaIcon(
-                                    FontAwesomeIcons.mapMarkerAlt,
+                                    FaIconData(const IconData(
+                                        /* mapMarkerAlt */ 0xf3c5,
+                                        fontFamily: 'FontAwesomeSolid',
+                                        fontPackage: 'font_awesome_flutter')),
                                     size: 18.0,
                                   ),
                                   subLabel: 'Stockholm, Sverige',
@@ -590,7 +593,7 @@ class _KontaktaossWidgetState extends State<KontaktaossWidget> {
                     ),
                   ]
                       .divide(SizedBox(height: 20.0))
-                      .around(SizedBox(height: 20.0)),
+                      .addToEnd(SizedBox(height: 20.0)),
                 ),
               ),
             ),

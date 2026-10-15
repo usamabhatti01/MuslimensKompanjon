@@ -49,7 +49,7 @@ class _BottomSheetIconWidgetState extends State<BottomSheetIconWidget> {
         },
         child: Container(
           width: 50.0,
-          height: 50.0,
+          height: 35.0,
           decoration: BoxDecoration(),
           child: Column(
             mainAxisSize: MainAxisSize.max,

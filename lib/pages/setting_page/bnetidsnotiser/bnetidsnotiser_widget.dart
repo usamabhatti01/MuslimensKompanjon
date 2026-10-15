@@ -286,7 +286,10 @@ class _BnetidsnotiserWidgetState extends State<BnetidsnotiserWidget> {
                                   child: BnetidsnotiserWithoutTimeWidget(
                                     label: 'Fajr',
                                     icon: FaIcon(
-                                      FontAwesomeIcons.cloudSun,
+                                      FaIconData(const IconData(
+                                          /* cloudSun */ 0xf6c4,
+                                          fontFamily: 'FontAwesomeSolid',
+                                          fontPackage: 'font_awesome_flutter')),
                                       color: FlutterFlowTheme.of(context)
                                           .primaryText,
                                       size: 18.0,
@@ -309,7 +312,10 @@ class _BnetidsnotiserWidgetState extends State<BnetidsnotiserWidget> {
                                   child: BnetidsnotiserWithoutTimeWidget(
                                     label: 'Dhohr',
                                     icon: FaIcon(
-                                      FontAwesomeIcons.sun,
+                                      FaIconData(const IconData(
+                                          /* sun */ 0xf185,
+                                          fontFamily: 'FontAwesomeRegular',
+                                          fontPackage: 'font_awesome_flutter')),
                                       color: FlutterFlowTheme.of(context)
                                           .primaryText,
                                       size: 18.0,
@@ -355,7 +361,10 @@ class _BnetidsnotiserWidgetState extends State<BnetidsnotiserWidget> {
                                   child: BnetidsnotiserWithoutTimeWidget(
                                     label: 'Maghrib',
                                     icon: FaIcon(
-                                      FontAwesomeIcons.cloudMoon,
+                                      FaIconData(const IconData(
+                                          /* cloudMoon */ 0xf6c3,
+                                          fontFamily: 'FontAwesomeSolid',
+                                          fontPackage: 'font_awesome_flutter')),
                                       color: FlutterFlowTheme.of(context)
                                           .primaryText,
                                       size: 18.0,
@@ -378,7 +387,10 @@ class _BnetidsnotiserWidgetState extends State<BnetidsnotiserWidget> {
                                   child: BnetidsnotiserWithoutTimeWidget(
                                     label: 'Isha',
                                     icon: FaIcon(
-                                      FontAwesomeIcons.moon,
+                                      FaIconData(const IconData(
+                                          /* moon */ 0xf186,
+                                          fontFamily: 'FontAwesomeRegular',
+                                          fontPackage: 'font_awesome_flutter')),
                                       color: FlutterFlowTheme.of(context)
                                           .primaryText,
                                       size: 18.0,

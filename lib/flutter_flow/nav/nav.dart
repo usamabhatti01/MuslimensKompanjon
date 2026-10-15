@@ -206,11 +206,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
-          name: TestWidget.routeName,
-          path: TestWidget.routePath,
-          builder: (context, params) => TestWidget(),
-        ),
-        FFRoute(
           name: AllahNamesWidget.routeName,
           path: AllahNamesWidget.routePath,
           builder: (context, params) => AllahNamesWidget(
@@ -334,6 +329,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               structBuilder: AdhkarStruct.fromSerializableMap,
             ),
           ),
+        ),
+        FFRoute(
+          name: OnBoarding00Widget.routeName,
+          path: OnBoarding00Widget.routePath,
+          builder: (context, params) => OnBoarding00Widget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
       observers: ffNavigatorObservers,
@@ -474,6 +474,10 @@ class FFRoute {
                     duration: transitionInfo.duration,
                     reverseDuration: transitionInfo.duration,
                     alignment: transitionInfo.alignment,
+                    curve: transitionInfo.transitionType ==
+                            PageTransitionType.scale
+                        ? const Interval(0.0, 0.5)
+                        : Curves.linear,
                     child: child,
                   ).buildTransitions(
                     context,

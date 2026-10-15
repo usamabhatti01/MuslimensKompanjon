@@ -165,10 +165,15 @@ class _FullCalenderWidgetState extends State<FullCalenderWidget> {
                       FlutterFlowDropDown<int>(
                         controller: _model.yearValueController ??=
                             FormFieldController<int>(
-                          _model.yearValue ??= 2026,
+                          _model.yearValue ??=
+                              FFAppState().availablePrayerYears.firstOrNull,
                         ),
-                        options: List<int>.from([2026, 2027]),
-                        optionLabels: ['2026', '2027'],
+                        options:
+                            List<int>.from(FFAppState().availablePrayerYears),
+                        optionLabels: FFAppState()
+                            .availablePrayerYears
+                            .map((e) => e.toString())
+                            .toList(),
                         onChanged: (val) async {
                           safeSetState(() => _model.yearValue = val);
                           _model.year = _model.yearValue!;

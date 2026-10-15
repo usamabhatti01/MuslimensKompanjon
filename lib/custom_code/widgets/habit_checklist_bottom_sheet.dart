@@ -1,23 +1,23 @@
 // Automatic FlutterFlow imports
 import '/backend/schema/structs/index.dart';
 import '/backend/schema/enums/enums.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/widgets/index.dart'; // Imports other custom widgets
 import '/custom_code/actions/index.dart'; // Imports custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-/// Set your widget name, define your parameter, and then add the boilerplate
-/// code using the `</>` button on the right!
 import 'package:google_fonts/google_fonts.dart';
 import '/custom_code/actions/habit_tracker_service.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hijri/hijri_calendar.dart';
 import '/custom_code/actions/habit_tracker_service.dart';
+import '/pages/setting_page/bottom_sheet_icon/bottom_sheet_icon_widget.dart';
 
 class HabitChecklistBottomSheet extends StatefulWidget {
   const HabitChecklistBottomSheet({
@@ -41,6 +41,7 @@ class HabitChecklistBottomSheet extends StatefulWidget {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       backgroundColor: Colors.transparent,
       builder: (ctx) => _HabitChecklistSheetContent(
         selectedDate: selectedDate,
@@ -160,7 +161,6 @@ class _HabitChecklistSheetContentState
         ? (theme.secondaryBackground ?? const Color(0xFF1E293B))
         : Colors.white;
 
-    final primaryTextColor = isDark ? Colors.white : const Color(0xFF0F172A);
     final secondaryTextColor =
         isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
 
@@ -192,21 +192,12 @@ class _HabitChecklistSheetContentState
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Top Drag Handle
-            Container(
-              margin: const EdgeInsets.only(top: 12.0, bottom: 8.0),
-              width: 44.0,
-              height: 5.0,
-              decoration: BoxDecoration(
-                color: isDark ? Colors.grey[700] : Colors.grey[300],
-                borderRadius: BorderRadius.circular(2.5),
-              ),
-            ),
+            const BottomSheetIconWidget(),
 
             // Header Row (Title & Close Button)
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+              padding: EdgeInsets.fromLTRB(theme.designToken.spacing.md, 0.0,
+                  theme.designToken.spacing.md, 8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -215,20 +206,40 @@ class _HabitChecklistSheetContentState
                     children: [
                       Text(
                         'Att göra idag',
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w700,
-                          color: primaryTextColor,
-                        ),
+                        style: FlutterFlowTheme.of(context).titleLarge.override(
+                              font: GoogleFonts.plusJakartaSans(
+                                fontWeight: FlutterFlowTheme.of(context)
+                                    .titleLarge
+                                    .fontWeight,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .titleLarge
+                                    .fontStyle,
+                              ),
+                              letterSpacing: 0.0,
+                              fontWeight: FlutterFlowTheme.of(context)
+                                  .titleLarge
+                                  .fontWeight,
+                              fontStyle: FlutterFlowTheme.of(context)
+                                  .titleLarge
+                                  .fontStyle,
+                            ),
                       ),
-                      const SizedBox(height: 2.0),
+                      const SizedBox(height: 4.0),
                       Text(
                         '$_hijriDay $_hijriMonthName $_hijriYear AH',
-                        style: GoogleFonts.manrope(
-                          fontSize: 13.0,
-                          fontWeight: FontWeight.w500,
-                          color: const Color(0xFF10B981),
-                        ),
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              font: GoogleFonts.manrope(
+                                fontWeight: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontWeight,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontStyle,
+                              ),
+                              color: const Color(0xFF10B981),
+                              letterSpacing: 0.0,
+                              fontWeight: FontWeight.w600,
+                            ),
                       ),
                     ],
                   ),
@@ -259,8 +270,12 @@ class _HabitChecklistSheetContentState
                     )
                   : ListView(
                       shrinkWrap: true,
-                      padding:
-                          const EdgeInsets.fromLTRB(20.0, 16.0, 20.0, 24.0),
+                      padding: EdgeInsets.fromLTRB(
+                        theme.designToken.spacing.md,
+                        theme.designToken.spacing.md,
+                        theme.designToken.spacing.md,
+                        24.0 + MediaQuery.of(context).viewPadding.bottom,
+                      ),
                       children: [
                         // Completion Progress Bar
                         if (_scheduledHabits.isNotEmpty) ...[

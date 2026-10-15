@@ -1,12 +1,13 @@
 // Automatic FlutterFlow imports
 import '/backend/schema/structs/index.dart';
 import '/backend/schema/enums/enums.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/widgets/index.dart'; // Imports other custom widgets
 import '/custom_code/actions/index.dart'; // Imports custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
@@ -23,13 +24,11 @@ class SimpleAudioPlayer extends StatefulWidget {
     super.key,
     this.width,
     this.height,
-    this.audioUrl = 'assets/audios/AllahNamesAr.mp3',
     this.autoPlay = false,
   });
 
   final double? width;
   final double? height;
-  final String? audioUrl;
   final bool autoPlay;
 
   @override
@@ -50,8 +49,8 @@ class _SimpleAudioPlayerState extends State<SimpleAudioPlayer>
   int _playSessionId = 0;
 
   String get _currentAudioUrl {
-    final url = widget.audioUrl?.trim() ?? '';
-    return url.isNotEmpty ? url : 'assets/audios/AllahNamesAr.mp3';
+    final url = 'assets/audios/AllahNames.mp3';
+    return url;
   }
 
   @override
@@ -59,6 +58,21 @@ class _SimpleAudioPlayerState extends State<SimpleAudioPlayer>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _initAudioPlayer();
+    if (widget.autoPlay) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _playAudio();
+        }
+      });
+    }
+  }
+
+  @override
+  void didUpdateWidget(SimpleAudioPlayer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.autoPlay && !oldWidget.autoPlay && !_isPlaying) {
+      _playAudio();
+    }
   }
 
   @override
@@ -72,6 +86,8 @@ class _SimpleAudioPlayerState extends State<SimpleAudioPlayer>
 
   @override
   void didPushNext() {
+    _stopAudio();
+    FFAppState().updateAdhkarSettingStruct((e) => e..audioDisplay = false);
     super.didPushNext();
   }
 
@@ -95,9 +111,7 @@ class _SimpleAudioPlayerState extends State<SimpleAudioPlayer>
       const ap.AudioContext(
         iOS: ap.AudioContextIOS(
           category: ap.AVAudioSessionCategory.playback,
-          options: [
-            ap.AVAudioSessionOptions.defaultToSpeaker,
-          ],
+          options: [],
         ),
         android: ap.AudioContextAndroid(
           isSpeakerphoneOn: false,
@@ -278,9 +292,7 @@ class _SimpleAudioPlayerState extends State<SimpleAudioPlayer>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.detached ||
-        state == AppLifecycleState.paused ||
-        state == AppLifecycleState.inactive) {
+    if (state == AppLifecycleState.detached) {
       _stopAudio();
     }
   }

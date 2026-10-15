@@ -119,7 +119,9 @@ class _AboutIslamTabsWidgetState extends State<AboutIslamTabsWidget> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             FaIcon(
-                              FontAwesomeIcons.check,
+                              FaIconData(const IconData(/* check */ 0xf00c,
+                                  fontFamily: 'FontAwesomeSolid',
+                                  fontPackage: 'font_awesome_flutter')),
                               color: FlutterFlowTheme.of(context).primary,
                               size: 18.0,
                             ),

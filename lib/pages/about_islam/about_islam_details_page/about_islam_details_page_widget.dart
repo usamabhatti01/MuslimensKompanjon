@@ -182,7 +182,10 @@ class _AboutIslamDetailsPageWidgetState
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     FaIcon(
-                                      FontAwesomeIcons.check,
+                                      FaIconData(const IconData(
+                                          /* check */ 0xf00c,
+                                          fontFamily: 'FontAwesomeSolid',
+                                          fontPackage: 'font_awesome_flutter')),
                                       color: FlutterFlowTheme.of(context).white,
                                       size: 18.0,
                                     ),
@@ -255,7 +258,9 @@ class _AboutIslamDetailsPageWidgetState
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             FaIcon(
-                              FontAwesomeIcons.clock,
+                              FaIconData(const IconData(/* clock */ 0xf017,
+                                  fontFamily: 'FontAwesomeRegular',
+                                  fontPackage: 'font_awesome_flutter')),
                               color: Color(0x99999999),
                               size: 15.0,
                             ),

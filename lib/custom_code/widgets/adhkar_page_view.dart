@@ -1,12 +1,13 @@
 // Automatic FlutterFlow imports
 import '/backend/schema/structs/index.dart';
 import '/backend/schema/enums/enums.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/widgets/index.dart'; // Imports other custom widgets
 import '/custom_code/actions/index.dart'; // Imports custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
@@ -15,12 +16,27 @@ import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
-import 'package:audioplayers/audioplayers.dart' as ap;
+import 'package:just_audio/just_audio.dart';
+import 'package:audio_session/audio_session.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 import '/app_state.dart';
+
+class AdhkarTrackTag {
+  final int adhkarIndex;
+  final int repetitionIndex;
+  final int totalRepetitions;
+  final String audioUrl;
+
+  const AdhkarTrackTag({
+    required this.adhkarIndex,
+    required this.repetitionIndex,
+    required this.totalRepetitions,
+    required this.audioUrl,
+  });
+}
 
 class AdhkarPageView extends StatefulWidget {
   const AdhkarPageView({
@@ -42,12 +58,13 @@ class _AdhkarPageViewState extends State<AdhkarPageView>
     with RouteAware, WidgetsBindingObserver {
   // Counters state for each item in list
   final Map<int, int> _itemCounters = {};
-  final Set<int> _bookmarkedIndices = {};
-  bool _isLooping = false;
-  int _currentAudioPlayCount = 0;
 
   // Audio Player state
-  late ap.AudioPlayer _audioPlayer;
+  late AudioPlayer _audioPlayer;
+  final List<AdhkarTrackTag> _trackTags = [];
+  final Map<int, int> _adhkarToSequenceIndex = {};
+  Future<void>? _playlistFuture;
+
   bool _isPlaying = false;
   Duration _duration = Duration.zero;
   Duration _position = Duration.zero;
@@ -69,17 +86,16 @@ class _AdhkarPageViewState extends State<AdhkarPageView>
   double _playbackSpeed = 1.0;
 
   // Stream Subscriptions
-  StreamSubscription<Duration>? _durSub;
+  StreamSubscription<Duration?>? _durSub;
   StreamSubscription<Duration>? _posSub;
-  StreamSubscription<ap.PlayerState>? _stateSub;
+  StreamSubscription<PlayerState>? _stateSub;
+  StreamSubscription<int?>? _seqSub;
 
   // Active playing & scrolling states
   int? _currentPlayingIndex;
   int? _selectedIndex;
-  bool _isAutoplayActive = true;
-  bool _isPlayerVisible = false;
+  int? _targetAdhkarIndex;
   bool? _prevAudioCheck;
-  int _playSessionId = 0;
 
   // Keys and ScrollController for auto-scrolling
   final Map<int, GlobalKey> _itemKeys = {};
@@ -95,8 +111,16 @@ class _AdhkarPageViewState extends State<AdhkarPageView>
     WidgetsBinding.instance.addObserver(this);
     _scrollController = ScrollController();
     _prevAudioCheck = FFAppState().adhkarSetting.audioDisplay;
-    _initAudioPlayer();
+    _playlistFuture = _initAudioPlayer();
     _preloadAudios();
+  }
+
+  @override
+  void didUpdateWidget(AdhkarPageView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.adhkarList != oldWidget.adhkarList) {
+      _playlistFuture = _buildAndSetPlaylist();
+    }
   }
 
   @override
@@ -112,8 +136,6 @@ class _AdhkarPageViewState extends State<AdhkarPageView>
     _stopAudio();
     _selectedIndex = null;
     _currentPlayingIndex = null;
-    _currentAudioPlayCount = 0;
-    _isPlayerVisible = false;
 
     if (mounted) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -138,43 +160,30 @@ class _AdhkarPageViewState extends State<AdhkarPageView>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.detached ||
-        state == AppLifecycleState.paused ||
-        state == AppLifecycleState.inactive) {
+    if (state == AppLifecycleState.detached) {
       _stopAudio();
     }
   }
 
-  void _initAudioPlayer() {
-    _audioPlayer = ap.AudioPlayer();
-    _audioPlayer.setReleaseMode(ap.ReleaseMode.stop);
-    _audioPlayer.setAudioContext(
-      const ap.AudioContext(
-        iOS: ap.AudioContextIOS(
-          category: ap.AVAudioSessionCategory.playback,
-          options: [
-            ap.AVAudioSessionOptions.defaultToSpeaker,
-          ],
-        ),
-        android: ap.AudioContextAndroid(
-          isSpeakerphoneOn: false,
-          stayAwake: true,
-          contentType: ap.AndroidContentType.music,
-          usageType: ap.AndroidUsageType.media,
-          audioFocus: ap.AndroidAudioFocus.gain,
-        ),
-      ),
-    );
+  Future<void> _initAudioPlayer() async {
+    _audioPlayer = AudioPlayer();
 
-    _durSub = _audioPlayer.onDurationChanged.listen((d) {
-      if (mounted) {
+    try {
+      final session = await AudioSession.instance;
+      await session.configure(const AudioSessionConfiguration.music());
+    } catch (e) {
+      debugPrint('Error configuring AudioSession: $e');
+    }
+
+    _durSub = _audioPlayer.durationStream.listen((d) {
+      if (mounted && d != null) {
         setState(() {
           _duration = d;
         });
       }
     });
 
-    _posSub = _audioPlayer.onPositionChanged.listen((p) {
+    _posSub = _audioPlayer.positionStream.listen((p) {
       if (mounted) {
         setState(() {
           _position = p;
@@ -182,28 +191,139 @@ class _AdhkarPageViewState extends State<AdhkarPageView>
       }
     });
 
-    _stateSub = _audioPlayer.onPlayerStateChanged.listen((state) {
+    _stateSub = _audioPlayer.playerStateStream.listen((state) {
       if (mounted) {
         setState(() {
-          _isPlaying = state == ap.PlayerState.playing;
+          _isPlaying = state.playing;
         });
+      }
+      if (state.processingState == ProcessingState.completed) {
+        _stopAudio();
       }
     });
 
-    _audioPlayer.onPlayerComplete.listen((_) {
-      if (mounted) {
-        _handleAudioCompleted();
+    _seqSub = _audioPlayer.currentIndexStream.listen((seqIndex) {
+      if (_selectedIndex == null ||
+          (!_isPlaying && !_audioPlayer.playerState.playing)) {
+        return;
+      }
+      if (seqIndex != null && seqIndex < _trackTags.length) {
+        final tag = _trackTags[seqIndex];
+        final adhkarIndex = tag.adhkarIndex;
+
+        // If the user tapped a specific item, ignore any leftover events from the old track
+        if (_targetAdhkarIndex != null) {
+          if (adhkarIndex != _targetAdhkarIndex) {
+            return;
+          }
+          _targetAdhkarIndex = null;
+        }
+
+        final remainingCount = tag.totalRepetitions - (tag.repetitionIndex + 1);
+
+        if (mounted) {
+          final isNew = _currentPlayingIndex != adhkarIndex;
+          setState(() {
+            _currentPlayingIndex = adhkarIndex;
+            _selectedIndex = adhkarIndex;
+            _itemCounters[adhkarIndex] =
+                remainingCount.clamp(0, tag.totalRepetitions);
+          });
+          if (isNew) {
+            _scrollToItem(adhkarIndex);
+          }
+        }
       }
     });
+
+    await _buildAndSetPlaylist();
+  }
+
+  Future<void> _buildAndSetPlaylist() async {
+    final List<AudioSource> sources = [];
+    _trackTags.clear();
+    _adhkarToSequenceIndex.clear();
+
+    String? audioDirPath;
+    try {
+      final docsDir = await getApplicationDocumentsDirectory();
+      final audioDir = Directory('${docsDir.path}/adhkar_audio');
+      if (await audioDir.exists()) {
+        audioDirPath = audioDir.path;
+      }
+    } catch (_) {}
+
+    for (int i = 0; i < widget.adhkarList.length; i++) {
+      final item = widget.adhkarList[i];
+      if (!_hasValidAudio(item)) continue;
+
+      final audioUrl = item.audio.trim();
+      final targetCount = item.counter > 0 ? item.counter : 1;
+      _adhkarToSequenceIndex[i] = sources.length;
+
+      AudioSource createSource(AdhkarTrackTag tag) {
+        if (audioUrl.startsWith('http://') || audioUrl.startsWith('https://')) {
+          final fileName = audioUrl.split('/').last;
+          if (audioDirPath != null) {
+            final localFile = File('$audioDirPath/$fileName');
+            if (localFile.existsSync() && localFile.lengthSync() > 0) {
+              return AudioSource.uri(Uri.file(localFile.path), tag: tag);
+            }
+          }
+          return AudioSource.uri(Uri.parse(audioUrl), tag: tag);
+        } else {
+          String assetPath = audioUrl;
+          if (assetPath.startsWith('assets/')) {
+            assetPath = assetPath.substring('assets/'.length);
+          }
+          if (!assetPath.startsWith('audios/')) {
+            assetPath = 'audios/$assetPath';
+          }
+          if (!assetPath.endsWith('.mp3')) {
+            assetPath = '$assetPath.mp3';
+          }
+          return AudioSource.asset(assetPath, tag: tag);
+        }
+      }
+
+      for (int rep = 0; rep < targetCount; rep++) {
+        final tag = AdhkarTrackTag(
+          adhkarIndex: i,
+          repetitionIndex: rep,
+          totalRepetitions: targetCount,
+          audioUrl: audioUrl,
+        );
+        _trackTags.add(tag);
+        sources.add(createSource(tag));
+      }
+    }
+
+    if (sources.isNotEmpty) {
+      try {
+        await _audioPlayer.setAudioSources(
+          sources,
+          preload: false,
+          initialIndex: 0,
+          initialPosition: Duration.zero,
+        );
+      } catch (e) {
+        debugPrint('Error setting AudioSources playlist: $e');
+      }
+    }
   }
 
   void _preloadAudios() {
     Future.microtask(() async {
-      for (final item in widget.adhkarList) {
+      final List<AdhkarStruct> validItems =
+          widget.adhkarList.where(_hasValidAudio).toList();
+      const int batchSize = 4;
+      for (int i = 0; i < validItems.length; i += batchSize) {
         if (!mounted) break;
-        if (_hasValidAudio(item)) {
-          await _cacheAudio(item.audio.trim());
-        }
+        final end = (i + batchSize < validItems.length)
+            ? i + batchSize
+            : validItems.length;
+        final batch = validItems.sublist(i, end);
+        await Future.wait(batch.map((item) => _cacheAudio(item.audio.trim())));
       }
     });
   }
@@ -229,7 +349,9 @@ class _AdhkarPageViewState extends State<AdhkarPageView>
           .get(Uri.parse(trimmedUrl))
           .timeout(const Duration(seconds: 15));
       if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
-        await localFile.writeAsBytes(response.bodyBytes);
+        final tmpFile = File('${audioDir.path}/$fileName.tmp');
+        await tmpFile.writeAsBytes(response.bodyBytes);
+        await tmpFile.rename(localFile.path);
         debugPrint('Pre-cached audio locally: ${localFile.path}');
       }
     } catch (e) {
@@ -251,125 +373,21 @@ class _AdhkarPageViewState extends State<AdhkarPageView>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     routeObserver.unsubscribe(this);
-    _playSessionId++;
-    _currentAudioPlayCount = 0;
     _durSub?.cancel();
     _posSub?.cancel();
     _stateSub?.cancel();
+    _seqSub?.cancel();
     try {
       _audioPlayer.stop();
-      _audioPlayer.release();
     } catch (_) {}
     _audioPlayer.dispose();
     _scrollController.dispose();
     super.dispose();
   }
 
-  Future<void> _handleAudioCompleted() async {
-    if (!FFAppState().adhkarSetting.audioDisplay) {
-      _stopAudio();
-      return;
-    }
-
-    if (_currentPlayingIndex == null ||
-        _currentPlayingIndex! < 0 ||
-        _currentPlayingIndex! >= widget.adhkarList.length) {
-      setState(() {
-        _isPlaying = false;
-      });
-      return;
-    }
-
-    final currentIndex = _currentPlayingIndex!;
-    final item = widget.adhkarList[currentIndex];
-    final targetCount = item.counter > 0 ? item.counter : 1;
-    final currentSession = _playSessionId;
-
-    _currentAudioPlayCount++;
-
-    if (mounted) {
-      setState(() {
-        _itemCounters[currentIndex] =
-            (targetCount - _currentAudioPlayCount).clamp(0, targetCount);
-      });
-    }
-
-    if (_currentAudioPlayCount < targetCount) {
-      // Replay audio for the remaining counts reliably on Android and iOS
-      try {
-        final audioUrl = item.audio.trim();
-        final source = await _getAudioSource(audioUrl);
-        if (mounted && _playSessionId == currentSession) {
-          await _audioPlayer.stop();
-          await _audioPlayer.setPlaybackRate(_playbackSpeed);
-          await _audioPlayer.setVolume(1.0);
-          await _audioPlayer.play(source);
-        }
-      } catch (e) {
-        debugPrint('Error repeating Adhkar audio: $e');
-      }
-      return;
-    }
-
-    // Finished all repetitions for current adhkar -> Move continuously to next item
-    if (currentIndex < widget.adhkarList.length - 1) {
-      final nextIndex = currentIndex + 1;
-      _playAdhkar(nextIndex);
-    } else {
-      _stopAudio();
-    }
-  }
-
   bool _hasValidAudio(AdhkarStruct item) {
     final a = item.audio.trim();
     return a.isNotEmpty && a != 'nill' && !a.contains('EmptyString');
-  }
-
-  Future<ap.Source> _getAudioSource(String audioUrl) async {
-    final trimmedUrl = audioUrl.trim();
-    if (trimmedUrl.startsWith('http://') || trimmedUrl.startsWith('https://')) {
-      try {
-        final docsDir = await getApplicationDocumentsDirectory();
-        final audioDir = Directory('${docsDir.path}/adhkar_audio');
-        if (!await audioDir.exists()) {
-          await audioDir.create(recursive: true);
-        }
-
-        final fileName = trimmedUrl.split('/').last;
-        final localFile = File('${audioDir.path}/$fileName');
-
-        if (await localFile.exists() && (await localFile.length()) > 0) {
-          debugPrint('Playing local cached audio file: ${localFile.path}');
-          return ap.DeviceFileSource(localFile.path);
-        }
-
-        // Download and save locally with timeout so background transition never hangs
-        debugPrint('Downloading audio file from $trimmedUrl...');
-        final response = await http
-            .get(Uri.parse(trimmedUrl))
-            .timeout(const Duration(seconds: 4));
-        if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
-          await localFile.writeAsBytes(response.bodyBytes);
-          debugPrint('Saved audio file locally to: ${localFile.path}');
-          return ap.DeviceFileSource(localFile.path);
-        }
-      } catch (e) {
-        debugPrint('Error loading/saving local audio: $e');
-      }
-      return ap.UrlSource(trimmedUrl);
-    } else {
-      String assetPath = trimmedUrl;
-      if (assetPath.startsWith('assets/')) {
-        assetPath = assetPath.substring('assets/'.length);
-      }
-      if (!assetPath.startsWith('audios/')) {
-        assetPath = 'audios/$assetPath';
-      }
-      if (!assetPath.endsWith('.mp3')) {
-        assetPath = '$assetPath.mp3';
-      }
-      return ap.AssetSource(assetPath);
-    }
   }
 
   Widget _buildArabicRichText({
@@ -490,122 +508,45 @@ class _AdhkarPageViewState extends State<AdhkarPageView>
     if (index < 0 || index >= widget.adhkarList.length) return;
 
     if (!FFAppState().adhkarSetting.audioDisplay) {
+      _targetAdhkarIndex = null;
       _stopAudio();
       setState(() {
         _currentPlayingIndex = index;
         _selectedIndex = index;
-        _isPlayerVisible = false;
       });
       _scrollToItem(index);
       return;
     }
 
-    final currentSession = ++_playSessionId;
-    _currentAudioPlayCount = 0;
-
     final item = widget.adhkarList[index];
-    final audioUrl = item.audio.trim();
     final hasAudio = _hasValidAudio(item);
 
-    // Prevent redundant audio loads if the exact same track is already playing
-    if (_currentPlayingIndex == index && _isPlaying && hasAudio) {
-      _scrollToItem(index);
-      return;
-    }
-
+    _targetAdhkarIndex = index;
     setState(() {
-      _currentPlayingIndex = index;
       _selectedIndex = index;
-      _isPlayerVisible = hasAudio;
+      _currentPlayingIndex = index;
     });
-
     _scrollToItem(index);
 
     if (!hasAudio) {
-      final targetCount = item.counter > 0 ? item.counter : 1;
-      while (_currentAudioPlayCount < targetCount &&
-          mounted &&
-          FFAppState().adhkarSetting.audioDisplay &&
-          _playSessionId == currentSession) {
-        await Future.delayed(const Duration(seconds: 3));
-        if (!mounted ||
-            !FFAppState().adhkarSetting.audioDisplay ||
-            _playSessionId != currentSession) {
-          return;
-        }
-        _currentAudioPlayCount++;
-        setState(() {
-          _itemCounters[index] =
-              (targetCount - _currentAudioPlayCount).clamp(0, targetCount);
-        });
-      }
-      if (mounted &&
-          FFAppState().adhkarSetting.audioDisplay &&
-          _playSessionId == currentSession) {
-        if (index < widget.adhkarList.length - 1) {
-          _playAdhkar(index + 1);
-        } else {
-          _stopAudio();
-        }
-      }
+      _targetAdhkarIndex = null;
+      _stopAudio();
       return;
     }
 
-    ap.Source source = await _getAudioSource(audioUrl);
-
-    // Re-check state and session ID after asynchronous audio source loading
-    if (!mounted ||
-        !FFAppState().adhkarSetting.audioDisplay ||
-        _selectedIndex != index ||
-        _playSessionId != currentSession) {
-      return;
+    if (_playlistFuture != null) {
+      await _playlistFuture;
     }
 
-    try {
-      await _audioPlayer.stop();
-      await _audioPlayer.setPlaybackRate(_playbackSpeed);
-      await _audioPlayer.setVolume(1.0);
-      await _audioPlayer.play(source);
-    } catch (e) {
-      debugPrint('Error playing Adhkar audio: $e');
-    }
-  }
-
-  Future<void> _prepareAudio(int index) async {
-    if (index < 0 || index >= widget.adhkarList.length) return;
-    final item = widget.adhkarList[index];
-    if (!_hasValidAudio(item)) return;
-
-    final audioUrl = item.audio.trim();
-    ap.Source source;
-    if (audioUrl.startsWith('http://') || audioUrl.startsWith('https://')) {
-      source = ap.UrlSource(audioUrl);
-    } else {
-      String assetPath = audioUrl;
-      if (assetPath.startsWith('assets/')) {
-        assetPath = assetPath.substring('assets/'.length);
+    final seqIndex = _adhkarToSequenceIndex[index];
+    if (seqIndex != null && seqIndex < _trackTags.length) {
+      try {
+        await _audioPlayer.setSpeed(_playbackSpeed);
+        await _audioPlayer.seek(Duration.zero, index: seqIndex);
+        await _audioPlayer.play();
+      } catch (e) {
+        debugPrint('Error playing Adhkar audio at seqIndex $seqIndex: $e');
       }
-      if (!assetPath.startsWith('audios/')) {
-        assetPath = 'audios/$assetPath';
-      }
-      if (!assetPath.endsWith('.mp3')) {
-        assetPath = '$assetPath.mp3';
-      }
-      source = ap.AssetSource(assetPath);
-    }
-
-    try {
-      await _audioPlayer.stop();
-      await _audioPlayer.setPlaybackRate(_playbackSpeed);
-      await _audioPlayer.setSource(source);
-      if (mounted) {
-        setState(() {
-          _currentPlayingIndex = index;
-          _isPlaying = false;
-        });
-      }
-    } catch (e) {
-      debugPrint('Error preparing Adhkar audio: $e');
     }
   }
 
@@ -622,27 +563,27 @@ class _AdhkarPageViewState extends State<AdhkarPageView>
       _stopAudio();
       return;
     }
-    if (_currentPlayingIndex != null) {
-      final item = widget.adhkarList[_currentPlayingIndex!];
-      final targetCount = item.counter > 0 ? item.counter : 1;
-      if (_currentAudioPlayCount >= targetCount) {
-        _playAdhkar(_currentPlayingIndex!);
-        return;
-      }
+
+    if (_playlistFuture != null) {
+      await _playlistFuture;
+    }
+
+    if (_audioPlayer.currentIndex != null) {
       try {
-        await _audioPlayer.setVolume(1.0);
-        await _audioPlayer.resume();
+        await _audioPlayer.setSpeed(_playbackSpeed);
+        await _audioPlayer.play();
       } catch (e) {
         debugPrint('Error resuming audio: $e');
       }
     } else {
-      _playAdhkar(0);
+      final startIndex = _selectedIndex ?? 0;
+      _playAdhkar(startIndex);
     }
   }
 
   Future<void> _stopAudio() async {
-    _playSessionId++;
-    _currentAudioPlayCount = 0;
+    _targetAdhkarIndex = null;
+    _isPlaying = false;
     try {
       await _audioPlayer.stop();
     } catch (e) {
@@ -651,7 +592,51 @@ class _AdhkarPageViewState extends State<AdhkarPageView>
     if (mounted) {
       setState(() {
         _isPlaying = false;
+        _currentPlayingIndex = null;
+        _position = Duration.zero;
       });
+    }
+  }
+
+  bool _canPlayPrevious() {
+    final current = _currentPlayingIndex ?? _selectedIndex;
+    if (current == null) return false;
+    for (int prev = current - 1; prev >= 0; prev--) {
+      if (_adhkarToSequenceIndex.containsKey(prev)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void _playPreviousAdhkar() {
+    final current = _currentPlayingIndex ?? _selectedIndex;
+    if (current == null) return;
+    for (int prev = current - 1; prev >= 0; prev--) {
+      if (_adhkarToSequenceIndex.containsKey(prev)) {
+        _playAdhkar(prev);
+        return;
+      }
+    }
+  }
+
+  bool _canPlayNext() {
+    final current = _currentPlayingIndex ?? _selectedIndex ?? -1;
+    for (int next = current + 1; next < widget.adhkarList.length; next++) {
+      if (_adhkarToSequenceIndex.containsKey(next)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void _playNextAdhkar() {
+    final current = _currentPlayingIndex ?? _selectedIndex ?? -1;
+    for (int next = current + 1; next < widget.adhkarList.length; next++) {
+      if (_adhkarToSequenceIndex.containsKey(next)) {
+        _playAdhkar(next);
+        return;
+      }
     }
   }
 
@@ -739,9 +724,9 @@ class _AdhkarPageViewState extends State<AdhkarPageView>
         _playbackSpeed = 1.0;
       }
     });
-    if (_isPlaying) {
-      _audioPlayer.setPlaybackRate(_playbackSpeed);
-    }
+    try {
+      _audioPlayer.setSpeed(_playbackSpeed);
+    } catch (_) {}
   }
 
   String _formatDuration(Duration d) {
@@ -846,30 +831,22 @@ class _AdhkarPageViewState extends State<AdhkarPageView>
                           FFAppState().adhkarSetting.audioDisplay;
 
                       if (_selectedIndex == index) {
-                        if (isAudioCheckEnabled &&
-                            !_isPlaying &&
-                            _hasValidAudio(item)) {
-                          _playAdhkar(index);
-                        } else {
-                          _stopAudio();
-                          setState(() {
-                            _selectedIndex = null;
-                            _currentPlayingIndex = null;
-                            _isPlayerVisible = false;
-                          });
-                        }
+                        _targetAdhkarIndex = null;
+                        _stopAudio();
+                        setState(() {
+                          _selectedIndex = null;
+                          _currentPlayingIndex = null;
+                        });
                       } else {
+                        _targetAdhkarIndex = index;
                         setState(() {
                           _selectedIndex = index;
+                          _currentPlayingIndex = index;
                         });
                         if (isAudioCheckEnabled && _hasValidAudio(item)) {
                           _playAdhkar(index);
                         } else {
                           _stopAudio();
-                          setState(() {
-                            _currentPlayingIndex = index;
-                            _isPlayerVisible = false;
-                          });
                           _scrollToItem(index);
                         }
                       }
@@ -1157,9 +1134,8 @@ class _AdhkarPageViewState extends State<AdhkarPageView>
                               icon: const Icon(Icons.skip_previous,
                                   color: Color(0xFF333333), size: 24.0),
                               tooltip: 'Föregående',
-                              onPressed: _currentPlayingIndex != null &&
-                                      _currentPlayingIndex! > 0
-                                  ? () => _playAdhkar(_currentPlayingIndex! - 1)
+                              onPressed: _canPlayPrevious()
+                                  ? () => _playPreviousAdhkar()
                                   : null,
                             ),
 
@@ -1171,7 +1147,7 @@ class _AdhkarPageViewState extends State<AdhkarPageView>
                                 } else if (_currentPlayingIndex != null) {
                                   _resumeAudio();
                                 } else {
-                                  _playAdhkar(0);
+                                  _playAdhkar(_selectedIndex ?? 0);
                                 }
                               },
                               child: Container(
@@ -1197,9 +1173,8 @@ class _AdhkarPageViewState extends State<AdhkarPageView>
                               icon: const Icon(Icons.skip_next,
                                   color: Color(0xFF333333), size: 24.0),
                               tooltip: 'Nästa',
-                              onPressed: _currentPlayingIndex != null &&
-                                      _currentPlayingIndex! < list.length - 1
-                                  ? () => _playAdhkar(_currentPlayingIndex! + 1)
+                              onPressed: _canPlayNext()
+                                  ? () => _playNextAdhkar()
                                   : null,
                             ),
 
@@ -1239,7 +1214,6 @@ class _AdhkarPageViewState extends State<AdhkarPageView>
                                     (e) => e..audioDisplay = false);
                                 FFAppState().update(() {});
                                 setState(() {
-                                  _isPlayerVisible = false;
                                   _selectedIndex = null;
                                   _currentPlayingIndex = null;
                                 });

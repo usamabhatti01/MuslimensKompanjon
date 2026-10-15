@@ -31,7 +31,6 @@ export '/pages/kanalen/reels_home/reels_home_widget.dart' show ReelsHomeWidget;
 export '/pages/kanalen/video_home/video_home_widget.dart' show VideoHomeWidget;
 export '/pages/kanalen/reels_player/reels_player_widget.dart'
     show ReelsPlayerWidget;
-export '/test/test_widget.dart' show TestWidget;
 export '/pages/categories/azhkar_quranic_verse/name_of_allaha/allah_names/allah_names_widget.dart'
     show AllahNamesWidget;
 export '/pages/categories/azhkar_quranic_verse/akallan_dua/akallan_dua/akallan_dua_widget.dart'
@@ -54,3 +53,5 @@ export '/pages/home/web_view/web_view_widget.dart' show WebViewWidget;
 export '/pages/kanalen/m_kkanalen/m_kkanalen_widget.dart' show MKkanalenWidget;
 export '/pages/categories/azhkar_quranic_verse/mornng_and_evebing_adhkar/nar_hjartat_detail/nar_hjartat_detail_widget.dart'
     show NarHjartatDetailWidget;
+export '/pages/on_boarding/on_boarding_00/on_boarding00_widget.dart'
+    show OnBoarding00Widget;

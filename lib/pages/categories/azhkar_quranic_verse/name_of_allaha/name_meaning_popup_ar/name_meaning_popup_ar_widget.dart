@@ -111,7 +111,7 @@ class _NameMeaningPopupArWidgetState extends State<NameMeaningPopupArWidget> {
                         minFontSize: FFAppConstants.body.toDouble(),
                         style: FlutterFlowTheme.of(context).arabicBody.override(
                               fontFamily: 'arabic',
-                              color: Colors.black,
+                              color: FlutterFlowTheme.of(context).primaryText,
                               fontSize: 16.0,
                               letterSpacing: 0.0,
                               fontWeight: FontWeight.normal,

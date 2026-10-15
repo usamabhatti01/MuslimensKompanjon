@@ -1,11 +1,12 @@
 // Automatic FlutterFlow imports
 import '/backend/schema/structs/index.dart';
 import '/backend/schema/enums/enums.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/actions/index.dart'; // Imports other custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
@@ -27,9 +28,9 @@ class AudioAppLifecycleObserver extends WidgetsBindingObserver {
 
 Future audioPlay(String audioLink) async {
   // Add your function code here!
-
   try {
-    if (audioLink.isEmpty) {
+    if (audioLink.isEmpty || audioLink == 'EmptyString') {
+      await _audioPlayer.stop();
       return;
     }
 
@@ -43,9 +44,6 @@ Future audioPlay(String audioLink) async {
       AudioContext(
         iOS: AudioContextIOS(
           category: AVAudioSessionCategory.playback,
-          options: [
-            AVAudioSessionOptions.defaultToSpeaker,
-          ],
         ),
         android: AudioContextAndroid(
           isSpeakerphoneOn: false,

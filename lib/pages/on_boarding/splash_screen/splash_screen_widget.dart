@@ -1,6 +1,7 @@
 import '/backend/schema/enums/enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'dart:async';
 import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,13 @@ class _SplashScreenWidgetState extends State<SplashScreenWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
+      unawaited(
+        () async {
+          await actions.getAppBuildNumber();
+        }(),
+      );
       await actions.loadAzkhar();
+      await actions.checkAvailablePrayerYears();
       await actions.loadMosquesData();
       await actions.fetchYoutubeVideos();
       _model.allResult = await actions.loadCities(
@@ -52,9 +59,9 @@ class _SplashScreenWidgetState extends State<SplashScreenWidget> {
           }
         }
 
-        context.pushNamed(HomeWidget.routeName);
+        context.goNamed(HomeWidget.routeName);
       } else {
-        context.pushNamed(OnBoarding01Widget.routeName);
+        context.goNamed(OnBoarding00Widget.routeName);
       }
     });
 

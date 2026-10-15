@@ -1,3 +1,4 @@
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/pages/setting_page/bottom_sheet_icon/bottom_sheet_icon_widget.dart';
@@ -42,7 +43,7 @@ class _OmappenWidgetState extends State<OmappenWidget> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.sizeOf(context).width * 1.0,
-      height: MediaQuery.sizeOf(context).height * 0.7,
+      height: MediaQuery.sizeOf(context).height * 0.87,
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).primaryBackground,
         borderRadius: BorderRadius.only(
@@ -55,7 +56,7 @@ class _OmappenWidgetState extends State<OmappenWidget> {
             EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.md),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: (FFMainAxisAlignment.end).flutterValue,
           children: [
             wrapWithModel(
               model: _model.bottomSheetIconModel,
@@ -66,35 +67,8 @@ class _OmappenWidgetState extends State<OmappenWidget> {
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: (FFMainAxisAlignment.center).flutterValue,
                   children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        AutoSizeText(
-                          'Om appen',
-                          minFontSize: FFAppConstants.heading.toDouble(),
-                          style:
-                              FlutterFlowTheme.of(context).titleMedium.override(
-                                    font: GoogleFonts.plusJakartaSans(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .titleMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .titleMedium
-                                          .fontStyle,
-                                    ),
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .titleMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .titleMedium
-                                        .fontStyle,
-                                  ),
-                        ),
-                      ],
-                    ),
                     Container(
                       decoration: BoxDecoration(),
                       child: Column(
@@ -208,9 +182,8 @@ class _OmappenWidgetState extends State<OmappenWidget> {
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Expanded(
-                                child: AutoSizeText(
-                                  'Muslimens kompanjon app är en plattform där du som muslim ska kunna få tillgång till olika verktyg som kan förenkla din vardag.\n\nBönen är en av Islams grunder och en länk mellan muslimer och Allah. Därför väljer vi att börja med att presentera våra bönetider till er på ett enkelt och smidigt sätt. Med vår app kan du hitta (Qibla) riktningen till Kabaa när och var du vill. Du kan även hitta moskéer nära dig. Snart kommer flera andra funktioner som ska underlätta din vardag som muslim i Sverige.',
-                                  minFontSize: FFAppConstants.body.toDouble(),
+                                child: Text(
+                                  'Välkommen till Muslimens Kompanjon (MK)\n\nVår ambition är att erbjuda en trygg och komplett plattform som förenklar och berikar din islamiska vardag i Sverige. I appen finner du:\n\n- Framsteg & Självrannsakan: Följ dina dagliga, veckovisa och månadsvisa rutiner i kalendern för personlig och spirituell utveckling.\n- Koranen: Läs och lyssna på arabiska med översättningar på svenska och engelska.\n- Bönetider & Qibla: Exakta bönetider för din ort samt kompass för att hitta riktningen till Kaba.\n- Bön och Åkallan: Verktyg för Dhikr/Tasbih och tillgång till Hijri-kalendern.\n- Inspiration & Gemenskap: Upptäck MK:s videokanal och hitta moskéer nära dig.\n\nVi fortsätter att konstant utveckla appen med nya verktyg för att underlätta för dig som muslim. Tack för att du låter oss vara en del av din vardag!',
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
@@ -275,41 +248,193 @@ class _OmappenWidgetState extends State<OmappenWidget> {
                               ),
                             ],
                           ),
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
+                        ].divide(SizedBox(height: 10.0)),
+                      ),
+                    ),
+                    Expanded(
+                      child: InkWell(
+                        splashColor: Colors.transparent,
+                        focusColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onTap: () async {
+                          await launchURL('https://islamiskaforbundet.se');
+                        },
+                        child: RichText(
+                          textScaler: MediaQuery.of(context).textScaler,
+                          text: TextSpan(
                             children: [
-                              Expanded(
-                                child: AutoSizeText(
-                                  'På Islamiska Förbundets hemsida kan ...',
-                                  minFontSize: FFAppConstants.body.toDouble(),
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        font: GoogleFonts.manrope(
-                                          fontWeight: FontWeight.w300,
-                                          fontStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyMedium
-                                                  .fontStyle,
-                                        ),
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                        letterSpacing: 0.0,
+                              TextSpan(
+                                text:
+                                    'På Islamiska Förbundets hemsida kan du läsa mer om vår bönetiderskälla.',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      font: GoogleFonts.manrope(
                                         fontWeight: FontWeight.w300,
                                         fontStyle: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .fontStyle,
-                                        lineHeight: 1.5,
                                       ),
-                                ),
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                      letterSpacing: 0.0,
+                                      fontWeight: FontWeight.w300,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
                               ),
+                              TextSpan(
+                                text: '',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      font: GoogleFonts.manrope(
+                                        fontWeight: FontWeight.bold,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
+                                      ),
+                                      letterSpacing: 0.0,
+                                      fontWeight: FontWeight.bold,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                              ),
+                              TextSpan(
+                                text: ', ',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      font: GoogleFonts.manrope(
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
+                                      ),
+                                      letterSpacing: 0.0,
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                              ),
+                              TextSpan(
+                                text: '',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      font: GoogleFonts.manrope(
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontWeight,
+                                        fontStyle: FontStyle.italic,
+                                      ),
+                                      letterSpacing: 0.0,
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                              ),
+                              TextSpan(
+                                text: '',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      font: GoogleFonts.manrope(
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
+                                      ),
+                                      letterSpacing: 0.0,
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                              ),
+                              TextSpan(
+                                text: '',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      font: GoogleFonts.manrope(
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
+                                      ),
+                                      letterSpacing: 0.0,
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                              ),
+                              TextSpan(
+                                text: '',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      font: GoogleFonts.manrope(
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
+                                      ),
+                                      letterSpacing: 0.0,
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                              )
                             ],
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  font: GoogleFonts.manrope(
+                                    fontWeight: FontWeight.w300,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
+                                  ),
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                  letterSpacing: 0.0,
+                                  fontWeight: FontWeight.w300,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .fontStyle,
+                                  lineHeight: 1.5,
+                                ),
                           ),
-                        ].divide(SizedBox(height: 10.0)),
+                        ),
                       ),
                     ),
                   ]
-                      .divide(SizedBox(height: 20.0))
+                      .divide(SizedBox(height: 10.0))
                       .addToEnd(SizedBox(height: 20.0)),
                 ),
               ),

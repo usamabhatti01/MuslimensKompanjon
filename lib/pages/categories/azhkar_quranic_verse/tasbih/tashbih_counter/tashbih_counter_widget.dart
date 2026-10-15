@@ -1,5 +1,6 @@
 import '/backend/schema/enums/enums.dart';
 import '/custom_header_footer/adhkar_header/adhkar_header_widget.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/actions/index.dart' as actions;
@@ -8,7 +9,6 @@ import '/index.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'tashbih_counter_model.dart';
@@ -43,12 +43,25 @@ class _TashbihCounterWidgetState extends State<TashbihCounterWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.pageIndex = widget.index!;
-      _model.counter = FFAppState()
-          .tasbihList
-          .elementAtOrNull(_model.pageIndex)!
-          .targetCount;
-      safeSetState(() {});
+      if ((FFAppState().tasbihSetting.arActive == false) &&
+          (FFAppState().tasbihSetting.enActive == false)) {
+        context.pushNamed(
+          TasbihWidget.routeName,
+          queryParameters: {
+            'adkar': serializeParam(
+              '',
+              ParamType.String,
+            ),
+          }.withoutNulls,
+        );
+      } else {
+        _model.pageIndex = widget.index!;
+        _model.counter = FFAppState()
+            .tasbihList
+            .elementAtOrNull(_model.pageIndex)!
+            .targetCount;
+        safeSetState(() {});
+      }
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
@@ -117,10 +130,11 @@ class _TashbihCounterWidgetState extends State<TashbihCounterWidget> {
                         child: AdhkarHeaderWidget(
                           pageName: 'Tasbih',
                           heptic: true,
-                          textSize: true,
+                          textSize: false,
                           audio: false,
                           fontType: Font.tasbih.name,
                           initialValue: FFAppState().tasbihSetting,
+                          favt: false,
                         ),
                       ),
                     ),
@@ -226,28 +240,19 @@ class _TashbihCounterWidgetState extends State<TashbihCounterWidget> {
                                 hoverColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
                                 onTap: () async {
-                                  _model.counter = _model.counter + -1;
-                                  safeSetState(() {});
+                                  _model.updateCounter =
+                                      await actions.counterIncrement(
+                                    _model.counter,
+                                    FFAppState()
+                                        .tasbihList
+                                        .elementAtOrNull(_model.pageIndex)!
+                                        .targetCount,
+                                  );
                                   await actions.triggerHapticFeedback();
-                                  HapticFeedback.heavyImpact();
-                                  if (_model.counter < 0) {
-                                    if (_model.pageIndex <
-                                        (FFAppState().tasbihList.length - 1)) {
-                                      _model.pageIndex = _model.pageIndex + 1;
-                                      _model.counter = FFAppState()
-                                          .tasbihList
-                                          .elementAtOrNull(_model.pageIndex)!
-                                          .targetCount;
-                                      safeSetState(() {});
-                                    } else {
-                                      _model.pageIndex = 0;
-                                      _model.counter = FFAppState()
-                                          .tasbihList
-                                          .elementAtOrNull(_model.pageIndex)!
-                                          .targetCount;
-                                      safeSetState(() {});
-                                    }
-                                  }
+                                  _model.counter = _model.updateCounter!;
+                                  safeSetState(() {});
+
+                                  safeSetState(() {});
                                 },
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
@@ -303,43 +308,6 @@ class _TashbihCounterWidgetState extends State<TashbihCounterWidget> {
                                         ),
                                       ),
                                     ),
-                                    if (FFAppState().tasbihSetting.swActive)
-                                      AutoSizeText(
-                                        valueOrDefault<String>(
-                                          FFAppState()
-                                              .tasbihList
-                                              .elementAtOrNull(_model.pageIndex)
-                                              ?.swedish,
-                                          '0',
-                                        ),
-                                        textAlign: TextAlign.center,
-                                        minFontSize:
-                                            FFAppConstants.body.toDouble(),
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              font: GoogleFonts.manrope(
-                                                fontWeight: FontWeight.normal,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryText,
-                                              fontSize: FFAppState()
-                                                  .tasbihSetting
-                                                  .swFont,
-                                              letterSpacing: 0.0,
-                                              fontWeight: FontWeight.normal,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontStyle,
-                                              lineHeight: 1.5,
-                                            ),
-                                      ),
                                   ].divide(SizedBox(height: 20.0)),
                                 ),
                               ),
@@ -365,113 +333,140 @@ class _TashbihCounterWidgetState extends State<TashbihCounterWidget> {
                               .md),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment:
+                                (FFMainAxisAlignment.center).flutterValue,
                             children: [
-                              Expanded(
-                                child: InkWell(
-                                  splashColor: Colors.transparent,
-                                  focusColor: Colors.transparent,
-                                  hoverColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  onTap: () async {
-                                    await actions.triggerHapticFeedback();
-                                    _model.counter = FFAppState()
-                                        .tasbihList
-                                        .elementAtOrNull(widget.index!)!
-                                        .targetCount;
-                                    safeSetState(() {});
-                                  },
-                                  child: Container(
-                                    height: 90.0,
-                                    decoration: BoxDecoration(
+                              InkWell(
+                                splashColor: Colors.transparent,
+                                focusColor: Colors.transparent,
+                                hoverColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                onTap: () async {
+                                  await actions.triggerHapticFeedback();
+                                  _model.counter = FFAppState()
+                                      .tasbihList
+                                      .elementAtOrNull(_model.pageIndex)!
+                                      .targetCount;
+                                  safeSetState(() {});
+                                  _model.complete = false;
+                                  safeSetState(() {});
+                                },
+                                child: Container(
+                                  width: 150.0,
+                                  height: 75.0,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    borderRadius: BorderRadius.circular(12.0),
+                                    border: Border.all(
                                       color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                      borderRadius: BorderRadius.circular(12.0),
-                                      border: Border.all(
-                                        color: FlutterFlowTheme.of(context)
-                                            .alternate,
-                                      ),
+                                          .alternate,
                                     ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          'Nollställ',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.manrope(
-                                                  fontWeight: FontWeight.w800,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryText,
-                                                letterSpacing: 0.0,
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.restart_alt_rounded,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                        size: 22.0,
+                                      ),
+                                      Text(
+                                        'Nollställ',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              font: GoogleFonts.manrope(
                                                 fontWeight: FontWeight.w800,
                                                 fontStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
                                                         .fontStyle,
                                               ),
-                                        ),
-                                      ],
-                                    ),
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                              letterSpacing: 0.0,
+                                              fontWeight: FontWeight.w800,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontStyle,
+                                            ),
+                                      ),
+                                    ].divide(SizedBox(height: 5.0)),
                                   ),
                                 ),
                               ),
-                              Expanded(
-                                child: InkWell(
-                                  splashColor: Colors.transparent,
-                                  focusColor: Colors.transparent,
-                                  hoverColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  onTap: () async {
-                                    _model.pageIndex = _model.pageIndex +
-                                        (_model.pageIndex <
-                                                (FFAppState()
-                                                        .tasbihList
-                                                        .length -
-                                                    1)
-                                            ? 1
-                                            : functions.returnValue(FFAppState()
-                                                .tasbihList
-                                                .length));
-                                    safeSetState(() {});
-                                    _model.counter = FFAppState()
-                                        .tasbihList
-                                        .elementAtOrNull(_model.pageIndex)!
-                                        .targetCount;
-                                    safeSetState(() {});
-                                  },
-                                  child: Container(
-                                    height: 90.0,
-                                    decoration: BoxDecoration(
-                                      color:
-                                          FlutterFlowTheme.of(context).primary,
-                                      borderRadius: BorderRadius.circular(12.0),
-                                      border: Border.all(
+                              if (responsiveVisibility(
+                                context: context,
+                                phone: false,
+                                tablet: false,
+                                tabletLandscape: false,
+                                desktop: false,
+                              ))
+                                Expanded(
+                                  child: InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      _model.pageIndex = _model.pageIndex +
+                                          (_model.pageIndex <
+                                                  (FFAppState()
+                                                          .tasbihList
+                                                          .length -
+                                                      1)
+                                              ? 1
+                                              : functions.returnValue(
+                                                  FFAppState()
+                                                      .tasbihList
+                                                      .length));
+                                      safeSetState(() {});
+                                      _model.counter = FFAppState()
+                                          .tasbihList
+                                          .elementAtOrNull(_model.pageIndex)!
+                                          .targetCount;
+                                      safeSetState(() {});
+                                    },
+                                    child: Container(
+                                      height: 90.0,
+                                      decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context)
-                                            .alternate,
+                                            .primary,
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
+                                        border: Border.all(
+                                          color: FlutterFlowTheme.of(context)
+                                              .alternate,
+                                        ),
                                       ),
-                                    ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          'Nästa Tasbih',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.manrope(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'Nästa Tasbih',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  font: GoogleFonts.manrope(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .white,
+                                                  fontSize: 14.0,
+                                                  letterSpacing: 0.0,
                                                   fontWeight: FontWeight.w600,
                                                   fontStyle:
                                                       FlutterFlowTheme.of(
@@ -479,23 +474,12 @@ class _TashbihCounterWidgetState extends State<TashbihCounterWidget> {
                                                           .bodyMedium
                                                           .fontStyle,
                                                 ),
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .white,
-                                                fontSize: 14.0,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w600,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                        ),
-                                      ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
                             ].divide(SizedBox(width: 10.0)),
                           ),
                         ),

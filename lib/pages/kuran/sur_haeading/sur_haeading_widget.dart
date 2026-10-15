@@ -1,3 +1,4 @@
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -63,7 +64,7 @@ class _SurHaeadingWidgetState extends State<SurHaeadingWidget> {
         padding: EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 12.0, 12.0),
         child: Row(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: (FFMainAxisAlignment.start).flutterValue,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
@@ -211,7 +212,7 @@ class _SurHaeadingWidgetState extends State<SurHaeadingWidget> {
                 ),
               ].divide(SizedBox(height: 5.0)),
             ),
-          ],
+          ].divide(SizedBox(width: 20.0)),
         ),
       ),
     );

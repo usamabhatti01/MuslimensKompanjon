@@ -107,6 +107,7 @@ class _AkallanDuaWidgetState extends State<AkallanDuaWidget> {
                           audio: false,
                           initialValue: FFAppState().DuasSetting,
                           fontType: Font.duas.name,
+                          favt: false,
                         ),
                       ),
                     ),

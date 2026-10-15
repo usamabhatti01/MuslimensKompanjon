@@ -1,11 +1,12 @@
 // Automatic FlutterFlow imports
 import '/backend/schema/structs/index.dart';
 import '/backend/schema/enums/enums.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/actions/index.dart'; // Imports other custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
@@ -203,7 +204,7 @@ Future<void> loadAzkhar() async {
   try {
     print("Loading Tasbih from assets/jsons/Tasbih.json...");
     final tasbihJsonString =
-        await loadJsonFromAssetOrGitLocal('assets/jsons/tasbih.json');
+        await loadJsonFromAssetOrGitLocal('assets/jsons/Tasbih.json');
     final decodedTasbih = json.decode(tasbihJsonString);
 
     if (decodedTasbih is List) {

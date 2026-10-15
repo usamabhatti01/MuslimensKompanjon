@@ -31,3 +31,13 @@ export '/custom_code/actions/trigger_haptic_feedback.dart'
     show triggerHapticFeedback;
 export '/custom_code/actions/habit_tracker_service.dart'
     show habitTrackerService;
+export '/custom_code/actions/get_user_location_safe.dart'
+    show getUserLocationSafe;
+export '/custom_code/actions/schedule_event_notifications.dart'
+    show scheduleEventNotifications;
+export '/custom_code/actions/check_available_prayer_years.dart'
+    show checkAvailablePrayerYears;
+export '/custom_code/actions/counter_increment.dart' show counterIncrement;
+export '/custom_code/actions/get_app_build_number.dart' show getAppBuildNumber;
+export '/custom_code/actions/schedule_activity_notification.dart'
+    show scheduleActivityNotification;

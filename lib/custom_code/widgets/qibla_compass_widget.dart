@@ -1,12 +1,13 @@
 // Automatic FlutterFlow imports
 import '/backend/schema/structs/index.dart';
 import '/backend/schema/enums/enums.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/widgets/index.dart'; // Imports other custom widgets
 import '/custom_code/actions/index.dart'; // Imports custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
@@ -406,13 +407,39 @@ class _QiblaCompassWidgetState extends State<QiblaCompassWidget>
             lowAccuracy = true;
           }
         } else if (defaultTargetPlatform == TargetPlatform.android) {
-          // Android via flutter_compass plugin:
-          // SENSOR_STATUS_ACCURACY_HIGH = 15.0
-          // SENSOR_STATUS_ACCURACY_MEDIUM = 30.0
-          // SENSOR_STATUS_ACCURACY_LOW = 45.0
-          // UNRELIABLE / UNKNOWN = -1.0
-          if (acc < 0 || acc >= 40.0 || (acc <= 1.0 && acc >= 0)) {
+          // Android via flutter_compass plugin reports accuracy in two ways depending
+          // on the device/plugin version:
+          //
+          // Mode A – degrees of error (like iOS):
+          //   ~0°  = very high accuracy
+          //   ~15° = high accuracy
+          //   ~30° = medium accuracy
+          //   ~45° = low accuracy
+          //   < 0  = invalid / uncalibrated
+          //
+          // Mode B – SensorManager integer constants mapped to floats:
+          //   3.0 = SENSOR_STATUS_ACCURACY_HIGH
+          //   2.0 = SENSOR_STATUS_ACCURACY_MEDIUM
+          //   1.0 = SENSOR_STATUS_ACCURACY_LOW
+          //   0.0 = SENSOR_STATUS_ACCURACY_UNRELIABLE
+          //  -1.0 = SENSOR_STATUS_UNRELIABLE (unknown)
+          //
+          // Strategy: treat integer-constant range (0.0–3.0) separately from
+          // degrees-of-error range (> 3.0).
+          if (acc < 0) {
+            // Negative value always means invalid/uncalibrated
             lowAccuracy = true;
+          } else if (acc <= 3.0) {
+            // Likely SensorManager integer constants (0–3)
+            // Only UNRELIABLE (0.0) is considered low accuracy; 1=LOW, 2=MED, 3=HIGH are usable
+            if (acc == 0.0) {
+              lowAccuracy = true;
+            }
+          } else {
+            // Likely degrees-of-error mode; flag as low if error >= 40°
+            if (acc >= 40.0) {
+              lowAccuracy = true;
+            }
           }
         } else {
           // General fallback

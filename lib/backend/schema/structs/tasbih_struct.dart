@@ -18,6 +18,7 @@ class TasbihStruct extends BaseStruct {
     String? source,
     String? status,
     int? targetCount,
+    bool? isFav,
   })  : _id = id,
         _titleAr = titleAr,
         _titleSv = titleSv,
@@ -28,7 +29,8 @@ class TasbihStruct extends BaseStruct {
         _reward = reward,
         _source = source,
         _status = status,
-        _targetCount = targetCount;
+        _targetCount = targetCount,
+        _isFav = isFav;
 
   // "id" field.
   int? _id;
@@ -111,6 +113,13 @@ class TasbihStruct extends BaseStruct {
 
   bool hasTargetCount() => _targetCount != null;
 
+  // "isFav" field.
+  bool? _isFav;
+  bool get isFav => _isFav ?? false;
+  set isFav(bool? val) => _isFav = val;
+
+  bool hasIsFav() => _isFav != null;
+
   static TasbihStruct fromMap(Map<String, dynamic> data) => TasbihStruct(
         id: castToType<int>(data['id']),
         titleAr: data['titleAr'] as String?,
@@ -123,6 +132,7 @@ class TasbihStruct extends BaseStruct {
         source: data['source'] as String?,
         status: data['status'] as String?,
         targetCount: castToType<int>(data['targetCount']),
+        isFav: data['isFav'] as bool?,
       );
 
   static TasbihStruct? maybeFromMap(dynamic data) =>
@@ -140,6 +150,7 @@ class TasbihStruct extends BaseStruct {
         'source': _source,
         'status': _status,
         'targetCount': _targetCount,
+        'isFav': _isFav,
       }.withoutNulls;
 
   @override
@@ -187,6 +198,10 @@ class TasbihStruct extends BaseStruct {
         'targetCount': serializeParam(
           _targetCount,
           ParamType.int,
+        ),
+        'isFav': serializeParam(
+          _isFav,
+          ParamType.bool,
         ),
       }.withoutNulls;
 
@@ -247,6 +262,11 @@ class TasbihStruct extends BaseStruct {
           ParamType.int,
           false,
         ),
+        isFav: deserializeParam(
+          data['isFav'],
+          ParamType.bool,
+          false,
+        ),
       );
 
   @override
@@ -265,7 +285,8 @@ class TasbihStruct extends BaseStruct {
         reward == other.reward &&
         source == other.source &&
         status == other.status &&
-        targetCount == other.targetCount;
+        targetCount == other.targetCount &&
+        isFav == other.isFav;
   }
 
   @override
@@ -280,7 +301,8 @@ class TasbihStruct extends BaseStruct {
         reward,
         source,
         status,
-        targetCount
+        targetCount,
+        isFav
       ]);
 }
 
@@ -296,6 +318,7 @@ TasbihStruct createTasbihStruct({
   String? source,
   String? status,
   int? targetCount,
+  bool? isFav,
 }) =>
     TasbihStruct(
       id: id,
@@ -309,4 +332,5 @@ TasbihStruct createTasbihStruct({
       source: source,
       status: status,
       targetCount: targetCount,
+      isFav: isFav,
     );

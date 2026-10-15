@@ -637,7 +637,7 @@ class _PlatsWidgetState extends State<PlatsWidget>
                 ],
               ),
             ),
-          ].divide(SizedBox(height: 10.0)).around(SizedBox(height: 10.0)),
+          ],
         ),
       ),
     );

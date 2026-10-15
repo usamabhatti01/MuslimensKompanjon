@@ -170,8 +170,14 @@ class DuaStruct extends BaseStruct {
   }
 
   @override
-  int get hashCode => const ListEquality().hash(
-      [categoryId, categoryTitleAr, duas, icon, subtitle, categoryTitleSv]);
+  int get hashCode => const ListEquality().hash([
+        categoryId,
+        categoryTitleAr,
+        const ListEquality().hash(duas),
+        icon,
+        subtitle,
+        categoryTitleSv
+      ]);
 }
 
 DuaStruct createDuaStruct({

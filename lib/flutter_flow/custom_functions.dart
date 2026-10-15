@@ -16,3 +16,4 @@ export '/custom_code/functions/return_city_index.dart';
 export '/custom_code/functions/increment_i_d.dart';
 export '/custom_code/functions/int_to_string.dart';
 export '/custom_code/functions/format_r_t_l.dart';
+export '/custom_code/functions/sort_mosques_by_distance.dart';

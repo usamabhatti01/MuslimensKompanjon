@@ -287,7 +287,12 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                                                 );
                                               },
                                               child: FaIcon(
-                                                FontAwesomeIcons.share,
+                                                FaIconData(const IconData(
+                                                    /* share */ 0xf064,
+                                                    fontFamily:
+                                                        'FontAwesomeSolid',
+                                                    fontPackage:
+                                                        'font_awesome_flutter')),
                                                 color:
                                                     FlutterFlowTheme.of(context)
                                                         .primaryBackground,

@@ -1,4 +1,5 @@
 import '/backend/schema/structs/index.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -8,6 +9,7 @@ import '/index.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'nearby_mosque_locator_model.dart';
@@ -35,8 +37,13 @@ class _NearbyMosqueLocatorWidgetState extends State<NearbyMosqueLocatorWidget> {
     super.initState();
     _model = createModel(context, () => NearbyMosqueLocatorModel());
 
-    getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0), cached: true)
-        .then((loc) => safeSetState(() => currentUserLocationValue = loc));
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.currentLoc = await actions.getUserLocationSafe();
+      _model.userLocation = _model.currentLoc;
+      safeSetState(() {});
+    });
+
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
 
@@ -53,22 +60,6 @@ class _NearbyMosqueLocatorWidgetState extends State<NearbyMosqueLocatorWidget> {
   @override
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
-    if (currentUserLocationValue == null) {
-      return Container(
-        color: FlutterFlowTheme.of(context).primaryBackground,
-        child: Center(
-          child: SizedBox(
-            width: 50.0,
-            height: 50.0,
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                FlutterFlowTheme.of(context).primary,
-              ),
-            ),
-          ),
-        ),
-      );
-    }
 
     return GestureDetector(
       onTap: () {
@@ -140,29 +131,6 @@ class _NearbyMosqueLocatorWidgetState extends State<NearbyMosqueLocatorWidget> {
                                           .fontStyle,
                                     ),
                               ),
-                              AutoSizeText(
-                                'nära moskéer',
-                                minFontSize: FFAppConstants.body.toDouble(),
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyLarge
-                                    .override(
-                                      font: GoogleFonts.manrope(
-                                        fontWeight: FlutterFlowTheme.of(context)
-                                            .bodyLarge
-                                            .fontWeight,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .bodyLarge
-                                            .fontStyle,
-                                      ),
-                                      letterSpacing: 0.0,
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .bodyLarge
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyLarge
-                                          .fontStyle,
-                                    ),
-                              ),
                             ],
                           ),
                           FFButtonWidget(
@@ -219,36 +187,98 @@ class _NearbyMosqueLocatorWidgetState extends State<NearbyMosqueLocatorWidget> {
                 Expanded(
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: (FFMainAxisAlignment.start).flutterValue,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        width: double.infinity,
-                        child: TextFormField(
-                          controller: _model.textController,
-                          focusNode: _model.textFieldFocusNode,
-                          onChanged: (_) => EasyDebounce.debounce(
-                            '_model.textController',
-                            Duration(milliseconds: 2000),
-                            () async {
-                              _model.searchOutput =
-                                  await actions.searchCityByName(
-                                _model.textController.text,
-                                FFAppState().mosque.toList(),
-                              );
-                              _model.searchCities = _model.searchOutput!
-                                  .toList()
-                                  .cast<MosqueStruct>();
-                              safeSetState(() {});
+                      Align(
+                        alignment: AlignmentDirectional(0.0, 0.0),
+                        child: Container(
+                          width: double.infinity,
+                          child: TextFormField(
+                            controller: _model.textController,
+                            focusNode: _model.textFieldFocusNode,
+                            onChanged: (_) => EasyDebounce.debounce(
+                              '_model.textController',
+                              Duration(milliseconds: 2000),
+                              () async {
+                                _model.searchOutput =
+                                    await actions.searchCityByName(
+                                  _model.textController.text,
+                                  FFAppState().mosque.toList(),
+                                );
+                                _model.searchCities = _model.searchOutput!
+                                    .toList()
+                                    .cast<MosqueStruct>();
+                                safeSetState(() {});
 
-                              safeSetState(() {});
-                            },
-                          ),
-                          autofocus: false,
-                          obscureText: false,
-                          decoration: InputDecoration(
-                            isDense: false,
-                            hintText: 'Sök stad eller moské...',
-                            hintStyle: FlutterFlowTheme.of(context)
+                                safeSetState(() {});
+                              },
+                            ),
+                            autofocus: false,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              isDense: false,
+                              hintText: 'Sök stad eller moské...',
+                              hintStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    font: GoogleFonts.manrope(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                                    color: Color(0xFFA3A3A3),
+                                    fontSize: 16.0,
+                                    letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
+                                  ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0xFF056F00),
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: FlutterFlowTheme.of(context).error,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: FlutterFlowTheme.of(context).error,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              filled: true,
+                              fillColor: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              suffixIcon: Icon(
+                                Icons.search_rounded,
+                                color:
+                                    FlutterFlowTheme.of(context).secondaryText,
+                                size: 24.0,
+                              ),
+                            ),
+                            style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
                                   font: GoogleFonts.manrope(
@@ -259,8 +289,6 @@ class _NearbyMosqueLocatorWidgetState extends State<NearbyMosqueLocatorWidget> {
                                         .bodyMedium
                                         .fontStyle,
                                   ),
-                                  color: Color(0xFFA3A3A3),
-                                  fontSize: 16.0,
                                   letterSpacing: 0.0,
                                   fontWeight: FlutterFlowTheme.of(context)
                                       .bodyMedium
@@ -269,83 +297,28 @@ class _NearbyMosqueLocatorWidgetState extends State<NearbyMosqueLocatorWidget> {
                                       .bodyMedium
                                       .fontStyle,
                                 ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                                width: 1.0,
-                              ),
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0xFF056F00),
-                                width: 1.0,
-                              ),
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).error,
-                                width: 1.0,
-                              ),
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).error,
-                                width: 1.0,
-                              ),
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            filled: true,
-                            fillColor: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            suffixIcon: Icon(
-                              Icons.search_rounded,
-                              color: FlutterFlowTheme.of(context).accent1,
-                              size: 24.0,
-                            ),
+                            cursorColor:
+                                FlutterFlowTheme.of(context).primaryText,
+                            validator: _model.textControllerValidator
+                                .asValidator(context),
                           ),
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.manrope(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    fontSize: 16.0,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
-                          cursorColor: FlutterFlowTheme.of(context).primaryText,
-                          validator: _model.textControllerValidator
-                              .asValidator(context),
                         ),
                       ),
                       AutoSizeText(
-                        'Närmsta moskéer (sorterade efter avstånd)',
+                        'Närmste moskéer (sorterade efter avstånd)',
                         minFontSize: FFAppConstants.heading.toDouble(),
                         style:
-                            FlutterFlowTheme.of(context).titleMedium.override(
-                                  font: GoogleFonts.plusJakartaSans(
+                            FlutterFlowTheme.of(context).labelMedium.override(
+                                  font: GoogleFonts.manrope(
                                     fontWeight: FontWeight.w300,
                                     fontStyle: FlutterFlowTheme.of(context)
-                                        .titleMedium
+                                        .labelMedium
                                         .fontStyle,
                                   ),
-                                  fontSize: 12.0,
                                   letterSpacing: 0.0,
                                   fontWeight: FontWeight.w300,
                                   fontStyle: FlutterFlowTheme.of(context)
-                                      .titleMedium
+                                      .labelMedium
                                       .fontStyle,
                                 ),
                       ),
@@ -354,8 +327,12 @@ class _NearbyMosqueLocatorWidgetState extends State<NearbyMosqueLocatorWidget> {
                           builder: (context) {
                             final mosqueData =
                                 (_model.textController.text == ''
-                                        ? FFAppState().mosque
-                                        : _model.searchCities)
+                                        ? functions.sortMosquesByDistance(
+                                            FFAppState().mosque.toList(),
+                                            _model.userLocation)
+                                        : functions.sortMosquesByDistance(
+                                            _model.searchCities.toList(),
+                                            _model.userLocation))
                                     .toList();
 
                             return SingleChildScrollView(
@@ -468,7 +445,7 @@ class _NearbyMosqueLocatorWidgetState extends State<NearbyMosqueLocatorWidget> {
                                                         ),
                                                   ),
                                                   AutoSizeText(
-                                                    '7 mcd, 173/1, Bishkek',
+                                                    mosqueDataItem.address,
                                                     minFontSize: FFAppConstants
                                                         .body
                                                         .toDouble(),
@@ -504,9 +481,9 @@ class _NearbyMosqueLocatorWidgetState extends State<NearbyMosqueLocatorWidget> {
                                                   ),
                                                   AutoSizeText(
                                                     functions.calculateDistance(
-                                                        currentUserLocationValue!,
+                                                        _model.userLocation,
                                                         mosqueDataItem
-                                                            .latitude!),
+                                                            .latitude),
                                                     minFontSize: FFAppConstants
                                                         .body
                                                         .toDouble(),
@@ -547,7 +524,10 @@ class _NearbyMosqueLocatorWidgetState extends State<NearbyMosqueLocatorWidget> {
                                               borderRadius:
                                                   BorderRadius.circular(0.0),
                                               child: Image.asset(
-                                                'assets/images/way.png',
+                                                Theme.of(context).brightness ==
+                                                        Brightness.dark
+                                                    ? 'assets/images/way_white.png'
+                                                    : 'assets/images/way.png',
                                                 width: 25.0,
                                                 height: 25.0,
                                                 fit: BoxFit.fill,

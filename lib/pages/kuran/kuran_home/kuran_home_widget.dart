@@ -481,7 +481,7 @@ class _KuranHomeWidgetState extends State<KuranHomeWidget>
                                               child: Padding(
                                                 padding: EdgeInsetsDirectional
                                                     .fromSTEB(
-                                                        0.0, 0.0, 10.0, 0.0),
+                                                        0.0, 0.0, 20.0, 0.0),
                                                 child: Row(
                                                   mainAxisSize:
                                                       MainAxisSize.max,
@@ -654,7 +654,7 @@ class _KuranHomeWidgetState extends State<KuranHomeWidget>
                                               child: Padding(
                                                 padding: EdgeInsetsDirectional
                                                     .fromSTEB(
-                                                        0.0, 0.0, 10.0, 0.0),
+                                                        0.0, 0.0, 20.0, 0.0),
                                                 child: Row(
                                                   mainAxisSize:
                                                       MainAxisSize.max,
@@ -889,7 +889,7 @@ class _KuranHomeWidgetState extends State<KuranHomeWidget>
                                                                   .fromSTEB(
                                                                       0.0,
                                                                       0.0,
-                                                                      10.0,
+                                                                      20.0,
                                                                       0.0),
                                                           child: Row(
                                                             mainAxisSize:
@@ -1006,7 +1006,8 @@ class _KuranHomeWidgetState extends State<KuranHomeWidget>
                                                           ),
                                                         ),
                                                       );
-                                                    }),
+                                                    }).divide(
+                                                        SizedBox(height: 10.0)),
                                                   );
                                                 },
                                               ),
@@ -1102,7 +1103,7 @@ class _KuranHomeWidgetState extends State<KuranHomeWidget>
                                                                   .fromSTEB(
                                                                       0.0,
                                                                       0.0,
-                                                                      10.0,
+                                                                      20.0,
                                                                       0.0),
                                                           child: Row(
                                                             mainAxisSize:
@@ -1217,7 +1218,8 @@ class _KuranHomeWidgetState extends State<KuranHomeWidget>
                                                           ),
                                                         ),
                                                       );
-                                                    }),
+                                                    }).divide(
+                                                        SizedBox(height: 10.0)),
                                                   );
                                                 },
                                               ),
@@ -1310,7 +1312,7 @@ class _KuranHomeWidgetState extends State<KuranHomeWidget>
                                                                   .fromSTEB(
                                                                       0.0,
                                                                       0.0,
-                                                                      10.0,
+                                                                      20.0,
                                                                       0.0),
                                                           child: Row(
                                                             mainAxisSize:
@@ -1394,7 +1396,8 @@ class _KuranHomeWidgetState extends State<KuranHomeWidget>
                                                           ),
                                                         ),
                                                       );
-                                                    }),
+                                                    }).divide(
+                                                        SizedBox(height: 10.0)),
                                                   );
                                                 },
                                               ),

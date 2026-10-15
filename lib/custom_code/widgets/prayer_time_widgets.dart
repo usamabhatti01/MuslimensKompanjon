@@ -1,12 +1,13 @@
 // Automatic FlutterFlow imports
 import '/backend/schema/structs/index.dart';
 import '/backend/schema/enums/enums.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/widgets/index.dart'; // Imports other custom widgets
 import '/custom_code/actions/index.dart'; // Imports custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
@@ -89,7 +90,11 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
     'Isha',
   ];
 
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+  );
   late ScrollController _scrollController;
   late List<DateTime> days;
   final double itemWidth = 90.0;
@@ -136,7 +141,7 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
         todayOffset.clamp(0.0, maxScroll > 0 ? maxScroll : 0.0);
     final double scrollDiff =
         (_scrollController.offset - clampedTodayOffset).abs();
-    final bool far = (scrollDiff / totalItemWidth) >= 2.2;
+    final bool far = (scrollDiff / totalItemWidth) >= 2.5;
 
     if (far != _isScrolledFar) {
       setState(() {
@@ -146,8 +151,10 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
   }
 
   void _setDateAndRefresh(DateTime newDate) {
-    selectedDate = newDate;
-    _isScrolledFar = false;
+    selectedDate = DateTime(newDate.year, newDate.month, newDate.day);
+    if (isToday(selectedDate)) {
+      _isScrolledFar = false;
+    }
 
     if (decodedJson != null && loadedYear == selectedDate.year) {
       final key = "${selectedDate.year.toString().padLeft(4, '0')}-"
@@ -171,6 +178,8 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
   void _recenterToToday() {
     final now = timezone.isNotEmpty ? nowInCity() : DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
+    _isProgrammaticScroll = true;
+    _isScrolledFar = false;
     setState(() {
       _setDateAndRefresh(today);
     });
@@ -464,7 +473,10 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
 
   Widget item(String title, String time) {
     final theme = FlutterFlowTheme.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final active = isToday(selectedDate) && (currentPrayer == title);
+
+    final Color activeColor = isDark ? theme.primary : const Color(0xFF007A00);
 
     return Expanded(
       child: Column(
@@ -477,8 +489,8 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12.0,
-                fontWeight: active ? FontWeight.w700 : FontWeight.w600,
-                color: active ? theme.primary : theme.primaryText,
+                fontWeight: active ? FontWeight.w800 : FontWeight.w600,
+                color: active ? activeColor : theme.primaryText,
               ),
             ),
           ),
@@ -490,9 +502,19 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12.0,
-                fontWeight: active ? FontWeight.w700 : FontWeight.w500,
-                color: active ? theme.primary : theme.primaryText,
+                fontWeight: active ? FontWeight.w800 : FontWeight.w500,
+                color: active ? activeColor : theme.primaryText,
               ),
+            ),
+          ),
+          const SizedBox(height: 2),
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            height: 2.0,
+            width: active ? 22.0 : 0.0,
+            decoration: BoxDecoration(
+              color: active ? activeColor : Colors.transparent,
+              borderRadius: BorderRadius.circular(2.0),
             ),
           ),
         ],
@@ -503,35 +525,39 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
   void _generateMonthDays() {
     final now = timezone.isNotEmpty ? nowInCity() : DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final List<DateTime> list = [];
 
-    // Generate dates from today - 15 days to today + 15 days
-    for (int i = -15; i <= 15; i++) {
-      list.add(today.add(Duration(days: i)));
-    }
-
-    days = list;
+    // Generate dates from today - 15 days to today + 15 days without timezone/DST duration drift
+    days = List.generate(31, (index) {
+      final int offset = index - 15;
+      return DateTime(today.year, today.month, today.day + offset);
+    });
   }
 
   void _scrollToSelected(double viewportWidth) {
+    _isProgrammaticScroll = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted || !_scrollController.hasClients) return;
+      if (!mounted || !_scrollController.hasClients) {
+        _isProgrammaticScroll = false;
+        return;
+      }
 
       final int selectedIndex = days.indexWhere((d) =>
           d.day == selectedDate.day &&
           d.month == selectedDate.month &&
           d.year == selectedDate.year);
 
-      if (selectedIndex == -1) return;
+      if (selectedIndex == -1) {
+        _isProgrammaticScroll = false;
+        return;
+      }
 
-      final double totalItemWidth =
+      const double totalItemWidth =
           80.0 + 10.0; // width (80) + horizontal margins (5 * 2)
       final double itemCenter =
           (selectedIndex * totalItemWidth) + (totalItemWidth / 2);
       final double targetOffset = itemCenter - (viewportWidth / 2);
-      final double maxScroll = (days.length * totalItemWidth) - viewportWidth;
+      final double maxScroll = _scrollController.position.maxScrollExtent;
 
-      _isProgrammaticScroll = true;
       _scrollController
           .animateTo(
         targetOffset.clamp(0.0, maxScroll > 0 ? maxScroll : 0.0),
@@ -541,6 +567,12 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
           .then((_) {
         if (mounted) {
           _isProgrammaticScroll = false;
+          _onScroll();
+          if (isToday(selectedDate) && _isScrolledFar) {
+            setState(() {
+              _isScrolledFar = false;
+            });
+          }
         }
       });
     });
@@ -619,6 +651,7 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
                   selectedDate.year == date.year;
               return GestureDetector(
                 onTap: () {
+                  _isProgrammaticScroll = true;
                   setState(() {
                     _setDateAndRefresh(date);
                   });
@@ -684,7 +717,7 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
     final int dayDiff = (selDate.difference(todayDate).inDays).abs();
 
     final bool showTodayButton =
-        _isScrolledFar || (!isCurrentDay && dayDiff >= 3);
+        (!isCurrentDay && dayDiff >= 3) || (isCurrentDay && _isScrolledFar);
 
     Widget bottomBarContent;
     if (showTodayButton) {
@@ -745,7 +778,7 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           buildDatePicker(context),
-          const SizedBox(height: 4),
+          const SizedBox(height: 1),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4.0),
             child: Row(
@@ -760,9 +793,9 @@ class _PrayerTimeWidgetsState extends State<PrayerTimeWidgets>
               ],
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 1),
           SizedBox(
-            height: 26,
+            height: 25,
             child: Center(
               child: bottomBarContent,
             ),

@@ -1,12 +1,13 @@
 // Automatic FlutterFlow imports
 import '/backend/schema/structs/index.dart';
 import '/backend/schema/enums/enums.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/widgets/index.dart'; // Imports other custom widgets
 import '/custom_code/actions/index.dart'; // Imports custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
@@ -16,7 +17,8 @@ import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:audioplayers/audioplayers.dart' as ap;
+import 'package:just_audio/just_audio.dart';
+import 'package:audio_session/audio_session.dart';
 import 'package:provider/provider.dart';
 
 class QuranPageView extends StatefulWidget {
@@ -42,21 +44,29 @@ class QuranPageView extends StatefulWidget {
 
 class _QuranPageViewState extends State<QuranPageView> {
   // Audio Player variables
-  late ap.AudioPlayer _audioPlayer;
+  late AudioPlayer _audioPlayer;
   bool _isPlaying = false;
   Duration _duration = Duration.zero;
   Duration _position = Duration.zero;
   double _playbackSpeed = 1.0;
 
   // Stream Subscriptions
-  StreamSubscription<Duration>? _durSub;
+  StreamSubscription<Duration?>? _durSub;
   StreamSubscription<Duration>? _posSub;
-  StreamSubscription<ap.PlayerState>? _stateSub;
+  StreamSubscription<PlayerState>? _stateSub;
+  StreamSubscription<int?>? _seqSub;
+
+  // Playlist mapping
+  final Map<int, int> _ayahToSeqIndex = {};
+  final List<int> _seqIndexToAyah = [];
+  Future<void>? _playlistFuture;
+  int? _targetAyahIndex;
+  int? _lastActiveAyahIndex;
 
   // Widget active states
   int? _activeHighlightIndex;
   int? _currentPlayingIndex;
-  bool _isAutoplayActive = false;
+  bool _isAutoplayActive = true;
   bool _isPlayerVisible = false;
   bool _hasScrolledToCurrentAyat = false;
   int _scrollSessionId = 0;
@@ -105,18 +115,25 @@ class _QuranPageViewState extends State<QuranPageView> {
     });
   }
 
-  void _initAudioPlayer() {
-    _audioPlayer = ap.AudioPlayer();
+  Future<void> _initAudioPlayer() async {
+    _audioPlayer = AudioPlayer();
 
-    _durSub = _audioPlayer.onDurationChanged.listen((d) {
-      if (mounted) {
+    try {
+      final session = await AudioSession.instance;
+      await session.configure(const AudioSessionConfiguration.music());
+    } catch (e) {
+      debugPrint('Error configuring AudioSession: $e');
+    }
+
+    _durSub = _audioPlayer.durationStream.listen((d) {
+      if (mounted && d != null) {
         setState(() {
           _duration = d;
         });
       }
     });
 
-    _posSub = _audioPlayer.onPositionChanged.listen((p) {
+    _posSub = _audioPlayer.positionStream.listen((p) {
       if (mounted) {
         setState(() {
           _position = p;
@@ -124,20 +141,105 @@ class _QuranPageViewState extends State<QuranPageView> {
       }
     });
 
-    _stateSub = _audioPlayer.onPlayerStateChanged.listen((state) {
+    _stateSub = _audioPlayer.playerStateStream.listen((state) {
       if (mounted) {
         setState(() {
-          _isPlaying = state == ap.PlayerState.playing;
+          _isPlaying = state.playing;
         });
+      }
+      if (state.processingState == ProcessingState.completed) {
+        _stopAudio();
       }
     });
 
-    // Listen to completion event for autoplay logic
-    _audioPlayer.onPlayerComplete.listen((event) {
-      if (mounted) {
-        _handleAudioCompleted();
+    _seqSub = _audioPlayer.currentIndexStream.listen((seqIndex) {
+      if (_currentPlayingIndex == null ||
+          (!_isPlaying && !_audioPlayer.playerState.playing)) {
+        return;
+      }
+      if (seqIndex != null && seqIndex < _seqIndexToAyah.length) {
+        final ayahIndex = _seqIndexToAyah[seqIndex];
+
+        // Guard against stale events during user seek transitions
+        if (_targetAyahIndex != null) {
+          if (ayahIndex != _targetAyahIndex) {
+            return;
+          }
+          _targetAyahIndex = null;
+        }
+
+        // If autoplay is off and natural track transition occurred, pause
+        if (!_isAutoplayActive &&
+            _lastActiveAyahIndex != null &&
+            _lastActiveAyahIndex != ayahIndex) {
+          _pauseAudio();
+          return;
+        }
+        _lastActiveAyahIndex = ayahIndex;
+
+        if (mounted) {
+          final isNew = _currentPlayingIndex != ayahIndex;
+          setState(() {
+            _currentPlayingIndex = ayahIndex;
+            _activeHighlightIndex = ayahIndex;
+            _isPlayerVisible = true;
+          });
+          if (isNew) {
+            _scrollToAyah(ayahIndex);
+          }
+        }
       }
     });
+
+    _playlistFuture = _buildAndSetPlaylist();
+  }
+
+  Future<void> _buildAndSetPlaylist() async {
+    final sortedList = _sortedAyahs;
+    final List<AudioSource> sources = [];
+    _ayahToSeqIndex.clear();
+    _seqIndexToAyah.clear();
+
+    AudioSource createSource(String audioUrl, int ayahIndex) {
+      if (audioUrl.startsWith('http://') || audioUrl.startsWith('https://')) {
+        return AudioSource.uri(Uri.parse(audioUrl), tag: ayahIndex);
+      } else {
+        String assetPath = audioUrl;
+        if (assetPath.startsWith('assets/')) {
+          assetPath = assetPath.substring('assets/'.length);
+        }
+        if (!assetPath.startsWith('audios/')) {
+          assetPath = 'audios/$assetPath';
+        }
+        if (!assetPath.endsWith('.mp3')) {
+          assetPath = '$assetPath.mp3';
+        }
+        return AudioSource.asset(assetPath, tag: ayahIndex);
+      }
+    }
+
+    for (int i = 0; i < sortedList.length; i++) {
+      final ayah = sortedList[i];
+      final audioUrl = ayah.audio.trim();
+      if (audioUrl.isEmpty || audioUrl.contains('EmptyString')) continue;
+
+      _ayahToSeqIndex[i] = sources.length;
+      _seqIndexToAyah.add(i);
+      sources.add(createSource(audioUrl, i));
+    }
+
+    if (sources.isNotEmpty) {
+      try {
+        await _audioPlayer.setAudioSources(
+          sources,
+          preload: false,
+          initialIndex: 0,
+          initialPosition: Duration.zero,
+        );
+      } catch (e) {
+        debugPrint('Error setting Quran AudioSources playlist: $e');
+      }
+    }
   }
 
   @override
@@ -158,6 +260,7 @@ class _QuranPageViewState extends State<QuranPageView> {
         _ayahKeys.clear();
         _activeHighlightIndex = null;
         _currentPlayingIndex = null;
+        _playlistFuture = _buildAndSetPlaylist();
       }
       _hasScrolledToCurrentAyat = false;
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -171,6 +274,10 @@ class _QuranPageViewState extends State<QuranPageView> {
     _durSub?.cancel();
     _posSub?.cancel();
     _stateSub?.cancel();
+    _seqSub?.cancel();
+    try {
+      _audioPlayer.stop();
+    } catch (_) {}
     _audioPlayer.dispose();
     QuranPageView.targetAyahNotifier.removeListener(_onTargetAyahChanged);
     _scrollController.dispose();
@@ -185,6 +292,8 @@ class _QuranPageViewState extends State<QuranPageView> {
     final audioUrl = ayah.audio.trim();
     if (audioUrl.isEmpty || audioUrl.contains('EmptyString')) return;
 
+    _targetAyahIndex = index;
+    _lastActiveAyahIndex = index;
     setState(() {
       _currentPlayingIndex = index;
       _activeHighlightIndex = index; // Highlight playing ayah
@@ -193,29 +302,19 @@ class _QuranPageViewState extends State<QuranPageView> {
 
     _scrollToAyah(index);
 
-    ap.Source source;
-    if (audioUrl.startsWith('http://') || audioUrl.startsWith('https://')) {
-      source = ap.UrlSource(audioUrl);
-    } else {
-      String assetPath = audioUrl;
-      if (assetPath.startsWith('assets/')) {
-        assetPath = assetPath.substring('assets/'.length);
-      }
-      if (!assetPath.startsWith('audios/')) {
-        assetPath = 'audios/$assetPath';
-      }
-      if (!assetPath.endsWith('.mp3')) {
-        assetPath = '$assetPath.mp3';
-      }
-      source = ap.AssetSource(assetPath);
+    if (_playlistFuture != null) {
+      await _playlistFuture;
     }
 
-    try {
-      await _audioPlayer.stop();
-      await _audioPlayer.setPlaybackRate(_playbackSpeed);
-      await _audioPlayer.play(source);
-    } catch (e) {
-      debugPrint('Error playing audio: $e');
+    final seqIndex = _ayahToSeqIndex[index];
+    if (seqIndex != null && seqIndex < _seqIndexToAyah.length) {
+      try {
+        await _audioPlayer.setSpeed(_playbackSpeed);
+        await _audioPlayer.seek(Duration.zero, index: seqIndex);
+        await _audioPlayer.play();
+      } catch (e) {
+        debugPrint('Error playing Quran audio at seqIndex $seqIndex: $e');
+      }
     }
   }
 
@@ -228,59 +327,60 @@ class _QuranPageViewState extends State<QuranPageView> {
   }
 
   Future<void> _resumeAudio() async {
-    if (_currentPlayingIndex != null) {
+    if (_playlistFuture != null) {
+      await _playlistFuture;
+    }
+    if (_audioPlayer.currentIndex != null) {
       try {
-        await _audioPlayer.resume();
+        await _audioPlayer.setSpeed(_playbackSpeed);
+        await _audioPlayer.play();
       } catch (e) {
         debugPrint('Error resuming audio: $e');
       }
     } else {
-      _playAyah(0);
+      final startIndex = _currentPlayingIndex ?? _activeHighlightIndex ?? 0;
+      _playAyah(startIndex);
     }
   }
 
   Future<void> _stopAudio() async {
+    _targetAyahIndex = null;
+    _lastActiveAyahIndex = null;
+    _isPlaying = false;
     try {
       await _audioPlayer.stop();
     } catch (e) {
       debugPrint('Error stopping audio: $e');
     }
-    setState(() {
-      _isPlaying = false;
-      _isPlayerVisible = false;
-      _currentPlayingIndex = null;
-      _activeHighlightIndex = null;
-    });
-  }
-
-  void _handleAudioCompleted() {
-    final sortedList = _sortedAyahs;
-    if (_isAutoplayActive) {
-      final nextIndex = (_currentPlayingIndex ?? 0) + 1;
-      if (nextIndex < sortedList.length) {
-        _playAyah(nextIndex);
-      } else {
-        _stopAudio();
-      }
-    } else {
+    if (mounted) {
       setState(() {
         _isPlaying = false;
+        _isPlayerVisible = false;
+        _currentPlayingIndex = null;
+        _activeHighlightIndex = null;
+        _position = Duration.zero;
       });
     }
   }
 
   void _playNext() {
     final sortedList = _sortedAyahs;
-    final nextIndex = (_currentPlayingIndex ?? 0) + 1;
-    if (nextIndex < sortedList.length) {
-      _playAyah(nextIndex);
+    final current = _currentPlayingIndex ?? _activeHighlightIndex ?? -1;
+    for (int next = current + 1; next < sortedList.length; next++) {
+      if (_ayahToSeqIndex.containsKey(next)) {
+        _playAyah(next);
+        return;
+      }
     }
   }
 
   void _playPrevious() {
-    final prevIndex = (_currentPlayingIndex ?? 0) - 1;
-    if (prevIndex >= 0) {
-      _playAyah(prevIndex);
+    final current = _currentPlayingIndex ?? _activeHighlightIndex ?? 1;
+    for (int prev = current - 1; prev >= 0; prev--) {
+      if (_ayahToSeqIndex.containsKey(prev)) {
+        _playAyah(prev);
+        return;
+      }
     }
   }
 
@@ -729,7 +829,7 @@ class _QuranPageViewState extends State<QuranPageView> {
                   setState(() {
                     _playbackSpeed = speed;
                   });
-                  _audioPlayer.setPlaybackRate(speed);
+                  _audioPlayer.setSpeed(speed);
                   Navigator.pop(context);
                 },
               );

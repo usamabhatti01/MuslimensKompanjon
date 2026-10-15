@@ -466,7 +466,10 @@ class _SettingWidgetState extends State<SettingWidget> {
                                     sunLabel:
                                         'Välj 5, 10 eller 15 minuter före bön',
                                     icon: FaIcon(
-                                      FontAwesomeIcons.bell,
+                                      FaIconData(const IconData(
+                                          /* bell */ 0xf0f3,
+                                          fontFamily: 'FontAwesomeRegular',
+                                          fontPackage: 'font_awesome_flutter')),
                                       color: FlutterFlowTheme.of(context)
                                           .primaryText,
                                       size: 18.0,
@@ -606,11 +609,19 @@ class _SettingWidgetState extends State<SettingWidget> {
                                   hoverColor: Colors.transparent,
                                   highlightColor: Colors.transparent,
                                   onTap: () async {
-                                    await Share.share(
-                                      'com.mycompany.muslimenskompanjon',
-                                      sharePositionOrigin:
-                                          getWidgetBoundingBox(context),
-                                    );
+                                    if (isiOS) {
+                                      await Share.share(
+                                        'Jag vill tipsa dig om Muslimens Kompanjon – din vardagliga kompanjon för ett rikare muslimskt liv. Koranen, bönetider, Dhikr, Dua, Hijri-kalender, Qibla, videor och mycket mer. Testa appen och upptäck den själv! ${FFAppConstants.Ios}',
+                                        sharePositionOrigin:
+                                            getWidgetBoundingBox(context),
+                                      );
+                                    } else {
+                                      await Share.share(
+                                        'Jag vill tipsa dig om Muslimens Kompanjon – din vardagliga kompanjon för ett rikare muslimskt liv. Koranen, bönetider, Dhikr, Dua, Hijri-kalender, Qibla, videor och mycket mer. Testa appen och upptäck den själv! ${FFAppConstants.Android}',
+                                        sharePositionOrigin:
+                                            getWidgetBoundingBox(context),
+                                      );
+                                    }
                                   },
                                   child: wrapWithModel(
                                     model: _model.settingTabModel3,
@@ -718,7 +729,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             AutoSizeText(
-                              'Muslimens Kompanjon Version: 1.10',
+                              'Muslimens Kompanjon Version: ${FFAppState().appVersion} (${FFAppState().buildNumber})',
                               minFontSize: FFAppConstants.body.toDouble(),
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium

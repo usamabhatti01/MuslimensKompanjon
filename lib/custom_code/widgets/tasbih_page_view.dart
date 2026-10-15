@@ -1,12 +1,13 @@
 // Automatic FlutterFlow imports
 import '/backend/schema/structs/index.dart';
 import '/backend/schema/enums/enums.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/widgets/index.dart'; // Imports other custom widgets
 import '/custom_code/actions/index.dart'; // Imports custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
@@ -14,6 +15,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vibration/vibration.dart';
 import '/index.dart';
 
@@ -42,6 +44,59 @@ class _TasbihPageViewState extends State<TasbihPageView>
   // Keys and ScrollController for auto-scrolling
   final Map<int, GlobalKey> _itemKeys = {};
   late ScrollController _scrollController;
+
+  // Favorites state
+  Set<int> _favoriteIds = {};
+
+  Future<void> _loadFavorites() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final saved = prefs.getStringList('favorite_tasbih_ids');
+      if (saved != null) {
+        _favoriteIds = saved
+            .map((e) => int.tryParse(e) ?? -1)
+            .where((id) => id != -1)
+            .toSet();
+      }
+      for (final id in _favoriteIds) {
+        final idx = FFAppState().tasbihList.indexWhere((e) => e.id == id);
+        if (idx != -1 && !FFAppState().tasbihList[idx].isFav) {
+          FFAppState().tasbihList[idx].isFav = true;
+        }
+      }
+    } catch (_) {}
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  Future<void> _toggleFavorite(int id) async {
+    _triggerHaptic();
+    final bool newFav = !_favoriteIds.contains(id);
+    setState(() {
+      if (newFav) {
+        _favoriteIds.add(id);
+      } else {
+        _favoriteIds.remove(id);
+      }
+    });
+
+    final idx = FFAppState().tasbihList.indexWhere((e) => e.id == id);
+    if (idx != -1) {
+      FFAppState().updateTasbihListAtIndex(
+        idx,
+        (e) => e..isFav = newFav,
+      );
+    }
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setStringList(
+        'favorite_tasbih_ids',
+        _favoriteIds.map((e) => e.toString()).toList(),
+      );
+    } catch (_) {}
+  }
 
   GlobalKey _getKey(int index) {
     return _itemKeys.putIfAbsent(index, () => GlobalKey());
@@ -180,6 +235,7 @@ class _TasbihPageViewState extends State<TasbihPageView>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _scrollController = ScrollController();
+    _loadFavorites();
   }
 
   @override
@@ -281,7 +337,13 @@ class _TasbihPageViewState extends State<TasbihPageView>
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
     final tasbihSettings = FFAppState().tasbihSetting;
-    final list = widget.tasbihList;
+    final isFavFilterActive = FFAppState().tasbihFav;
+    final allList = widget.tasbihList;
+    final list = isFavFilterActive
+        ? allList
+            .where((item) => item.isFav || _favoriteIds.contains(item.id))
+            .toList()
+        : allList;
     final arFont = tasbihSettings.arFont;
     final swFont = tasbihSettings.swFont;
     final enFont = tasbihSettings.enFont;
@@ -294,9 +356,28 @@ class _TasbihPageViewState extends State<TasbihPageView>
         width: widget.width,
         height: widget.height,
         child: Center(
-          child: Text(
-            'Inga tasbih tillgängliga',
-            style: FlutterFlowTheme.of(context).bodyMedium,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                isFavFilterActive
+                    ? Icons.star_border_rounded
+                    : Icons.list_alt_rounded,
+                size: 56.0,
+                color: FlutterFlowTheme.of(context).secondaryText,
+              ),
+              const SizedBox(height: 16.0),
+              Text(
+                isFavFilterActive
+                    ? 'Inga favoritmarkerade tasbih än'
+                    : 'Inga tasbih tillgängliga',
+                style: FlutterFlowTheme.of(context).bodyMedium.override(
+                      font: GoogleFonts.manrope(),
+                      color: FlutterFlowTheme.of(context).secondaryText,
+                      fontSize: 16.0,
+                    ),
+              ),
+            ],
           ),
         ),
       );
@@ -317,6 +398,7 @@ class _TasbihPageViewState extends State<TasbihPageView>
         itemCount: list.length,
         itemBuilder: (context, index) {
           final item = list[index];
+          final isFavorited = item.isFav || _favoriteIds.contains(item.id);
           final titleSwedish = item.titleSv.trim();
           final titleArabic = item.titleAr.trim();
           final transliteration = item.transliteration.trim();
@@ -325,6 +407,8 @@ class _TasbihPageViewState extends State<TasbihPageView>
           final rewardText = item.reward.trim();
           final sourceText = item.source.trim();
           final statusText = item.status.trim();
+          final originalIndex = allList.indexWhere((e) => e.id == item.id);
+          final targetIndex = originalIndex != -1 ? originalIndex : index;
 
           return InkWell(
             splashColor: Colors.transparent,
@@ -338,7 +422,7 @@ class _TasbihPageViewState extends State<TasbihPageView>
                 TashbihCounterWidget.routeName,
                 queryParameters: {
                   'index': serializeParam(
-                    index,
+                    targetIndex,
                     ParamType.int,
                   ),
                   'language': serializeParam(
@@ -347,16 +431,16 @@ class _TasbihPageViewState extends State<TasbihPageView>
                   ),
                 }.withoutNulls,
                 extra: <String, dynamic>{
-                  '__transition_info__': TransitionInfo(
+                  '__transition_info__': const TransitionInfo(
                     hasTransition: true,
                     transitionType: PageTransitionType.fade,
-                    duration: const Duration(milliseconds: 0),
+                    duration: Duration(milliseconds: 0),
                   ),
                 },
               );
             },
             child: Container(
-              key: _getKey(index),
+              key: _getKey(targetIndex),
               margin: const EdgeInsets.only(bottom: 16.0),
               decoration: BoxDecoration(
                 color: FlutterFlowTheme.of(context).secondaryBackground,
@@ -378,46 +462,79 @@ class _TasbihPageViewState extends State<TasbihPageView>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Arabic Text & Arabic Title
-                  if (arActive && item.arabic.trim().isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 16.0,
-                        right: 16.0,
-                        top: 14.0,
-                        bottom: 6.0,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          if (titleArabic.isNotEmpty &&
-                              titleArabic != item.arabic.trim())
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 6.0),
-                              child: Text(
-                                titleArabic,
-                                textAlign: TextAlign.right,
-                                textDirection: ui.TextDirection.rtl,
-                                style: GoogleFonts.scheherazadeNew(
-                                  fontSize: (arFont + 4.0).clamp(20.0, 38.0),
-                                  fontWeight: FontWeight.w800,
-                                  color: FlutterFlowTheme.of(context).primary,
-                                ),
-                              ),
-                            ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: _buildArabicRichText(
-                              text: item.arabic,
-                              fontSize: arFont,
-                              textColor:
-                                  FlutterFlowTheme.of(context).primaryText,
-                              textAlign: TextAlign.right,
+                  // Top Row: Favorite Star (Left) & Arabic (Right)
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 14.0,
+                      right: 16.0,
+                      top: 12.0,
+                      bottom: 4.0,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Point 1: Star/Favorite Icon Button (Top-Left)
+                        InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () => _toggleFavorite(item.id),
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Icon(
+                              isFavorited
+                                  ? Icons.star_rounded
+                                  : Icons.star_border_rounded,
+                              color: isFavorited
+                                  ? const Color(0xFFFFB800)
+                                  : FlutterFlowTheme.of(context).primaryText,
+                              size: 26.0,
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: 8.0),
+                        // Arabic Section (Top-Right)
+                        if (arActive && item.arabic.trim().isNotEmpty)
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                if (titleArabic.isNotEmpty &&
+                                    titleArabic != item.arabic.trim())
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 4.0),
+                                    child: Text(
+                                      titleArabic,
+                                      textAlign: TextAlign.right,
+                                      textDirection: ui.TextDirection.rtl,
+                                      style: GoogleFonts.scheherazadeNew(
+                                        fontSize:
+                                            (arFont + 4.0).clamp(20.0, 38.0),
+                                        fontWeight: FontWeight.w800,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primary,
+                                      ),
+                                    ),
+                                  ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: _buildArabicRichText(
+                                    text: item.arabic,
+                                    fontSize: arFont,
+                                    textColor: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    textAlign: TextAlign.right,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        else
+                          const Spacer(),
+                      ],
                     ),
+                  ),
 
                   // Tasbih Title in Swedish (if enabled)
                   if ((swActive || enActive) && titleSwedish.isNotEmpty)
